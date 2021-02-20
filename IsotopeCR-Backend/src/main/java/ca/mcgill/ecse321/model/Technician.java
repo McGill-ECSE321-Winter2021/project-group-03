@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.model;
 
-import  java.util.*;
+import  java.util.Set;
 import  java.sql.Time;
 import  javax.persistence.Entity;
 import  javax.persistence.OneToMany;
@@ -28,14 +28,14 @@ public class Technician extends Profile
  
   
  
-  private Set<DailyAvailabilities> dailyAvailabilities;
+  private Set<DailyAvailability> dailyAvailabilities;
   @OneToMany(cascade= {CascadeType.ALL})
-  public Set<DailyAvailabilities> getDailyAvailabilities()
+  public Set<DailyAvailability> getDailyAvailabilities()
   {
     return this.dailyAvailabilities;
   }
   
-  public void setDailyAvailabilities(Set<DailyAvailabilities> dailyAvailabilities) {
+  public void setDailyAvailabilities(Set<DailyAvailability> dailyAvailabilities) {
 	  this.dailyAvailabilities=dailyAvailabilities;
   }
   
