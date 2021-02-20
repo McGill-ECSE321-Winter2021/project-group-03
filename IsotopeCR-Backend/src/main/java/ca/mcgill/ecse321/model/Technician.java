@@ -3,30 +3,16 @@ package ca.mcgill.ecse321.model;
 import java.util.*;
 import java.sql.Time;
 import  javax.persistence.Entity;
-import  java.util.*;
 import  javax.persistence.OneToMany;
 import  javax.persistence.Id;
 import  javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 
 @Entity
+@DiscriminatorValue("Technician")
+
 public class Technician extends Profile
-{
-
- 
-
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public Technician(String aFirstName, String aLastName, String aEmail, String aPassword, boolean aIsRegisteredAccount, AutoRepairShop aAutoRepairShop)
-  {
-    super(aFirstName, aLastName, aEmail, aPassword, aIsRegisteredAccount, aAutoRepairShop);
-    services = new ArrayList<Service>();
-    dailyAvailabilities = new ArrayList<DailyAvailabilities>();
-  }
-
-  
+{ 
   
   private List<Service> services;
   @OneToMany(cascade= {CascadeType.ALL})
