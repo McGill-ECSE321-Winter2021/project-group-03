@@ -10,7 +10,6 @@ import  javax.persistence.DiscriminatorValue;
 
 @Entity
 @DiscriminatorValue("Technician")
-
 public class Technician extends Profile
 {
   

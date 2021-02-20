@@ -1,7 +1,10 @@
 package ca.mcgill.ecse321.model;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("Customer")
@@ -17,7 +20,7 @@ public class Customer extends Profile{
     }
 
     private Set<Vehicle> vehicles;
-
+    @OneToMany(cascade={CascadeType.ALL})
     public void setVehicles (Set<Vehicle> vehicles){
         this.vehicles = vehicles;
     }

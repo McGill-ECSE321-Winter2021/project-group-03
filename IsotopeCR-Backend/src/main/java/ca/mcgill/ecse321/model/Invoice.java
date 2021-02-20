@@ -2,9 +2,10 @@ package ca.mcgill.ecse321.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import java.util.Set;
 
 @Entity
 public class Invoice {
@@ -39,7 +40,7 @@ public class Invoice {
 	}
 	
 	public void setID(String invoiceID) {
-		this.invoiceId = invoiceID;
+		this.invoiceID = invoiceID;
 	}
 	
 	private boolean isPaid;
@@ -51,3 +52,4 @@ public class Invoice {
 	public void setIsPaid(boolean isPaid) {
 		this.isPaid = isPaid;
 	}
+}

@@ -2,9 +2,11 @@ package ca.mcgill.ecse321.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Set;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import java.util.Set;
 
 @Entity
 public class Appointment {
@@ -15,7 +17,7 @@ public class Appointment {
 		return appointmentID;
 	}
 
-	public void setID(String appointmentID)) {
+	public void setID(String appointmentID) {
 		this.appointmentID = appointmentID;
 	}
 		
@@ -34,7 +36,7 @@ public class Appointment {
 	
 	@ManyToOne
 	public Vehicle getVehicle(){
-		return this.customer;
+		return this.vehicle;
 	}
 	
 	public void setVehicle(Vehicle vehicle) {

@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
@@ -10,7 +12,7 @@ import javax.persistence.OneToMany;
 public class Vehicle {
 	
 	// TODO do we need this???
-	private Customer customer
+	private Customer customer;
 	
 	@ManyToOne
 	public Customer getCustomer(){
@@ -37,7 +39,7 @@ public class Vehicle {
 		return model;
 	}
 
-	public void setModel(String model)) {
+	public void setModel(String model) {
 		this.model = model;
 	}
 	
@@ -47,7 +49,7 @@ public class Vehicle {
 		return brand;
 	}
 
-	public void setBrand(String brand)) {
+	public void setBrand(String brand) {
 		this.brand = brand;
 	}
 	
@@ -58,7 +60,7 @@ public class Vehicle {
 		return licensePlate;
 	}
 
-	public void setLicensePlate(String licensePlate)) {
+	public void setLicensePlate(String licensePlate) {
 		this.licensePlate = licensePlate;
 	}
 }
