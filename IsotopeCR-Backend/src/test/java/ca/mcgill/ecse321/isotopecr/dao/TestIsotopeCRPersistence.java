@@ -68,6 +68,7 @@ public class TestIsotopeCRPersistence {
 		String name = "CompanyName";
 		String address="CompanyAddress";
 		String workingHours ="workingHours";
+		
 		CompanyProfile cp = new CompanyProfile();
 		cp.setAddress(address);
 		cp.setName(name);
@@ -155,11 +156,11 @@ public class TestIsotopeCRPersistence {
 		}
 	}
 
-/*
+/*//Victoria
 	@Test
 	public void testPersistAndLoadAppointment() {
 	}
-
+//Jiatong
 	@Test
 	public void testPersistAndLoadTechnician() {
 		
@@ -168,7 +169,7 @@ public class TestIsotopeCRPersistence {
 	@Test
 	public void testPersistAndLoadTimeslot() {
 	}
-
+//Jack
 	@Test
 	public void testPersistAndLoadCustomer() {
 	}
@@ -176,7 +177,7 @@ public class TestIsotopeCRPersistence {
 	@Test
 	public void testPersistAndLoadAdmin() {
 	}
-
+//Zichen
 	@Test
 	public void testPersistAndLoadVehicle() {
 	}
@@ -184,7 +185,7 @@ public class TestIsotopeCRPersistence {
 	@Test
 	public void testPersistAndLoadDailyAvailability() {
 	}
-
+//Mathieu
 	@Test
 	public void testPersistAndLoadInvoice() {
 	}
