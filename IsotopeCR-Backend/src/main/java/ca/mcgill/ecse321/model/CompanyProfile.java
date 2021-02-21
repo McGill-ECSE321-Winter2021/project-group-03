@@ -11,7 +11,7 @@ public class CompanyProfile {
 		return this.name;
 	}
 	
-	public void setTime(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 	
@@ -22,7 +22,7 @@ public class CompanyProfile {
 		return this.address;
 	}
 	
-	public void setAddresss(String address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 	

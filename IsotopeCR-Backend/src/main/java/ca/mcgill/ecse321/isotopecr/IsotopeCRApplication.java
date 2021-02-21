@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @SpringBootApplication
-public class IsotopeCrApplication {
+public class IsotopeCRApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(IsotopeCrApplication.class, args);
+		SpringApplication.run(IsotopeCRApplication.class, args);
 	}
 
 @RequestMapping("/")

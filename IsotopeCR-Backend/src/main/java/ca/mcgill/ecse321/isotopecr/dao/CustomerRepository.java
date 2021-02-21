@@ -1,12 +1,14 @@
 package ca.mcgill.ecse321.isotopecr.dao;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
 import ca.mcgill.ecse321.model.Customer;
 import ca.mcgill.ecse321.model.Vehicle;
 
 
 public interface CustomerRepository extends CrudRepository <Customer,String> {
 
-	Customer findCustomerByProfileID(String profileID);
+	Customer findCustomerByProfileID(String id);
 	
-	Customer findByVehicle(Vehicle vehicle);
+	Customer findByVehicles(Vehicle vehicles);
 }

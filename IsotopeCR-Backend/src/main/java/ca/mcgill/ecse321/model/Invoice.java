@@ -35,11 +35,11 @@ public class Invoice {
 	private String invoiceID;
 	
 	@Id
-	public String getID() {
+	public String getInvoiceID() {
 		return invoiceID;
 	}
 	
-	public void setID(String invoiceID) {
+	public void setInvoiceID(String invoiceID) {
 		this.invoiceID = invoiceID;
 	}
 	

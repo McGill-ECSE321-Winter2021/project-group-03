@@ -15,11 +15,11 @@ public abstract class Profile {
 	private String profileID;
 	
 	@Id
-	public String getID() {
+	public String getProfileID() {
 		return this.profileID;
 	}
 	
-	public void setID(String id) {
+	public void setProfileID(String id) {
 		this.profileID = id;
 	}
 	

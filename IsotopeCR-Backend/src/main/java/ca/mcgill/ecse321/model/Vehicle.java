@@ -56,7 +56,7 @@ public class Vehicle {
 	private String licensePlate;
 	
 	@Id
-	public String getlicensePlate() {
+	public String getLicensePlate() {
 		return licensePlate;
 	}
 

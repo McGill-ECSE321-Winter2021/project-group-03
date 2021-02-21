@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.model;
 
-import  java.util.Set;
+import  java.util.*;
 import  java.sql.Time;
 import  javax.persistence.Entity;
 import  javax.persistence.OneToMany;
@@ -14,28 +14,28 @@ import  javax.persistence.DiscriminatorValue;
 public class Technician extends Profile
 {
   
-  private Set<Service> services;
+  private List<Service> services;
   @ManyToMany(cascade= {CascadeType.ALL})
-   public Set<Service> getServices()
+   public List<Service> getServices()
   {
     return this.services;
   }
 
-  public void setService(Set<Service> services) {
+  public void setServices(List<Service> services) {
 	  this.services = services;
   }
 
  
   
  
-  private Set<DailyAvailability> dailyAvailabilities;
+  private List<DailyAvailability> dailyAvailabilities;
   @OneToMany(cascade= {CascadeType.ALL})
-  public Set<DailyAvailability> getDailyAvailabilities()
+  public List<DailyAvailability> getDailyAvailabilities()
   {
     return this.dailyAvailabilities;
   }
   
-  public void setDailyAvailabilities(Set<DailyAvailability> dailyAvailabilities) {
+  public void setDailyAvailabilities(List<DailyAvailability> dailyAvailabilities) {
 	  this.dailyAvailabilities=dailyAvailabilities;
   }
   

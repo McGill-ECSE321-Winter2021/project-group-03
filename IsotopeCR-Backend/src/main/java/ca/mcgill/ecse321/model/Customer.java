@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @DiscriminatorValue("Customer")
@@ -19,13 +19,13 @@ public class Customer extends Profile{
         return this.phoneNumber;
     }
 
-    private Set<Vehicle> vehicles;
+    private List<Vehicle> vehicles;
     @OneToMany(cascade={CascadeType.ALL})
-    public void setVehicles (Set<Vehicle> vehicles){
-        this.vehicles = vehicles;
-    }
-
-    public Set<Vehicle> getVehicles (){
+    public List<Vehicle> getVehicles (){
         return this.vehicles;
+    }
+    
+     public void setVehicles (List<Vehicle> vehicles){
+        this.vehicles = vehicles;
     }
 }

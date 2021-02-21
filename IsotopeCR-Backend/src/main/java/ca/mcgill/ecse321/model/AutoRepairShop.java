@@ -1,21 +1,23 @@
 package ca.mcgill.ecse321.model;
 
 import javax.persistence.Entity;
-import java.util.Set;
+import javax.persistence.Id;
+
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class AutoRepairShop {
-	private Set<Profile> profiles;
+	private List<Profile> profiles;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public Set<Profile> getProfiles(){
+	public List<Profile> getProfiles(){
 		return this.profiles;
 	}
 	
-	public void setProfiles(Set<Profile> profiles) {
+	public void setProfiles(List<Profile> profiles) {
 		   this.profiles = profiles;
 	}
 	
@@ -32,51 +34,61 @@ public class AutoRepairShop {
 	}
 	
 	
-	private Set<Appointment> appointments;
+	private List<Appointment> appointments;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public Set<Appointment> getAppointments(){
+	public List<Appointment> getAppointments(){
 		return this.appointments;
 	}
 	
-	public void setAppointments(Set<Appointment> appointments) {
+	public void setAppointments(List<Appointment> appointments) {
 		   this.appointments = appointments;
 	}
 	
 	
-	private Set<Timeslot> timeSlots;
+	private List<Timeslot> timeSlots;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public Set<Timeslot> getTimeSlots(){
+	public List<Timeslot> getTimeSlots(){
 		return this.timeSlots;
 	}
 	
-	public void setTimeSlots(Set<Timeslot> timeSlots) {
+	public void setTimeSlots(List<Timeslot> timeSlots) {
 		   this.timeSlots = timeSlots;
 	}
 	
-	private Set<Resource> resources;
+	private List<Resource> resources;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public Set<Resource> getResources(){
+	public List<Resource> getResources(){
 		return this.resources;
 	}
 	
-	public void setResources(Set<Resource> resources) {
+	public void setResources(List<Resource> resources) {
 		   this.resources = resources;
 	}
 	
 	
-	private Set<Service> services;
+	private List<Service> services;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public Set<Service> getServices(){
+	public List<Service> getServices(){
 		return this.services;
 	}
 	
-	public void setServices(Set<Service> services) {
+	public void setServices(List<Service> services) {
 		   this.services = services;
 	}
 
+    private String ID;
+
+    @Id
+	public String getID() {
+		return this.ID;
+	}
 	
+	public void setID(String slotID) {
+		this.ID = slotID;
+	}
+
 }

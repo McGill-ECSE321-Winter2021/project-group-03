@@ -6,6 +6,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
+
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,11 +15,11 @@ public class Appointment {
 	private String appointmentID;
 	
 	@Id
-	public String getID() {
+	public String getAppointmentID() {
 		return appointmentID;
 	}
 
-	public void setID(String appointmentID) {
+	public void setAppointmentID(String appointmentID) {
 		this.appointmentID = appointmentID;
 	}
 		
@@ -61,7 +63,7 @@ public class Appointment {
 		return this.technician;
 	}
 	
-	public void setTechinician(Technician technician) {
+	public void setTechnician(Technician technician) {
 		   this.technician = technician;
 	} 
 	
@@ -76,14 +78,14 @@ public class Appointment {
 		   this.service = service;
 	} 
 	
-	private Set<Timeslot> timeslots;
+	private List<Timeslot> timeslots;
 	
 	@ManyToMany(cascade={CascadeType.ALL})
-	public Set<Timeslot> getTimeslots(){
+	public List<Timeslot> getTimeslots(){
 		return this.timeslots;
 	}
 	
-	public void setTimeslots(Set<Timeslot> timeslots) {
+	public void setTimeslots(List<Timeslot> timeslots) {
 		   this.timeslots = timeslots;
 	} 
 }

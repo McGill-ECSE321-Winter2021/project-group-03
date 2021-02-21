@@ -35,19 +35,20 @@ public class DailyAvailability{
         this.endTime = endTime;
     }
 
-    public Time getEndtime (){
+    public Time getEndTime(){
         return this.endTime;
     }
 
     private String availabilityID;
 
-    public void setID (String availabilityID){
-        this.availabilityID = availabilityID;
-    }
+  
+    
     @Id
-
-    public String getID (){
+    public String getAvailabilityID(){
         return this.availabilityID;
+    }
+    public void setAvailabilityID (String availabilityID){
+        this.availabilityID = availabilityID;
     }
 
 }

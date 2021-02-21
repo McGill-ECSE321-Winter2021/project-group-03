@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 public class Resource
 {
   private String resourceType;
-  public void setResourceType(String type) {
-	  this.resourceType=type;
+  public void setResourceType(String resourceType) {
+	  this.resourceType=resourceType;
   }
   
   @Id
