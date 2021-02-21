@@ -142,6 +142,7 @@ public class TestIsotopeCRPersistence {
 		service = serviceRepository.findServiceByName(name);
 		assertNotNull(service);
 		assertEquals(name, service.getName());
+		assertEquals(resource.getResourceType(),service.getResource().getResourceType());
 
 		// Test findServiceByResource
 		service = null;
