@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.model;
+package ca.mcgill.ecse321.isotopecr.model;
 
 import java.sql.Time;
 import java.sql.Date;

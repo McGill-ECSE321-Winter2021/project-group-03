@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@EntityScan("ca.mcgill.ecse321.model")
+@EntityScan("ca.mcgill.ecse321.isotopecr.model")
 //@RunWith(SpringRunner.class)
 @SpringBootTest
 class IsotopeCRApplicationTests {

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@EntityScan("ca.mcgill.ecse321.model")
+@EntityScan("ca.mcgill.ecse321.isotopecr.model")
 @RestController
 @SpringBootApplication
 public class IsotopeCRApplication {

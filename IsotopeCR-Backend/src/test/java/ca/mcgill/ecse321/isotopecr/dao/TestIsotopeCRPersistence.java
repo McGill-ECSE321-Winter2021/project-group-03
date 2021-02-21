@@ -17,9 +17,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ca.mcgill.ecse321.model.*;
+import ca.mcgill.ecse321.isotopecr.model.*;
 
-@EntityScan("ca.mcgill.ecse321.model")
+@EntityScan("ca.mcgill.ecse321.isotopecr.model")
 //@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TestIsotopeCRPersistence {

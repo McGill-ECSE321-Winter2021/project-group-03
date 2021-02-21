@@ -2,8 +2,8 @@ package ca.mcgill.ecse321.isotopecr.dao;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import ca.mcgill.ecse321.model.Customer;
-import ca.mcgill.ecse321.model.Vehicle;
+import ca.mcgill.ecse321.isotopecr.model.Customer;
+import ca.mcgill.ecse321.isotopecr.model.Vehicle;
 
 
 public interface CustomerRepository extends CrudRepository <Customer,String> {
