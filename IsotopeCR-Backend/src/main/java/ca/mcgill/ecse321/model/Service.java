@@ -49,7 +49,7 @@ public class Service
   
   private int duration;
   
-  public double getDuration() {
+  public int getDuration() {
 	  return this.duration;
   }
   
