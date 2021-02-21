@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.model;
 import javax.persistence.Entity;
 import javax.persistence.DiscriminatorValue;
 
+//Comment
 @Entity
 @DiscriminatorValue("Admin")
 public class Admin {
