@@ -23,6 +23,7 @@ public abstract class Profile {
 		this.profileID = id;
 	}
 	
+	
 	private String firstName;
 	
 	public String getFirstName() {

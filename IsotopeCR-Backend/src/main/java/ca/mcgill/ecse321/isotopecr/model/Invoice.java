@@ -10,17 +10,17 @@ import java.util.Set;
 @Entity
 public class Invoice {
 	
-	//TODO do we need this???
-	private Appointment appointment;
-	
-	@OneToOne
-	public Appointment getAppointment(){
-		return this.appointment;
-	}
-	
-	public void setAppointment(Appointment appointment) {
-		   this.appointment = appointment;
-	}
+//	//TODO do we need this???
+//	private Appointment appointment;
+//	
+//	@OneToOne
+//	public Appointment getAppointment(){
+//		return this.appointment;
+//	}
+//	
+//	public void setAppointment(Appointment appointment) {
+//		   this.appointment = appointment;
+//	}
 	
 	private double cost;
 	

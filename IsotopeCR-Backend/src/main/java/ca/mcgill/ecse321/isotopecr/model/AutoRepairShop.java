@@ -4,20 +4,22 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class AutoRepairShop {
-	private List<Profile> profiles;
+	private Set<Profile> profiles;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public List<Profile> getProfiles(){
+	public Set<Profile> getProfiles(){
 		return this.profiles;
 	}
 	
-	public void setProfiles(List<Profile> profiles) {
+	public void setProfiles(Set<Profile> profiles) {
 		   this.profiles = profiles;
 	}
 	
@@ -34,37 +36,37 @@ public class AutoRepairShop {
 	}
 	
 	
-	private List<Appointment> appointments;
+	private Set<Appointment> appointments;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public List<Appointment> getAppointments(){
+	public Set<Appointment> getAppointments(){
 		return this.appointments;
 	}
 	
-	public void setAppointments(List<Appointment> appointments) {
+	public void setAppointments(Set<Appointment> appointments) {
 		   this.appointments = appointments;
 	}
 	
 	
-	private List<Timeslot> timeSlots;
+	private Set<Timeslot> timeSlots;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public List<Timeslot> getTimeSlots(){
+	public Set<Timeslot> getTimeSlots(){
 		return this.timeSlots;
 	}
 	
-	public void setTimeSlots(List<Timeslot> timeSlots) {
+	public void setTimeSlots(Set<Timeslot> timeSlots) {
 		   this.timeSlots = timeSlots;
 	}
 	
-	private List<Resource> resources;
+	private Set<Resource> resources;
 	
 	@OneToMany(cascade={CascadeType.ALL})
-	public List<Resource> getResources(){
+	public Set<Resource> getResources(){
 		return this.resources;
 	}
 	
-	public void setResources(List<Resource> resources) {
+	public void setResources(Set<Resource> resources) {
 		   this.resources = resources;
 	}
 	

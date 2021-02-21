@@ -7,8 +7,17 @@ import java.sql.Time;
 
 @Entity
 public class DailyAvailability{
+	
+	private String availabilityID;
+    @Id
+    public String getAvailabilityID(){
+        return this.availabilityID;
+    }
+    public void setAvailabilityID (String availabilityID){
+        this.availabilityID = availabilityID;
+    }
     
-    private enum DayOfWeek {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday};
+    public enum DayOfWeek {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday};
     private DayOfWeek day;
 
     public void setDay(DayOfWeek day){
@@ -38,17 +47,4 @@ public class DailyAvailability{
     public Time getEndTime(){
         return this.endTime;
     }
-
-    private String availabilityID;
-
-  
-    
-    @Id
-    public String getAvailabilityID(){
-        return this.availabilityID;
-    }
-    public void setAvailabilityID (String availabilityID){
-        this.availabilityID = availabilityID;
-    }
-
 }

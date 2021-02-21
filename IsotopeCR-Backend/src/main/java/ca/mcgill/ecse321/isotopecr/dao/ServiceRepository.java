@@ -12,7 +12,7 @@ public interface ServiceRepository extends CrudRepository <Service,String> {
 
 	Service findServiceByName(String name);
 	
-	List<Service> findByResource(Resource resource);
+	List<Service> findServiceByResource(Resource resource);
 	
 	//boolean existsByName(String name);
 }

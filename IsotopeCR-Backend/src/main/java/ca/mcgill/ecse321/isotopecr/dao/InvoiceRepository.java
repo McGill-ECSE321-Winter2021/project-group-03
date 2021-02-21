@@ -10,5 +10,5 @@ public interface InvoiceRepository extends CrudRepository<Invoice,String> {
 
 	Invoice findInvoiceByInvoiceID(String invoiceID);
 	
-	Invoice findByAppointment(Appointment appointment);
+	//Invoice findByAppointment(Appointment appointment);
 }

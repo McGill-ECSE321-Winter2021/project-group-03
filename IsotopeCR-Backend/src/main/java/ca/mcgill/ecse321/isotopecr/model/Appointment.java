@@ -78,14 +78,14 @@ public class Appointment {
 		   this.service = service;
 	} 
 	
-	private List<Timeslot> timeslots;
+	private Set<Timeslot> timeslots;
 	
 	@ManyToMany(cascade={CascadeType.ALL})
-	public List<Timeslot> getTimeslots(){
+	public Set<Timeslot> getTimeslots(){
 		return this.timeslots;
 	}
 	
-	public void setTimeslots(List<Timeslot> timeslots) {
+	public void setTimeslots(Set<Timeslot> timeslots) {
 		   this.timeslots = timeslots;
 	} 
 }

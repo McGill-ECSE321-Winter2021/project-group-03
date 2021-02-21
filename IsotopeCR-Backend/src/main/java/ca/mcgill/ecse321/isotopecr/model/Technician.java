@@ -14,28 +14,28 @@ import  javax.persistence.DiscriminatorValue;
 public class Technician extends Profile
 {
   
-  private List<Service> services;
+  private Set<Service> services;
   @ManyToMany(cascade= {CascadeType.ALL})
-   public List<Service> getServices()
+   public Set<Service> getServices()
   {
     return this.services;
   }
 
-  public void setServices(List<Service> services) {
+  public void setServices(Set<Service> services) {
 	  this.services = services;
   }
 
  
   
  
-  private List<DailyAvailability> dailyAvailabilities;
+  private Set<DailyAvailability> dailyAvailabilities;
   @OneToMany(cascade= {CascadeType.ALL})
-  public List<DailyAvailability> getDailyAvailabilities()
+  public Set<DailyAvailability> getDailyAvailabilities()
   {
     return this.dailyAvailabilities;
   }
   
-  public void setDailyAvailabilities(List<DailyAvailability> dailyAvailabilities) {
+  public void setDailyAvailabilities(Set<DailyAvailability> dailyAvailabilities) {
 	  this.dailyAvailabilities=dailyAvailabilities;
   }
   

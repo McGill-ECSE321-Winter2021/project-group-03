@@ -9,6 +9,7 @@ import java.util.*;
 @Entity
 @DiscriminatorValue("Customer")
 public class Customer extends Profile{
+	
     private String phoneNumber;
 
     public void setPhoneNumber (String phoneNumber){
@@ -19,13 +20,13 @@ public class Customer extends Profile{
         return this.phoneNumber;
     }
 
-    private List<Vehicle> vehicles;
+    private Set<Vehicle> vehicles;
     @OneToMany(cascade={CascadeType.ALL})
-    public List<Vehicle> getVehicles (){
+    public Set<Vehicle> getVehicles (){
         return this.vehicles;
     }
     
-     public void setVehicles (List<Vehicle> vehicles){
+     public void setVehicles (Set<Vehicle> vehicles){
         this.vehicles = vehicles;
     }
 }

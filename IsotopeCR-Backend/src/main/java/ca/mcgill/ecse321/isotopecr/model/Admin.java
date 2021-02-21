@@ -8,6 +8,7 @@ import javax.persistence.DiscriminatorValue;
 @Entity
 @DiscriminatorValue("Admin")
 public class Admin extends Profile{
+	
     private Boolean isOwner;
 
     public void setIsOwner (Boolean isOwner){
