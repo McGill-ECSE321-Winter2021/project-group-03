@@ -5,6 +5,7 @@ import  java.sql.Time;
 import  javax.persistence.Entity;
 import  javax.persistence.OneToMany;
 import  javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import  javax.persistence.CascadeType;
 import  javax.persistence.DiscriminatorValue;
 
@@ -14,7 +15,7 @@ public class Technician extends Profile
 {
   
   private Set<Service> services;
-  @OneToMany(cascade= {CascadeType.ALL})
+  @ManyToMany(cascade= {CascadeType.ALL})
    public Set<Service> getServices()
   {
     return this.services;
