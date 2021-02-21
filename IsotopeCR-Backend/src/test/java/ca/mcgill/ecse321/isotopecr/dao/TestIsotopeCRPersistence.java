@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.mcgill.ecse321.model.*;
 
 @EntityScan("ca.mcgill.ecse321.model")
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TestIsotopeCRPersistence {
 
@@ -52,8 +52,8 @@ public class TestIsotopeCRPersistence {
 	public void clearDatabase() {
 		appointmentRepository.deleteAll();
 		companyProfileRepository.deleteAll();
-		resourceRepository.deleteAll();
 		serviceRepository.deleteAll();
+		resourceRepository.deleteAll();
 		technicianRepository.deleteAll();
 		timeslotRepository.deleteAll();
 		customerRepository.deleteAll();
@@ -63,16 +63,44 @@ public class TestIsotopeCRPersistence {
 		invoiceRepository.deleteAll();
 	}
 
-	@Test
-	public void testPersistAndLoadAppointment() {
-	}
-
-	@Test
-	public void testPersistAndLoadCompany() {
+	@Test 
+	public void testPersistAndLoadCompanyProfile() {
+		String name = "CompanyName";
+		String address="CompanyAddress";
+		String workingHours ="workingHours";
+		CompanyProfile cp = new CompanyProfile();
+		cp.setAddress(address);
+		cp.setName(name);
+		cp.setWorkingHours(workingHours);
+		
+		companyProfileRepository.save(cp);
+		
+		cp=null;
+		
+		cp=companyProfileRepository.findCompanyProfileByAddress(address);
+		assertNotNull(cp);
+		assertEquals(address,cp.getAddress());
 	}
 
 	@Test
 	public void testPersistAndLoadResource() {
+		String resourceType ="resourceType";
+		Integer maxAvailability =4;
+		
+		Resource r = new Resource();
+		r.setMaxAvailable(maxAvailability);
+		r.setResourceType(resourceType);
+		
+		resourceRepository.save(r);
+		
+		r=null;
+		
+		r=resourceRepository.findResourceByResourceType(resourceType);
+		
+		assertNotNull(r);
+		assertEquals(resourceType,r.getResourceType());
+		
+		
 	}
 
 	@Test
@@ -96,7 +124,7 @@ public class TestIsotopeCRPersistence {
 
 		Service service = new Service();
 		service.setName(name);
-		service.setPrice(20.00);
+		service.setPrice(price);
 		service.setDuration(duration);
 		service.setResource(resource);
 
@@ -121,14 +149,19 @@ public class TestIsotopeCRPersistence {
 		List<Service> servicesFound = serviceRepository.findByResource(resource);
 		assertNotNull(servicesFound);
 		assertEquals(services.size(), servicesFound.size());
-//		for(int i = 0; i<servicesFound.size(); i++){
-//			assertEquals(servicesFound.get(i).getResource().getResourceType(), resource.getResourceType());
-//		}
+		for(int i = 0; i<servicesFound.size(); i++){
+			assertEquals(servicesFound.get(i).getResource().getResourceType(), resource.getResourceType());
+		}
 	}
 
 /*
 	@Test
+	public void testPersistAndLoadAppointment() {
+	}
+
+	@Test
 	public void testPersistAndLoadTechnician() {
+		
 	}
 
 	@Test
@@ -155,81 +188,5 @@ public class TestIsotopeCRPersistence {
 	public void testPersistAndLoadInvoice() {
 	}
 
-//！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
-	@Test
-	public void testPersistAndLoadPerson() {
-		String name = "TestPerson";
-		// First example for object save/load
-		Person person = new Person();
-		// First example for attribute save/load
-		person.setName(name);
-		personRepository.save(person);
-
-		person = null;
-
-		person = personRepository.findPersonByName(name);
-		assertNotNull(person);
-		assertEquals(name, person.getName());
-	}
-
-	@Test
-	public void testPersistAndLoadEvent() {
-		String name = "ECSE321 Tutorial";
-		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
-		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
-		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
-		Event event = new Event();
-		event.setName(name);
-		event.setDate(date);
-		event.setStartTime(startTime);
-		event.setEndTime(endTime);
-		eventRepository.save(event);
-
-		event = null;
-
-		event = eventRepository.findEventByName(name);
-
-		assertNotNull(event);
-		assertEquals(name, event.getName());
-		assertEquals(date, event.getDate());
-		assertEquals(startTime, event.getStartTime());
-		assertEquals(endTime, event.getEndTime());
-	}
-
-	@Test
-	public void testPersistAndLoadRegistration() {
-		String personName = "TestPerson";
-		Person person = new Person();
-		person.setName(personName);
-		personRepository.save(person);
-
-		String eventName = "ECSE321 Tutorial";
-		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
-		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
-		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
-		Event event = new Event();
-		event.setName(eventName);
-		event.setDate(date);
-		event.setStartTime(startTime);
-		event.setEndTime(endTime);
-		eventRepository.save(event);
-
-		Registration reg = new Registration();
-		int regId = 1;
-		// First example for reference save/load
-		reg.setId(regId);
-		reg.setPerson(person);
-		reg.setEvent(event);
-		registrationRepository.save(reg);
-
-		reg = null;
-
-		reg = registrationRepository.findByPersonAndEvent(person, event);
-		assertNotNull(reg);
-		assertEquals(regId, reg.getId());
-		// Comparing by keys
-		assertEquals(person.getName(), reg.getPerson().getName());
-		assertEquals(event.getName(), reg.getEvent().getName());
-	}
-	*/
+*/
 }
