@@ -56,7 +56,6 @@ public class TestIsotopeCRPersistence {
 		appointmentRepository.deleteAll();
 		autoRepairShopRepository.deleteAll();
 		profileRepository.deleteAll();
-		
 		companyProfileRepository.deleteAll();
 		serviceRepository.deleteAll();
 		resourceRepository.deleteAll();
@@ -171,7 +170,6 @@ public class TestIsotopeCRPersistence {
 		
 	}
 	
-	//Jack
 		@Test
 	public void testPersistAndLoadCustomer() {
 			
@@ -515,7 +513,7 @@ public class TestIsotopeCRPersistence {
 		assertEquals(appointmentID,aptmt.getAppointmentID());
 		
 	}
-private Resource createResource(String type, Integer maxAvailable) {
+    private Resource createResource(String type, Integer maxAvailable) {
 		Resource resource = new Resource();
 		resource.setResourceType(type);
 		resource.setMaxAvailable(maxAvailable);
