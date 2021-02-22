@@ -58,6 +58,7 @@ public class TestIsotopeCRPersistence {
 	
 	@AfterEach
 	public void clearDatabase() {
+		
 		autoRepairShopRepository.deleteAll();
 		profileRepository.deleteAll();
 		appointmentRepository.deleteAll();
@@ -118,6 +119,8 @@ public class TestIsotopeCRPersistence {
 		
 		
 	}
+	
+	
 	@Test
 	public void testPersistAndLoadTimeslot() {
 		java.sql.Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
@@ -139,6 +142,8 @@ public class TestIsotopeCRPersistence {
 		assertEquals(slotID,ts.getSlotID());
 		
 	}
+	
+	
 	@Test
 	public void testPersistAndLoadAdmin() {
 		
@@ -171,8 +176,9 @@ public class TestIsotopeCRPersistence {
 		assertEquals(profileID, a.getProfileID());
 		
 	}
+	
 
-	/*@Test
+	@Test
 	public void testPersistAndLoadService() {
 
 	
@@ -221,13 +227,27 @@ public class TestIsotopeCRPersistence {
 //			assertEquals(servicesFound.get(i).getResource().getResourceType(), resource.getResourceType());
 //		}
 	}
-	
-/*		
-	//Victoria
 	@Test
-	public void testPersistAndLoadAppointment() {
+	public void testPersistAndLoadDailyAvailability() {
+		DayOfWeek day= DayOfWeek.Tuesday;
+		java.sql.Time startTime= java.sql.Time.valueOf(LocalTime.of(11, 35));
+		java.sql.Time endTime =  java.sql.Time.valueOf(LocalTime.of(13, 25));
+		String availabilityID ="availabilityID";
+		
+		DailyAvailability dA = new DailyAvailability();
+		dA.setAvailabilityID(availabilityID);
+		dA.setDay(day);
+		dA.setStartTime(startTime);
+		dA.setEndTime(endTime);
+		
+		dailyAvailabilityRepository.save(dA);
+		
+		dA=null;
+		
+		dA=dailyAvailabilityRepository.findDailyAvailabilityByAvailabilityID(availabilityID);
+		assertNotNull(dA);
+		assertEquals(availabilityID, dA.getAvailabilityID());
 	}
-//Jiatong
 //	@Test
 //	public void testPersistAndLoadTechnician() {
 //		
@@ -263,7 +283,7 @@ public class TestIsotopeCRPersistence {
 //		int duration = 3;
 //
 //		Service service = new Service();
-//		service.setName(name);
+//		service.setServiceName(name);
 //		service.setPrice(price);
 //		service.setDuration(duration);
 //		service.setResource(resource);
@@ -304,6 +324,13 @@ public class TestIsotopeCRPersistence {
 //		
 //		
 //	}
+/*		
+	//Victoria
+	@Test
+	public void testPersistAndLoadAppointment() {
+	}
+//Jiatong
+
 
 
 	/*

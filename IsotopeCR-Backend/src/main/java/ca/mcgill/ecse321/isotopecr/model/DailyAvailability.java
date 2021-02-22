@@ -11,16 +11,16 @@ public class DailyAvailability{
    public enum DayOfWeek {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday};
 
 	
-   private Technician technician;
-   
-   @ManyToOne(optional=false)
-   public Technician getTechnician() {
-      return this.technician;
-   }
-   
-   public void setTechnician(Technician technician) {
-      this.technician = technician;
-   }
+//   private Technician technician;
+//   
+//   @ManyToOne(optional=false)
+//   public Technician getTechnician() {
+//      return this.technician;
+//   }
+//   
+//   public void setTechnician(Technician technician) {
+//      this.technician = technician;
+//   }
    
    private String availabilityID;
 
