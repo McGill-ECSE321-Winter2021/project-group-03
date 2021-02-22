@@ -18,8 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
-//@EntityScan("ca.mcgill.ecse321.isotopecr.model")
-//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TestIsotopeCRPersistence {
     @Autowired
