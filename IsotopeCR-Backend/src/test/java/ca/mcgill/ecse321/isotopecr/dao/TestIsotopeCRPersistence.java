@@ -343,108 +343,126 @@ public class TestIsotopeCRPersistence {
 	  assertEquals(invoiceID, invoice.getInvoiceID());
 	  
 	}
+	
+	@Test
+	public void testPersistAndLoadTechnician() {
+		
+		DayOfWeek day= DayOfWeek.Tuesday;
+		java.sql.Time startTime= java.sql.Time.valueOf(LocalTime.of(11, 35));
+		java.sql.Time endTime =  java.sql.Time.valueOf(LocalTime.of(13, 25));
+		String availabilityID ="availabilityID";
+		
+		DailyAvailability dA = new DailyAvailability();
+		dA.setAvailabilityID(availabilityID);
+		dA.setDay(day);
+		dA.setStartTime(startTime);
+		dA.setEndTime(endTime);
+
+	
+		
+		Set<DailyAvailability> dAs = new HashSet<DailyAvailability>();
+		dAs.add(dA);
+			
+		dailyAvailabilityRepository.save(dA);
+		
+		String type = "Resource Type";
+		int maxAvailable = 4;
+		
+		Resource resource = new Resource();
+		resource.setResourceType(type);
+		resource.setMaxAvailable(maxAvailable);
+		resourceRepository.save(resource);
+
+		// Create a Service
+		String name = "Service Name";
+		double price = 20.00;
+		int duration = 3;
+
+		Service service = new Service();
+		service.setServiceName(name);
+		service.setPrice(price);
+		service.setDuration(duration);
+		service.setResource(resource);
+
+		// Save the Service
+		
+		
+		Set<Service> services = new HashSet<Service>();
+		services.add(service);
+		
+		serviceRepository.save(service);
+		
+		
+		String firstName ="firstName";
+		String lastName ="lastName";
+		String email ="email";
+		String password ="password";
+		boolean isRegisteredAccount = true;
+		String profileID = "profileID";
+		
+		Technician t = new Technician();
+		t.setProfileID(profileID);
+		t.setEmail(email);
+		t.setFirstName(firstName);
+		t.setLastName(lastName);
+		t.setIsRegisteredAccount(isRegisteredAccount);
+		t.setPassword(password);
+		//t.setServices(services);
+		//t.setDailyAvailabilities(dAs);
+		technicianRepository.save(t);
+		
+		t = null;
+		
+		t=technicianRepository.findTechnicianByProfileID(profileID);
+		assertNotNull(t);
+		assertEquals(t.getProfileID(),profileID);
+		
+
+	}
+	
+	@Test
+	public void testPersistAndLoadAutoRepairShop() {
+		
+		String AutoRepairShopID = "ARS";
+		AutoRepairShop ars = new AutoRepairShop();
+		ars.setAutoRepairShopID(AutoRepairShopID);
+		
+		autoRepairShopRepository.save(ars);
+		
+		ars = null;
+		
+		ars = autoRepairShopRepository.findAutoRepairShopByAutoRepairShopID(AutoRepairShopID);
+		assertNotNull(ars);
+		assertEquals(ars.getAutoRepairShopID(),AutoRepairShopID);
+		
+	}
+}
+		
+//	//Victoria
 //	@Test
-//	public void testPersistAndLoadTechnician() {
-//		
-//		DayOfWeek day= DayOfWeek.Tuesday;
-//		java.sql.Time startTime= java.sql.Time.valueOf(LocalTime.of(11, 35));
-//		java.sql.Time endTime =  java.sql.Time.valueOf(LocalTime.of(13, 25));
-//		String availabilityID ="availabilityID";
-//		
-//		DailyAvailability dA = new DailyAvailability();
-//		dA.setAvailabilityID(availabilityID);
-//		dA.setDay(day);
-//		dA.setStartTime(startTime);
-//		dA.setEndTime(endTime);
+//	public void testPersistAndLoadAppointment() {
+//	}
+////Jiatong
+
+
+
+//	/*
+////Jack
+//	@Test
+//	public void testPersistAndLoadCustomer() {
+//	}
+//
+//
+//
+////Zichen
+//	@Test
+//	public void testPersistAndLoadVehicle() {
+//	}
+//
+//	@Test
+//	public void testPersistAndLoadDailyAvailability() {
+//	}
+////Mathieu
 //
 //	
-//		
-//		Set<DailyAvailability> dAs = new HashSet<DailyAvailability>();
-//		dAs.add(dA);
-//			
-//		dailyAvailabilityRepository.save(dA);
-//		
-//		String type = "Resource Type";
-//		int maxAvailable = 4;
-//		
-//		Resource resource = new Resource();
-//		resource.setResourceType(type);
-//		resource.setMaxAvailable(maxAvailable);
-//		resourceRepository.save(resource);
-//
-//		// Create a Service
-//		String name = "Service Name";
-//		double price = 20.00;
-//		int duration = 3;
-//
-//		Service service = new Service();
-//		service.setServiceName(name);
-//		service.setPrice(price);
-//		service.setDuration(duration);
-//		service.setResource(resource);
-//
-//		// Save the Service
-//		
-//		
-//		Set<Service> services = new HashSet<Service>();
-//		services.add(service);
-//		
-//		serviceRepository.save(service);
-//		
-//		
-//		String firstName ="firstName";
-//		String lastName ="lastName";
-//		String email ="email";
-//		String password ="password";
-//		boolean isRegisteredAccount = true;
-//		String profileID = "profileID";
-//		
-//		Technician t = new Technician();
-//		t.setProfileID(profileID);
-//		t.setEmail(email);
-//		t.setFirstName(firstName);
-//		t.setLastName(lastName);
-//		t.setIsRegisteredAccount(isRegisteredAccount);
-//		t.setPassword(password);
-//		//t.setServices(services);
-//		//t.setDailyAvailabilities(dAs);
-//		technicianRepository.save(t);
-//		
-//		t = null;
-//		
-//		t=technicianRepository.findTechnicianByProfileID(profileID);
-//		assertNotNull(t);
-//		assertEquals(t.getProfileID(),profileID);
-//		
-//		
-//		
-//	}
-/*		
-	//Victoria
-	@Test
-	public void testPersistAndLoadAppointment() {
-	}
-//Jiatong
-
-
-
-	/*
-//Jack
-	@Test
-	public void testPersistAndLoadCustomer() {
-	}
-
-
-
-//Zichen
-	@Test
-	public void testPersistAndLoadVehicle() {
-	}
-
-	@Test
-	public void testPersistAndLoadDailyAvailability() {
-	}
-//Mathieu
-
-	*/
-}
+//}
