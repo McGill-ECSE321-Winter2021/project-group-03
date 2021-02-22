@@ -3,21 +3,28 @@ package ca.mcgill.ecse321.isotopecr.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.*;
-
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
+
+
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TestIsotopeCRPersistence {
     @Autowired
