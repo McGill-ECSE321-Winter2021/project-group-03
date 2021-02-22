@@ -1,10 +1,7 @@
 package ca.mcgill.ecse321.isotopecr.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Set;
-import javax.persistence.ManyToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Technician extends Profile{

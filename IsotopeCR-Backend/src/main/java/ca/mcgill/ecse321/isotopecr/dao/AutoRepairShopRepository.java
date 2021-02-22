@@ -1,12 +1,10 @@
 package ca.mcgill.ecse321.isotopecr.dao;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
+import org.springframework.data.repository.CrudRepository;
 import ca.mcgill.ecse321.isotopecr.model.AutoRepairShop;
 
-public interface AutoRepairShopRepository extends CrudRepository<AutoRepairShop,String>{
-	
-    AutoRepairShop findAutoRepairShopByAutoRepairShopID(String autoRepairShopID);
-  
-}
+public interface AutoRepairShopRepository extends CrudRepository<AutoRepairShop, String> {
 
+	AutoRepairShop findAutoRepairShopByAutoRepairShopID(String autoRepairShopID);
+
+}

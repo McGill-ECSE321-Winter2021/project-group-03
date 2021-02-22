@@ -15,9 +15,9 @@ public class IsotopeCRApplication {
 		SpringApplication.run(IsotopeCRApplication.class, args);
 	}
 
-@RequestMapping("/")
-  	public String greeting(){
-    	return "Hello world!";
-  	}
+	@RequestMapping("/")
+	public String greeting() {
+		return "Hello world!";
+	}
 
 }

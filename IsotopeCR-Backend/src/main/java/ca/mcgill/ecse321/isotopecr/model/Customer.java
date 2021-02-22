@@ -6,25 +6,25 @@ import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Customer extends Profile{
-   private Set<Vehicle> vehicle;
-   
-//   @OneToMany(mappedBy="customer" , cascade={CascadeType.ALL})
-   @OneToMany(cascade={CascadeType.ALL})
-   public Set<Vehicle> getVehicle() {
-      return this.vehicle;
-   }
-   
-   public void setVehicle(Set<Vehicle> vehicles) {
-      this.vehicle = vehicles;
-   }
-   
-   private String phoneNumber;
+public class Customer extends Profile {
+	private Set<Vehicle> vehicle;
 
-public void setPhoneNumber(String value) {
-    this.phoneNumber = value;
-}
-public String getPhoneNumber() {
-    return this.phoneNumber;
-}
+	@OneToMany(cascade = { CascadeType.ALL })
+	public Set<Vehicle> getVehicle() {
+		return this.vehicle;
+	}
+
+	public void setVehicle(Set<Vehicle> vehicles) {
+		this.vehicle = vehicles;
+	}
+
+	private String phoneNumber;
+
+	public void setPhoneNumber(String value) {
+		this.phoneNumber = value;
+	}
+
+	public String getPhoneNumber() {
+		return this.phoneNumber;
+	}
 }

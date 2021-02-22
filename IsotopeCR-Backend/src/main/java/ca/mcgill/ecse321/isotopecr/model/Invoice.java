@@ -1,8 +1,6 @@
 package ca.mcgill.ecse321.isotopecr.model;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Invoice{
