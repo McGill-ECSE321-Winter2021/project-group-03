@@ -6,16 +6,16 @@ import javax.persistence.Id;
 
 @Entity
 public class Vehicle{
-   private Customer customer;
-   
-   @ManyToOne(optional=false)
-   public Customer getCustomer() {
-      return this.customer;
-   }
-   
-   public void setCustomer(Customer customer) {
-      this.customer = customer;
-   }
+//   private Customer customer;
+//   
+//   @ManyToOne(optional=false)
+//   public Customer getCustomer() {
+//      return this.customer;
+//   }
+//   
+//   public void setCustomer(Customer customer) {
+//      this.customer = customer;
+//   }
    
    private String licensePlate;
 

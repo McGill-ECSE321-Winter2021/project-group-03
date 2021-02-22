@@ -139,6 +139,7 @@ public class TestIsotopeCRPersistence {
 		assertEquals(slotID,ts.getSlotID());
 		
 	}
+	
 	@Test
 	public void testPersistAndLoadAdmin() {
 		
@@ -171,6 +172,86 @@ public class TestIsotopeCRPersistence {
 		assertEquals(profileID, a.getProfileID());
 		
 	}
+	
+	
+	//Jack
+		@Test
+		public void testPersistAndLoadCustomer() {
+			
+			// Create two vehicles
+			String brand1 = "Nissan";
+			String brand2 = "Volkswagen";
+			String model1 = "GT-R";
+			String model2 = "Tiguan";
+			int year1 = 2016;
+			int year2 = 2018;
+			String licensePlate1 = "xxxx1";
+			String licensePlate2 = "xxxx2";
+			
+			
+			Vehicle v1 = new Vehicle();
+			Vehicle v2 = new Vehicle();
+			v1.setBrand(brand1);
+			v2.setBrand(brand2);
+			v1.setModel(model1);
+			v2.setBrand(model2);
+			v1.setYear(year1);
+			v2.setYear(year2);
+			v1.setLicensePlate(licensePlate1);
+			v2.setLicensePlate(licensePlate2);
+//			v1.setCustomer(a);
+//			v2.setCustomer(a);
+			
+			vehicleRepository.save(v1);
+			vehicleRepository.save(v2);
+			
+			Set<Vehicle> vehicles = new HashSet<Vehicle> (); 
+			vehicles.add(v1);
+			vehicles.add(v2);
+			
+			// Create a customer
+			
+			String firstName = "John";
+			String lastName = "Doe";
+			String email = "john.doe@mail.mcgill.ca";
+			String phoneNumber = "613-555-xxxx";
+			String password = "12345";
+			Boolean isRegistered = true;
+			String profileID = "C1";
+			Customer c = new Customer();
+			
+			c.setFirstName(firstName);
+			c.setLastName(lastName);
+			c.setEmail(email);
+			c.setPhoneNumber(phoneNumber);
+			c.setIsRegisteredAccount(isRegistered);
+			c.setProfileID(profileID);
+			c.setPassword(password);
+			c.setVehicle(vehicles);
+			
+			customerRepository.save(c);
+			
+			// Test find by profileID
+			
+			c = null;
+			
+			c = customerRepository.findCustomerByProfileID(profileID);
+			assertNotNull(c);
+			assertEquals(profileID, c.getProfileID());
+			
+			// Test find by vehicles
+			
+			c = null;
+			c = customerRepository.findByVehicle(v1);
+			assertNotNull(c);
+			assertEquals(profileID, c.getProfileID());
+			
+			c = null;
+			c = customerRepository.findByVehicle(v2);
+			assertNotNull(c);
+			assertEquals(profileID, c.getProfileID());
+			
+		}
 
 	/*@Test
 	public void testPersistAndLoadService() {

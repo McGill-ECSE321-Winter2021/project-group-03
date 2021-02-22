@@ -12,5 +12,5 @@ public interface VehicleRepository extends CrudRepository<Vehicle,String> {
 
 	Vehicle findVehicleByLicensePlate(String licensePlate);
 	
-	List<Vehicle> findByCustomer(Customer customer);
+//	List<Vehicle> findByCustomer(Customer customer);
 }

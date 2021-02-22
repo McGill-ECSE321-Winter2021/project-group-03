@@ -9,7 +9,8 @@ import javax.persistence.OneToMany;
 public class Customer extends Profile{
    private Set<Vehicle> vehicle;
    
-   @OneToMany(mappedBy="customer" , cascade={CascadeType.ALL})
+//   @OneToMany(mappedBy="customer" , cascade={CascadeType.ALL})
+   @OneToMany(cascade={CascadeType.ALL})
    public Set<Vehicle> getVehicle() {
       return this.vehicle;
    }
