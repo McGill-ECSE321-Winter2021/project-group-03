@@ -1,66 +1,53 @@
 package ca.mcgill.ecse321.isotopecr.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
+import javax.persistence.Id;
 
 @Entity
-public class Vehicle {
-	
-	// TODO do we need this???
-	private Customer customer;
-	
-	@ManyToOne
-	public Customer getCustomer(){
-		return this.customer;
-	}
-	
-	public void setCustomer(Customer customer) {
-		   this.customer = customer;
-	}
-	
-	private int year;
-	
-	public int getYear() {
-		return year;
-	}
-	
-	public void setYear(int year) {
-		this.year = year;
-	}
-	
-	private String model;
-	
-	public String getModel() {
-		return model;
-	}
+public class Vehicle{
+   private Customer customer;
+   
+   @ManyToOne(optional=false)
+   public Customer getCustomer() {
+      return this.customer;
+   }
+   
+   public void setCustomer(Customer customer) {
+      this.customer = customer;
+   }
+   
+   private String licensePlate;
 
-	public void setModel(String model) {
-		this.model = model;
-	}
-	
-	private String brand;
-	
-	public String getBrand() {
-		return brand;
-	}
+public void setLicensePlate(String value) {
+    this.licensePlate = value;
+}
+@Id
+public String getLicensePlate() {
+    return this.licensePlate;
+}
+private Integer year;
 
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-	
-	private String licensePlate;
-	
-	@Id
-	public String getLicensePlate() {
-		return licensePlate;
-	}
+public void setYear(Integer value) {
+    this.year = value;
+}
+public Integer getYear() {
+    return this.year;
+}
+private String model;
 
-	public void setLicensePlate(String licensePlate) {
-		this.licensePlate = licensePlate;
-	}
+public void setModel(String value) {
+    this.model = value;
+}
+public String getModel() {
+    return this.model;
+}
+private String brand;
+
+public void setBrand(String value) {
+    this.brand = value;
+}
+public String getBrand() {
+    return this.brand;
+}
 }

@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
-@EntityScan("ca.mcgill.ecse321.isotopecr.model")
+//@EntityScan("ca.mcgill.ecse321.isotopecr.model")
 //@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TestIsotopeCRPersistence {
@@ -35,7 +35,6 @@ public class TestIsotopeCRPersistence {
 	private ServiceRepository serviceRepository;
 	@Autowired
 	private ResourceRepository resourceRepository;
-
 	@Autowired
 	private TimeslotRepository timeslotRepository;
 	@Autowired
@@ -52,6 +51,7 @@ public class TestIsotopeCRPersistence {
 	private TechnicianRepository technicianRepository;
 	@Autowired
 	private AppointmentRepository appointmentRepository;
+
 	
 	@AfterEach
 	public void clearDatabase() {
@@ -67,20 +67,22 @@ public class TestIsotopeCRPersistence {
 		vehicleRepository.deleteAll();
 		dailyAvailabilityRepository.deleteAll();
 		invoiceRepository.deleteAll();
-	
+			
 	}
 
+	
+	
 	@Test 
 	public void testPersistAndLoadCompanyProfile() {
+		
 		String name = "CompanyName";
 		String address="CompanyAddress";
-		String workingHours ="workingHours";
-		
+		String workingHours ="workingHours";		
 		CompanyProfile cp = new CompanyProfile();
 		cp.setAddress(address);
-		cp.setName(name);
+		cp.setCompanyName(name);
 		cp.setWorkingHours(workingHours);
-		
+
 		companyProfileRepository.save(cp);
 		
 		cp=null;
@@ -90,6 +92,7 @@ public class TestIsotopeCRPersistence {
 		assertEquals(address,cp.getAddress());
 	}
 
+	/*
 	@Test
 	public void testPersistAndLoadResource() {
 		String resourceType ="resourceType";
@@ -133,7 +136,7 @@ public class TestIsotopeCRPersistence {
 		int duration = 3;
 
 		Service service = new Service();
-		service.setName(name);
+		service.setServiceName(name);
 		service.setPrice(price);
 		service.setDuration(duration);
 		service.setResource(resource);
@@ -149,9 +152,9 @@ public class TestIsotopeCRPersistence {
 		// Test findServiceByName
 		service = null;
 
-		service = serviceRepository.findServiceByName(name);
+		service = serviceRepository.findServiceByServiceName(name);
 		assertNotNull(service);
-		assertEquals(name, service.getName());
+		assertEquals(name, service.getServiceName());
 		assertEquals(resource.getResourceType(),service.getResource().getResourceType());
 
 //		// Test findServiceByResource
@@ -326,4 +329,5 @@ public class TestIsotopeCRPersistence {
 //	  assertEquals(invoiceID, invoice.getInvoiceID());
 //	  //assertEquals(appointment.getAppointmentID(), invoice.getAppointment().getAppointmentID());
 	}
+	*/
 }

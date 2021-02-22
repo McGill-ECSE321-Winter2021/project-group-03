@@ -1,50 +1,58 @@
 package ca.mcgill.ecse321.isotopecr.model;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Id;
 import java.sql.Time;
-
 
 @Entity
 public class DailyAvailability{
 	
-	private String availabilityID;
-    @Id
-    public String getAvailabilityID(){
-        return this.availabilityID;
-    }
-    public void setAvailabilityID (String availabilityID){
-        this.availabilityID = availabilityID;
-    }
-    
-    public enum DayOfWeek {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday};
-    private DayOfWeek day;
+   public enum DayOfWeek {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday};
 
-    public void setDay(DayOfWeek day){
-        this.day = day;
-    }
+	
+   private Technician technician;
+   
+   @ManyToOne(optional=false)
+   public Technician getTechnician() {
+      return this.technician;
+   }
+   
+   public void setTechnician(Technician technician) {
+      this.technician = technician;
+   }
+   
+   private String availabilityID;
 
-    public DayOfWeek getDay(){
-        return this.day;
-    }
+public void setAvailabilityID(String value) {
+    this.availabilityID = value;
+}
+@Id
+public String getAvailabilityID() {
+    return this.availabilityID;
+}
+private DayOfWeek day;
 
-    private Time startTime;
+public void setDay(DayOfWeek value) {
+    this.day = value;
+}
+public DayOfWeek getDay() {
+    return this.day;
+}
+private Time startTime;
 
-    public void setStartTime (Time startTime){
-        this.startTime = startTime;
-    }
+public void setStartTime(Time value) {
+    this.startTime = value;
+}
+public Time getStartTime() {
+    return this.startTime;
+}
+private Time endTime;
 
-    public Time getStartTime (){
-        return this.startTime;
-    }
-
-    private Time endTime;
-
-    public void setEndTime (Time endTime){
-        this.endTime = endTime;
-    }
-
-    public Time getEndTime(){
-        return this.endTime;
-    }
+public void setEndTime(Time value) {
+    this.endTime = value;
+}
+public Time getEndTime() {
+    return this.endTime;
+}
 }
