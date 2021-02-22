@@ -30,9 +30,12 @@ import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 public class TestIsotopeCRPersistence {
     @Autowired
 	private CompanyProfileRepository companyProfileRepository;
-
+    @Autowired
+   	private AutoRepairShopRepository autoRepairShopRepository;
 	@Autowired
 	private ServiceRepository serviceRepository;
+	@Autowired
+	private ProfileRepository profileRepository;
 	@Autowired
 	private ResourceRepository resourceRepository;
 	@Autowired
@@ -55,7 +58,8 @@ public class TestIsotopeCRPersistence {
 	
 	@AfterEach
 	public void clearDatabase() {
-		
+		autoRepairShopRepository.deleteAll();
+		profileRepository.deleteAll();
 		appointmentRepository.deleteAll();
 		companyProfileRepository.deleteAll();
 		serviceRepository.deleteAll();
@@ -90,9 +94,10 @@ public class TestIsotopeCRPersistence {
 		cp=companyProfileRepository.findCompanyProfileByAddress(address);
 		assertNotNull(cp);
 		assertEquals(address,cp.getAddress());
+		assertEquals("1","1");
 	}
 
-	/*
+	
 	@Test
 	public void testPersistAndLoadResource() {
 		String resourceType ="resourceType";
@@ -113,8 +118,61 @@ public class TestIsotopeCRPersistence {
 		
 		
 	}
-
 	@Test
+	public void testPersistAndLoadTimeslot() {
+		java.sql.Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		java.sql.Time time = java.sql.Time.valueOf(LocalTime.of(11, 35));
+		String slotID ="slotID";
+		
+		Timeslot ts = new Timeslot();
+		ts.setDate(date);
+		ts.setSlotID(slotID);
+		ts.setTime(time);
+		
+		timeslotRepository.save(ts);
+		
+		ts=null;
+		
+		ts=timeslotRepository.findTimeslotBySlotID(slotID);
+		
+		assertNotNull(ts);
+		assertEquals(slotID,ts.getSlotID());
+		
+	}
+	@Test
+	public void testPersistAndLoadAdmin() {
+		
+		String firstName = "John";
+		String lastName = "Doe";
+		String email = "john.doe@mail.mcgill.ca";
+		Boolean isRegistered = true;
+		String profileID = "C1";
+		String password = "12345";
+		Boolean isOwner = true;
+		
+		Admin a = new Admin();
+		
+		a.setFirstName(firstName);
+		a.setLastName(lastName);
+		a.setEmail(email);
+		a.setIsRegisteredAccount(isRegistered);
+		a.setProfileID(profileID);
+		a.setPassword(password);
+		a.setIsOwner(isOwner);
+		
+		adminRepository.save(a);
+		
+		// Test find by profileID
+		
+		a = null;
+		
+		a = adminRepository.findAdminByProfileID(profileID);
+		assertNotNull(a);
+		assertEquals(profileID, a.getProfileID());
+		
+	}
+
+	/*@Test
 	public void testPersistAndLoadService() {
 
 	
@@ -144,10 +202,6 @@ public class TestIsotopeCRPersistence {
 		// Save the Service
 		serviceRepository.save(service);
 
-		// Create a list of services
-		//Set<Service> services = new HashSet<>();
-//		List<Service> services = new ArrayList<>();
-//		services.add(service);
 
 		// Test findServiceByName
 		service = null;
@@ -167,8 +221,8 @@ public class TestIsotopeCRPersistence {
 //			assertEquals(servicesFound.get(i).getResource().getResourceType(), resource.getResourceType());
 //		}
 	}
-
-		
+	
+/*		
 	//Victoria
 	@Test
 	public void testPersistAndLoadAppointment() {
@@ -251,49 +305,14 @@ public class TestIsotopeCRPersistence {
 //		
 //	}
 
-	@Test
-	public void testPersistAndLoadTimeslot() {
-		java.sql.Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
-		java.sql.Time time = java.sql.Time.valueOf(LocalTime.of(11, 35));
-		String slotID ="slotID";
-		
-		Timeslot ts = new Timeslot();
-		ts.setDate(date);
-		ts.setSlotID(slotID);
-		ts.setTime(time);
-		
-		timeslotRepository.save(ts);
-		
-		ts=null;
-		
-		ts=timeslotRepository.findTimeslotBySlotID(slotID);
-		
-		assertNotNull(ts);
-		assertEquals(slotID,ts.getSlotID());
-		
-	}
+
+	/*
 //Jack
 	@Test
 	public void testPersistAndLoadCustomer() {
 	}
 
-	@Test
-	public void testPersistAndLoadAdmin() {
-//		
-//			String profileid = "john.doe@mail.com";
-//			// First example for object save/load
-//			Admin admin = new Admin();
-//			// First example for attribute save/load
-//			admin.setProfileID(profileid);
-//			adminRepository.save(admin);
-//
-//			admin = null;
-//
-//			admin = adminRepository.findAdminByProfileID(profileid);
-//			assertNotNull(admin);
-//			assertEquals(profileid, admin.getEmail());
-			
-	}
+
 
 //Zichen
 	@Test

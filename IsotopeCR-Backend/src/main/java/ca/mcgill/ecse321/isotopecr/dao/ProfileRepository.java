@@ -6,5 +6,5 @@ import ca.mcgill.ecse321.isotopecr.model.Profile;
 
 public interface ProfileRepository extends CrudRepository<Profile, String>{
 
-	Profile findProfileByEmail(String profileID);
+	Profile findProfileByProfileID(String profileID);
 }
