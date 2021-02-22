@@ -21,7 +21,7 @@ public class Technician extends Profile{
    
    private Set<DailyAvailability> dailyAvailability;
    
-   @OneToMany(mappedBy="technician" , cascade={CascadeType.ALL})
+   @OneToMany(/*mappedBy="technician" ,*/ cascade={CascadeType.ALL})
    public Set<DailyAvailability> getDailyAvailability() {
       return this.dailyAvailability;
    }
