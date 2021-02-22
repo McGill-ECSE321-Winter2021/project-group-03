@@ -1,8 +1,6 @@
 language: java
-before_install:
- - chmod +x gradlew
 script:
+- chmod +x gradlew
 - gradle build
-
 env:
   - SPRING_DATASOURCE_URL=jdbc:postgresql://ec2-3-223-72-172.compute-1.amazonaws.com:5432/d20n64jv2b09ca?password=be306d36912f9e2c28d59aa58b175743a5738f565a6e251ab5011706381fab3e&sslmode=require&user=gfpikkdrnzebuk
