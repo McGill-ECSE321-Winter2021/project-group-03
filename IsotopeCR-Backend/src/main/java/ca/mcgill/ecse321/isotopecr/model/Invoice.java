@@ -1,55 +1,45 @@
 package ca.mcgill.ecse321.isotopecr.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.util.Set;
+import javax.persistence.Id;
 
 @Entity
-public class Invoice {
-	
-//	//TODO do we need this???
-//	private Appointment appointment;
-//	
-//	@OneToOne
-//	public Appointment getAppointment(){
-//		return this.appointment;
-//	}
-//	
-//	public void setAppointment(Appointment appointment) {
-//		   this.appointment = appointment;
-//	}
-	
-	private double cost;
-	
-	public double getCost() {
-		return cost;
-	}
-	
-	public void setCost(double cost) {
-		this.cost = cost;
-	}
-	
-	private String invoiceID;
-	
-	@Id
-	public String getInvoiceID() {
-		return invoiceID;
-	}
-	
-	public void setInvoiceID(String invoiceID) {
-		this.invoiceID = invoiceID;
-	}
-	
-	private boolean isPaid;
-	
-	public boolean getIsPaid() {
-		return isPaid;
-	}
+public class Invoice{
+//   private Appointment appointment;
+//   
+//   @OneToOne(optional=false)
+//   public Appointment getAppointment() {
+//      return this.appointment;
+//   }
+//   
+//   public void setAppointment(Appointment appointment) {
+//      this.appointment = appointment;
+//   }
+//   
+   private String invoiceID;
 
-	public void setIsPaid(boolean isPaid) {
-		this.isPaid = isPaid;
-	}
+public void setInvoiceID(String value) {
+    this.invoiceID = value;
+}
+@Id
+public String getInvoiceID() {
+    return this.invoiceID;
+}
+private double cost;
+
+public void setCost(double value) {
+    this.cost = value;
+}
+public double getCost() {
+    return this.cost;
+}
+private Boolean isPaid;
+
+public void setIsPaid(Boolean value) {
+    this.isPaid = value;
+}
+public Boolean getIsPaid() {
+    return this.isPaid;
+}
 }

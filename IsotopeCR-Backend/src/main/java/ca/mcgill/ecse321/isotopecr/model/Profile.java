@@ -1,79 +1,57 @@
 package ca.mcgill.ecse321.isotopecr.model;
 
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.Id;
 
-
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="ProfileType")
-public abstract class Profile {
-	
-	private String profileID;
-	
-	@Id
-	public String getProfileID() {
-		return this.profileID;
-	}
-	
-	public void setProfileID(String id) {
-		this.profileID = id;
-	}
-	
-	
-	private String firstName;
-	
-	public String getFirstName() {
-		return this.firstName;
-	}
-	
-	public void setFirstName(String firstname) {
-		this.firstName = firstname;
-	}
-	
-	private String lastName;
-	
-	public String getLastName() {
-		return this.lastName;
-	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	
-	private String email;
-	
-	public String getEmail() {
-		return this.email;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	private String password;
-	
-	public String getPassword() {
-		return this.password;
-	}
-	
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	private boolean isRegisteredAccount;
-	
-	public boolean getIsRegisteredAccount() {
-		return this.isRegisteredAccount;
-	}
-	
-	public void setIsRegisteredAccount(boolean isRegisteredAccount) {
-		this.isRegisteredAccount = isRegisteredAccount;
-	}
+public class Profile{
+   private String profileID;
 
+public void setProfileID(String value) {
+    this.profileID = value;
 }
+@Id
+public String getProfileID() {
+    return this.profileID;
+}
+private String firstName;
 
+public void setFirstName(String value) {
+    this.firstName = value;
+}
+public String getFirstName() {
+    return this.firstName;
+}
+private String lastName;
+
+public void setLastName(String value) {
+    this.lastName = value;
+}
+public String getLastName() {
+    return this.lastName;
+}
+private String email;
+
+public void setEmail(String value) {
+    this.email = value;
+}
+public String getEmail() {
+    return this.email;
+}
+private String password;
+
+public void setPassword(String value) {
+    this.password = value;
+}
+public String getPassword() {
+    return this.password;
+}
+private Boolean isRegisteredAccount;
+
+public void setIsRegisteredAccount(Boolean value) {
+    this.isRegisteredAccount = value;
+}
+public Boolean getIsRegisteredAccount() {
+    return this.isRegisteredAccount;
+}
+}

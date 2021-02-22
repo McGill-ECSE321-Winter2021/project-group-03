@@ -4,36 +4,30 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class CompanyProfile {
-	private String name;
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
-	private String address;
-	@Id
-	public String getAddress() {
-		return this.address;
-	}
-	
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
-	
-	private String workingHours;
-	
-	public String getWorkingHours() {
-		return this.workingHours;
-	}
-	
-	public void setWorkingHours(String workingHours) {
-		this.workingHours = workingHours;
-	}
+public class CompanyProfile{
+   private String companyName;
+
+public void setCompanyName(String value) {
+    this.companyName = value;
+}
+public String getCompanyName() {
+    return this.companyName;
+}
+private String address;
+
+public void setAddress(String value) {
+    this.address = value;
+}
+@Id
+public String getAddress() {
+    return this.address;
+}
+private String workingHours;
+
+public void setWorkingHours(String value) {
+    this.workingHours = value;
+}
+public String getWorkingHours() {
+    return this.workingHours;
+}
 }

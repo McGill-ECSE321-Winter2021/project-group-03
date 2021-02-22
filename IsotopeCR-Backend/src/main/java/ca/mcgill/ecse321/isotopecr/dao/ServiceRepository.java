@@ -10,7 +10,7 @@ import ca.mcgill.ecse321.isotopecr.model.Service;
 
 public interface ServiceRepository extends CrudRepository <Service,String> {
 
-	Service findServiceByName(String name);
+	Service findServiceByServiceName(String serviceName);
 	
 	List<Service> findServiceByResource(Resource resource);
 	

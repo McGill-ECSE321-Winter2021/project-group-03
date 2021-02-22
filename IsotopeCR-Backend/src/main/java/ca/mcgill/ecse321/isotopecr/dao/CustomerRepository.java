@@ -10,5 +10,5 @@ public interface CustomerRepository extends CrudRepository <Customer,String> {
 
 	Customer findCustomerByProfileID(String id);
 	
-	Customer findByVehicles(Vehicle vehicles);
+	Customer findByVehicle(Vehicle vehicle);
 }
