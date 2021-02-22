@@ -625,6 +625,23 @@ public class TestIsotopeCRPersistence {
 		appointmentRepository.save(appointment);
 		return appointment;
 	}
+	
+	@Test
+	public void testPersistAndLoadAutoRepairShop() {
+
+		String AutoRepairShopID = "ARS";
+		AutoRepairShop ars = new AutoRepairShop();
+		ars.setAutoRepairShopID(AutoRepairShopID);
+
+		autoRepairShopRepository.save(ars);
+
+		ars = null;
+
+		ars = autoRepairShopRepository.findAutoRepairShopByAutoRepairShopID(AutoRepairShopID);
+		assertNotNull(ars);
+		assertEquals(ars.getAutoRepairShopID(),AutoRepairShopID);
+
+	}
 
 
 
