@@ -45,7 +45,7 @@ public class Appointment{
    
    private Invoice invoice;
    
-   @OneToOne(mappedBy="appointment" , cascade={CascadeType.ALL})
+   @OneToOne(/*mappedBy="appointment",*/ cascade={CascadeType.ALL})
    public Invoice getInvoice() {
       return this.invoice;
    }

@@ -319,6 +319,30 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(dA);
 		assertEquals(availabilityID, dA.getAvailabilityID());
 	}
+	@Test
+	public void testPersistAndLoadInvoice() {
+		
+	Invoice invoice = new Invoice();
+
+	  
+	  String invoiceID = "12345";
+	  double cost = 150;
+	  boolean isPaid = true;
+	  
+	  
+	  invoice.setInvoiceID(invoiceID);
+	  invoice.setCost(cost);
+	  invoice.setIsPaid(isPaid);
+	  invoiceRepository.save(invoice);
+	  
+	  invoice = null;
+	  
+	  
+	  invoice = invoiceRepository.findInvoiceByInvoiceID(invoiceID);
+	  assertNotNull(invoice);
+	  assertEquals(invoiceID, invoice.getInvoiceID());
+	  
+	}
 //	@Test
 //	public void testPersistAndLoadTechnician() {
 //		
@@ -421,30 +445,6 @@ public class TestIsotopeCRPersistence {
 	public void testPersistAndLoadDailyAvailability() {
 	}
 //Mathieu
-	@Test
-	public void testPersistAndLoadInvoice() {
-		
-//	Invoice invoice = new Invoice();
-//
-//	  
-//	  String invoiceID = "12345";
-//	  double cost = 150;
-//	  boolean isPaid = true;
-//	  
-//	  
-//	  invoice.setInvoiceID(invoiceID);
-//	  invoice.setCost(cost);
-//	  invoice.setIsPaid(isPaid);
-//	  //invoice.setAppointment(appointment);
-//	  invoiceRepository.save(invoice);
-//	  
-//	  invoice = null;
-//	  
-//	  
-//	  invoice = invoiceRepository.findInvoiceByInvoiceID(invoiceID);
-//	  assertNotNull(invoice);
-//	  assertEquals(invoiceID, invoice.getInvoiceID());
-//	  //assertEquals(appointment.getAppointmentID(), invoice.getAppointment().getAppointmentID());
-	}
+
 	*/
 }
