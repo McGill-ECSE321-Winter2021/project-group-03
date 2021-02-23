@@ -63,6 +63,10 @@ public class TestIsotopeCRPersistence {
 		invoiceRepository.deleteAll();
 	}
 	
+	/**
+	 *  Test for Persistence of AutoRepairShop
+	 *  @author Jack Wei
+	 */
 	@Test
 	public void testPersistAndLoadAutoRepairShop() {
 		// Setting up the objects and variables
@@ -80,7 +84,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(ars);
 		assertEquals(ars.getAutoRepairShopID(), AutoRepairShopID);
 	}
-
+	/**
+	 *  Test for Persistence of CompanyProfile
+	 *  @author Jack Wei
+	 */
 	@Test
 	public void testPersistAndLoadCompanyProfile() {
 		// Setting up the objects and variables
@@ -98,7 +105,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(cp);
 		assertEquals(address, cp.getAddress());
 	}
-
+	/**
+	 *  Test for Persistence of Resource
+	 *  @author Mathieu-Joseph Magri
+	 */
 	@Test
 	public void testPersistAndLoadResource() {
 		// Setting up the objects and variables
@@ -115,7 +125,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(r);
 		assertEquals(resourceType, r.getResourceType());
 	}
-
+	/**
+	 *  Test for Persistence of Timeslot
+	 *  @author Mathieu-Joseph Magri
+	 */
 	@Test
 	public void testPersistAndLoadTimeslot() {
 		// Setting up the objects and variables
@@ -132,7 +145,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(ts);
 		assertEquals(slotID, ts.getSlotID());
 	}
-
+	/**
+	 *  Test for Persistence of Admin
+	 *  @author Zichen Chang
+	 */
 	@Test
 	public void testPersistAndLoadAdmin() {
 		// Setting up the objects and variables
@@ -154,7 +170,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(a);
 		assertEquals(profileID, a.getProfileID());
 	}
-
+	/**
+	 *  Test for Persistence of Customer
+	 *  @author Zichen Chang
+	 */
 	@Test
 	public void testPersistAndLoadCustomer() {
 		// Setting up the objects and variables
@@ -205,7 +224,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(c);
 		assertEquals(profileID, c.getProfileID());
 	}
-
+	/**
+	 *  Test for Persistence of Service
+	 *  @author Jiatong Niu
+	 */
 	@Test
 	public void testPersistAndLoadService() {
 		// Setting up the objects and variables
@@ -243,7 +265,10 @@ public class TestIsotopeCRPersistence {
 			assertEquals(servicesFound.get(i).getResource().getResourceType(), resource.getResourceType());
 		}
 	}
-
+	/**
+	 *  Test for Persistence of DailyAvailability
+	 *  @author Jiatong Niu
+	 */
 	@Test
 	public void testPersistAndLoadDailyAvailability() {
 		// Setting up the objects and variables
@@ -262,7 +287,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(dA);
 		assertEquals(availabilityID, dA.getAvailabilityID());
 	}
-
+	/**
+	 *  Test for Persistence of Invoice
+	 *  @author Jiatong Niu
+	 */
 	@Test
 	public void testPersistAndLoadInvoice() {
 		// Setting up the objects and variables
@@ -280,7 +308,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(invoice);
 		assertEquals(invoiceID, invoice.getInvoiceID());
 	}
-
+	/**
+	 *  Test for Persistence of Technician
+	 *  @author Victoria Iannotti
+	 */
 	@Test
 	public void testPersistAndLoadTechnician() {
 		// Setting up the objects and variables
@@ -325,7 +356,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(t);
 		assertEquals(t.getProfileID(), profileID);
 	}
-
+	/**
+	 *  Test for Persistence of Vehicle
+	 *  @author Victoria Iannotti
+	 */
 	@Test
 	public void testPersistAndLoadVehicle() {
 		// Setting up the objects and variables
@@ -342,7 +376,10 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(v);
 		assertEquals(licensePlate, v.getLicensePlate());
 	}
-
+	/**
+	 *  Test for Persistence of Appointment
+	 *  @author Victoria Iannotti
+	 */
 	@Test
 	public void testPersistAndLoadAppointment() {
 		// Setting up the objects and variables
