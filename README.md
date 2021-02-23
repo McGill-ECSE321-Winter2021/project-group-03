@@ -8,19 +8,19 @@ Checkout our [wiki](https://github.com/McGill-ECSE321-Winter2021/project-group-0
 ## Team Members
 
 #### Zichen Chang
-Zichen is a student in his third year of studies in the Computer Engineering program at McGill.
+Zichen is a U2 student in the Computer Engineering program at McGill.
 
 #### Victoria Iannotti
-Victoria is a student in her second year of studies in the Software Engineering program at McGill.
+Victoria is a U2 student in the Software Engineering program at McGill.
 
 #### Mathieu-Joseph Magri
-Mathieu is a student in his second year of studies in the Software Engineering program at McGill.
+Mathieu is a U2 student in the Software Engineering program at McGill.
 
 #### Jiatong Niu
-Jiatong is a student in her second year of studies in the Software Engineering program at McGill.
+Jiatong is a U2 student in the Software Engineering program at McGill.
 
 #### Jack Wei
-Jack is a student in his third year of studies in the Computer Engineering program at McGill.
+Jack is a U2 student in the Computer Engineering program at McGill.
   
  ### Below, a table representing each member's role withing the team, and their hours worked per deliverable.
  
@@ -28,7 +28,7 @@ Jack is a student in his third year of studies in the Computer Engineering progr
 |----------------------|--------------------------------|---------------|-------------------|-------------------|-------------------|-------------------|
 | Zichen Chang         | Project Manager                |     30hrs     | Going to be a lot | Going to be a lot | Going to be a lot | Going to be a lot |
 | Victoria Iannotti    | Software Developper            |     33hrs     | Going to be a lot | Going to be a lot | Going to be a lot | Going to be a lot |
-| Mathieu-Joseph Magri | Product Manager                |     33hrs     | Going to be a lot | Going to be a lot | Going to be a lot | Going to be a lot |
+| Mathieu-Joseph Magri | QA Lead                        |     33hrs     | Going to be a lot | Going to be a lot | Going to be a lot | Going to be a lot |
 | Jiatong Niu          | Software Consultant            |     33hrs     | Going to be a lot | Going to be a lot | Going to be a lot | Going to be a lot |
 | Jack Wei             | Software Architecture Engineer |     33hrs     | Going to be a lot | Going to be a lot | Going to be a lot | Going to be a lot |
 
