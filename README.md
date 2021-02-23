@@ -1,7 +1,7 @@
 # ECSE 321 - Winter 2021 - Group 03 - IsotopeCarRepair System
 
 ## Project Overview
-The goal of this project is to simply modernise our local neighborhood's car repair shop. To achieve such a task, we will help design a website and mobile application that will effectively transfer all in-person related planning tasks of the garage to the website. Our website shall be able to allow the creation of profiles, booking of appointments, payments of such appointments and send reminders to customers. The webiste will possess all functionality while the mobile application will possess the most important functionality features.
+The goal of this project is to simply modernise our local neighborhood's car repair shop. To achieve such a task, we will help design a website and mobile application that will effectively transfer all in-person related planning tasks of the garage to the website. Our website shall be able to allow the creation of profiles, booking of appointments, payments of such appointments and send reminders to customers. The website will possess all the functionalities while the mobile application will possess the most important features.
 
 Checkout our [wiki](https://github.com/McGill-ECSE321-Winter2021/project-group-03/wiki) for more info!
 
