@@ -20,7 +20,7 @@ Mathieu is a student in his second year of studies in the Software Engineering p
 Jiatong is a student in her second year of studies in the <Program> program at McGill.
 
 #### Jack Wei
-Jack is a student in his second year of studies in the <Program> program at McGill.
+Jack is a student in his third year of studies in the Computer Engineering program at McGill.
   
  ### Below, a table representing each member's role withing the team, and their hours worked per deliverable.
  
