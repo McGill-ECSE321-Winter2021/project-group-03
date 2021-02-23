@@ -8,7 +8,7 @@ Checkout our [wiki](https://github.com/McGill-ECSE321-Winter2021/project-group-0
 ## Team Members
 
 #### Zichen Chang
-Zichen is a student in his second year of studies in the <Program> program at McGill.
+Zichen is a student in his third year of studies in the Computer Engineering program at McGill.
 
 #### Victoria Iannotti
 Victoria is a student in her second year of studies in the Software Engineering program at McGill.
