@@ -17,7 +17,7 @@ Victoria is a student in her second year of studies in the Software Engineering 
 Mathieu is a student in his second year of studies in the Software Engineering program at McGill.
 
 #### Jiatong Niu
-Jiatong is a student in her second year of studies in the <Program> program at McGill.
+Jiatong is a student in her second year of studies in the Software Engineering program at McGill.
 
 #### Jack Wei
 Jack is a student in his third year of studies in the Computer Engineering program at McGill.
