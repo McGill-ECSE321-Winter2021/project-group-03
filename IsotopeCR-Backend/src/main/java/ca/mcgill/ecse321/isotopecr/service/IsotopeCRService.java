@@ -43,31 +43,25 @@ public class IsotopeCRService {
 	@Autowired
 	AppointmentRepository appointmentRepository;
 
-
-	@Transactional
-	public Customer createCustomer(String firstName, String lastName) {
-		Customer customer = new Customer();
-		customer.setFirstName(firstName);
-		customer.setLastName(lastName);
-
-		// TODO: finish all the fields for customer
-
-		customerRepository.save(customer);
-		return customer;
-	}
 	
 	@Transactional
-	public void updateAvailability(Technician tech, String day, Time startTime, 
+	public void updateAvailability(Technician tech, DayOfWeek day, Time startTime, 
 			Time endTime) {
 		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
-		for(DailyAvailability da : availabilities) {
-			if (da.getDay().toString().equals(day)) {
-				da.setStartTime(startTime);
-				da.setEndTime(endTime);
+		for(DailyAvailability availability : availabilities) {
+			if (availability.getDay().equals(day)) {
+				availability.setStartTime(startTime);
+				availability.setEndTime(endTime);
 				return;
 			}
 		}
-		System.out.println("Input day is invalid, please retry.");
+		System.out.println("Input day is invalid, please retry.");	// TODO where to check the input
+	}
+	
+	@Transactional
+	public List<DailyAvailabilityDto> viewAvailability(Technician tech){
+		// TODO: return technician with his/her availabilities
+		List<DailyAvailabilityDto> availabilities = toList(tech.getDailyAvailability());
 	}
 
 	
@@ -95,7 +89,7 @@ public class IsotopeCRService {
 	
 	
 	@Transactional
-	public double viewSummary() {
+	public double viewIncomeSummary() {
 		// TODO: want to see the income summation / resource allocation.
 		List<Invoice> invoices = toList(invoiceRepository.findAll());
 		double incomeSummary = 0d;
@@ -104,6 +98,13 @@ public class IsotopeCRService {
 		}
 		return incomeSummary;
 	}
+	
+	@Transactional
+	public void viewResourceSummary() {
+		// TODO: want to see the resource allocation.
+		
+	}
+	
 	
 	
 	private <T> List<T> toList(Iterable<T> iterable){
