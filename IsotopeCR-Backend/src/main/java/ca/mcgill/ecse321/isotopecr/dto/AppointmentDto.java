@@ -11,6 +11,7 @@ public class AppointmentDto {
 	private ServiceDto aService;
 	private Set<TimeslotDto> timeslots;
 	private String aAppointmentID;
+	
 	public AppointmentDto() {
 	}
 	

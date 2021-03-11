@@ -2,8 +2,10 @@ package ca.mcgill.ecse321.isotopecr.service;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,10 +46,26 @@ public class IsotopeCRService {
 	private AppointmentRepository appointmentRepository;
 
 	@Transactional
-	public Appointment bookAppointment(String appointmentID, Customer customer, Vehicle vehicle,
-			Technician technician, Invoice invoice, ca.mcgill.ecse321.isotopecr.model.Service service, Set<Timeslot> timeslots) {
+	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
+			Technician technician, Invoice invoice, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) {
 		Appointment appointment = new Appointment();
-		appointment.setAppointmentID(appointmentID);
+		Integer duration = service.getDuration();
+		Integer timeslotnum = duration/30;
+		Set <Timeslot> timeslots = new HashSet<Timeslot>();
+		
+		for(int i=0;i<timeslotnum;i++) {
+		       Timeslot ts = new Timeslot();
+		       ts.setDate(chosenDate);
+		       ts.setTime(startTime);
+		       ts.setSlotID(String.valueOf(chosenDate)+String.valueOf(startTime));
+		       timeslots.add(ts);
+		       LocalTime localtime = startTime.toLocalTime();
+		       localtime = localtime.plusMinutes(30);
+		       startTime = Time.valueOf(localtime);
+		}
+		
+		Timeslot timeslot = timeslots.iterator().next();
+		appointment.setAppointmentID(String.valueOf(customer.getProfileID().hashCode()*vehicle.getLicensePlate().hashCode()*timeslot.getSlotID().hashCode()));
 		appointment.setCustomer(customer);
 		appointment.setVehicle(vehicle);
 		appointment.setTechnician(technician);
@@ -61,14 +79,18 @@ public class IsotopeCRService {
 	}
 	
 	@Transactional
-	public boolean cancelAppointment (String appontmentID){
+	public boolean cancelAppointment (String appointmentID){
 		boolean isCancelled = false;
-		Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appontmentID);
-		appointmentRepository.delete(aptmt);
+		if(appointmentRepository.existsById(appointmentID)) {
+		    Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
+		    appointmentRepository.delete(aptmt);
 		
-		aptmt=appointmentRepository.findAppointmentByAppointmentID(appontmentID);
-		if (aptmt.equals(null)) {
-			isCancelled =true;
+		    aptmt=appointmentRepository.findAppointmentByAppointmentID(appointmentID);
+		    if (aptmt.equals(null)) {
+			    isCancelled =true;
+		    }
+		}else {
+			System.out.println("Invalid appointment ID");
 		}
 		return isCancelled;
 	}
@@ -88,11 +110,12 @@ public class IsotopeCRService {
     		boolean isBefore = true;
     		
     		Set<Timeslot> timeslots = aptmt.getTimeslot();
-    		for(Timeslot timeslot: timeslots) {
-    			if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
+    		Timeslot timeslot = timeslots.iterator().next();
+
+    		if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
     				isBefore = false;
-    			}
     		}
+    		
     		
     		if(isBefore ==true)
     			aptmtBeforeTime.add(aptmt);
@@ -110,10 +133,10 @@ public class IsotopeCRService {
     		boolean isBefore = true;
     		
     		Set<Timeslot> timeslots = aptmt.getTimeslot();
-    		for(Timeslot timeslot: timeslots) {
-    			if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
+    		Timeslot timeslot = timeslots.iterator().next();
+
+    		if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
     				isBefore = false;
-    			}
     		}
     		
     		if(isBefore ==false)
