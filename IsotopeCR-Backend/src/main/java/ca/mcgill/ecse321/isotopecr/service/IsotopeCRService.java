@@ -5,8 +5,10 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import java.util.Set;
@@ -63,11 +65,11 @@ public class IsotopeCRService {
 		System.out.println("Input day is invalid, please retry.");	// TODO where to check the input
 	}
 	
-//	@Transactional
-//	public List<DailyAvailabilityDto> viewAvailability(Technician tech){
-//		// TODO: return technician with his/her availabilities
-//		List<DailyAvailabilityDto> availabilities = toList(tech.getDailyAvailability());
-//	}
+	@Transactional
+	public List<DailyAvailability> viewAvailability(Technician tech){
+		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
+		return availabilities;
+	}
 
 	
 	@Transactional
@@ -92,6 +94,12 @@ public class IsotopeCRService {
 		}
 	}
 	
+	// return all resources
+	@Transactional
+	public List<Resource> viewAllResources() {
+		List<Resource> resources = toList(resourceRepository.findAll());
+		return resources;		
+	}
 	
 	@Transactional
 	public double viewIncomeSummary() {
@@ -105,9 +113,21 @@ public class IsotopeCRService {
 	}
 	
 	@Transactional
-	public void viewResourceSummary() {
-		// TODO: want to see the resource allocation.
+	public Map<String, Integer> viewResourceSummary() {
+		// TODO: want to see the income summation / resource allocation.
+		List<Resource> resources = toList(resourceRepository.findAll());
+		Map<String, Integer> resourceAllocation = new HashMap<String, Integer>();
 		
+		for (Resource resource : resources) {
+			resourceAllocation.put(resource.getResourceType(), 0);
+		}
+		
+		for (Appointment appointment : appointmentRepository.findAll()) {
+			String type = appointment.getService().getResource().getResourceType();
+			resourceAllocation.put(type, resourceAllocation.get(type) + 1);	// update the usage by 1;
+		}
+		
+		return resourceAllocation;
 	}
 	
 	
