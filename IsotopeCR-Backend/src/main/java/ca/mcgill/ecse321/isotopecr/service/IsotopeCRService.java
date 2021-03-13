@@ -25,16 +25,16 @@ import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
 public class IsotopeCRService {
 	@Autowired
-	private CustomerRepository customerRepository;
+	CustomerRepository customerRepository;
 	@Autowired
-	private AdminRepository adminRepository;
+	AdminRepository adminRepository;
 	@Autowired
-	private TechnicianRepository technicianRepository;
+	TechnicianRepository technicianRepository;
 	@Autowired
-	private ProfileRepository profileRepository;
+	ProfileRepository profileRepository;
 	@Autowired
-	private VehicleRepository vehicleRepository;
-  @Autowired
+	VehicleRepository vehicleRepository;
+	@Autowired
 	CompanyProfileRepository companyProfileRepository;
 	@Autowired
 	AutoRepairShopRepository autoRepairShopRepository;
@@ -590,6 +590,7 @@ public class IsotopeCRService {
 			resultList.add(t);
 		}
 		return resultList;
+	}
 	
 	/**
 	 * This helper method checks if the input email address satisfies a standard email address format.
@@ -747,6 +748,7 @@ public class IsotopeCRService {
 		Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(model);
         return matcher.matches();
+	}
 
 	/**
 	 * This helper method checks if the year of a vehicle is valid. The year must be between 1900 to 3000.
