@@ -4,16 +4,15 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -406,17 +405,18 @@ public class IsotopeCRService {
 			if (availability.getDay().equals(day)) {
 				availability.setStartTime(startTime);
 				availability.setEndTime(endTime);
+				dailyAvailabilityRepository.save(availability);
 				return;
 			}
 		}
 		System.out.println("Input day is invalid, please retry.");	// TODO where to check the input
 	}
 	
-//	@Transactional
-//	public List<DailyAvailabilityDto> viewAvailability(Technician tech){
-//		// TODO: return technician with his/her availabilities
-//		List<DailyAvailabilityDto> availabilities = toList(tech.getDailyAvailability());
-//	}
+	@Transactional
+	public List<DailyAvailability> viewAvailability(Technician tech){
+		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
+		return availabilities;
+	}
 
 	
 	@Transactional
@@ -441,10 +441,23 @@ public class IsotopeCRService {
 		}
 	}
 	
+
+	@Transactional
+	public List<Resource> viewAllResources() {
+		List<Resource> resources = toList(resourceRepository.findAll());
+		return resources;		
+	}
+	
+	
+	@Transactional
+	public List<Invoice> viewAllInvoices() {
+		// TODO return a list of Invoice
+		List<Invoice> invoices = toList(invoiceRepository.findAll());
+		return invoices;			
+	}
 	
 	@Transactional
 	public double viewIncomeSummary() {
-		// TODO: want to see the income summation / resource allocation.
 		List<Invoice> invoices = toList(invoiceRepository.findAll());
 		double incomeSummary = 0d;
 		for (Invoice i : invoices) {
@@ -454,11 +467,24 @@ public class IsotopeCRService {
 	}
 	
 	@Transactional
-	public void viewResourceSummary() {
-		// TODO: want to see the resource allocation.
+	public Map<String, Integer> viewResourceSummary() {
+		// TODO: want to see the income summation / resource allocation.
+		List<Resource> resources = toList(resourceRepository.findAll());
+		Map<String, Integer> resourceAllocation = new HashMap<String, Integer>();
 		
+		for (Resource resource : resources) {
+			resourceAllocation.put(resource.getResourceType(), 0);
+		}
+		
+		for (Appointment appointment : appointmentRepository.findAll()) {
+			String type = appointment.getService().getResource().getResourceType();
+			resourceAllocation.put(type, resourceAllocation.get(type) + 1);	// update the usage by 1;
+		}
+		
+		return resourceAllocation;
 	}
 	
+
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
 			Technician technician, Invoice invoice, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) {

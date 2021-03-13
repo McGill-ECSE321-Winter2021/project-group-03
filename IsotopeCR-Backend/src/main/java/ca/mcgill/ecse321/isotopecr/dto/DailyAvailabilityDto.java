@@ -15,16 +15,17 @@ public class DailyAvailabilityDto {
 	public DailyAvailabilityDto() {
 	}
 	
-	public DailyAvailabilityDto(String availabilityID, String day) {
+	/* Create a default DailyAvailabilityDto */
+	public DailyAvailabilityDto(String availabilityID, DayOfWeek day) {
 		this(availabilityID, java.sql.Time.valueOf(LocalTime.of(9, 00)), 
 				java.sql.Time.valueOf(LocalTime.of(17, 00)), day);
 	}
 	
-	public DailyAvailabilityDto(String availabilityID, Time startTime, Time endTime, String day) {
+	public DailyAvailabilityDto(String availabilityID, Time startTime, Time endTime, DayOfWeek day) {
 		this.availabilityID = availabilityID;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.day = DayOfWeek.valueOf(day);
+		this.day = day;
 	}
 
 	public String getAvailabilityID() {
