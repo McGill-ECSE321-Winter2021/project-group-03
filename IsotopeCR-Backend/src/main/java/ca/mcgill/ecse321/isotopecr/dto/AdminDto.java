@@ -8,7 +8,6 @@ import java.util.Set;
  *
  */
 public class AdminDto {
-	private String profileID;
 	private String email;
 	private String firstName;
 	private String lastName;
@@ -18,16 +17,12 @@ public class AdminDto {
 	public AdminDto() {
 	}
 	
-	public AdminDto(String profileID, String firstName, String lastName, String email, String password, Boolean isOwner) {
-		this.profileID = profileID;
+	public AdminDto(String firstName, String lastName, String email, String password, Boolean isOwner) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.isOwner = isOwner;
-	}
-	public String getProfileID() {
-		return profileID;
 	}
 	
 	public String getEmail() {
@@ -46,8 +41,16 @@ public class AdminDto {
 		return password;
 	}
 	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public Boolean getIsOwner() {
 		return isOwner;
+	}
+	
+	public void setIsOwner(Boolean isOwner) {
+		this.isOwner = isOwner;
 	}
 	
 }

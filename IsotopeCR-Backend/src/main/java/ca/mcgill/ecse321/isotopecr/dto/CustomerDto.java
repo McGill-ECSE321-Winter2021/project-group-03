@@ -8,31 +8,29 @@ import java.util.Set;
  *
  */
 public class CustomerDto {
-	private String profileID;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String phoneNumber;
 	private String password;
 	private Set <VehicleDto> vehicles;
-	private Boolean isRegisteredAccount;
 	
 	public CustomerDto() {
 	}
 	
-	public CustomerDto(String profileID, String firstName, String lastName, String email, String phoneNumber, String password, Set <VehicleDto> vehicles, Boolean isRegisteredAccount) {
-		this.profileID = profileID;
+	public CustomerDto(String firstName, String lastName, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+	}
+	
+	public CustomerDto(String firstName, String lastName, String email, String phoneNumber, String password, Set <VehicleDto> vehicles, Boolean isRegisteredAccount) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.password = password;
 		this.vehicles = vehicles;
-		this.isRegisteredAccount = isRegisteredAccount;
-	}
-
-	public String getProfileID() {
-		return profileID;
 	}
 
 	public String getEmail() {
@@ -51,16 +49,24 @@ public class CustomerDto {
 		return phoneNumber;
 	}
 	
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
 	public String getPassword() {
 		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public Set<VehicleDto> getVehicles() {
 		return vehicles;
 	}
-	
-	public Boolean getIsRegisteredAccount() {
-		return isRegisteredAccount;
+
+	public void setVehicles(Set<VehicleDto> vehicles) {
+		this.vehicles = vehicles;
 	}
 
 }
