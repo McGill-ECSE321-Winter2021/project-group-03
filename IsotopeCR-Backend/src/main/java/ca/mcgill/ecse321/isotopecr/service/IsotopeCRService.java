@@ -59,6 +59,7 @@ public class IsotopeCRService {
 			if (availability.getDay().equals(day)) {
 				availability.setStartTime(startTime);
 				availability.setEndTime(endTime);
+				dailyAvailabilityRepository.save(availability);
 				return;
 			}
 		}
@@ -94,16 +95,23 @@ public class IsotopeCRService {
 		}
 	}
 	
-	// return all resources
+
 	@Transactional
 	public List<Resource> viewAllResources() {
 		List<Resource> resources = toList(resourceRepository.findAll());
 		return resources;		
 	}
 	
+	
+	@Transactional
+	public List<Invoice> viewAllInvoices() {
+		// TODO return a list of Invoice
+		List<Invoice> invoices = toList(invoiceRepository.findAll());
+		return invoices;			
+	}
+	
 	@Transactional
 	public double viewIncomeSummary() {
-		// TODO: want to see the income summation / resource allocation.
 		List<Invoice> invoices = toList(invoiceRepository.findAll());
 		double incomeSummary = 0d;
 		for (Invoice i : invoices) {
@@ -131,9 +139,6 @@ public class IsotopeCRService {
 	}
 	
 	
-	
-
-
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
 			Technician technician, Invoice invoice, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) {
