@@ -10,23 +10,18 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.isotopecr.dao.AdminRepository;
-import ca.mcgill.ecse321.isotopecr.dao.CustomerRepository;
-import ca.mcgill.ecse321.isotopecr.dao.ProfileRepository;
-import ca.mcgill.ecse321.isotopecr.dao.TechnicianRepository;
-import ca.mcgill.ecse321.isotopecr.dao.VehicleRepository;
-import ca.mcgill.ecse321.isotopecr.model.Admin;
-import ca.mcgill.ecse321.isotopecr.model.Customer;
-import ca.mcgill.ecse321.isotopecr.model.DailyAvailability;
+import ca.mcgill.ecse321.isotopecr.dao.*;
+import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
-import ca.mcgill.ecse321.isotopecr.model.Profile;
-import ca.mcgill.ecse321.isotopecr.model.Technician;
-import ca.mcgill.ecse321.isotopecr.model.Vehicle;
 
 public class IsotopeCRService {
 	@Autowired
@@ -39,6 +34,22 @@ public class IsotopeCRService {
 	private ProfileRepository profileRepository;
 	@Autowired
 	private VehicleRepository vehicleRepository;
+  @Autowired
+	CompanyProfileRepository companyProfileRepository;
+	@Autowired
+	AutoRepairShopRepository autoRepairShopRepository;
+	@Autowired
+	ServiceRepository serviceRepository;
+	@Autowired
+	ResourceRepository resourceRepository;
+	@Autowired
+	TimeslotRepository timeslotRepository;
+	@Autowired
+	InvoiceRepository invoiceRepository;
+	@Autowired
+	DailyAvailabilityRepository dailyAvailabilityRepository;
+	@Autowired
+	AppointmentRepository appointmentRepository;
 	
 	/**
 	 * Creates a customer profile with the provide arguments. 
@@ -292,6 +303,8 @@ public class IsotopeCRService {
 	 * @param model
 	 * @param brand
 	 * @throws invalidInputException
+   *
+   * @author Jack Wei
 	 */
 	public void addVehicle(Profile currentUser, String licensePlate, int year, String model, String brand) throws invalidInputException {
 		
@@ -384,6 +397,199 @@ public class IsotopeCRService {
 			//TODO: exception? error message?
 		}
 	}
+  
+	@Transactional
+	public void updateAvailability(Technician tech, DayOfWeek day, Time startTime, 
+			Time endTime) {
+		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
+		for(DailyAvailability availability : availabilities) {
+			if (availability.getDay().equals(day)) {
+				availability.setStartTime(startTime);
+				availability.setEndTime(endTime);
+				return;
+			}
+		}
+		System.out.println("Input day is invalid, please retry.");	// TODO where to check the input
+	}
+	
+//	@Transactional
+//	public List<DailyAvailabilityDto> viewAvailability(Technician tech){
+//		// TODO: return technician with his/her availabilities
+//		List<DailyAvailabilityDto> availabilities = toList(tech.getDailyAvailability());
+//	}
+
+	
+	@Transactional
+	public Resource addResource(String resourceType, Integer maxAvailable) {
+		Resource resource = new Resource();
+		resource.setResourceType(resourceType);
+		resource.setMaxAvailable(maxAvailable);
+
+		resourceRepository.save(resource);
+		return resource;
+	}
+	
+	@Transactional
+	public Resource removeResource(String resourceType) {
+		if (resourceRepository.existsById(resourceType)) {
+			Resource resource = resourceRepository.findResourceByResourceType(resourceType);
+			resourceRepository.delete(resource);
+			return resource;
+		} else {
+			System.out.println("Input not found in the database.");
+			return null;
+		}
+	}
+	
+	
+	@Transactional
+	public double viewIncomeSummary() {
+		// TODO: want to see the income summation / resource allocation.
+		List<Invoice> invoices = toList(invoiceRepository.findAll());
+		double incomeSummary = 0d;
+		for (Invoice i : invoices) {
+			incomeSummary += i.getCost();
+		}
+		return incomeSummary;
+	}
+	
+	@Transactional
+	public void viewResourceSummary() {
+		// TODO: want to see the resource allocation.
+		
+	}
+	
+	@Transactional
+	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
+			Technician technician, Invoice invoice, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) {
+		Appointment appointment = new Appointment();
+		Integer duration = service.getDuration();
+		Integer timeslotnum = duration/30;
+		Set <Timeslot> timeslots = new HashSet<Timeslot>();
+		
+		for(int i=0;i<timeslotnum;i++) {
+		       Timeslot ts = new Timeslot();
+		       ts.setDate(chosenDate);
+		       ts.setTime(startTime);
+		       ts.setSlotID(String.valueOf(chosenDate)+String.valueOf(startTime));
+		       timeslots.add(ts);
+		       LocalTime localtime = startTime.toLocalTime();
+		       localtime = localtime.plusMinutes(30);
+		       startTime = Time.valueOf(localtime);
+		}
+		
+		Timeslot timeslot = timeslots.iterator().next();
+		appointment.setAppointmentID(String.valueOf(customer.getProfileID().hashCode()*vehicle.getLicensePlate().hashCode()*timeslot.getSlotID().hashCode()));
+		appointment.setCustomer(customer);
+		appointment.setVehicle(vehicle);
+		appointment.setTechnician(technician);
+		appointment.setInvoice(invoice);
+		appointment.setService(service);
+		appointment.setTimeslot(timeslots);
+		
+		appointmentRepository.save(appointment);
+		
+		return appointment;
+	}
+	
+	@Transactional
+	public boolean cancelAppointment (String appointmentID){
+		boolean isCancelled = false;
+		if(appointmentRepository.existsById(appointmentID)) {
+		    Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
+		    appointmentRepository.delete(aptmt);
+		
+		    aptmt=appointmentRepository.findAppointmentByAppointmentID(appointmentID);
+		    if (aptmt.equals(null)) {
+			    isCancelled =true;
+		    }
+		}else {
+			System.out.println("Invalid appointment ID");
+		}
+		return isCancelled;
+	}
+	
+	// do we actually need this? Or only the two getting
+	@Transactional
+	public List<Appointment> getAllAppointments(){
+		return toList(appointmentRepository.findAll());
+	}
+	
+    @Transactional 
+    public List<Appointment> getAllAppointmentsBeforeTime(List<Appointment> appointments){
+    	Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+    	Time curTime = new java.sql.Time(Calendar.getInstance().getTimeInMillis());
+    	List<Appointment> aptmtBeforeTime = new ArrayList<Appointment>();
+    	for(Appointment aptmt :appointments) {
+    		boolean isBefore = true;
+    		
+    		Set<Timeslot> timeslots = aptmt.getTimeslot();
+    		Timeslot timeslot = timeslots.iterator().next();
+
+    		if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
+    				isBefore = false;
+    		}
+    		
+    		
+    		if(isBefore ==true)
+    			aptmtBeforeTime.add(aptmt);
+    	}
+    	
+    	return aptmtBeforeTime;
+    }
+    
+    @Transactional
+    public List<Appointment> getAllAppointmentsAfterTime(List<Appointment> appointments){
+    	Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+    	Time curTime = new java.sql.Time(Calendar.getInstance().getTimeInMillis());
+    	List<Appointment> aptmtBeforeTime = new ArrayList<Appointment>();
+    	for(Appointment aptmt :appointments) {
+    		boolean isBefore = true;
+    		
+    		Set<Timeslot> timeslots = aptmt.getTimeslot();
+    		Timeslot timeslot = timeslots.iterator().next();
+
+    		if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
+    				isBefore = false;
+    		}
+    		
+    		if(isBefore ==false)
+    			aptmtBeforeTime.add(aptmt);
+    	}
+    	
+    	return aptmtBeforeTime;
+    }
+    
+    @Transactional
+    public List<Appointment> getAppointmentsByCustomer(Customer aCustomer){
+    	List<Appointment> allAppointmentByPerson = appointmentRepository.findAppointmentByCustomer(aCustomer);
+    	return allAppointmentByPerson;
+    }
+    
+    @Transactional
+    public List<Appointment> getAppointmentsByTechnician(Technician technician){
+    	List<Appointment> allAppointmentByTechnician= appointmentRepository.findAppointmentByTechnician(technician);
+    	return allAppointmentByTechnician;
+    }
+    
+    @Transactional
+    public List<Appointment> getAppointmentsByVehicle(Vehicle vehicle){
+    	List<Appointment> allAppointmentByVehicle= appointmentRepository.findAppointmentByVehicle(vehicle);
+    	return allAppointmentByVehicle;
+    }
+    
+    @Transactional
+    public List<Appointment> getAppointmentsByService(Service service){
+    	List<Appointment> allAppointmentByService= appointmentRepository.findAppointmentByService((ca.mcgill.ecse321.isotopecr.model.Service) service);
+    	return allAppointmentByService;
+    }
+
+	private <T> List<T> toList(Iterable<T> iterable){
+		List<T> resultList = new ArrayList<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
 	
 	/**
 	 * This helper method checks if the input email address satisfies a standard email address format.
@@ -541,7 +747,6 @@ public class IsotopeCRService {
 		Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(model);
         return matcher.matches();
-	}
 
 	/**
 	 * This helper method checks if the year of a vehicle is valid. The year must be between 1900 to 3000.
@@ -559,3 +764,4 @@ public class IsotopeCRService {
 		return isValid;
 	}
 }
+
