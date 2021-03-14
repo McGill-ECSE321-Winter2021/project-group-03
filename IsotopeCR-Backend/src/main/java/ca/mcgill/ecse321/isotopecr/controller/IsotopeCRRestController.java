@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.isotopecr.controller;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +35,7 @@ import ca.mcgill.ecse321.isotopecr.dao.VehicleRepository;
 import ca.mcgill.ecse321.isotopecr.dto.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.service.IsotopeCRService;
+import ca.mcgill.ecse321.isotopecr.service.invalidInputException;
 
 
 @CrossOrigin(origins = "*")
@@ -83,7 +87,7 @@ public class IsotopeCRRestController {
 	 * @param max The maximum availability of one resource
 	 * @return A ResourceDto just created
 	 */
-	@PostMapping(value = { "/events/{type}/{max}", "/events/{type}/{max}" })
+	@PostMapping(value = { "/resource/{type}/{max}", "/resource/{type}/{max}/" })
 	public ResourceDto createResource(@PathVariable("type") String type, @PathVariable("max") Integer max) 
 			throws RuntimeException{
 		try {
@@ -98,10 +102,10 @@ public class IsotopeCRRestController {
 	 * @author Zichen
 	 * @return List of InvoiceDtos
 	 */
-	@GetMapping(value = { "/invoice", "/invoice/" })
-	public List<InvoiceDto> getAllInvoices() {
-		return service.viewAllInvoices().stream().map(i -> convertToDto(i)).collect(Collectors.toList());
-	}
+//	@GetMapping(value = { "/invoice", "/invoice/" })
+//	public List<InvoiceDto> getAllInvoices() {
+//		return service.viewAllInvoices().stream().map(i -> convertToDto(i)).collect(Collectors.toList());
+//	}
 	
 	/**
 	 * @author Zichen
@@ -133,18 +137,25 @@ public class IsotopeCRRestController {
 	 * @param profileID profileID stored in database
 	 * @return List of DailyAvailabilityDto related to input technician
 	 * @throws IllegalArgumentException
+	 * @throws invalidInputException 
 	 */
-	@GetMapping(value = {"/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}"})
-	public AppointmentDto bookAppointment(@PathVariable("customer") String customerEmail, @PathVariable("vehicle") String licensPlate,
-			@PathVariable("technician") String technicianID, @PathVariable("invoice") String invoiceID, @PathVariable("service") String serviceName,
-			@RequestParam Time start, @RequestParam Date date) throws IllegalArgumentException {
-		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensPlate);
-		Customer customer = customerRepository.findCustomerByVehicle(vehicle);	
-		Invoice invoice = invoiceRepository.findInvoiceByInvoiceID(invoiceID);
-		Service serviceInSystem = serviceRepository.findServiceByServiceName(serviceName);
-		Technician technician = service.getFreeTechnician(start, date);
+	@PostMapping(value = {"/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}"})
+	public void bookAppointment(@PathVariable("vehicle") String licensePlate,
+			@PathVariable("service") String serviceName, 
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start, 
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") LocalDate date) 
+					throws IllegalArgumentException, invalidInputException {
 		
-		service.bookAppointment(customer, vehicle, technician, invoice, serviceInSystem, start, date);
+		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
+		Customer customer = customerRepository.findCustomerByVehicle(vehicle);	
+		Service serviceInSystem = serviceRepository.findServiceByServiceName(serviceName);
+		
+		Time startTime = Time.valueOf(start);
+		Date appointmentDate = Date.valueOf(date);
+		Technician technician = service.getFreeTechnician(startTime, appointmentDate);
+		
+		Appointment appointment = service.bookAppointment(customer, vehicle, technician, serviceInSystem, startTime, appointmentDate);
+		return convertToDto(appointment);
 	}
 	
 	
@@ -157,14 +168,14 @@ public class IsotopeCRRestController {
 		return resourceDto;
 	}
 	
-	private InvoiceDto convertToDto(Invoice i) {
-		if (i == null) {
-			throw new IllegalArgumentException("There is no such Invoice!");
-		}
+//	private InvoiceDto convertToDto(Invoice i) {
+//		if (i == null) {
+//			throw new IllegalArgumentException("There is no such Invoice!");
+//		}
 		// TODO: complete this one;
 //		InvoiceDto inovoiceDto = new InvoiceDto();
 //		return invoiceDto;
-	}
+//	}
 	
 	private DailyAvailabilityDto convertToDto(DailyAvailability d) {
 		if (d == null) {
@@ -172,6 +183,15 @@ public class IsotopeCRRestController {
 		}
 		DailyAvailabilityDto dailyAvailabilityDto = new DailyAvailabilityDto(d.getAvailabilityID(), d.getStartTime(), d.getEndTime(), d.getDay());
 		return dailyAvailabilityDto;
+	}
+	
+	private AppointmentDto convertToDto(Appointment a) {
+		if (a == null) {
+			throw new IllegalArgumentException("There is no such appointment!");
+		}
+		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), a.getCustomer(), a.getVehicle(),
+				a.getTechnician(), a.getInvoice(), a.getService(), a.getTimeslot());
+		return appointmentDto;
 	}
 
 }

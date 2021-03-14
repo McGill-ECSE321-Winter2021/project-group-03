@@ -22,6 +22,7 @@ import ca.mcgill.ecse321.isotopecr.dao.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
+@Service
 public class IsotopeCRService {
 	@Autowired
 	CustomerRepository customerRepository;
