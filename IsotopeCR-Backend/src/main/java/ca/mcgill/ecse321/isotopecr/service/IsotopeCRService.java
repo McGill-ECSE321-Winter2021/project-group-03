@@ -482,9 +482,11 @@ public class IsotopeCRService {
 	 * @return a resource created by request
 	 */
 	@Transactional
-	public Resource addResource(String resourceType, Integer maxAvailable) {
-		// check the input validity first:
-		if (resourceRepository.findResourceByResourceType(resourceType) != null) {
+	public Resource addResource(String resourceType, Integer maxAvailable){
+		if (resourceType == null || resourceType.trim().length() == 0) {
+			throw new IllegalArgumentException("ERROR: the resource type can not be empty.");
+		} else if (resourceRepository.findResourceByResourceType(resourceType) != null) {
+
 			throw new IllegalArgumentException("ERROR: the resource type has existed inside the system.");
 		} else if (maxAvailable < 1) {
 			throw new IllegalArgumentException("ERROR: the resource should at least have one availability.");
@@ -517,7 +519,7 @@ public class IsotopeCRService {
 	 * @return all resources stored in the system
 	 */
 	@Transactional
-	public List<Resource> viewAllResources() {
+	public List<Resource> getAllResources() {
 		List<Resource> resources = toList(resourceRepository.findAll());
 		return resources;
 	}
@@ -598,7 +600,33 @@ public class IsotopeCRService {
 		}
 		return null;
 	}
+	
 
+	/**
+	 * @author Zichen
+	 * @return the total income by all the appointments upto now
+	 */
+	@Transactional
+	public List<Vehicle> getVehiclesByCustomers(Customer customer) {
+		if (customer == null) {
+			throw new IllegalArgumentException("ERROR: input customer does not exist.");
+		}
+		return toList(customer.getVehicle());
+	}
+	
+	
+	
+	
+	/**
+	 * @author Jiatong
+	 * @param customer
+	 * @param vehicle
+	 * @param technician
+	 * @param service
+	 * @param startTime
+	 * @param chosenDate
+	 * @return An appointment just created
+	 */
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle, Technician technician,
 			ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate)

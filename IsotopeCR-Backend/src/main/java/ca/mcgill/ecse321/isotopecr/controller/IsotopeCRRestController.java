@@ -5,7 +5,6 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
@@ -67,9 +64,23 @@ public class IsotopeCRRestController {
 	 * @author Zichen
 	 * @return List of ResourceDtos.
 	 */
-	@GetMapping(value = { "/resources", "/resources/" })
+	@GetMapping(value = { "/resource", "/resource/" })
 	public List<ResourceDto> getAllResources() {
-		return service.viewAllResources().stream().map(r -> convertToDto(r)).collect(Collectors.toList());
+		return service.getAllResources().stream().map(r -> convertToDto(r)).collect(Collectors.toList());
+	}
+	
+	/**
+	 * @author Zichen
+	 * @return List of ResourceDtos.
+	 */
+	@PostMapping(value = { "/resource/delete/{type}", "/resource/delete/{type}/" })
+	public ResourceDto deleteResource(@PathVariable("type") String type) {
+		try{
+			Resource resource = service.removeResource(type);
+			return convertToDto(resource);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	/**
@@ -78,9 +89,10 @@ public class IsotopeCRRestController {
 	 * @param max  The maximum availability of one resource
 	 * @return A ResourceDto just created
 	 */
-	@PostMapping(value = { "/resource/{type}/{max}", "/resource/{type}/{max}/" })
-	public ResourceDto createResource(@PathVariable("type") String type, @PathVariable("max") Integer max)
-			throws RuntimeException {
+
+	@PostMapping(value = { "/resource/create/{type}/{max}", "/resource/create/{type}/{max}/" })
+	public ResourceDto createResource(@PathVariable("type") String type, @PathVariable("max") Integer max) 
+			throws RuntimeException{
 		try {
 			Resource resource = service.addResource(type, max);
 			return convertToDto(resource);
@@ -93,41 +105,119 @@ public class IsotopeCRRestController {
 	 * @author Zichen
 	 * @return List of InvoiceDtos
 	 */
-//	@GetMapping(value = { "/invoice", "/invoice/" })
-//	public List<InvoiceDto> getAllInvoices() {
-//		return service.viewAllInvoices().stream().map(i -> convertToDto(i)).collect(Collectors.toList());
-//	}
+	@GetMapping(value = { "/invoice", "/invoice/" })
+	public List<InvoiceDto> getAllInvoices() {
+		return service.viewAllInvoices().stream().map(i -> convertToDto(i)).collect(Collectors.toList());
+	}
 
 	/**
 	 * @author Zichen
 	 * @return the total income of the system up to now
+	 * @throws Exception
 	 */
-	@GetMapping(value = { "/incomesummary", "/incomesummary/" })
+	@GetMapping(value = { "/invoice/incomesummary", "/invoice/incomesummary/" })
 	public double getIncomeSummary() {
 		return service.viewIncomeSummary();
 	}
 
-	@GetMapping(value = { "/availablities/{ID}", "/availabilities/{ID}/" })
-	public List<DailyAvailabilityDto> getTechAvailabilities(@PathVariable("ID") String profileID)
-			throws IllegalArgumentException {
-		Technician tech = technicianRepository.findTechnicianByProfileID(profileID);
-		if (tech == null) {
-			throw new IllegalArgumentException("ERROR: Input profileID not found in system.");
+	
+	/**
+	 * @author Zichen
+	 * @param email
+	 * @return List of DailyAvailabilityDtos
+	 * @throws Exception
+	 */
+	@GetMapping(value = { "/availablity/{email}", "/availability/{email}/" })
+	public List<DailyAvailabilityDto> getAvailabilitiesByTechnician(@PathVariable("email") String email) throws Exception {
+		Profile tech = null;
+		try {
+			tech = service.getProfile(email);
+			if (tech instanceof Technician) {
+				List <DailyAvailabilityDto> dailyAvailabilityDtos = new ArrayList<>();
+				for (DailyAvailability dailyavailabilities : ((Technician) tech).getDailyAvailability()) {
+					dailyAvailabilityDtos.add(convertToDto(dailyavailabilities));
+				}
+				return dailyAvailabilityDtos;
+				
+			} else {
+				throw new IllegalArgumentException("ERROR: input email is related to a non-Technician account.");
+			}
+			
+		} catch (Exception e) {
+			throw e;
 		}
-		List<DailyAvailabilityDto> dailyAvailabilityDtos = new ArrayList<DailyAvailabilityDto>();
-		for (DailyAvailability dailyavailabilities : tech.getDailyAvailability()) {
-			dailyAvailabilityDtos.add(convertToDto(dailyavailabilities));
-		}
-
-		return dailyAvailabilityDtos;
 	}
 
-	/* ----------------------- Jack Wei -------------------------- */
-	@PostMapping(value = { "/create-customer-profile", "/create-customer-profile/" })
-	public CustomerDto createCustomerProfile(@RequestParam("email") String email,
-			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password)
-			throws IllegalArgumentException, InvalidInputException {
+	/**
+	 * 
+	 * @param email
+	 * @return List of ServiceDtos
+	 * @throws Exception
+	 */
+	@GetMapping(value = { "/service/{email}", "/service/{email}/" })
+	public List<ServiceDto> getServicesByTechnician(@PathVariable("email") String email) throws Exception {
+		Profile tech = null;
+		try {
+			tech = service.getProfile(email);
+			if (tech instanceof Technician) { 
+				List <ServiceDto> serviceDtos = new ArrayList<>();
+				for (Service service : ((Technician) tech).getService()) {
+					serviceDtos.add(convertToDto(service));
+				}
+				return serviceDtos;
+				
+			} else {
+				throw new IllegalArgumentException("ERROR: input email is related to a non-Technician account.");
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	/**
+	 * @author Zichen
+	 * @param email
+	 * @return List of VehicleDto
+	 * @throws Exception 
+	 */
+	@GetMapping(value = { "/vehicle/{email}", "/vehicle/{email}/" })
+	public List<VehicleDto> getVehiclesByCustomer(@PathVariable("email") String email) throws Exception {
+		Profile customer = null;
+		try {
+			customer = service.getProfile(email);
+			if (customer instanceof Customer) {
+				List<VehicleDto> vehicles = new ArrayList<>();
+				for (Vehicle vehicle : service.getVehiclesByCustomers((Customer) customer)) {
+					vehicles.add(convertToDto(vehicle));
+				}
+				return vehicles;
+				
+			} else {
+				throw new IllegalArgumentException("ERROR: input email is related to a non-Customer account.");
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}	
+		
+	}
+
+
+	
+	
+	
+	
+	
+	/* ----------------------- Jack Wei --------------------------*/
+	@PostMapping(value = { "/create-customer-profile", "/create-customer-profile/"})
+	public CustomerDto createCustomerProfile(@RequestParam("email") String email, 
+											 @RequestParam("firstName") String firstName,
+											 @RequestParam("lastName") String lastName,
+											 @RequestParam("phoneNumber") String phoneNumber,
+											 @RequestParam("password") String password)
+	throws IllegalArgumentException, InvalidInputException{
 		try {
 			Customer customer = service.createCustomerProfile(firstName, lastName, email, phoneNumber, password);
 			return convertToDto(customer);
@@ -376,14 +466,24 @@ public class IsotopeCRRestController {
 		return resourceDto;
 	}
 
-//	private InvoiceDto convertToDto(Invoice i) {
-//		if (i == null) {
-//			throw new IllegalArgumentException("There is no such Invoice!");
-//		}
-	// TODO: complete this one;
-	// InvoiceDto inovoiceDto = new InvoiceDto();
-	// return invoiceDto;
-//	}
+	
+	private ServiceDto convertToDto(Service s) {
+		// TODO: complete this after ServiceDto
+		if (s == null) {
+			throw new IllegalArgumentException("There is no such Service!");
+		}
+		ServiceDto serviceDto = new ServiceDto();
+		return serviceDto;
+	}
+	
+
+	private InvoiceDto convertToDto(Invoice i) {
+		if (i == null) {
+			throw new IllegalArgumentException("There is no such Invoice!");
+		}
+	 InvoiceDto inovoiceDto = new InvoiceDto(i.getCost(), i.getIsPaid(), i.getInvoiceID());
+	 return inovoiceDto;
+	}
 
 	private DailyAvailabilityDto convertToDto(DailyAvailability d) {
 		if (d == null) {
@@ -403,24 +503,16 @@ public class IsotopeCRRestController {
 		return customerDto;
 	}
 
+	
 	private VehicleDto convertToDto(Vehicle v) {
 		if (v == null) {
-			throw new IllegalArgumentException("There is no such vehicle!");
+			throw new IllegalArgumentException("There is no such Vehicle!");
 		}
 		VehicleDto vehicleDto = new VehicleDto(v.getLicensePlate(), v.getYear(), v.getModel(), v.getBrand());
 		return vehicleDto;
 	}
 
-	// requiring service Dto
-	private ServiceDto convertToDto(Service s) {
-		if (s == null) {
-			throw new IllegalArgumentException("There is no such service!");
-		}
-		
-		ServiceDto serviceDto = new ServiceDto(s.getServiceName(),s.getDuration(),s.getPrice(),convertToDto(s.getResource()));
-		return serviceDto;
 
-	}
 
 	private AdminDto convertToDto(Admin admin) {
 		if (admin == null) {
@@ -439,7 +531,7 @@ public class IsotopeCRRestController {
 				technician.getEmail(), technician.getPassword());
 		return technicianDto;
 	}
-
+	
 	private ProfileDto convertToDto(Profile profile) {
 		if (profile == null) {
 			throw new IllegalArgumentException("Profile does not exist.");
