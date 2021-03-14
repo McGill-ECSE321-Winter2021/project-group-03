@@ -104,7 +104,7 @@ public class IsotopeCRRestController {
 //		return convertToDto(person);
 	}
 	
-	
+	@GetMapping (value = {"/appointment/{vehicle}/{startTime}","/appointment/{vehicle}/{startTime}"})
 	
 	
 	/* ============================== Helpers ===============================*/

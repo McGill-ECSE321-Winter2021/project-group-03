@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.mcgill.ecse321.isotopecr.dao.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
-
+import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 public class IsotopeCRService {
 	@Autowired
 	CustomerRepository customerRepository;
@@ -487,10 +487,10 @@ public class IsotopeCRService {
 
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
-			Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) throws invalidInputException{
+			Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate){
 		
 		if (!isValidCustomer(customer)||!isValidVehicle(vehicle)||!isValidTechnician(technician)||!isValidService(service)) {
-			throw new invalidInputException();
+			throw new IllegalArgumentException("Invalid input for booking an appointment.");
 		}
 		
 		Appointment appointment = new Appointment();
@@ -523,6 +523,7 @@ public class IsotopeCRService {
 		appointment.setTechnician(technician);
 		appointment.setService(service);
 		appointment.setTimeslot(timeslots);
+		appointment.setStatus(Status.BOOKED);
 		
 		appointmentRepository.save(appointment);
 		
@@ -538,23 +539,52 @@ public class IsotopeCRService {
 		
 		return appointment;
 	}
+	
 	@Transactional 
-	public Appointment viewAppointment (Appointment appointment) throws invalidInputException{
-		if (isValidAppointment(appointment)) {
-		    return appointment;
-			}else {
-				throw new invalidInputException();
+	public Appointment viewAppointment (Vehicle vehicle,Time starttime) {
+		List<Appointment> appointments = appointmentRepository.findAppointmentByVehicle(vehicle);
+		List<Appointment> bookedappointments = new ArrayList<Appointment>();
+		for (Appointment appointment : appointments) {
+			if (appointment.getStatus().equals(Status.BOOKED)) {
+				bookedappointments.add(appointment);
 			}
+		}
+		if (bookedappointments.equals(null)) {
+				throw new IllegalArgumentException("There is no appiontment for"+vehicle.getLicensePlate());
+		}
+		boolean found = false;
+		Appointment viewAptmt = new Appointment();
+		for(Appointment appointment:appointments) {
+			Set <Timeslot> timeslots = appointment.getTimeslot();
+			if (timeslots.iterator().next().getTime().equals(starttime)) {
+				viewAptmt = appointment;
+				found = true;
+			}
+		}
+		if (found == true) {
+			return viewAptmt;
+		}
+		else {
+			throw new IllegalArgumentException("There is no appiontment at this time for"+vehicle.getLicensePlate());
+		}
 	}
+	
 	@Transactional
-	public boolean cancelAppointment (Appointment appointment) throws invalidInputException{
+	public boolean cancelAppointment (Appointment appointment) {
+	
 		if (isValidAppointment(appointment)) {
 		String appointmentID =appointment.getAppointmentID();
 		boolean isCancelled = false;
 		if(appointmentRepository.existsById(appointmentID)) {
 		    Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
-		    appointmentRepository.delete(aptmt);
-		
+		    Set <Timeslot> timeslots = aptmt.getTimeslot();
+		    Time startTime = timeslots.iterator().next().getTime();
+		    Date aDate = timeslots.iterator().next().getDate();
+		    if(isBeforeADay(aDate)) {
+		         aptmt.setStatus(Status.CANCELED);
+		    }else {
+		    	throw new IllegalArgumentException("Sorry, you are not able to cancle the appointment within 24 hours");
+		    }
 		    aptmt=appointmentRepository.findAppointmentByAppointmentID(appointmentID);
 		    if (aptmt.equals(null)) {
 			    isCancelled =true;
@@ -563,7 +593,7 @@ public class IsotopeCRService {
 		}
 	    return isCancelled;
 		}else {
-			throw new invalidInputException();
+			throw new IllegalArgumentException("Invalid input for cancelling an appointment.");
 		}
 	}
 	
@@ -624,7 +654,7 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByPerson = appointmentRepository.findAppointmentByCustomer(aCustomer);
     	    return allAppointmentByPerson;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid customer");
     	}
     }
     
@@ -634,7 +664,7 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByTechnician= appointmentRepository.findAppointmentByTechnician(technician);
     	    return allAppointmentByTechnician;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid technician");
     	}
     }
     
@@ -644,7 +674,7 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByVehicle= appointmentRepository.findAppointmentByVehicle(vehicle);
     	    return allAppointmentByVehicle;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid vehicle.");
     	}
     }
     
@@ -654,9 +684,11 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByService= appointmentRepository.findAppointmentByService((ca.mcgill.ecse321.isotopecr.model.Service) service);
     	    return allAppointmentByService;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid service");
     	}
     }
+    
+   
 
 	private <T> List<T> toList(Iterable<T> iterable){
 		List<T> resultList = new ArrayList<T>();
@@ -878,6 +910,17 @@ public class IsotopeCRService {
 			isValid = true;
 		}
 		return isValid;
+	}
+	
+	private boolean isBeforeADay(Date date) {
+		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+  
+    	boolean isBefore = false;
+    	if (date.before(curDate)) {
+    		isBefore = true;
+    	}
+    	
+    	return isBefore;
 	}
 	
 }
