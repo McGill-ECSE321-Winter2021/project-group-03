@@ -582,10 +582,15 @@ public class IsotopeCRService {
 
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
-			Technician technician, Invoice invoice, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) {
+			Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) throws invalidInputException{
+		
+		if (!isValidCustomer(customer)||!isValidVehicle(vehicle)||!isValidTechnician(technician)||!isValidService(service)) {
+			throw new invalidInputException();
+		}
+		
 		Appointment appointment = new Appointment();
 		Integer duration = service.getDuration();
-		Integer timeslotnum = duration/30;
+		Integer timeslotnum = (int) Math.ceil(duration/30);
 		Set <Timeslot> timeslots = new HashSet<Timeslot>();
 		
 		for(int i=0;i<timeslotnum;i++) {
@@ -593,7 +598,14 @@ public class IsotopeCRService {
 		       ts.setDate(chosenDate);
 		       ts.setTime(startTime);
 		       ts.setSlotID(String.valueOf(chosenDate)+String.valueOf(startTime));
-		       timeslots.add(ts);
+		       if (timeslotRepository.findTimeslotBySlotID(ts.getSlotID())==null) {
+		    	   timeslotRepository.save(ts);
+		    	   timeslots.add(ts);
+		       }else {
+		    	   Timeslot existTimeslot = timeslotRepository.findTimeslotBySlotID(ts.getSlotID());
+		    	   timeslots.add(existTimeslot);
+		       }
+		       
 		       LocalTime localtime = startTime.toLocalTime();
 		       localtime = localtime.plusMinutes(30);
 		       startTime = Time.valueOf(localtime);
@@ -604,17 +616,35 @@ public class IsotopeCRService {
 		appointment.setCustomer(customer);
 		appointment.setVehicle(vehicle);
 		appointment.setTechnician(technician);
-		appointment.setInvoice(invoice);
 		appointment.setService(service);
 		appointment.setTimeslot(timeslots);
 		
 		appointmentRepository.save(appointment);
 		
+		for(Timeslot t: timeslots) {
+			Set <Appointment> appointments = new HashSet<Appointment>();
+			if (t.getAppointment()!=null) {
+			    appointments = t.getAppointment();
+			}
+		    appointments.add(appointment);
+		    t.setAppointment(appointments);
+			timeslotRepository.save(t);
+		}
+		
 		return appointment;
 	}
-	
+	@Transactional 
+	public Appointment viewAppointment (Appointment appointment) throws invalidInputException{
+		if (isValidAppointment(appointment)) {
+		    return appointment;
+			}else {
+				throw new invalidInputException();
+			}
+	}
 	@Transactional
-	public boolean cancelAppointment (String appointmentID){
+	public boolean cancelAppointment (Appointment appointment) throws invalidInputException{
+		if (isValidAppointment(appointment)) {
+		String appointmentID =appointment.getAppointmentID();
 		boolean isCancelled = false;
 		if(appointmentRepository.existsById(appointmentID)) {
 		    Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
@@ -624,10 +654,12 @@ public class IsotopeCRService {
 		    if (aptmt.equals(null)) {
 			    isCancelled =true;
 		    }
-		}else {
-			System.out.println("Invalid appointment ID");
+			
 		}
-		return isCancelled;
+	    return isCancelled;
+		}else {
+			throw new invalidInputException();
+		}
 	}
 	
 	// do we actually need this? Or only the two getting
@@ -682,27 +714,43 @@ public class IsotopeCRService {
     }
     
     @Transactional
-    public List<Appointment> getAppointmentsByCustomer(Customer aCustomer){
-    	List<Appointment> allAppointmentByPerson = appointmentRepository.findAppointmentByCustomer(aCustomer);
-    	return allAppointmentByPerson;
+    public List<Appointment> getAppointmentsByCustomer(Customer aCustomer) throws invalidInputException{
+    	if(isValidCustomer(aCustomer)) {
+    	    List<Appointment> allAppointmentByPerson = appointmentRepository.findAppointmentByCustomer(aCustomer);
+    	    return allAppointmentByPerson;
+    	}else {
+    		throw new invalidInputException();
+    	}
     }
     
     @Transactional
-    public List<Appointment> getAppointmentsByTechnician(Technician technician){
-    	List<Appointment> allAppointmentByTechnician= appointmentRepository.findAppointmentByTechnician(technician);
-    	return allAppointmentByTechnician;
+    public List<Appointment> getAppointmentsByTechnician(Technician technician) throws invalidInputException{
+    	if(isValidTechnician(technician)) {
+    	    List<Appointment> allAppointmentByTechnician= appointmentRepository.findAppointmentByTechnician(technician);
+    	    return allAppointmentByTechnician;
+    	}else {
+    		throw new invalidInputException();
+    	}
     }
     
     @Transactional
-    public List<Appointment> getAppointmentsByVehicle(Vehicle vehicle){
-    	List<Appointment> allAppointmentByVehicle= appointmentRepository.findAppointmentByVehicle(vehicle);
-    	return allAppointmentByVehicle;
+    public List<Appointment> getAppointmentsByVehicle(Vehicle vehicle) throws invalidInputException{
+    	if(isValidVehicle(vehicle)) {
+    	    List<Appointment> allAppointmentByVehicle= appointmentRepository.findAppointmentByVehicle(vehicle);
+    	    return allAppointmentByVehicle;
+    	}else {
+    		throw new invalidInputException();
+    	}
     }
     
     @Transactional
-    public List<Appointment> getAppointmentsByService(Service service){
-    	List<Appointment> allAppointmentByService= appointmentRepository.findAppointmentByService((ca.mcgill.ecse321.isotopecr.model.Service) service);
-    	return allAppointmentByService;
+    public List<Appointment> getAppointmentsByService(ca.mcgill.ecse321.isotopecr.model.Service service) throws invalidInputException{
+    	if(isValidService(service)) {
+    	    List<Appointment> allAppointmentByService= appointmentRepository.findAppointmentByService((ca.mcgill.ecse321.isotopecr.model.Service) service);
+    	    return allAppointmentByService;
+    	}else {
+    		throw new invalidInputException();
+    	}
     }
 
 	private <T> List<T> toList(Iterable<T> iterable){
@@ -886,5 +934,46 @@ public class IsotopeCRService {
 		}
 		return isValid;
 	}
+	
+	private boolean isValidCustomer(Customer customer) {
+		boolean isValid = false;
+		if (customer != null) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	private boolean isValidTechnician(Technician technician) {
+		boolean isValid = false;
+		if (technician != null) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	private boolean isValidVehicle(Vehicle vehicle) {
+		boolean isValid = false;
+		if (vehicle != null) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	private boolean isValidService(ca.mcgill.ecse321.isotopecr.model.Service service) {
+		boolean isValid = false;
+		if (service != null) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	private boolean isValidAppointment(Appointment appointment) {
+		boolean isValid = false;
+		if (appointment != null) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
 }
 
