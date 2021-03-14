@@ -62,15 +62,16 @@ public class TestIsotopeCRPersistence {
 		dailyAvailabilityRepository.deleteAll();
 		invoiceRepository.deleteAll();
 	}
-	
+
 	/**
-	 *  Test for Persistence of AutoRepairShop
-	 *  @author Jack Wei
+	 * Test for Persistence of AutoRepairShop
+	 * 
+	 * @author Jack Wei
 	 */
 	@Test
 	public void testPersistAndLoadAutoRepairShop() {
 		// Setting up the objects and variables
-		
+
 		// Create an AutoRepairShop
 		String AutoRepairShopID = "ARS";
 		AutoRepairShop ars = new AutoRepairShop();
@@ -84,14 +85,16 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(ars);
 		assertEquals(ars.getAutoRepairShopID(), AutoRepairShopID);
 	}
+
 	/**
-	 *  Test for Persistence of CompanyProfile
-	 *  @author Jack Wei
+	 * Test for Persistence of CompanyProfile
+	 * 
+	 * @author Jack Wei
 	 */
 	@Test
 	public void testPersistAndLoadCompanyProfile() {
 		// Setting up the objects and variables
-		
+
 		// Create a CompanyProfile
 		String companyName = "CompanyName";
 		String address = "CompanyAddress";
@@ -105,14 +108,16 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(cp);
 		assertEquals(address, cp.getAddress());
 	}
+
 	/**
-	 *  Test for Persistence of Resource
-	 *  @author Mathieu-Joseph Magri
+	 * Test for Persistence of Resource
+	 * 
+	 * @author Mathieu-Joseph Magri
 	 */
 	@Test
 	public void testPersistAndLoadResource() {
 		// Setting up the objects and variables
-		
+
 		// Create a resource
 		String resourceType = "resourceType";
 		Integer maxAvailability = 4;
@@ -125,9 +130,11 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(r);
 		assertEquals(resourceType, r.getResourceType());
 	}
+
 	/**
-	 *  Test for Persistence of Timeslot
-	 *  @author Mathieu-Joseph Magri
+	 * Test for Persistence of Timeslot
+	 * 
+	 * @author Mathieu-Joseph Magri
 	 */
 	@Test
 	public void testPersistAndLoadTimeslot() {
@@ -145,14 +152,16 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(ts);
 		assertEquals(slotID, ts.getSlotID());
 	}
+
 	/**
-	 *  Test for Persistence of Admin
-	 *  @author Zichen Chang
+	 * Test for Persistence of Admin
+	 * 
+	 * @author Zichen Chang
 	 */
 	@Test
 	public void testPersistAndLoadAdmin() {
 		// Setting up the objects and variables
-		
+
 		// Create an Admin
 		String firstName = "John";
 		String lastName = "Doe";
@@ -170,14 +179,16 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(a);
 		assertEquals(profileID, a.getProfileID());
 	}
+
 	/**
-	 *  Test for Persistence of Customer
-	 *  @author Zichen Chang
+	 * Test for Persistence of Customer
+	 * 
+	 * @author Zichen Chang
 	 */
 	@Test
 	public void testPersistAndLoadCustomer() {
 		// Setting up the objects and variables
-		
+
 		// Create two vehicles
 		String brand1 = "Nissan";
 		String brand2 = "Volkswagen";
@@ -202,7 +213,8 @@ public class TestIsotopeCRPersistence {
 		String password = "12345";
 		Boolean isRegistered = true;
 		String profileID = "C1";
-		Customer c = createCustomer(vehicles, phoneNumber, firstName, lastName, email, isRegistered, profileID, password);
+		Customer c = createCustomer(vehicles, phoneNumber, firstName, lastName, email, isRegistered, profileID,
+				password);
 
 		// Test findCustomerByProfileID
 		c = null;
@@ -213,20 +225,22 @@ public class TestIsotopeCRPersistence {
 
 		// Test findCustomerByVehicle
 		c = null;
-		
+
 		c = customerRepository.findCustomerByVehicle(v1);
 		assertNotNull(c);
 		assertEquals(profileID, c.getProfileID());
 
 		c = null;
-		
+
 		c = customerRepository.findCustomerByVehicle(v2);
 		assertNotNull(c);
 		assertEquals(profileID, c.getProfileID());
 	}
+
 	/**
-	 *  Test for Persistence of Service
-	 *  @author Jiatong Niu
+	 * Test for Persistence of Service
+	 * 
+	 * @author Jiatong Niu
 	 */
 	@Test
 	public void testPersistAndLoadService() {
@@ -243,36 +257,37 @@ public class TestIsotopeCRPersistence {
 		double price = 20.00;
 		Service s = createService(resource, serviceName, duration, price);
 
-
 		// Test findServiceByServiceName
 		s = null;
 
 		s = serviceRepository.findServiceByServiceName(serviceName);
 		assertNotNull(s);
 		// Check that the serviceName matches
-		assertEquals(serviceName, s.getServiceName()); 
+		assertEquals(serviceName, s.getServiceName());
 		// Check that the service's resource matches
-		assertEquals(resource.getResourceType(), s.getResource().getResourceType()); 
+		assertEquals(resource.getResourceType(), s.getResource().getResourceType());
 
 		// Test findServiceByResource
 		s = null;
-	
+
 		List<Service> servicesFound = serviceRepository.findServiceByResource(resource);
 		assertNotNull(servicesFound);
-		assertEquals(servicesFound.size(),1); //There is only one service in this test
-		for(int i = 0; i<servicesFound.size(); i++){
+		assertEquals(servicesFound.size(), 1); // There is only one service in this test
+		for (int i = 0; i < servicesFound.size(); i++) {
 			// check that the resourceType matches
 			assertEquals(servicesFound.get(i).getResource().getResourceType(), resource.getResourceType());
 		}
 	}
+
 	/**
-	 *  Test for Persistence of DailyAvailability
-	 *  @author Jiatong Niu
+	 * Test for Persistence of DailyAvailability
+	 * 
+	 * @author Jiatong Niu
 	 */
 	@Test
 	public void testPersistAndLoadDailyAvailability() {
 		// Setting up the objects and variables
-		
+
 		// Create DailyAvailability
 		DayOfWeek day = DayOfWeek.Tuesday;
 		java.sql.Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
@@ -287,14 +302,16 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(dA);
 		assertEquals(availabilityID, dA.getAvailabilityID());
 	}
+
 	/**
-	 *  Test for Persistence of Invoice
-	 *  @author Jiatong Niu
+	 * Test for Persistence of Invoice
+	 * 
+	 * @author Jiatong Niu
 	 */
 	@Test
 	public void testPersistAndLoadInvoice() {
 		// Setting up the objects and variables
-		
+
 		// Create an Invoice
 		String invoiceID = "12345";
 		double cost = 150;
@@ -308,14 +325,16 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(invoice);
 		assertEquals(invoiceID, invoice.getInvoiceID());
 	}
+
 	/**
-	 *  Test for Persistence of Technician
-	 *  @author Victoria Iannotti
+	 * Test for Persistence of Technician
+	 * 
+	 * @author Victoria Iannotti
 	 */
 	@Test
 	public void testPersistAndLoadTechnician() {
 		// Setting up the objects and variables
-		
+
 		// Create a DailyAvailability
 		DayOfWeek day = DayOfWeek.Tuesday;
 		java.sql.Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
@@ -330,7 +349,7 @@ public class TestIsotopeCRPersistence {
 		String type = "Resource Type";
 		int maxAvailable = 4;
 		Resource resource = createResource(type, maxAvailable);
-		
+
 		// Create a Service
 		String serviceName = "Service Name";
 		double price = 20.00;
@@ -340,14 +359,14 @@ public class TestIsotopeCRPersistence {
 		Set<Service> services = new HashSet<Service>();
 		services.add(service);
 
-
 		String firstName = "firstName";
 		String lastName = "lastName";
 		String email = "email";
 		String password = "password";
 		boolean isRegisteredAccount = true;
 		String profileID = "profileID";
-		Technician t = createTechnician(services, dAs, firstName, lastName, email, isRegisteredAccount, profileID, password);
+		Technician t = createTechnician(services, dAs, firstName, lastName, email, isRegisteredAccount, profileID,
+				password);
 
 		// Test findTechnicianByProfileID
 		t = null;
@@ -356,9 +375,11 @@ public class TestIsotopeCRPersistence {
 		assertNotNull(t);
 		assertEquals(t.getProfileID(), profileID);
 	}
+
 	/**
-	 *  Test for Persistence of Vehicle
-	 *  @author Victoria Iannotti
+	 * Test for Persistence of Vehicle
+	 * 
+	 * @author Victoria Iannotti
 	 */
 	@Test
 	public void testPersistAndLoadVehicle() {
@@ -371,25 +392,27 @@ public class TestIsotopeCRPersistence {
 
 		// Test findVehicleByLicensePlate
 		v = null;
-		
+
 		v = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 		assertNotNull(v);
 		assertEquals(licensePlate, v.getLicensePlate());
 	}
+
 	/**
-	 *  Test for Persistence of Appointment
-	 *  @author Victoria Iannotti
+	 * Test for Persistence of Appointment
+	 * 
+	 * @author Victoria Iannotti
 	 */
 	@Test
 	public void testPersistAndLoadAppointment() {
 		// Setting up the objects and variables
-		
+
 		// Create a Timeslot
 		java.sql.Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
 		java.sql.Time time = java.sql.Time.valueOf(LocalTime.of(11, 35));
 		String slotID = "slotID";
 		Timeslot timeslot = createTimeslot(date, time, slotID);
-		
+
 		Set<Timeslot> timeslots = new HashSet<Timeslot>();
 		timeslots.add(timeslot);
 
@@ -403,7 +426,7 @@ public class TestIsotopeCRPersistence {
 		double price = 20.00;
 		int duration = 3;
 		Service service = createService(resource, name, duration, price);
-		
+
 		Set<Service> services = new HashSet<Service>();
 		services.add(service);
 
@@ -419,10 +442,10 @@ public class TestIsotopeCRPersistence {
 		int year1 = 2016;
 		String licensePlate1 = "xxxx1";
 		Vehicle vehicle = createVehicle(licensePlate1, year1, model1, brand1);
-		
+
 		Set<Vehicle> vehicles = new HashSet<Vehicle>();
 		vehicles.add(vehicle);
-		
+
 		// Create a Customer
 		String firstName = "John";
 		String lastName = "Doe";
@@ -440,7 +463,7 @@ public class TestIsotopeCRPersistence {
 		java.sql.Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
 		String availabilityID = "availabilityID";
 		DailyAvailability dA = createDailyAvailability(availabilityID, day, startTime, endTime);
-		
+
 		Set<DailyAvailability> dAs = new HashSet<DailyAvailability>();
 		dAs.add(dA);
 
@@ -468,48 +491,48 @@ public class TestIsotopeCRPersistence {
 		// Test findAppointmentByCustomer
 		List<Appointment> aptmts = appointmentRepository.findAppointmentByCustomer(c1);
 		assertNotNull(aptmts);
-		for(int i = 0; i<aptmts.size(); i++){
+		for (int i = 0; i < aptmts.size(); i++) {
 			// check that the customer profileID matches
 			assertEquals(aptmts.get(i).getCustomer().getProfileID(), c1.getProfileID());
 		}
-		
+
 		// Test findAppointmentByVehicle
 		aptmts = appointmentRepository.findAppointmentByVehicle(vehicle);
 		assertNotNull(aptmts);
-		for(int i = 0; i<aptmts.size(); i++){
+		for (int i = 0; i < aptmts.size(); i++) {
 			// check that the vehicle licensePlate
 			assertEquals(aptmts.get(i).getVehicle().getLicensePlate(), vehicle.getLicensePlate());
 		}
-		
+
 		// Test findAppointmentByTechnician
 		aptmts = appointmentRepository.findAppointmentByTechnician(t1);
 		assertNotNull(aptmts);
-		for(int i = 0; i<aptmts.size(); i++){
+		for (int i = 0; i < aptmts.size(); i++) {
 			// check that the technician profileID matches
 			assertEquals(aptmts.get(i).getTechnician().getProfileID(), t1.getProfileID());
 		}
-		
+
 		// Test findAppointmentByTimeslot
 		aptmts = appointmentRepository.findAppointmentByTimeslot(timeslot);
 		assertNotNull(aptmts);
-		for(int i = 0; i<aptmts.size(); i++){
+		for (int i = 0; i < aptmts.size(); i++) {
 			// check that the timeslot is contained in that appointment
 			assertTrue(aptmts.get(i).getTimeslot().contains(timeslot));
 		}
-		
+
 		// Test findAppointmentByService
 		aptmts = appointmentRepository.findAppointmentByService(service);
 		assertNotNull(aptmts);
-		for(int i = 0; i<aptmts.size(); i++){
+		for (int i = 0; i < aptmts.size(); i++) {
 			// check that the serviceName matches
 			assertEquals(aptmts.get(i).getService().getServiceName(), service.getServiceName());
 		}
 	}
 
-	//---------------------------------//
-	//---------HELPER METHODS----------//
-	//---------------------------------//
-	
+	// ---------------------------------//
+	// ---------HELPER METHODS----------//
+	// ---------------------------------//
+
 	// Helper method to create a Resource
 	private Resource createResource(String type, Integer maxAvailable) {
 		Resource resource = new Resource();
@@ -604,7 +627,8 @@ public class TestIsotopeCRPersistence {
 	}
 
 	// Helper method to create a Admin
-	private Admin createAdmin(boolean isOwner, String firstName, String lastName, String email, boolean isRegistered, String profileID, String password) {
+	private Admin createAdmin(boolean isOwner, String firstName, String lastName, String email, boolean isRegistered,
+			String profileID, String password) {
 		Admin admin = new Admin();
 		admin.setIsOwner(isOwner);
 		admin.setFirstName(firstName);

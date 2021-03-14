@@ -6,34 +6,34 @@ public class VehicleDto {
 	private String model;
 	private String brand;
 	private CustomerDto owner;
-	
+
 	public VehicleDto() {
-		
+
 	}
-	
+
 	public VehicleDto(String licensePlate, String year, String model, String brand) {
 		this.licensePlate = licensePlate;
 		this.year = year;
 		this.model = model;
 		this.brand = brand;
 	}
-	
+
 	public String getLicensePlate() {
 		return licensePlate;
 	}
-	
+
 	public String getYear() {
 		return year;
 	}
-	
+
 	public String getModel() {
 		return model;
 	}
-	
+
 	public String getBrand() {
 		return brand;
 	}
-	
+
 	public CustomerDto getOwner() {
 		return owner;
 	}

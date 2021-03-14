@@ -11,42 +11,42 @@ public class TimeslotDto {
 	private Date aDate;
 	private String aSlotID;
 	private Set<Appointment> aAppointment;
-	
+
 	public TimeslotDto() {
-		
+
 	}
-	public TimeslotDto(Time aTime,Date aDate,String aId) {
+
+	public TimeslotDto(Time aTime, Date aDate, String aId) {
 		this.aDate = aDate;
 		this.aTime = aTime;
 		this.aSlotID = aId;
 	}
-	
-	
-	public TimeslotDto(Time aTime,Date aDate,String aId,Set<Appointment> appointment) {
+
+	public TimeslotDto(Time aTime, Date aDate, String aId, Set<Appointment> appointment) {
 		this.aDate = aDate;
 		this.aTime = aTime;
 		this.aSlotID = aId;
 		this.aAppointment = appointment;
 	}
-	
+
 	public Time getTime() {
 		return this.aTime;
 	}
-	
+
 	public Date getDate() {
 		return this.aDate;
 	}
-	
+
 	public String getSlotID() {
 		return this.aSlotID;
 	}
-	
-	public Set<Appointment> getAppointments(){
+
+	public Set<Appointment> getAppointments() {
 		return this.aAppointment;
 	}
-	
-	public void setAppointments(Set<Appointment> appointment){
-	    this.aAppointment=appointment;
+
+	public void setAppointments(Set<Appointment> appointment) {
+		this.aAppointment = appointment;
 	}
 
 }
