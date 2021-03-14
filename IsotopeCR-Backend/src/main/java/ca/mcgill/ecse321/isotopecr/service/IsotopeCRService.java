@@ -1204,20 +1204,20 @@ public class IsotopeCRService {
 	 */
 	private DayOfWeek intToDayOfWeek(int dayOfWeeki) {
 		switch (dayOfWeeki) {
+		//case 1:
+			//return DayOfWeek.Sunday;
 		case 1:
-			return DayOfWeek.Sunday;
-		case 2:
 			return DayOfWeek.Monday;
-		case 3:
+		case 2:
 			return DayOfWeek.Tuesday;
-		case 4:
+		case 3:
 			return DayOfWeek.Wednesday;
-		case 5:
+		case 4:
 			return DayOfWeek.Thursday;
-		case 6:
+		case 5:
 			return DayOfWeek.Friday;
-		case 7:
-			return DayOfWeek.Saturday;
+		//case 7:
+			//return DayOfWeek.Saturday;
 		}
 		return null;
 	}
