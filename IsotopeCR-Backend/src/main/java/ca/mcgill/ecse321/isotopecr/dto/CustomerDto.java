@@ -32,7 +32,6 @@ public class CustomerDto {
 		this.phoneNumber = phoneNumber;
 	}
 
-
 	public String getEmail() {
 		return email;
 	}
