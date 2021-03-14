@@ -412,10 +412,13 @@ public class IsotopeCRRestController {
 	}
 
 	// requiring service Dto
-	private Service convertToDto(Service s) {
+	private ServiceDto convertToDto(Service s) {
 		if (s == null) {
 			throw new IllegalArgumentException("There is no such service!");
 		}
+		
+		ServiceDto serviceDto = new ServiceDto(s.getServiceName(),s.getDuration(),s.getPrice(),convertToDto(s.getResource()));
+		return serviceDto;
 
 	}
 
@@ -463,7 +466,7 @@ public class IsotopeCRRestController {
 			timeslots.add(convertToDto(timeslot));
 		}
 		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),
-				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), a.getService(), timeslots);
+				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), convertToDto(a.getService()), timeslots);
 		return appointmentDto;
 	}
 
