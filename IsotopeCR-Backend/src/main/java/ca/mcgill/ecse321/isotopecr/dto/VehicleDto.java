@@ -11,7 +11,7 @@ public class VehicleDto {
 		
 	}
 	
-	public VehicleDto(String licensePlate, int year, String model, String brand) {
+	public VehicleDto(String licensePlate, String year, String model, String brand) {
 		this.licensePlate = licensePlate;
 		this.year = year;
 		this.model = model;

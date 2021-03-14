@@ -22,6 +22,8 @@ import ca.mcgill.ecse321.isotopecr.dao.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
+import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
+
 @Service
 public class IsotopeCRService {
 	@Autowired
@@ -72,7 +74,7 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 */
 	@Transactional
-	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber, String password, String licensePlate, int year, String model, String brand) throws invalidInputException {
+	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber, String password) throws invalidInputException {
 		Customer customer = new Customer();
 		
 		if (isValidEmail(email)) {
@@ -105,17 +107,6 @@ public class IsotopeCRService {
 			} else {
 				throw new invalidInputException();
 			}
-		}
-		
-		if(licensePlate != null) {
-			try {
-				Vehicle vehicle = createVehicle(licensePlate, year, model, brand);
-				Set<Vehicle> vehicles = new HashSet<Vehicle>();
-				vehicles.add(vehicle);
-				customer.setVehicle(vehicles);
-			} catch (Exception e) {
-				//TODO
-			} throw new invalidInputException();
 		}
 		
 		customer.setProfileID(String.valueOf(email.hashCode()));
@@ -195,7 +186,7 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 */
 	@Transactional
-	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password, Set<ca.mcgill.ecse321.isotopecr.model.Service> services) throws invalidInputException {
+	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password) throws invalidInputException {
 		Technician technician = new Technician();
 
 		if (isValidEmail(email)) {
@@ -221,8 +212,6 @@ public class IsotopeCRService {
 		} else {
 			throw new invalidInputException();
 		}
-		
-		technician.setService(services);
 		
 		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
 		DailyAvailability dailyAvailability = new DailyAvailability();
@@ -306,7 +295,7 @@ public class IsotopeCRService {
    *
    * @author Jack Wei
 	 */
-	public void addVehicle(Profile currentUser, String licensePlate, int year, String model, String brand) throws invalidInputException {
+	public void addVehicle(Profile currentUser, String licensePlate, String year, String model, String brand) throws invalidInputException {
 		
 		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
 		
@@ -317,7 +306,7 @@ public class IsotopeCRService {
 			customer.setVehicle(vehicles);
 		} catch (invalidInputException e) {
 			throw e;
-		} 
+		}
 		
 		customerRepository.save(customer);
 	}
@@ -398,6 +387,29 @@ public class IsotopeCRService {
 		}
 	}
 	
+	/**
+	 * Gets the profile by email. 
+	 * Throws exception when profile not found.
+	 * 
+	 * @param email
+	 * @return
+	 * 
+	 * @author Jack Wei
+	 * @throws invalidInputException 
+	 */
+	public Profile getProfile(String email) throws invalidInputException {
+		if (email == null) {
+			throw new invalidInputException();
+		}
+		
+		Profile profile = profileRepository.findProfileByProfileID(String.valueOf(email.hashCode()));
+		if(profile == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		return profile;
+	}
+  
 	/**
 	 * Update the availability to a specific day.
 	 * @author Zichen
@@ -584,10 +596,10 @@ public class IsotopeCRService {
 
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
-			Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate) throws invalidInputException{
+			Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate){
 		
 		if (!isValidCustomer(customer)||!isValidVehicle(vehicle)||!isValidTechnician(technician)||!isValidService(service)) {
-			throw new invalidInputException();
+			throw new IllegalArgumentException("Invalid input for booking an appointment.");
 		}
 		
 		Appointment appointment = new Appointment();
@@ -620,6 +632,7 @@ public class IsotopeCRService {
 		appointment.setTechnician(technician);
 		appointment.setService(service);
 		appointment.setTimeslot(timeslots);
+		appointment.setStatus(Status.BOOKED);
 		
 		appointmentRepository.save(appointment);
 		
@@ -635,23 +648,52 @@ public class IsotopeCRService {
 		
 		return appointment;
 	}
+	
 	@Transactional 
-	public Appointment viewAppointment (Appointment appointment) throws invalidInputException{
-		if (isValidAppointment(appointment)) {
-		    return appointment;
-			}else {
-				throw new invalidInputException();
+	public Appointment viewAppointment (Vehicle vehicle,Time starttime) {
+		List<Appointment> appointments = appointmentRepository.findAppointmentByVehicle(vehicle);
+		List<Appointment> bookedappointments = new ArrayList<Appointment>();
+		for (Appointment appointment : appointments) {
+			if (appointment.getStatus().equals(Status.BOOKED)) {
+				bookedappointments.add(appointment);
 			}
+		}
+		if (bookedappointments.equals(null)) {
+				throw new IllegalArgumentException("There is no appiontment for"+vehicle.getLicensePlate());
+		}
+		boolean found = false;
+		Appointment viewAptmt = new Appointment();
+		for(Appointment appointment:appointments) {
+			Set <Timeslot> timeslots = appointment.getTimeslot();
+			if (timeslots.iterator().next().getTime().equals(starttime)) {
+				viewAptmt = appointment;
+				found = true;
+			}
+		}
+		if (found == true) {
+			return viewAptmt;
+		}
+		else {
+			throw new IllegalArgumentException("There is no appiontment at this time for"+vehicle.getLicensePlate());
+		}
 	}
+	
 	@Transactional
-	public boolean cancelAppointment (Appointment appointment) throws invalidInputException{
+	public boolean cancelAppointment (Appointment appointment) {
+	
 		if (isValidAppointment(appointment)) {
 		String appointmentID =appointment.getAppointmentID();
 		boolean isCancelled = false;
 		if(appointmentRepository.existsById(appointmentID)) {
 		    Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
-		    appointmentRepository.delete(aptmt);
-		
+		    Set <Timeslot> timeslots = aptmt.getTimeslot();
+		    Time startTime = timeslots.iterator().next().getTime();
+		    Date aDate = timeslots.iterator().next().getDate();
+		    if(isBeforeADay(aDate)) {
+		         aptmt.setStatus(Status.CANCELED);
+		    }else {
+		    	throw new IllegalArgumentException("Sorry, you are not able to cancle the appointment within 24 hours");
+		    }
 		    aptmt=appointmentRepository.findAppointmentByAppointmentID(appointmentID);
 		    if (aptmt.equals(null)) {
 			    isCancelled =true;
@@ -660,7 +702,7 @@ public class IsotopeCRService {
 		}
 	    return isCancelled;
 		}else {
-			throw new invalidInputException();
+			throw new IllegalArgumentException("Invalid input for cancelling an appointment.");
 		}
 	}
 	
@@ -721,7 +763,7 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByPerson = appointmentRepository.findAppointmentByCustomer(aCustomer);
     	    return allAppointmentByPerson;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid customer");
     	}
     }
     
@@ -731,7 +773,7 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByTechnician= appointmentRepository.findAppointmentByTechnician(technician);
     	    return allAppointmentByTechnician;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid technician");
     	}
     }
     
@@ -741,7 +783,7 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByVehicle= appointmentRepository.findAppointmentByVehicle(vehicle);
     	    return allAppointmentByVehicle;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid vehicle.");
     	}
     }
     
@@ -751,9 +793,11 @@ public class IsotopeCRService {
     	    List<Appointment> allAppointmentByService= appointmentRepository.findAppointmentByService((ca.mcgill.ecse321.isotopecr.model.Service) service);
     	    return allAppointmentByService;
     	}else {
-    		throw new invalidInputException();
+    		throw new IllegalArgumentException("Invalid service");
     	}
     }
+    
+   
 
 	private <T> List<T> toList(Iterable<T> iterable){
 		List<T> resultList = new ArrayList<T>();
@@ -865,7 +909,7 @@ public class IsotopeCRService {
 	 * 
 	 * @author Jack Wei
 	 */
-	private Vehicle createVehicle(String licensePlate, int year, String model, String brand) throws invalidInputException {
+	private Vehicle createVehicle(String licensePlate, String year, String model, String brand) throws invalidInputException {
 		Vehicle vehicle = new Vehicle();
 		if(isValidYear(year)) {
 			vehicle.setYear(year);
@@ -929,11 +973,17 @@ public class IsotopeCRService {
 	 * 
 	 * @author Jack Wei
 	 */
-	private boolean isValidYear(int year) {
+	private boolean isValidYear(String year) {
 		boolean isValid = false;
-		if(1900 <= year || year <= 3000) { // between 1900 and 3000 for any car
-			isValid = true;
+		
+		try {
+			if(1900 <= Integer.parseInt(year) || Integer.parseInt(year) <= 3000) { // between 1900 and 3000 for any car
+				isValid = true;
+			}
+		} catch (NumberFormatException e) {
+			throw e;
 		}
+		
 		return isValid;
 	}
 	
@@ -975,6 +1025,17 @@ public class IsotopeCRService {
 			isValid = true;
 		}
 		return isValid;
+	}
+	
+	private boolean isBeforeADay(Date date) {
+		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+  
+    	boolean isBefore = false;
+    	if (date.before(curDate)) {
+    		isBefore = true;
+    	}
+    	
+    	return isBefore;
 	}
 	
 }
