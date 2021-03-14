@@ -5,21 +5,17 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.RuntimeCryptoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
@@ -150,12 +146,6 @@ public class IsotopeCRRestController {
 		} catch (Exception e) {
 			throw e;
 		}
-		List<DailyAvailabilityDto> dailyAvailabilityDtos = new ArrayList<DailyAvailabilityDto>();
-		for (DailyAvailability dailyavailabilities : tech.getDailyAvailability()) {
-			dailyAvailabilityDtos.add(convertToDto(dailyavailabilities));
-		}
-
-		return dailyAvailabilityDtos;
 	}
 
 	/**
@@ -487,14 +477,13 @@ public class IsotopeCRRestController {
 	}
 	
 
-//	private InvoiceDto convertToDto(Invoice i) {
-//		if (i == null) {
-//			throw new IllegalArgumentException("There is no such Invoice!");
-//		}
-	// TODO: complete this one;
-	// InvoiceDto inovoiceDto = new InvoiceDto();
-	// return invoiceDto;
-//	}
+	private InvoiceDto convertToDto(Invoice i) {
+		if (i == null) {
+			throw new IllegalArgumentException("There is no such Invoice!");
+		}
+	 InvoiceDto inovoiceDto = new InvoiceDto(i.getCost(), i.getIsPaid(), i.getInvoiceID());
+	 return inovoiceDto;
+	}
 
 	private DailyAvailabilityDto convertToDto(DailyAvailability d) {
 		if (d == null) {
@@ -541,7 +530,7 @@ public class IsotopeCRRestController {
 				technician.getEmail(), technician.getPassword());
 		return technicianDto;
 	}
-
+	
 	private ProfileDto convertToDto(Profile profile) {
 		if (profile == null) {
 			throw new IllegalArgumentException("Profile does not exist.");
@@ -568,7 +557,7 @@ public class IsotopeCRRestController {
 			timeslots.add(convertToDto(timeslot));
 		}
 		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),
-				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), a.getService(), timeslots);
+				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), convertToDto(a.getService()), timeslots);
 
 		return appointmentDto;
 	}
