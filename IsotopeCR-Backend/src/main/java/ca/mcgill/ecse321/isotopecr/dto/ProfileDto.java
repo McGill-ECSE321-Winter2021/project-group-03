@@ -4,10 +4,10 @@ public class ProfileDto {
 	private String email;
 	private String firstName;
 	private String lastName;
-	
-	public ProfileDto() {	
+
+	public ProfileDto() {
 	}
-	
+
 	public ProfileDto(String email, String firstName, String lastName) {
 		this.email = email;
 		this.firstName = firstName;

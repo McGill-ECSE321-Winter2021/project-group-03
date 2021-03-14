@@ -24,10 +24,9 @@ public class AppointmentDto {
 		this.aService = service;
 		this.timeslots = timeslots;
 	}
-	
 
 	public AppointmentDto(String appointmentID, CustomerDto customer, VehicleDto vehicle, TechnicianDto technician,
-			 ServiceDto service, Set<TimeslotDto> timeslots) {
+			ServiceDto service, Set<TimeslotDto> timeslots) {
 		this.aAppointmentID = appointmentID;
 		this.aCustomer = customer;
 		this.aVehicle = vehicle;

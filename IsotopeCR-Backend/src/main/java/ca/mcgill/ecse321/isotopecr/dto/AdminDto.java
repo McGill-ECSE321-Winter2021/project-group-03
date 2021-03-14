@@ -17,7 +17,7 @@ public class AdminDto {
 
 	public AdminDto() {
 	}
-	
+
 	public AdminDto(String firstName, String lastName, String email, Boolean isOwner) {
 		this.firstName = firstName;
 		this.lastName = lastName;

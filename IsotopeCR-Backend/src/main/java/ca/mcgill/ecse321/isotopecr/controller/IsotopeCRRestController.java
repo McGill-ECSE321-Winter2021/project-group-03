@@ -121,15 +121,13 @@ public class IsotopeCRRestController {
 
 		return dailyAvailabilityDtos;
 	}
-	
-	/* ----------------------- Jack Wei --------------------------*/
-	@PostMapping(value = { "/create-customer-profile", "/create-customer-profile/"})
-	public CustomerDto createCustomerProfile(@RequestParam("email") String email, 
-											 @RequestParam("firstName") String firstName,
-											 @RequestParam("lastName") String lastName,
-											 @RequestParam("phoneNumber") String phoneNumber,
-											 @RequestParam("password") String password)
-	throws IllegalArgumentException, InvalidInputException {
+
+	/* ----------------------- Jack Wei -------------------------- */
+	@PostMapping(value = { "/create-customer-profile", "/create-customer-profile/" })
+	public CustomerDto createCustomerProfile(@RequestParam("email") String email,
+			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
+			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password)
+			throws IllegalArgumentException, InvalidInputException {
 		try {
 			Customer customer = service.createCustomerProfile(firstName, lastName, email, phoneNumber, password);
 			return convertToDto(customer);
@@ -137,14 +135,11 @@ public class IsotopeCRRestController {
 			throw e;
 		}
 	}
-	
-	@PostMapping(value = { "/create-admin-profile", "/create-admin-profile/"})
-	public AdminDto createAdminProfile(@RequestParam("email") String email, 
-											 @RequestParam("firstName") String firstName,
-											 @RequestParam("lastName") String lastName,
-											 @RequestParam("password") String password,
-											 @RequestParam("isOwner") boolean isOwner)
-	throws IllegalArgumentException, InvalidInputException {
+
+	@PostMapping(value = { "/create-admin-profile", "/create-admin-profile/" })
+	public AdminDto createAdminProfile(@RequestParam("email") String email, @RequestParam("firstName") String firstName,
+			@RequestParam("lastName") String lastName, @RequestParam("password") String password,
+			@RequestParam("isOwner") boolean isOwner) throws IllegalArgumentException, InvalidInputException {
 		try {
 			Admin admin = service.createAdminProfile(firstName, lastName, email, isOwner, password);
 			return convertToDto(admin);
@@ -152,13 +147,11 @@ public class IsotopeCRRestController {
 			throw e;
 		}
 	}
-	
-	@PostMapping(value = { "/create-technician-profile", "/create-technician-profile/"})
-	public TechnicianDto createTechnicianProfile(@RequestParam("email") String email, 
-											 @RequestParam("firstName") String firstName,
-											 @RequestParam("lastName") String lastName,
-											 @RequestParam("password") String password)
-	throws IllegalArgumentException, InvalidInputException {
+
+	@PostMapping(value = { "/create-technician-profile", "/create-technician-profile/" })
+	public TechnicianDto createTechnicianProfile(@RequestParam("email") String email,
+			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
+			@RequestParam("password") String password) throws IllegalArgumentException, InvalidInputException {
 		try {
 			Technician technician = service.createTechnicianProfile(firstName, lastName, email, password);
 			return convertToDto(technician);
@@ -166,9 +159,10 @@ public class IsotopeCRRestController {
 			throw e;
 		}
 	}
-	
-	@PostMapping(value = { "/delete-profile/{email}", "/delete-profile/{email}/"})
-	public ProfileDto deleteProfile(@PathVariable("email") String email) throws IllegalArgumentException, InvalidInputException {
+
+	@PostMapping(value = { "/delete-profile/{email}", "/delete-profile/{email}/" })
+	public ProfileDto deleteProfile(@PathVariable("email") String email)
+			throws IllegalArgumentException, InvalidInputException {
 		try {
 			Profile profile = service.getProfile(email);
 			service.deleteProfile(profile);
@@ -177,47 +171,43 @@ public class IsotopeCRRestController {
 			throw e;
 		}
 	}
-	
-	@PostMapping(value = { "customer/add-vehicle/{email}", "customer/add-vehicle/{email}/"})
-	public VehicleDto addVehicle(@PathVariable("email") String email,
-								 @RequestParam("licensePlate") String licensePlate,
-								 @RequestParam("year") String year,
-								 @RequestParam("model") String model,
-								 @RequestParam("brand") String brand) throws Exception {
+
+	@PostMapping(value = { "customer/add-vehicle/{email}", "customer/add-vehicle/{email}/" })
+	public VehicleDto addVehicle(@PathVariable("email") String email, @RequestParam("licensePlate") String licensePlate,
+			@RequestParam("year") String year, @RequestParam("model") String model, @RequestParam("brand") String brand)
+			throws Exception {
 		try {
 			Profile profile = service.getProfile(email);
-			if(profile instanceof Customer){
-				Vehicle vehicle = service.addVehicle((Customer)profile, licensePlate, year, model, brand);
+			if (profile instanceof Customer) {
+				Vehicle vehicle = service.addVehicle((Customer) profile, licensePlate, year, model, brand);
 				return convertToDto(vehicle);
 			} else {
-				throw new InvalidInputException(); //TODO
+				throw new InvalidInputException(); // TODO
 			}
 		} catch (Exception e) {
 			throw e;// TODO: Exception
 		}
 	}
-	
-	@PostMapping(value = { "customer/delete-vehicle/", "customer/delete-vehicle/"})
+
+	@PostMapping(value = { "customer/delete-vehicle/", "customer/delete-vehicle/" })
 	public VehicleDto deleteVehicle(@RequestParam("email") String email,
-								 	@RequestParam("licensePlate") String licensePlate) throws Exception {
+			@RequestParam("licensePlate") String licensePlate) throws Exception {
 		try {
 			Profile profile = service.getProfile(email);
-			if(profile instanceof Customer){
-				Vehicle vehicle = service.deleteVehicle((Customer)profile, licensePlate);
+			if (profile instanceof Customer) {
+				Vehicle vehicle = service.deleteVehicle((Customer) profile, licensePlate);
 				return convertToDto(vehicle);
 			} else {
-				throw new InvalidInputException(); //TODO
+				throw new InvalidInputException(); // TODO
 			}
 		} catch (Exception e) {
 			throw e;// TODO: Exception
 		}
 	}
-	
-	@PostMapping(value = { "/login", "/login/"})
-	public Profile login(@RequestParam("email") String email, 
-							@RequestParam("password") String password,
-							HttpSession session)
-	throws IllegalArgumentException, InvalidInputException {
+
+	@PostMapping(value = { "/login", "/login/" })
+	public Profile login(@RequestParam("email") String email, @RequestParam("password") String password,
+			HttpSession session) throws IllegalArgumentException, InvalidInputException {
 		try {
 			Profile profile = service.getProfile(email);
 			if (profile.getIsRegisteredAccount()) {
@@ -246,17 +236,17 @@ public class IsotopeCRRestController {
 	 * @param profileID profileID stored in database
 	 * @return List of DailyAvailabilityDto related to input technician
 	 * @throws IllegalArgumentException
-	 * @throws InvalidInputException 
+	 * @throws InvalidInputException
 	 */
 
 	@PostMapping(value = { "/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}" })
 	public AppointmentDto bookAppointment(@PathVariable("vehicle") String licensePlate,
 
-			@PathVariable("service") String serviceName, 
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start, 
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") LocalDate date) 
-					throws IllegalArgumentException, InvalidInputException {
-		
+			@PathVariable("service") String serviceName,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") LocalDate date)
+			throws IllegalArgumentException, InvalidInputException {
+
 		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 		Customer customer = customerRepository.findCustomerByVehicle(vehicle);
 		Service serviceInSystem = serviceRepository.findServiceByServiceName(serviceName);
@@ -433,7 +423,8 @@ public class IsotopeCRRestController {
 		if (admin == null) {
 			throw new IllegalArgumentException("Administrative account does not exist.");
 		}
-		AdminDto adminDto = new AdminDto(admin.getFirstName(), admin.getLastName(), admin.getEmail(), admin.getIsOwner());
+		AdminDto adminDto = new AdminDto(admin.getFirstName(), admin.getLastName(), admin.getEmail(),
+				admin.getIsOwner());
 		return adminDto;
 	}
 
@@ -445,7 +436,7 @@ public class IsotopeCRRestController {
 				technician.getEmail(), technician.getPassword());
 		return technicianDto;
 	}
-	
+
 	private ProfileDto convertToDto(Profile profile) {
 		if (profile == null) {
 			throw new IllegalArgumentException("Profile does not exist.");
@@ -472,8 +463,7 @@ public class IsotopeCRRestController {
 			timeslots.add(convertToDto(timeslot));
 		}
 		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),
-				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), a.getService(),
-				timeslots);
+				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), a.getService(), timeslots);
 		return appointmentDto;
 	}
 
