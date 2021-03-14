@@ -183,8 +183,8 @@ public class TestIsotopeCRPersistence {
 		String brand2 = "Volkswagen";
 		String model1 = "GT-R";
 		String model2 = "Tiguan";
-		int year1 = 2016;
-		int year2 = 2018;
+		String year1 = "2016";
+		String year2 = "2018";
 		String licensePlate1 = "xxxx1";
 		String licensePlate2 = "xxxx2";
 		Vehicle v1 = createVehicle(licensePlate1, year1, model1, brand1);
@@ -365,7 +365,7 @@ public class TestIsotopeCRPersistence {
 		// Setting up the objects and variables
 		String brand = "Nissan";
 		String model = "GT-R";
-		int year = 2016;
+		String year = "2016";
 		String licensePlate = "xxxx1";
 		Vehicle v = createVehicle(licensePlate, year, model, brand);
 
@@ -416,7 +416,7 @@ public class TestIsotopeCRPersistence {
 		// Create a Vehicle
 		String brand1 = "Nissan";
 		String model1 = "GT-R";
-		int year1 = 2016;
+		String year1 = "2016";
 		String licensePlate1 = "xxxx1";
 		Vehicle vehicle = createVehicle(licensePlate1, year1, model1, brand1);
 		
@@ -593,7 +593,7 @@ public class TestIsotopeCRPersistence {
 	}
 
 	// Helper method to create a Vehicle
-	private Vehicle createVehicle(String licensePlate, Integer year, String model, String brand) {
+	private Vehicle createVehicle(String licensePlate, String year, String model, String brand) {
 		Vehicle vehicle = new Vehicle();
 		vehicle.setLicensePlate(licensePlate);
 		vehicle.setYear(year);

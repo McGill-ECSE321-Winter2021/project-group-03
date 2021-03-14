@@ -113,26 +113,100 @@ public class IsotopeCRRestController {
 	/**
 	 * @author Zichen
 	 * @return the total income of the system up to now
+	 * @throws Exception
 	 */
 	@GetMapping(value = { "/incomesummary", "/incomesummary/" })
 	public double getIncomeSummary() {
 		return service.viewIncomeSummary();
 	}
 	
+	/**
+	 * @author Zichen
+	 * @param email
+	 * @return List of DailyAvailabilityDtos
+	 * @throws Exception
+	 */
 	@GetMapping(value = { "/availablities/{email}", "/availabilities/{email}/" })
-	public List<DailyAvailabilityDto> getTechAvailabilities(@PathVariable("email") String email) {
-//		Technician tech = (Technician) service.getProfile(email);
-		Technician tech = technicianRepository.findTechnicianByProfileID(email);	// TODO: delete this line!!!
-		if (tech == null) {
-			throw new IllegalArgumentException("ERROR: Input profileID not found in system.");
+	public List<DailyAvailabilityDto> getAvailabilitiesByTechnician(@PathVariable("email") String email) throws Exception {
+		Profile tech = null;
+		try {
+			tech = service.getProfile(email);
+			if (tech instanceof Technician) {
+				List <DailyAvailabilityDto> dailyAvailabilityDtos = new ArrayList<>();
+				for (DailyAvailability dailyavailabilities : ((Technician) tech).getDailyAvailability()) {
+					dailyAvailabilityDtos.add(convertToDto(dailyavailabilities));
+				}
+				return dailyAvailabilityDtos;
+				
+			} else {
+				throw new IllegalArgumentException("ERROR: input email is related to a non-Technician account.");
+			}
+			
+		} catch (Exception e) {
+			throw e;
 		}
-		List <DailyAvailabilityDto> dailyAvailabilityDtos = new ArrayList<DailyAvailabilityDto>();
-		for (DailyAvailability dailyavailabilities : tech.getDailyAvailability()) {
-			dailyAvailabilityDtos.add(convertToDto(dailyavailabilities));
-		}
-		
-		return dailyAvailabilityDtos;
+
 	}
+	
+	/**
+	 * 
+	 * @param email
+	 * @return List of ServiceDtos
+	 * @throws Exception
+	 */
+	@GetMapping(value = { "/services/{email}", "/services/{email}/" })
+	public List<ServiceDto> getServicesByTechnician(@PathVariable("email") String email) throws Exception {
+		Profile tech = null;
+		try {
+			tech = service.getProfile(email);
+			if (tech instanceof Technician) { 
+				List <ServiceDto> serviceDtos = new ArrayList<>();
+				for (Service service : ((Technician) tech).getService()) {
+					serviceDtos.add(convertToDto(service));
+				}
+				return serviceDtos;
+				
+			} else {
+				throw new IllegalArgumentException("ERROR: input email is related to a non-Technician account.");
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	/**
+	 * @author Zichen
+	 * @param email
+	 * @return List of VehicleDto
+	 * @throws Exception 
+	 */
+	@GetMapping(value = { "/vehicle/{email}", "/vehicle/{email}/" })
+	public List<VehicleDto> getVehiclesByCustomer(@PathVariable("email") String email) throws Exception {
+		Profile customer = null;
+		try {
+			customer = service.getProfile(email);
+			if (customer instanceof Customer) {
+				List<VehicleDto> vehicles = new ArrayList<>();
+				for (Vehicle vehicle : service.getVehiclesByCustomers((Customer) customer)) {
+					vehicles.add(convertToDto(vehicle));
+				}
+				return vehicles;
+				
+			} else {
+				throw new IllegalArgumentException("ERROR: input email is related to a non-Customer account.");
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}	
+		
+	}
+	
+	
+	
+	
 	
 	/* ----------------------- Jack Wei --------------------------*/
 	@PostMapping(value = { "/create-customer-profile", "/create-customer-profile/"})
@@ -262,6 +336,15 @@ public class IsotopeCRRestController {
 		}
 		ResourceDto resourceDto = new ResourceDto(r.getResourceType(), r.getMaxAvailable());
 		return resourceDto;
+	}
+	
+	private ServiceDto convertToDto(Service s) {
+		// TODO: complete this after ServiceDto
+		if (s == null) {
+			throw new IllegalArgumentException("There is no such Service!");
+		}
+		ServiceDto serviceDto = new ServiceDto();
+		return serviceDto;
 	}
 	
 //	private InvoiceDto convertToDto(Invoice i) {
