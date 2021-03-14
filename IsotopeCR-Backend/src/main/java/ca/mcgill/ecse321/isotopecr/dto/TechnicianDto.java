@@ -21,23 +21,12 @@ public class TechnicianDto {
 	public TechnicianDto() {
 	}
 
-	public TechnicianDto(String firstName, String lastName, String email, String password, Set<ServiceDto> services,
-			Set<DailyAvailabilityDto> dailyAvailabilities) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.services = services;
-		this.dailyAvailabilities = dailyAvailabilities;
-	}
-
 	public TechnicianDto(String firstName, String lastName, String email, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.services = Collections.EMPTY_SET;
-		this.dailyAvailabilities = Collections.emptySet();
 	}
 
 	public String getEmail() {

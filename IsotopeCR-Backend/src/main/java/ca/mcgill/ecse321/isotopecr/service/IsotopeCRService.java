@@ -72,33 +72,32 @@ public class IsotopeCRService {
 	 * @param model
 	 * @param brand
 	 * @return
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
 	
 	 */
 	@Transactional
-	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber,
-			String password) throws invalidInputException {
+	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber, String password) throws InvalidInputException {
 		Customer customer = new Customer();
 
 		if (isValidEmail(email)) {
 			customer.setEmail(email);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidName(firstName) && isValidName(lastName)) {
 			customer.setFirstName(firstName);
 			customer.setLastName(lastName);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (phoneNumber != null) {
 			if (isValidPhoneNumber(phoneNumber)) {
 				customer.setPhoneNumber(phoneNumber);
 			} else {
-				throw new invalidInputException();
+				throw new InvalidInputException();
 			}
 		} // else phone number is set to null
 
@@ -109,7 +108,7 @@ public class IsotopeCRService {
 					customer.setIsRegisteredAccount(true);
 				}
 			} else {
-				throw new invalidInputException();
+				throw new InvalidInputException();
 			}
 		}
 
@@ -134,13 +133,13 @@ public class IsotopeCRService {
 	 * @param isOwner
 	 * @param password
 	 * @return
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
 
 	 */
 	@Transactional
-	public Admin createAdminProfile(String firstName, String lastName, String email, Boolean isOwner, String password)
-			throws invalidInputException {
+	public Admin createAdminProfile(String firstName, String lastName, String email, Boolean isOwner, String password) throws InvalidInputException {
+
 		Admin admin = new Admin();
 
 		if (isValidEmail(email)) {
@@ -150,21 +149,21 @@ public class IsotopeCRService {
 				// TODO: exception? error message?
 			}
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidName(firstName) && isValidName(lastName)) {
 			admin.setFirstName(firstName);
 			admin.setLastName(lastName);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidPassword(password)) {
 			admin.setPassword(password);
 			admin.setIsRegisteredAccount(true);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		admin.setPassword(password);
@@ -191,13 +190,11 @@ public class IsotopeCRService {
 	 * @param password
 	 * @param services
 	 * @return
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
-	
 	 */
 	@Transactional
-	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password)
-			throws invalidInputException {
+	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password) throws InvalidInputException {
 		Technician technician = new Technician();
 
 		if (isValidEmail(email)) {
@@ -207,21 +204,21 @@ public class IsotopeCRService {
 				// TODO: exception? error message?
 			}
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidName(firstName) && isValidName(lastName)) {
 			technician.setFirstName(firstName);
 			technician.setLastName(lastName);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidPassword(password)) {
 			technician.setPassword(password);
 			technician.setIsRegisteredAccount(true);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
@@ -254,22 +251,19 @@ public class IsotopeCRService {
 	 * 
 	 * @param currentUser
 	 * @param password
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
 	
 	 */
-	@Transactional
-	public void editPassword(Profile currentUser, String password) throws invalidInputException {
 
-		if (isValidPassword(password)) {
+	public void editPassword(Profile currentUser, String password) throws InvalidInputException {
+		
 			currentUser.setPassword(password);
 			if (currentUser instanceof Customer) {
 				currentUser.setIsRegisteredAccount(true);
-			}
-		} else {
-			throw new invalidInputException();
-		}
-
+			} else {
+			throw new InvalidInputException();
+		}	
 		profileRepository.save(currentUser);
 	}
 
@@ -282,21 +276,22 @@ public class IsotopeCRService {
 	 * 
 	 * @param currentUser
 	 * @param phoneNumber
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
 	
 	 */
-	@Transactional
-	public void editPhoneNumber(Profile currentUser, String phoneNumber) throws invalidInputException {
+
+	
+	public void editPhoneNumber(Profile currentUser, String phoneNumber) throws InvalidInputException {
 
 		Customer customerProfile = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
 
 		if (isValidPhoneNumber(phoneNumber)) {
 			customerProfile.setPhoneNumber(phoneNumber);
 		} else {
-			throw new invalidInputException();
-		}
-
+			throw new InvalidInputException();
+		}	
+		
 		customerRepository.save(customerProfile);
 	}
 
@@ -316,21 +311,19 @@ public class IsotopeCRService {
 
 	 */
 	@Transactional
-	public void addVehicle(Profile currentUser, String licensePlate, String year, String model, String brand)
-			throws invalidInputException {
-
-		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
-
+	public Vehicle addVehicle(Profile profile, String licensePlate, String year, String model, String brand) throws InvalidInputException {
+		
+		Customer customer = customerRepository.findCustomerByProfileID(profile.getProfileID());
 		try {
 			Vehicle vehicle = createVehicle(licensePlate, year, model, brand);
 			Set<Vehicle> vehicles = customer.getVehicle();
 			vehicles.add(vehicle);
 			customer.setVehicle(vehicles);
-		} catch (invalidInputException e) {
+			customerRepository.save(customer);
+			return vehicle;
+		} catch (InvalidInputException e) {
 			throw e;
 		}
-
-		customerRepository.save(customer);
 	}
 
 	/**
@@ -343,16 +336,19 @@ public class IsotopeCRService {
 	 * 
 	 
 	 */
-	@Transactional
-	public void deleteVehicle(Profile currentUser, String licensePlate) {
+
+	public Vehicle deleteVehicle(Profile currentUser, String licensePlate) {
 
 		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
 
 		Boolean isDeleted = false;
+		Vehicle foundVehicle = null;
 
 		Set<Vehicle> vehicles = customer.getVehicle();
-		for (Vehicle vehicle : vehicles) {
-			if (vehicle.getLicensePlate() == licensePlate) {
+
+		for (Vehicle vehicle: vehicles) {
+			if(vehicle.getLicensePlate() == licensePlate) {
+				foundVehicle = vehicle;
 				vehicles.remove(vehicle);
 				vehicleRepository.delete(vehicle);
 				isDeleted = true;
@@ -365,6 +361,7 @@ public class IsotopeCRService {
 		} else { // vehicle not found
 			// TODO: exception? error message?
 		}
+		return foundVehicle;
 	}
 
 	/** 
@@ -373,13 +370,13 @@ public class IsotopeCRService {
 	 * 
 	 * @param technician
 	 * @param service
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
 	
 	 */
-	@Transactional
-	public void addServiceToProfile(Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service)
-			throws invalidInputException {
+
+	public void addServiceToProfile(Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service) throws InvalidInputException {
+		
 
 		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();
 
@@ -427,14 +424,14 @@ public class IsotopeCRService {
 	 * 
 	 * @param email
 	 * @return
-	 * 
-	 
+	 *  
 	 * @throws invalidInputException
 	 */
-	@Transactional
-	public Profile getProfile(String email) throws invalidInputException {
+
+	public Profile getProfile(String email) throws InvalidInputException {
+
 		if (email == null) {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		Profile profile = profileRepository.findProfileByProfileID(String.valueOf(email.hashCode()));
@@ -790,7 +787,10 @@ public class IsotopeCRService {
 		}
 	}
 
-	private <T> List<T> toList(Iterable<T> iterable) {
+    
+   
+
+	private <T> List<T> toList(Iterable<T> iterable){
 		List<T> resultList = new ArrayList<T>();
 		for (T t : iterable) {
 			resultList.add(t);
@@ -902,29 +902,29 @@ public class IsotopeCRService {
 	 * @param model
 	 * @param brand
 	 * @return Vehicle
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
 	 * @author Jack Wei
 	 */
-	private Vehicle createVehicle(String licensePlate, String year, String model, String brand)
-			throws invalidInputException {
+	private Vehicle createVehicle(String licensePlate, String year, String model, String brand) throws InvalidInputException {
+
 		Vehicle vehicle = new Vehicle();
 		if (isValidYear(year)) {
 			vehicle.setYear(year);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidModelName(model)) {
 			vehicle.setModel(model);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidBrandName(brand)) {
 			vehicle.setBrand(brand);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		vehicleRepository.save(vehicle);
@@ -1013,14 +1013,6 @@ public class IsotopeCRService {
 	private boolean isValidService(ca.mcgill.ecse321.isotopecr.model.Service service) {
 		boolean isValid = false;
 		if (service != null) {
-			isValid = true;
-		}
-		return isValid;
-	}
-
-	private boolean isValidAppointment(Appointment appointment) {
-		boolean isValid = false;
-		if (appointment != null) {
 			isValid = true;
 		}
 		return isValid;
