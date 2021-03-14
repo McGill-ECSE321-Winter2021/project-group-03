@@ -431,7 +431,7 @@ public class IsotopeCRRestController {
 			timeslots.add(convertToDto(timeslot));
 		}
 		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),
-				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), a.getInvoice(), a.getService(),
+				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), a.getService(),
 				timeslots);
 		return appointmentDto;
 	}
