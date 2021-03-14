@@ -862,6 +862,12 @@ public class IsotopeCRService {
     }
     
     @Transactional
+	public List<ca.mcgill.ecse321.isotopecr.model.Service> viewAllServices() {
+		List<ca.mcgill.ecse321.isotopecr.model.Service> services = toList(serviceRepository.findAll());
+		return services;
+	}
+    
+    @Transactional
     public CompanyProfile createCompanyProfile(String companyName, String address, String workingHours) {
     	if(isValidCompanyName(companyName)) {
     		CompanyProfile companyProfile = new CompanyProfile();
@@ -891,6 +897,12 @@ public class IsotopeCRService {
     		throw new IllegalArgumentException("Inputs.");
     	}
     }
+    
+    @Transactional
+	public List<CompanyProfile> viewAllCompanyProfiles() {
+		List<CompanyProfile> companyProfiles = toList(companyProfileRepository.findAll());
+		return companyProfiles;
+	}
 
 	private <T> List<T> toList(Iterable<T> iterable) {
 		List<T> resultList = new ArrayList<T>();
