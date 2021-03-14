@@ -81,4 +81,16 @@ public class Appointment {
 	public String getAppointmentID() {
 		return this.appointmentID;
 	}
+	
+	public enum Status {BOOKED,CANCELED};
+	
+	private Status status;
+	public void setStatus(Status status) {
+		this.status=status;
+	}
+	
+	public Status getStatus() {
+		return this.status;
+	}
+
 }

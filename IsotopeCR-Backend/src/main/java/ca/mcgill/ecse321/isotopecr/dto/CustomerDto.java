@@ -24,6 +24,14 @@ public class CustomerDto {
 		this.email = email;
 	}
 	
+	public CustomerDto(String firstName, String lastName, String email, String phoneNumber, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+	}
+	
 	public CustomerDto(String firstName, String lastName, String email, String phoneNumber, String password, Set <VehicleDto> vehicles) {
 		this.firstName = firstName;
 		this.lastName = lastName;
