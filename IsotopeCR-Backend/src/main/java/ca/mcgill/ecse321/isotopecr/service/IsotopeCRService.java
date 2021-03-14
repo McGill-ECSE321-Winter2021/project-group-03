@@ -246,21 +246,13 @@ public class IsotopeCRService {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Changes/sets the password of the profile provided with the
-	 * given password. The password must satisfy password format (one upper
-	 * case letter, one lower case letter and one number; 8-20 characters
-	 * long, otherwise an invalidInputException is thrown. If the profile is
-	 * a customer profile, calling this method will change the profile to a
-	 * registered account that can be used to log in the application.
-=======
+
 	 * Changes/sets the password of the profile provided with the given password.
 	 * The password must satisfy password format (one upper case letter, one lower
 	 * case letter and one number; 8-20 characters long, otherwise an
 	 * invalidInputException is thrown. If the profile is a customer profile,
 	 * calling this method will change the profile to a registered account that can
 	 * be used to log in the application.
->>>>>>> 163d2842e969137fa388cc977b8e218e329540c0
 	 * 
 	 * @param currentUser
 	 * @param password
@@ -268,6 +260,7 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 * 
 	 */
+	@Transactional
 	public Profile editPassword(Profile profile, String password) throws InvalidInputException {
 		
 			profile.setPassword(password);
@@ -281,17 +274,10 @@ public class IsotopeCRService {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Edits/sets the phone number of the profile provided and the
-	 * given phone number. The phone number must satisfy standard phone
-	 * number format which can include white space, hyphen, dot and
-	 * international prefix, otherwise an invalidInputException is thrown.
-=======
 	 * Edits/sets the phone number of the profile provided and the given phone
 	 * number. The phone number must satisfy standard phone number format which can
 	 * include white space, hyphen, dot and international prefix, otherwise an
 	 * invalidInputException is thrown.
->>>>>>> 163d2842e969137fa388cc977b8e218e329540c0
 	 * 
 	 * @param currentUser
 	 * @param phoneNumber
@@ -299,6 +285,7 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 * 
 	 */
+	@Transactional
 	public Customer editPhoneNumber(Profile currentUser, String phoneNumber) throws InvalidInputException {
 		
 		Customer customerProfile = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
@@ -390,6 +377,7 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 * @return 
 	 */
+	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service addServiceToProfile(Technician technician, String serviceName) throws InvalidInputException {
 		
 		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();

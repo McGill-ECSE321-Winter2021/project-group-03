@@ -307,7 +307,7 @@ public class IsotopeCRRestController {
 		}
 	}
 	
-	@PostMapping(value = { "/edit-password", "/edit-password/"})
+	@PostMapping(value = { "/edit-phoneNumber", "/edit-phoneNumber/"})
 	public CustomerDto editPhoneNumber(@RequestParam("email") String email,
 								   	   @RequestParam("phoneNumber") String phoneNumber) throws Exception {
 		try {
