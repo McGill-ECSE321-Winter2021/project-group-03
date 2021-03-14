@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.isotopecr.dto;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,17 +17,19 @@ public class TechnicianDto {
 	private String email;
 	//private String password;
 	private Set<ServiceDto> services;
-	private Set<DailyAvailabilityDto> dailyAvailabilities;
+	private List<DailyAvailabilityDto> dailyAvailabilities;
 
 	public TechnicianDto() {
 	}
 
-	public TechnicianDto(String firstName, String lastName, String email) {
+
+	public TechnicianDto(String firstName, String lastName, String email, String password, List<DailyAvailabilityDto> dailyAvailabilities) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		//this.password = password;
 		this.services = Collections.EMPTY_SET;
+		this.dailyAvailabilities = dailyAvailabilities;
 	}
 
 	public String getEmail() {
@@ -53,11 +56,11 @@ public class TechnicianDto {
 //		return password;
 //	}
 
-	public Set<DailyAvailabilityDto> getDailyAvailabilities() {
+	public List<DailyAvailabilityDto> getDailyAvailabilities() {
 		return dailyAvailabilities;
 	}
 
-	public void setDailyAvailabilities(Set<DailyAvailabilityDto> dailyAvailabilities) {
+	public void setDailyAvailabilities(List<DailyAvailabilityDto> dailyAvailabilities) {
 		this.dailyAvailabilities = dailyAvailabilities;
 	}
 

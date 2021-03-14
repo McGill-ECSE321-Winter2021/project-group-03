@@ -241,7 +241,7 @@ public class IsotopeCRRestController {
 	@PostMapping(value = { "/create-technician-profile", "/create-technician-profile/" })
 	public TechnicianDto createTechnicianProfile(@RequestParam("email") String email,
 			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-			@RequestParam("password") String password) throws IllegalArgumentException, InvalidInputException {
+			@RequestParam("password") String password) throws Exception {
 		try {
 			Technician technician = service.createTechnicianProfile(firstName, lastName, email, password);
 			return convertToDto(technician);
@@ -372,8 +372,7 @@ public class IsotopeCRRestController {
 	 * @author Zichen
 	 * @param profileID profileID stored in database
 	 * @return List of DailyAvailabilityDto related to input technician
-	 * @throws IllegalArgumentException
-	 * @throws InvalidInputException
+	 * @throws Exception 
 	 */
 
 	@PostMapping(value = { "/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}" })
@@ -382,7 +381,7 @@ public class IsotopeCRRestController {
 			@PathVariable("service") String serviceName,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") LocalDate date)
-			throws IllegalArgumentException, InvalidInputException {
+			throws Exception {
 
 		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 		Customer customer = customerRepository.findCustomerByVehicle(vehicle);
@@ -446,7 +445,7 @@ public class IsotopeCRRestController {
 	}
 
 	@GetMapping(value = { "/pastappointment/vehicle/{vehicle}", "/pastappointment/vehicle/{vehicle}/" })
-	public List<AppointmentDto> viewPastAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) {
+	public List<AppointmentDto> viewPastAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) throws Exception {
 		try {
 			Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 			if (vehicle == null) {
@@ -469,7 +468,7 @@ public class IsotopeCRRestController {
 	}
 
 	@GetMapping(value = { "/futureappointment/vehicle/{vehicle}", "/futureappointment/vehicle/{vehicle}/" })
-	public List<AppointmentDto> viewFutureAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) {
+	public List<AppointmentDto> viewFutureAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) throws Exception {
 		try {
 			Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 			if (vehicle == null) {
@@ -492,7 +491,7 @@ public class IsotopeCRRestController {
 	}
 
 	@PostMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
-	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) {
+	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) throws Exception {
 		try {
 			Appointment appointment = appointmentRepository.findAppointmentByAppointmentID(aAppointmentId);
 
@@ -570,12 +569,14 @@ public class IsotopeCRRestController {
 		return adminDto;
 	}
 
-	private TechnicianDto convertToDto(Technician technician) {
+	private TechnicianDto convertToDto(Technician technician) throws Exception {
 		if (technician == null) {
 			throw new IllegalArgumentException("Technician account does not exist.");
 		}
+		List<DailyAvailabilityDto> availabilities = getAvailabilitiesByTechnician(technician.getEmail());
 		TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(),
-				technician.getEmail());
+				technician.getEmail(), technician.getPassword(), availabilities);
+
 		return technicianDto;
 	}
 	
@@ -596,7 +597,7 @@ public class IsotopeCRRestController {
 		return timeslotDto;
 	}
 
-	private AppointmentDto convertToDto(Appointment a) {
+	private AppointmentDto convertToDto(Appointment a) throws Exception {
 		if (a == null) {
 			throw new IllegalArgumentException("There is no such appointment!");
 		}
@@ -609,7 +610,7 @@ public class IsotopeCRRestController {
 		return appointmentDto;
 	}
 
-	private List<AppointmentDto> convertToDto(List<Appointment> appointments) {
+	private List<AppointmentDto> convertToDto(List<Appointment> appointments) throws Exception {
 		if (appointments == null) {
 			throw new IllegalArgumentException("There is no appointments.");
 		}

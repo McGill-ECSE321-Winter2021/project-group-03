@@ -1023,6 +1023,11 @@ public class IsotopeCRService {
 			throws InvalidInputException {
 
 		Vehicle vehicle = new Vehicle();
+		if(!licensePlate.isEmpty()) {
+			vehicle.setLicensePlate(licensePlate);
+		}else {
+			throw new InvalidInputException();
+		}
 		if (isValidYear(year)) {
 			vehicle.setYear(year);
 		} else {
