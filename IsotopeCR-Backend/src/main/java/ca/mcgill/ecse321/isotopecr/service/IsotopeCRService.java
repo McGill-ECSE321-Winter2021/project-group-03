@@ -573,6 +573,7 @@ public class IsotopeCRService {
 	 * @param time
 	 * @return a technician available at that time
 	 */
+	@Transactional
 	public Technician getFreeTechnician(Time time, Date date) {
 		java.util.Date utilDate = new java.util.Date(date.getTime());
 		Calendar c = Calendar.getInstance();
@@ -596,7 +597,33 @@ public class IsotopeCRService {
 		}
 		return null;
 	}
+	
 
+	/**
+	 * @author Zichen
+	 * @return the total income by all the appointments upto now
+	 */
+	@Transactional
+	public List<Vehicle> getVehiclesByCustomers(Customer customer) {
+		if (customer == null) {
+			throw new IllegalArgumentException("ERROR: input customer does not exist.");
+		}
+		return toList(customer.getVehicle());
+	}
+	
+	
+	
+	
+	/**
+	 * @author Jiatong
+	 * @param customer
+	 * @param vehicle
+	 * @param technician
+	 * @param service
+	 * @param startTime
+	 * @param chosenDate
+	 * @return An appointment just created
+	 */
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle, Technician technician,
 			ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate)
