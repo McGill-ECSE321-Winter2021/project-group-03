@@ -253,15 +253,16 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 */
 
-	public void editPassword(Profile currentUser, String password) throws InvalidInputException {
+	public Profile editPassword(Profile profile, String password) throws InvalidInputException {
 		
-			currentUser.setPassword(password);
-			if (currentUser instanceof Customer) {
-				currentUser.setIsRegisteredAccount(true);
+			profile.setPassword(password);
+			if (profile instanceof Customer) {
+				profile.setIsRegisteredAccount(true);
+				profileRepository.save(profile);
+				return profile;
 			} else {
 			throw new InvalidInputException();
 		}	
-		profileRepository.save(currentUser);
 	}
 
 	/**
@@ -277,17 +278,17 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 */
 	
-	public void editPhoneNumber(Profile currentUser, String phoneNumber) throws InvalidInputException {
+	public Customer editPhoneNumber(Profile currentUser, String phoneNumber) throws InvalidInputException {
 		
 		Customer customerProfile = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
 
 		if (isValidPhoneNumber(phoneNumber)) {
 			customerProfile.setPhoneNumber(phoneNumber);
+			customerRepository.save(customerProfile);
+			return customerProfile;
 		} else {
 			throw new InvalidInputException();
 		}	
-		
-		customerRepository.save(customerProfile);
 	}
 
 	/**
@@ -364,15 +365,22 @@ public class IsotopeCRService {
 	 * @throws InvalidInputException
 	 * 
 	 * @author Jack Wei
+	 * @return 
 	 */
-	public void addServiceToProfile(Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service) throws InvalidInputException {
+	public ca.mcgill.ecse321.isotopecr.model.Service addServiceToProfile(Technician technician, String serviceName) throws InvalidInputException {
 		
 		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();
 
-		services.add(service);
-		technician.setService(services);
-
-		technicianRepository.save(technician);
+		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+		
+		if(service != null) {
+			services.add(service);
+			technician.setService(services);
+			technicianRepository.save(technician);
+			return service;
+		} else {
+			throw new InvalidInputException(); //TODO: exceptions
+		}
 	}
 
 	/**

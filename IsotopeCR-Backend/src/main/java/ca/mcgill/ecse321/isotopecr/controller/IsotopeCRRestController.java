@@ -213,6 +213,50 @@ public class IsotopeCRRestController {
 		}
 	}
 	
+	@PostMapping(value = { "/edit-password", "/edit-password/"})
+	public ProfileDto editPassword(@RequestParam("email") String email,
+								   @RequestParam("password") String password) throws Exception {
+		try {
+			Profile profile = service.getProfile(email);
+			profile = service.editPassword(profile, password);
+			return convertToDto(profile);
+		} catch (Exception e) {
+			throw e;// TODO: Exception
+		}
+	}
+	
+	@PostMapping(value = { "/edit-password", "/edit-password/"})
+	public CustomerDto editPhoneNumber(@RequestParam("email") String email,
+								   	   @RequestParam("phoneNumber") String phoneNumber) throws Exception {
+		try {
+			Profile profile = service.getProfile(email);
+			if(profile instanceof Customer) {
+				Customer customer = service.editPhoneNumber(profile, phoneNumber);
+				return convertToDto(customer);
+			} else {
+				throw new Exception(); //TODO: excpetion
+			}
+		} catch (Exception e) {
+			throw e;// TODO: Exception
+		}
+	}
+	
+	@PostMapping(value = { "technician/add-service/{email}", "customer/add-service/{email}/"})
+	public ServiceDto addServiceToTechnician(@PathVariable("email") String email,
+								 @RequestParam("serviceName") String serviceName) throws Exception {
+		try {
+			Profile profile = service.getProfile(email);
+			if(profile instanceof Customer){
+				ca.mcgill.ecse321.isotopecr.model.Service technicianService = service.addServiceToProfile((Technician)profile, serviceName);
+				return convertToDto(technicianService);
+			} else {
+				throw new InvalidInputException(); //TODO
+			}
+		} catch (Exception e) {
+			throw e;// TODO: Exception
+		}
+	}
+	
 	@PostMapping(value = { "/login", "/login/"})
 	public Profile login(@RequestParam("email") String email, 
 							@RequestParam("password") String password,
