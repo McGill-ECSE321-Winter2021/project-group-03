@@ -538,7 +538,14 @@ public class IsotopeCRService {
 		
 		return appointment;
 	}
-	
+	@Transactional 
+	public Appointment viewAppointment (Appointment appointment) throws invalidInputException{
+		if (isValidAppointment(appointment)) {
+		    return appointment;
+			}else {
+				throw new invalidInputException();
+			}
+	}
 	@Transactional
 	public boolean cancelAppointment (Appointment appointment) throws invalidInputException{
 		if (isValidAppointment(appointment)) {
@@ -552,10 +559,9 @@ public class IsotopeCRService {
 		    if (aptmt.equals(null)) {
 			    isCancelled =true;
 		    }
-		}else {
-			System.out.println("Invalid appointment ID");
+			
 		}
-		return isCancelled;
+	    return isCancelled;
 		}else {
 			throw new invalidInputException();
 		}
