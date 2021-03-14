@@ -5,7 +5,10 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ import ca.mcgill.ecse321.isotopecr.dao.TimeslotRepository;
 import ca.mcgill.ecse321.isotopecr.dao.VehicleRepository;
 import ca.mcgill.ecse321.isotopecr.dto.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
+import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.service.IsotopeCRService;
 import ca.mcgill.ecse321.isotopecr.service.invalidInputException;
 
@@ -139,8 +143,8 @@ public class IsotopeCRRestController {
 	 * @throws IllegalArgumentException
 	 * @throws invalidInputException 
 	 */
-	@PostMapping(value = {"/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}"})
-	public void bookAppointment(@PathVariable("vehicle") String licensePlate,
+	@PostMapping(value = {"/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}/"})
+	public AppointmentDto bookAppointment(@PathVariable("vehicle") String licensePlate,
 			@PathVariable("service") String serviceName, 
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start, 
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") LocalDate date) 
@@ -157,6 +161,73 @@ public class IsotopeCRRestController {
 		Appointment appointment = service.bookAppointment(customer, vehicle, technician, serviceInSystem, startTime, appointmentDate);
 		return convertToDto(appointment);
 	}
+	
+	@GetMapping(value = {"/pastappointment/customer/{customer}", "/pastappointment/customer/{customer}/"})
+	public List<AppointmentDto> viewPastAppointmentForCustomer(@PathVariable("customer") String email ) 
+					throws IllegalArgumentException, invalidInputException {
+		Customer aCustomer = findProfileByEmail(email);
+		List <Appointment> appointments= appointmentRepository.findAppointmentByCustomer(aCustomer);
+		appointments = service.getAllAppointmentsBeforeTime(appointments);
+		List <Appointment> uncancelledappointments = new ArrayList <Appointment>();
+		for (Appointment appointment: appointments) {
+			if(appointment.getStatus().equals(Status.BOOKED)) {
+				uncancelledappointments.add(appointment);
+			}
+		}
+		
+		return convertToDto(uncancelledappointments);
+	}
+	
+	@GetMapping(value = {"/futureappointment/customer/{customer}", "/futureappointment/customer/{customer}/"})
+	public List<AppointmentDto> viewFutureAppointmentForCustomer(@PathVariable("customer") String email ) 
+					throws IllegalArgumentException, invalidInputException {
+		Customer aCustomer = findProfileByEmail(email);
+		List <Appointment> appointments= appointmentRepository.findAppointmentByCustomer(aCustomer);
+		appointments = service.getAllAppointmentsAfterTime(appointments);
+		List <Appointment> uncancelledappointments = new ArrayList <Appointment>();
+		for (Appointment appointment: appointments) {
+			if(appointment.getStatus().equals(Status.BOOKED)) {
+				uncancelledappointments.add(appointment);
+			}
+		}
+		
+		return convertToDto(uncancelledappointments);
+	}
+	
+	@GetMapping(value = {"/pastappointment/vehicle/{vehicle}", "/pastappointment/vehicle/{vehicle}/"})
+	public List<AppointmentDto> viewPastAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) 
+					throws IllegalArgumentException, invalidInputException {
+		
+		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
+		List <Appointment> appointments= appointmentRepository.findAppointmentByVehicle(vehicle);
+		appointments = service.getAllAppointmentsBeforeTime(appointments);
+		List <Appointment> uncancelledappointments = new ArrayList <Appointment>();
+		for (Appointment appointment: appointments) {
+			if(appointment.getStatus().equals(Status.BOOKED)) {
+				uncancelledappointments.add(appointment);
+			}
+		}
+		
+		return convertToDto(uncancelledappointments);
+	}
+	
+	@GetMapping(value = {"/futureappointment/vehicle/{vehicle}", "/futureappointment/vehicle/{vehicle}/"})
+	public List<AppointmentDto> viewFutureAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) 
+					throws IllegalArgumentException, invalidInputException {
+		
+		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
+		List <Appointment> appointments= appointmentRepository.findAppointmentByVehicle(vehicle);
+		appointments = service.getAllAppointmentsAfterTime(appointments);
+		List <Appointment> uncancelledappointments = new ArrayList <Appointment>();
+		for (Appointment appointment: appointments) {
+			if(appointment.getStatus().equals(Status.BOOKED)) {
+				uncancelledappointments.add(appointment);
+			}
+		}
+		
+		return convertToDto(uncancelledappointments);
+	}
+
 
 	
 	/* ============================== Helpers ===============================*/
@@ -185,13 +256,59 @@ public class IsotopeCRRestController {
 		return dailyAvailabilityDto;
 	}
 	
+	private VehicleDto convertToDto(Vehicle v) {
+		if(v==null) {
+			throw new IllegalArgumentException("There is no such vehicle!");
+		}
+		VehicleDto vehicleDto = new VehicleDto (v.getLicensePlate(),v.getYear(),v.getModel(),v.getBrand());
+		return vehicleDto;
+	}
+	private CustomerDto convertToDto (Customer c) {
+		if(c==null) {
+			throw new IllegalArgumentException("There is no such customer!");
+		}
+		Set<VehicleDto> vehicles = new HashSet<VehicleDto>();
+		for(Vehicle v:c.getVehicle()) {
+			vehicles.add(convertToDto(v));
+		}
+		CustomerDto customerDto = new CustomerDto (c.getFirstName(),c.getLastName(),c.getEmail(),c.getPhoneNumber(),c.getPassword(),vehicles,c.getIsRegisteredAccount());
+	}
+	
+	// requiring service Dto
+	private Service convertToDto (Service s) {
+		if (s==null) {
+			throw new IllegalArgumentException("There is no such service!");
+		}
+		
+		
+	}
+	// requring service Dto
+	private Technician convertToDto (Technician t) {
+		if(t == null) {
+			throw new IllegalArgumentException("There is no such technician");
+		}
+		
+		//TechnicianDto technicianDto = new TechniciaDto();
+	}
+	
 	private AppointmentDto convertToDto(Appointment a) {
 		if (a == null) {
 			throw new IllegalArgumentException("There is no such appointment!");
 		}
-		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), a.getCustomer(), a.getVehicle(),
+		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),convertToDto(a.getVehicle()),
 				a.getTechnician(), a.getInvoice(), a.getService(), a.getTimeslot());
 		return appointmentDto;
+	}
+	
+	private List<AppointmentDto> convertToDto(List<Appointment> appointments) {
+		if (appointments == null) {
+			throw new IllegalArgumentException("There is no appointments.");
+		}
+		List<AppointmentDto> aptmtsDto = new ArrayList<AppointmentDto>();
+		for(Appointment appointment:appointments) {
+			aptmtsDto.add(convertToDto(appointment));
+		}
+		return aptmtsDto;
 	}
 
 }

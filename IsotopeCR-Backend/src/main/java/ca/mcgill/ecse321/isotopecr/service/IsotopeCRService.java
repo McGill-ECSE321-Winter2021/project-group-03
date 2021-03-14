@@ -638,35 +638,35 @@ public class IsotopeCRService {
 		return appointment;
 	}
 	
-	@Transactional 
-	public Appointment viewAppointment (Vehicle vehicle,Time starttime) {
-		List<Appointment> appointments = appointmentRepository.findAppointmentByVehicle(vehicle);
-		List<Appointment> bookedappointments = new ArrayList<Appointment>();
-		for (Appointment appointment : appointments) {
-			if (appointment.getStatus().equals(Status.BOOKED)) {
-				bookedappointments.add(appointment);
-			}
-		}
-		if (bookedappointments.equals(null)) {
-				throw new IllegalArgumentException("There is no appiontment for"+vehicle.getLicensePlate());
-		}
-		boolean found = false;
-		Appointment viewAptmt = new Appointment();
-		for(Appointment appointment:appointments) {
-			Set <Timeslot> timeslots = appointment.getTimeslot();
-			if (timeslots.iterator().next().getTime().equals(starttime)) {
-				viewAptmt = appointment;
-				found = true;
-			}
-		}
-		if (found == true) {
-			return viewAptmt;
-		}
-		else {
-			throw new IllegalArgumentException("There is no appiontment at this time for"+vehicle.getLicensePlate());
-		}
-	}
-	
+//	@Transactional 
+//	public Appointment viewAppointment (Vehicle vehicle,Time starttime,Date date) {
+//		List<Appointment> appointments = appointmentRepository.findAppointmentByVehicle(vehicle);
+//		List<Appointment> bookedappointments = new ArrayList<Appointment>();
+//		for (Appointment appointment : appointments) {
+//			if (appointment.getStatus().equals(Status.BOOKED)) {
+//				bookedappointments.add(appointment);
+//			}
+//		}
+//		if (bookedappointments.equals(null)) {
+//				throw new IllegalArgumentException("There is no appiontment for"+vehicle.getLicensePlate());
+//		}
+//		boolean found = false;
+//		Appointment viewAptmt = new Appointment();
+//		for(Appointment appointment:appointments) {
+//			Set <Timeslot> timeslots = appointment.getTimeslot();
+//			if (timeslots.iterator().next().getTime().equals(starttime)&&timeslots.iterator().next().getDate().equals(date)) {
+//				viewAptmt = appointment;
+//				found = true;
+//			}
+//		}
+//		if (found == true) {
+//			return viewAptmt;
+//		}
+//		else {
+//			throw new IllegalArgumentException("There is no appiontment at this time for"+vehicle.getLicensePlate());
+//		}
+//	}
+//	
 	@Transactional
 	public boolean cancelAppointment (Appointment appointment) {
 	
@@ -676,10 +676,11 @@ public class IsotopeCRService {
 		if(appointmentRepository.existsById(appointmentID)) {
 		    Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
 		    Set <Timeslot> timeslots = aptmt.getTimeslot();
-		    Time startTime = timeslots.iterator().next().getTime();
 		    Date aDate = timeslots.iterator().next().getDate();
 		    if(isBeforeADay(aDate)) {
 		         aptmt.setStatus(Status.CANCELED);
+
+		 		 appointmentRepository.save(appointment);
 		    }else {
 		    	throw new IllegalArgumentException("Sorry, you are not able to cancle the appointment within 24 hours");
 		    }
