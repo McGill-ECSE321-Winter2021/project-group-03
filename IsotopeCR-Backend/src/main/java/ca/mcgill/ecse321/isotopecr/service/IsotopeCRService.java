@@ -21,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.mcgill.ecse321.isotopecr.dao.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
+
 import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
+
+@Service
 public class IsotopeCRService {
 	@Autowired
 	CustomerRepository customerRepository;
@@ -396,7 +399,15 @@ public class IsotopeCRService {
 			//TODO: exception? error message?
 		}
 	}
-  
+	
+	/**
+	 * Update the availability to a specific day.
+	 * @author Zichen
+	 * @param tech
+	 * @param day
+	 * @param startTime
+	 * @param endTime
+	 */
 	@Transactional
 	public void updateAvailability(Technician tech, DayOfWeek day, Time startTime, 
 			Time endTime) {
@@ -412,23 +423,43 @@ public class IsotopeCRService {
 		System.out.println("Input day is invalid, please retry.");	// TODO where to check the input
 	}
 	
+	/**
+	 * @author Zichen
+	 * @param tech
+	 * @return all dailyAvailabilities of a technician
+	 */
 	@Transactional
 	public List<DailyAvailability> viewAvailability(Technician tech){
 		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
 		return availabilities;
 	}
 
-	
+	/**
+	 * @author Zichen
+	 * @param resourceType
+	 * @param maxAvailable
+	 * @return a resource created by request
+	 */
 	@Transactional
-	public Resource addResource(String resourceType, Integer maxAvailable) {
+	public Resource addResource(String resourceType, Integer maxAvailable){
+		// check the input validity first:
+		if (resourceRepository.findResourceByResourceType(resourceType) != null) {
+			throw new IllegalArgumentException("ERROR: the resource type has existed inside the system.");
+		} else if (maxAvailable < 1) {
+			throw new IllegalArgumentException("ERROR: the resource should at least have one availability.");
+		}		
 		Resource resource = new Resource();
 		resource.setResourceType(resourceType);
 		resource.setMaxAvailable(maxAvailable);
-
 		resourceRepository.save(resource);
 		return resource;
 	}
 	
+	/**
+	 * @author Zichen
+	 * @param resourceType
+	 * @return the resource removed by request.
+	 */
 	@Transactional
 	public Resource removeResource(String resourceType) {
 		if (resourceRepository.existsById(resourceType)) {
@@ -436,39 +467,52 @@ public class IsotopeCRService {
 			resourceRepository.delete(resource);
 			return resource;
 		} else {
-			System.out.println("Input not found in the database.");
-			return null;
+			throw new IllegalArgumentException("ERROR: Resource not found in the system.");
 		}
 	}
 	
-
+	/**
+	 * @author Zichen
+	 * @return all resources stored in the system
+	 */
 	@Transactional
 	public List<Resource> viewAllResources() {
 		List<Resource> resources = toList(resourceRepository.findAll());
 		return resources;		
 	}
 	
-	
+	/**
+	 * @author Zichen
+	 * @return all invoices stored in the system
+	 */
 	@Transactional
 	public List<Invoice> viewAllInvoices() {
-		// TODO return a list of Invoice
 		List<Invoice> invoices = toList(invoiceRepository.findAll());
 		return invoices;			
 	}
 	
+	/**
+	 * @author Zichen
+	 * @return the total income by all the appointments upto now
+	 */
 	@Transactional
 	public double viewIncomeSummary() {
 		List<Invoice> invoices = toList(invoiceRepository.findAll());
 		double incomeSummary = 0d;
 		for (Invoice i : invoices) {
-			incomeSummary += i.getCost();
+			if (i.getIsPaid()) {
+				incomeSummary += i.getCost();
+			}
 		}
 		return incomeSummary;
 	}
 	
+	/**
+	 * @author Zichen
+	 * @return a map indicating how the resources are used.
+	 */
 	@Transactional
 	public Map<String, Integer> viewResourceSummary() {
-		// TODO: want to see the income summation / resource allocation.
 		List<Resource> resources = toList(resourceRepository.findAll());
 		Map<String, Integer> resourceAllocation = new HashMap<String, Integer>();
 		
@@ -484,6 +528,60 @@ public class IsotopeCRService {
 		return resourceAllocation;
 	}
 	
+	/**
+	 * @author Zichen
+	 * @param time
+	 * @return a technician available at that time
+	 */
+	public Technician getFreeTechnician(Time time, Date date) {
+		java.util.Date utilDate = new java.util.Date(date.getTime());
+		Calendar c = Calendar.getInstance();
+		c.setTime(utilDate);
+		int dayOfWeeki = c.get(Calendar.DAY_OF_WEEK);
+		DayOfWeek dayOfWeek = intToDayOfWeek(dayOfWeeki);
+		
+		// look for the first available technician in the system
+		for (Technician technician : technicianRepository.findAll()) {
+			for (DailyAvailability availability : technician.getDailyAvailability()) {
+				if (availability.getDay().equals(dayOfWeek) ) {
+					LocalTime request = time.toLocalTime();
+					LocalTime start = availability.getStartTime().toLocalTime();
+					LocalTime end = availability.getEndTime().toLocalTime();
+					
+					if (start.isBefore(request) && end.isAfter(request)) { 
+						return technician;
+					}
+				}
+			}
+		}
+		return null; 
+	}
+	
+	/**
+	 * Helper method
+	 * @author Zichen
+	 * @param dayOfWeeki
+	 * @return
+	 */
+	private DayOfWeek intToDayOfWeek(int dayOfWeeki) {
+		switch (dayOfWeeki) {
+			case 1:
+				return DayOfWeek.Sunday;
+			case 2:
+				return DayOfWeek.Monday;
+			case 3:
+				return DayOfWeek.Tuesday;
+			case 4:
+				return DayOfWeek.Wednesday;
+			case 5:
+				return DayOfWeek.Thursday;
+			case 6: 
+				return DayOfWeek.Friday;
+			case 7:
+				return DayOfWeek.Saturday;
+		}
+		return null;
+	}
 
 	@Transactional
 	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
