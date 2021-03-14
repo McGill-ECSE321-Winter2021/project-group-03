@@ -74,7 +74,7 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 */
 	@Transactional
-	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber, String password, String licensePlate, int year, String model, String brand) throws invalidInputException {
+	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber, String password) throws invalidInputException {
 		Customer customer = new Customer();
 		
 		if (isValidEmail(email)) {
@@ -107,17 +107,6 @@ public class IsotopeCRService {
 			} else {
 				throw new invalidInputException();
 			}
-		}
-		
-		if(licensePlate != null) {
-			try {
-				Vehicle vehicle = createVehicle(licensePlate, year, model, brand);
-				Set<Vehicle> vehicles = new HashSet<Vehicle>();
-				vehicles.add(vehicle);
-				customer.setVehicle(vehicles);
-			} catch (Exception e) {
-				//TODO
-			} throw new invalidInputException();
 		}
 		
 		customer.setProfileID(String.valueOf(email.hashCode()));
@@ -197,7 +186,7 @@ public class IsotopeCRService {
 	 * @author Jack Wei
 	 */
 	@Transactional
-	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password, Set<ca.mcgill.ecse321.isotopecr.model.Service> services) throws invalidInputException {
+	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password) throws invalidInputException {
 		Technician technician = new Technician();
 
 		if (isValidEmail(email)) {
@@ -223,8 +212,6 @@ public class IsotopeCRService {
 		} else {
 			throw new invalidInputException();
 		}
-		
-		technician.setService(services);
 		
 		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
 		DailyAvailability dailyAvailability = new DailyAvailability();
@@ -308,7 +295,7 @@ public class IsotopeCRService {
    *
    * @author Jack Wei
 	 */
-	public void addVehicle(Profile currentUser, String licensePlate, int year, String model, String brand) throws invalidInputException {
+	public void addVehicle(Profile currentUser, String licensePlate, String year, String model, String brand) throws invalidInputException {
 		
 		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
 		
@@ -319,7 +306,7 @@ public class IsotopeCRService {
 			customer.setVehicle(vehicles);
 		} catch (invalidInputException e) {
 			throw e;
-		} 
+		}
 		
 		customerRepository.save(customer);
 	}
@@ -400,6 +387,29 @@ public class IsotopeCRService {
 		}
 	}
 	
+	/**
+	 * Gets the profile by email. 
+	 * Throws exception when profile not found.
+	 * 
+	 * @param email
+	 * @return
+	 * 
+	 * @author Jack Wei
+	 * @throws invalidInputException 
+	 */
+	public Profile getProfile(String email) throws invalidInputException {
+		if (email == null) {
+			throw new invalidInputException();
+		}
+		
+		Profile profile = profileRepository.findProfileByProfileID(String.valueOf(email.hashCode()));
+		if(profile == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		return profile;
+	}
+  
 	/**
 	 * Update the availability to a specific day.
 	 * @author Zichen
@@ -899,7 +909,7 @@ public class IsotopeCRService {
 	 * 
 	 * @author Jack Wei
 	 */
-	private Vehicle createVehicle(String licensePlate, int year, String model, String brand) throws invalidInputException {
+	private Vehicle createVehicle(String licensePlate, String year, String model, String brand) throws invalidInputException {
 		Vehicle vehicle = new Vehicle();
 		if(isValidYear(year)) {
 			vehicle.setYear(year);
@@ -963,11 +973,17 @@ public class IsotopeCRService {
 	 * 
 	 * @author Jack Wei
 	 */
-	private boolean isValidYear(int year) {
+	private boolean isValidYear(String year) {
 		boolean isValid = false;
-		if(1900 <= year || year <= 3000) { // between 1900 and 3000 for any car
-			isValid = true;
+		
+		try {
+			if(1900 <= Integer.parseInt(year) || Integer.parseInt(year) <= 3000) { // between 1900 and 3000 for any car
+				isValid = true;
+			}
+		} catch (NumberFormatException e) {
+			throw e;
 		}
+		
 		return isValid;
 	}
 	

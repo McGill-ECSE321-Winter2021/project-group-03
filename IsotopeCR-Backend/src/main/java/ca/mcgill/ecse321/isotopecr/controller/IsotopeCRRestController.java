@@ -21,26 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpSession;
 
-import ca.mcgill.ecse321.isotopecr.dao.AdminRepository;
-import ca.mcgill.ecse321.isotopecr.dao.AppointmentRepository;
-import ca.mcgill.ecse321.isotopecr.dao.AutoRepairShopRepository;
-import ca.mcgill.ecse321.isotopecr.dao.CompanyProfileRepository;
-import ca.mcgill.ecse321.isotopecr.dao.CustomerRepository;
-import ca.mcgill.ecse321.isotopecr.dao.DailyAvailabilityRepository;
-import ca.mcgill.ecse321.isotopecr.dao.InvoiceRepository;
-import ca.mcgill.ecse321.isotopecr.dao.ProfileRepository;
-import ca.mcgill.ecse321.isotopecr.dao.ResourceRepository;
-import ca.mcgill.ecse321.isotopecr.dao.ServiceRepository;
-import ca.mcgill.ecse321.isotopecr.dao.TechnicianRepository;
-import ca.mcgill.ecse321.isotopecr.dao.TimeslotRepository;
-import ca.mcgill.ecse321.isotopecr.dao.VehicleRepository;
+import ca.mcgill.ecse321.isotopecr.dao.*;
 import ca.mcgill.ecse321.isotopecr.dto.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.service.IsotopeCRService;
 import ca.mcgill.ecse321.isotopecr.service.invalidInputException;
-
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -135,6 +123,100 @@ public class IsotopeCRRestController {
 		return dailyAvailabilityDtos;
 	}
 	
+	/* ----------------------- Jack Wei --------------------------*/
+	@PostMapping(value = { "/create-customer-profile", "/create-customer-profile/"})
+	public CustomerDto createCustomerProfile(@RequestParam("email") String email, 
+											 @RequestParam("firstName") String firstName,
+											 @RequestParam("lastName") String lastName,
+											 @RequestParam("phoneNumber") String phoneNumber,
+											 @RequestParam("password") String password)
+	throws invalidInputException {
+		try {
+			Customer customer = service.createCustomerProfile(firstName, lastName, email, phoneNumber, password);
+			return convertToDto(customer);
+		} catch (invalidInputException e) {
+			throw e;
+		}
+	}
+	
+	@PostMapping(value = { "/create-admin-profile", "/create-admin-profile/"})
+	public AdminDto createAdminProfile(@RequestParam("email") String email, 
+											 @RequestParam("firstName") String firstName,
+											 @RequestParam("lastName") String lastName,
+											 @RequestParam("password") String password,
+											 @RequestParam("isOwner") boolean isOwner)
+	throws invalidInputException {
+		try {
+			Admin admin = service.createAdminProfile(firstName, lastName, email, isOwner, password);
+			return convertToDto(admin);
+		} catch (invalidInputException e) {
+			throw e;
+		}
+	}
+	
+	@PostMapping(value = { "/create-technician-profile", "/create-technician-profile/"})
+	public TechnicianDto createTechnicianProfile(@RequestParam("email") String email, 
+											 @RequestParam("firstName") String firstName,
+											 @RequestParam("lastName") String lastName,
+											 @RequestParam("password") String password)
+	throws invalidInputException {
+		try {
+			Technician technician = service.createTechnicianProfile(firstName, lastName, email, password);
+			return convertToDto(technician);
+		} catch (invalidInputException e) {
+			throw e;
+		}
+	}
+	
+//	@PostMapping(value = { "/delete-profile/{email}", "/delete-profile/{email}/"})
+//	public CustomerDto deleteProfile(@PathVariable("email") String email) throws invalidInputException {
+//		try {
+//			Profile profile = service.getProfile(email);
+//			service.deleteProfile(profile);
+//		} catch (invalidInputException e) {
+//			throw e;
+//		}
+//	}
+	
+//	@PostMapping(value = { "/add-vehicle/{email}", "/add-vehicle/{email}/"})
+//	public VehicleDto addVehicle(@PathVariable("email") String email,
+//								 @RequestParam("licensePlate") String licensePlate,
+//								 @RequestParam("year") String year,
+//								 @RequestParam("model") String model,
+//								 @RequestParam("brand") String brand) throws IllegalArgumentException {
+//		try {
+//		} catch (invalidInputException e) {
+//			
+//		}
+//	}
+	
+	@PostMapping(value = { "/login", "/login/"})
+	public Profile login(@RequestParam("email") String email, 
+							@RequestParam("password") String password,
+							HttpSession session)
+	throws invalidInputException {
+		try {
+			Profile profile = service.getProfile(email);
+			if (profile.getIsRegisteredAccount()) {
+				if (password != null && profile.getPassword().equals(password)) {
+					session.setAttribute(email, profile);
+				} else {
+					throw new invalidInputException(); // TODO: Needs specific exception
+				}
+			} else {
+				throw new invalidInputException(); // TODO: Needs specific exception
+			}
+			return profile;
+		} catch (invalidInputException e) {
+			throw e;
+		}
+	}
+	
+	@PostMapping(value = {"/logout", "/logout/"})
+	public String logout(HttpSession session) {
+		session.removeAttribute("username");
+		return "logout sucessfully";
+	}
 
 	/**
 	 * @author Zichen
@@ -143,7 +225,8 @@ public class IsotopeCRRestController {
 	 * @throws IllegalArgumentException
 	 * @throws invalidInputException 
 	 */
-	@PostMapping(value = {"/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}/"})
+
+	@PostMapping(value = {"/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}"})
 	public AppointmentDto bookAppointment(@PathVariable("vehicle") String licensePlate,
 			@PathVariable("service") String serviceName, 
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start, 
@@ -161,11 +244,12 @@ public class IsotopeCRRestController {
 		Appointment appointment = service.bookAppointment(customer, vehicle, technician, serviceInSystem, startTime, appointmentDate);
 		return convertToDto(appointment);
 	}
+
 	
 	@GetMapping(value = {"/pastappointment/customer/{customer}", "/pastappointment/customer/{customer}/"})
 	public List<AppointmentDto> viewPastAppointmentForCustomer(@PathVariable("customer") String email ) 
 					throws IllegalArgumentException, invalidInputException {
-		Customer aCustomer = findProfileByEmail(email);
+		Customer aCustomer = (Customer) service.getProfile(email);
 		List <Appointment> appointments= appointmentRepository.findAppointmentByCustomer(aCustomer);
 		appointments = service.getAllAppointmentsBeforeTime(appointments);
 		List <Appointment> uncancelledappointments = new ArrayList <Appointment>();
@@ -181,7 +265,7 @@ public class IsotopeCRRestController {
 	@GetMapping(value = {"/futureappointment/customer/{customer}", "/futureappointment/customer/{customer}/"})
 	public List<AppointmentDto> viewFutureAppointmentForCustomer(@PathVariable("customer") String email ) 
 					throws IllegalArgumentException, invalidInputException {
-		Customer aCustomer = findProfileByEmail(email);
+		Customer aCustomer = (Customer) service.getProfile(email);
 		List <Appointment> appointments= appointmentRepository.findAppointmentByCustomer(aCustomer);
 		appointments = service.getAllAppointmentsAfterTime(appointments);
 		List <Appointment> uncancelledappointments = new ArrayList <Appointment>();
@@ -229,6 +313,7 @@ public class IsotopeCRRestController {
 	}
 
 
+
 	
 	/* ============================== Helpers ===============================*/
 	private ResourceDto convertToDto(Resource r) {
@@ -244,8 +329,8 @@ public class IsotopeCRRestController {
 //			throw new IllegalArgumentException("There is no such Invoice!");
 //		}
 		// TODO: complete this one;
-//		InvoiceDto inovoiceDto = new InvoiceDto();
-//		return invoiceDto;
+		//		InvoiceDto inovoiceDto = new InvoiceDto();
+		//		return invoiceDto;
 //	}
 	
 	private DailyAvailabilityDto convertToDto(DailyAvailability d) {
@@ -255,7 +340,16 @@ public class IsotopeCRRestController {
 		DailyAvailabilityDto dailyAvailabilityDto = new DailyAvailabilityDto(d.getAvailabilityID(), d.getStartTime(), d.getEndTime(), d.getDay());
 		return dailyAvailabilityDto;
 	}
+
+	private CustomerDto convertToDto(Customer customer) {
+		if (customer == null) {
+			throw new IllegalArgumentException("Customer profile does not exist.");
+		}
+		CustomerDto customerDto = new CustomerDto(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPhoneNumber());
+		return customerDto;
+	}
 	
+
 	private VehicleDto convertToDto(Vehicle v) {
 		if(v==null) {
 			throw new IllegalArgumentException("There is no such vehicle!");
@@ -263,16 +357,7 @@ public class IsotopeCRRestController {
 		VehicleDto vehicleDto = new VehicleDto (v.getLicensePlate(),v.getYear(),v.getModel(),v.getBrand());
 		return vehicleDto;
 	}
-	private CustomerDto convertToDto (Customer c) {
-		if(c==null) {
-			throw new IllegalArgumentException("There is no such customer!");
-		}
-		Set<VehicleDto> vehicles = new HashSet<VehicleDto>();
-		for(Vehicle v:c.getVehicle()) {
-			vehicles.add(convertToDto(v));
-		}
-		CustomerDto customerDto = new CustomerDto (c.getFirstName(),c.getLastName(),c.getEmail(),c.getPhoneNumber(),c.getPassword(),vehicles,c.getIsRegisteredAccount());
-	}
+	
 	
 	// requiring service Dto
 	private Service convertToDto (Service s) {
@@ -282,21 +367,43 @@ public class IsotopeCRRestController {
 		
 		
 	}
-	// requring service Dto
-	private Technician convertToDto (Technician t) {
-		if(t == null) {
-			throw new IllegalArgumentException("There is no such technician");
+	
+
+	private AdminDto convertToDto(Admin admin) {
+		if (admin == null) {
+			throw new IllegalArgumentException("Administrative account does not exist.");
 		}
-		
-		//TechnicianDto technicianDto = new TechniciaDto();
+		AdminDto adminDto = new AdminDto(admin.getFirstName(), admin.getLastName(), admin.getEmail(), admin.getPassword(), admin.getIsOwner());
+		return adminDto;
 	}
 	
+	private TechnicianDto convertToDto(Technician technician) {
+		if (technician == null) {
+			throw new IllegalArgumentException("Technician account does not exist.");
+		}
+		TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(), technician.getEmail(), technician.getPassword());
+		return technicianDto;
+	}
+    
+	private TimeslotDto convertToDto (Timeslot t) {
+		if(t== null) {
+		throw new IllegalArgumentException("Timeslot does not exist.");
+		}
+		
+		TimeslotDto timeslotDto = new TimeslotDto(t.getTime(),t.getDate(),t.getSlotID());
+		return timeslotDto;
+	}
+
 	private AppointmentDto convertToDto(Appointment a) {
 		if (a == null) {
 			throw new IllegalArgumentException("There is no such appointment!");
 		}
+		Set <TimeslotDto> timeslots = new HashSet<TimeslotDto>();
+		for(Timeslot timeslot:a.getTimeslot()) {
+			timeslots.add(convertToDto(timeslot));
+		}
 		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),convertToDto(a.getVehicle()),
-				a.getTechnician(), a.getInvoice(), a.getService(), a.getTimeslot());
+				convertToDto(a.getTechnician()), a.getInvoice(), a.getService(), timeslots);
 		return appointmentDto;
 	}
 	

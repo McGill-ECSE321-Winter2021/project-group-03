@@ -2,7 +2,7 @@ package ca.mcgill.ecse321.isotopecr.dto;
 
 public class VehicleDto {
 	private String licensePlate;
-	private Integer year;
+	private String year;
 	private String model;
 	private String brand;
 	private CustomerDto owner;
@@ -11,7 +11,7 @@ public class VehicleDto {
 		
 	}
 	
-	public VehicleDto(String licensePlate, int year, String model, String brand) {
+	public VehicleDto(String licensePlate, String year, String model, String brand) {
 		this.licensePlate = licensePlate;
 		this.year = year;
 		this.model = model;
@@ -22,7 +22,7 @@ public class VehicleDto {
 		return licensePlate;
 	}
 	
-	public Integer getYear() {
+	public String getYear() {
 		return year;
 	}
 	

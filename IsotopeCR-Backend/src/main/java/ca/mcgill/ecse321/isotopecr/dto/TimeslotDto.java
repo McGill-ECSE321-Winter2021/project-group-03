@@ -15,6 +15,12 @@ public class TimeslotDto {
 	public TimeslotDto() {
 		
 	}
+	public TimeslotDto(Time aTime,Date aDate,String aId) {
+		this.aDate = aDate;
+		this.aTime = aTime;
+		this.aSlotID = aId;
+	}
+	
 	
 	public TimeslotDto(Time aTime,Date aDate,String aId,Set<Appointment> appointment) {
 		this.aDate = aDate;
