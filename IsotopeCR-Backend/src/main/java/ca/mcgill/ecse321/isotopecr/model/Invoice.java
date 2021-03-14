@@ -4,17 +4,6 @@ import javax.persistence.*;
 
 @Entity
 public class Invoice {
-	// private Appointment appointment;
-	//
-	// @OneToOne(optional=false)
-	// public Appointment getAppointment() {
-	// return this.appointment;
-	// }
-	//
-	// public void setAppointment(Appointment appointment) {
-	// this.appointment = appointment;
-	// }
-	//
 	private String invoiceID;
 
 	public void setInvoiceID(String value) {
