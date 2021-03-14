@@ -47,6 +47,7 @@ public class AppointmentDto {
 	public TechnicianDto getTechnician() {
 		return this.aTechnician;
 	}
+	
 	public void setTechnician(TechnicianDto technician) {
 		this.aTechnician = technician;
 	}

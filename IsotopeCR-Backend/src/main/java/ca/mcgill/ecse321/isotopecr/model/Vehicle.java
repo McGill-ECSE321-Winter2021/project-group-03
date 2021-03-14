@@ -16,13 +16,13 @@ public class Vehicle {
 		return this.licensePlate;
 	}
 
-	private Integer year;
+	private String year;
 
-	public void setYear(Integer value) {
+	public void setYear(String value) {
 		this.year = value;
 	}
 
-	public Integer getYear() {
+	public String getYear() {
 		return this.year;
 	}
 
