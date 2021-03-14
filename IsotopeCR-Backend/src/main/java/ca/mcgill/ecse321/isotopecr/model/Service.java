@@ -45,4 +45,15 @@ public class Service {
 	public double getPrice() {
 		return this.price;
 	}
+	
+	
+	private int frequency;
+	
+	public void setFrequency(int frequency) {
+		this.frequency = frequency;
+	}
+	
+	public int getFrequency() {
+		return this.frequency;
+	}
 }

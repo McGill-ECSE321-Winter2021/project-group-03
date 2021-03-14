@@ -10,6 +10,7 @@ public class InvoiceDto {
 		
 	}
 	
+
 	public InvoiceDto(double cost, boolean isPaid, String invoiceID) {
 		
 	this.cost = cost;
@@ -22,6 +23,7 @@ public class InvoiceDto {
 		return this.cost;
 	}
 	
+
 	public boolean getIsPaid() {
 		return this.isPaid;
 	}
@@ -30,11 +32,12 @@ public class InvoiceDto {
 		return this.invoiceID;
 	}
 	
+
 	public void setCost(double cost) {
 		this.cost = cost;
 	}
 	
-	public void setIsPaiddouble(boolean isPaid) {
+	public void setIsPaid(boolean isPaid) {
 		this.isPaid = isPaid;
 	}
 	
@@ -43,5 +46,4 @@ public class InvoiceDto {
 	}
 
 
-	
 }
