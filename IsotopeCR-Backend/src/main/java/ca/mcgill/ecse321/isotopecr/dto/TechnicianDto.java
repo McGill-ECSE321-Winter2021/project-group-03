@@ -14,18 +14,18 @@ public class TechnicianDto {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private String password;
+	//private String password;
 	private Set<ServiceDto> services;
 	private Set<DailyAvailabilityDto> dailyAvailabilities;
 
 	public TechnicianDto() {
 	}
 
-	public TechnicianDto(String firstName, String lastName, String email, String password) {
+	public TechnicianDto(String firstName, String lastName, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = password;
+		//this.password = password;
 		this.services = Collections.EMPTY_SET;
 	}
 
@@ -49,9 +49,9 @@ public class TechnicianDto {
 		this.services = services;
 	}
 
-	public String getPassword() {
-		return password;
-	}
+//	public String getPassword() {
+//		return password;
+//	}
 
 	public Set<DailyAvailabilityDto> getDailyAvailabilities() {
 		return dailyAvailabilities;

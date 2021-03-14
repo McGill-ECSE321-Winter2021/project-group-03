@@ -127,7 +127,7 @@ public class IsotopeCRRestController {
 	 * @return List of DailyAvailabilityDtos
 	 * @throws Exception
 	 */
-	@GetMapping(value = { "/availablity/{email}", "/availability/{email}/" })
+	@GetMapping(value = { "/availability/{email}", "/availability/{email}/" })
 	public List<DailyAvailabilityDto> getAvailabilitiesByTechnician(@PathVariable("email") String email) throws Exception {
 		Profile tech = null;
 		try {
@@ -575,7 +575,7 @@ public class IsotopeCRRestController {
 			throw new IllegalArgumentException("Technician account does not exist.");
 		}
 		TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(),
-				technician.getEmail(), technician.getPassword());
+				technician.getEmail());
 		return technicianDto;
 	}
 	

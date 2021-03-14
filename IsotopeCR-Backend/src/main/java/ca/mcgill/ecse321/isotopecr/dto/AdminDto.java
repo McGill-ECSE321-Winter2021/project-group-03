@@ -12,7 +12,7 @@ public class AdminDto {
 	private String email;
 	private String firstName;
 	private String lastName;
-	private String password;
+	//private String password;
 	private Boolean isOwner;
 
 	public AdminDto() {
@@ -37,13 +37,13 @@ public class AdminDto {
 		return lastName;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+//	public String getPassword() {
+//		return password;
+//	}
+//
+//	public void setPassword(String password) {
+//		this.password = password;
+//	}
 
 	public Boolean getIsOwner() {
 		return isOwner;

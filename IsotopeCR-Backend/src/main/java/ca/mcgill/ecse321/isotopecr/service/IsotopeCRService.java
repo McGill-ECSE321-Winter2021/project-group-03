@@ -226,9 +226,9 @@ public class IsotopeCRService {
 		technician.setProfileID(String.valueOf(email.hashCode()));
 
 		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
-		DailyAvailability dailyAvailability = new DailyAvailability();
-
+		
 		for (DayOfWeek day : DayOfWeek.values()) {
+			DailyAvailability dailyAvailability = new DailyAvailability();
 			dailyAvailability.setDay(day);
 			dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
 			dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
@@ -1192,8 +1192,7 @@ public class IsotopeCRService {
 	 */
 	private DayOfWeek intToDayOfWeek(int dayOfWeeki) {
 		switch (dayOfWeeki) {
-		case 1:
-			return DayOfWeek.Sunday;
+		
 		case 2:
 			return DayOfWeek.Monday;
 		case 3:
@@ -1204,8 +1203,7 @@ public class IsotopeCRService {
 			return DayOfWeek.Thursday;
 		case 6:
 			return DayOfWeek.Friday;
-		case 7:
-			return DayOfWeek.Saturday;
+		
 		}
 		return null;
 	}
