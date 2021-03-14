@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class Technician extends Profile{
+public class Technician extends Profile {
 	private Set<Service> service;
 
 	@ManyToMany
@@ -18,7 +18,7 @@ public class Technician extends Profile{
 
 	private Set<DailyAvailability> dailyAvailability;
 
-	@OneToMany(/*mappedBy="technician" ,*/ cascade={CascadeType.ALL})
+	@OneToMany(/* mappedBy="technician" , */ cascade = { CascadeType.ALL })
 	public Set<DailyAvailability> getDailyAvailability() {
 		return this.dailyAvailability;
 	}

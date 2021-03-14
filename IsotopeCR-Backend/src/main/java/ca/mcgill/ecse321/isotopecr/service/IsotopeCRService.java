@@ -52,12 +52,15 @@ public class IsotopeCRService {
 	DailyAvailabilityRepository dailyAvailabilityRepository;
 	@Autowired
 	AppointmentRepository appointmentRepository;
-	
+
 	/**
-	 * Creates a customer profile with the provide arguments. 
-	 * First name, last name, and email are mandatory and inputs must satisfy their corresponding format, otherwise an invalidInputException is thrown. 
-	 * Phone number, password and vehicle information (license plate) can be empty (null) but otherwise they must satisfy a specific format.
-	 * If password is null, customer profile will not be registered account.
+	 * @author Jack Wei Creates a customer profile with the provide arguments. First
+	 *         name, last name, and email are mandatory and inputs must satisfy
+	 *         their corresponding format, otherwise an invalidInputException is
+	 *         thrown. Phone number, password and vehicle information (license
+	 *         plate) can be empty (null) but otherwise they must satisfy a specific
+	 *         format. If password is null, customer profile will not be registered
+	 *         account.
 	 * 
 	 * @param firstName
 	 * @param lastName
@@ -69,57 +72,61 @@ public class IsotopeCRService {
 	 * @param model
 	 * @param brand
 	 * @return
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
 	@Transactional
-	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber, String password) throws invalidInputException {
+	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber,
+			String password) throws InvalidInputException {
 		Customer customer = new Customer();
-		
+
 		if (isValidEmail(email)) {
 			customer.setEmail(email);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
-		
+
 		if (isValidName(firstName) && isValidName(lastName)) {
 			customer.setFirstName(firstName);
 			customer.setLastName(lastName);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
-		
+
 		if (phoneNumber != null) {
 			if (isValidPhoneNumber(phoneNumber)) {
 				customer.setPhoneNumber(phoneNumber);
 			} else {
-				throw new invalidInputException();
+				throw new InvalidInputException();
 			}
 		} // else phone number is set to null
-		
+
 		if (password != null) {
 			if (isValidPassword(password)) {
 				customer.setPassword(password);
-				if(password != null) {
+				if (password != null) {
 					customer.setIsRegisteredAccount(true);
 				}
 			} else {
-				throw new invalidInputException();
+				throw new InvalidInputException();
 			}
 		}
-		
+
 		customer.setProfileID(String.valueOf(email.hashCode()));
-		
+
 		customerRepository.save(customer);
-		
+
 		return customer;
 	}
 
 	/**
-	 * Creates an admin profile with the provide arguments. The admin can either be the owner or administrative assistance.
-	 * All arguments are mandatory and inputs must satisfy their corresponding format, otherwise an invalidInputException is thrown.
-	 * All admin profile are registered accounts and can be used to log in the application.
+	 * @author Jack Wei Creates an admin profile with the provide arguments. The
+	 *         admin can either be the owner or administrative assistance. All
+	 *         arguments are mandatory and inputs must satisfy their corresponding
+	 *         format, otherwise an invalidInputException is thrown. All admin
+	 *         profile are registered accounts and can be used to log in the
+	 *         application.
 	 * 
 	 * @param firstName
 	 * @param lastName
@@ -127,53 +134,57 @@ public class IsotopeCRService {
 	 * @param isOwner
 	 * @param password
 	 * @return
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
 	@Transactional
-	public Admin createAdminProfile(String firstName, String lastName, String email, Boolean isOwner, String password) throws invalidInputException {
+	public Admin createAdminProfile(String firstName, String lastName, String email, Boolean isOwner, String password)
+			throws InvalidInputException {
+
 		Admin admin = new Admin();
 
 		if (isValidEmail(email)) {
-			if(isValidCompanyEmail(email)) {
+			if (isValidCompanyEmail(email)) {
 				admin.setEmail(email);
 			} else { // valid email but not company email
-				//TODO: exception? error message?
+				// TODO: exception? error message?
 			}
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidName(firstName) && isValidName(lastName)) {
 			admin.setFirstName(firstName);
 			admin.setLastName(lastName);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidPassword(password)) {
 			admin.setPassword(password);
 			admin.setIsRegisteredAccount(true);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		admin.setPassword(password);
-		
+
 		admin.setIsOwner(isOwner);
-		
+
 		adminRepository.save(admin);
-		
+
 		admin.setProfileID(String.valueOf(email.hashCode()));
 
 		return admin;
 	}
-	
+
 	/**
-	 * Creates a technician profile with the provide arguments.
-	 * All arguments are mandatory and inputs must satisfy their corresponding format, otherwise an invalidInputException is thrown.
-	 * All technician profiles are registered accounts and can be used to login the application.
+	 * @author Jack Wei Creates a technician profile with the provide arguments. All
+	 *         arguments are mandatory and inputs must satisfy their corresponding
+	 *         format, otherwise an invalidInputException is thrown. All technician
+	 *         profiles are registered accounts and can be used to login the
+	 *         application.
 	 * 
 	 * @param firstName
 	 * @param lastName
@@ -181,248 +192,265 @@ public class IsotopeCRService {
 	 * @param password
 	 * @param services
 	 * @return
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
-	 * @author Jack Wei
 	 */
 	@Transactional
-	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password) throws invalidInputException {
+	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password)
+			throws InvalidInputException {
 		Technician technician = new Technician();
 
 		if (isValidEmail(email)) {
-			if(isValidCompanyEmail(email)) {
+			if (isValidCompanyEmail(email)) {
 				technician.setEmail(email);
 			} else { // valid email but not company email
-				//TODO: exception? error message?
+				// TODO: exception? error message?
 			}
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidName(firstName) && isValidName(lastName)) {
 			technician.setFirstName(firstName);
 			technician.setLastName(lastName);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
 
 		if (isValidPassword(password)) {
 			technician.setPassword(password);
 			technician.setIsRegisteredAccount(true);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
-		
+
 		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
 		DailyAvailability dailyAvailability = new DailyAvailability();
-		
-		for (DayOfWeek day : DayOfWeek.values()) { 
+
+		for (DayOfWeek day : DayOfWeek.values()) {
 			dailyAvailability.setDay(day);
 			dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
 			dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
 			dailyAvailabilities.add(dailyAvailability);
 		}
-		
+
 		technician.setDailyAvailability(dailyAvailabilities);
-		
+
 		technician.setProfileID(String.valueOf(email.hashCode()));
-		
+
 		technicianRepository.save(technician);
 
 		return technician;
-	}	
-	
+	}
+
 	/**
-	 * Changes/sets the password of the profile provided with the given password.
-	 * The password must satisfy password format (one upper case letter, one lower case letter and one number; 8-20 characters long,
-	 * otherwise an invalidInputException is thrown.
-	 * If the profile is a customer profile, calling this method will change the profile to a registered account that can be used to log in the application.
+	 * @author Jack Wei Changes/sets the password of the profile provided with the
+	 *         given password. The password must satisfy password format (one upper
+	 *         case letter, one lower case letter and one number; 8-20 characters
+	 *         long, otherwise an invalidInputException is thrown. If the profile is
+	 *         a customer profile, calling this method will change the profile to a
+	 *         registered account that can be used to log in the application.
 	 * 
 	 * @param currentUser
 	 * @param password
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
-	public void editPassword(Profile currentUser, String password) throws invalidInputException {
-				
-		if(isValidPassword(password)) {
-			currentUser.setPassword(password);
-			if(currentUser instanceof Customer) {
-				currentUser.setIsRegisteredAccount(true);
-			}
+
+	public void editPassword(Profile currentUser, String password) throws InvalidInputException {
+
+		currentUser.setPassword(password);
+		if (currentUser instanceof Customer) {
+			currentUser.setIsRegisteredAccount(true);
 		} else {
-			throw new invalidInputException();
-		}	
-		
+			throw new InvalidInputException();
+		}
 		profileRepository.save(currentUser);
 	}
-	
+
 	/**
-	 * Edits/sets the phone number of the profile provided and the given phone number.
-	 * The phone number must satisfy standard phone number format which can include white space, hyphen, dot and international prefix, 
-	 * otherwise an invalidInputException is thrown.
+	 * @author Jack Wei Edits/sets the phone number of the profile provided and the
+	 *         given phone number. The phone number must satisfy standard phone
+	 *         number format which can include white space, hyphen, dot and
+	 *         international prefix, otherwise an invalidInputException is thrown.
 	 * 
 	 * @param currentUser
 	 * @param phoneNumber
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
-	public void editPhoneNumber(Profile currentUser, String phoneNumber) throws invalidInputException {
-		
+
+	public void editPhoneNumber(Profile currentUser, String phoneNumber) throws InvalidInputException {
+
 		Customer customerProfile = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
-		
-		if(isValidPhoneNumber(phoneNumber)) {
+
+		if (isValidPhoneNumber(phoneNumber)) {
 			customerProfile.setPhoneNumber(phoneNumber);
 		} else {
-			throw new invalidInputException();
-		}	
-		
+			throw new InvalidInputException();
+		}
+
 		customerRepository.save(customerProfile);
 	}
-	
-	
+
 	/**
-	 * Adds a vehicle to the customer profile with the provided arguments. 
-	 * All arguments must satisfy their corresponding input formats, otherwise an invalidInputException is thrown.
+	 * @author Jack Wei Adds a vehicle to the customer profile with the provided
+	 *         arguments. All arguments must satisfy their corresponding input
+	 *         formats, otherwise an invalidInputException is thrown.
+	 * 
 	 * @param currentUser
 	 * @param licensePlate
 	 * @param year
 	 * @param model
 	 * @param brand
 	 * @throws invalidInputException
-   *
-   * @author Jack Wei
+	 *
+	 * 
 	 */
-	public void addVehicle(Profile currentUser, String licensePlate, String year, String model, String brand) throws invalidInputException {
-		
-		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
-		
+	@Transactional
+	public Vehicle addVehicle(Profile profile, String licensePlate, String year, String model, String brand)
+			throws InvalidInputException {
+
+		Customer customer = customerRepository.findCustomerByProfileID(profile.getProfileID());
 		try {
 			Vehicle vehicle = createVehicle(licensePlate, year, model, brand);
 			Set<Vehicle> vehicles = customer.getVehicle();
 			vehicles.add(vehicle);
 			customer.setVehicle(vehicles);
-		} catch (invalidInputException e) {
+			customerRepository.save(customer);
+			return vehicle;
+		} catch (InvalidInputException e) {
 			throw e;
 		}
-		
-		customerRepository.save(customer);
 	}
-	
+
 	/**
-	 * Deletes the vehicle with the provided licensePlate from the database and the customer profile.
+	 * @author Jack Wei Deletes the vehicle with the provided licensePlate from the
+	 *         database and the customer profile.
 	 * 
 	 * @param currentUser
 	 * @param licensePlate
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
-	public void deleteVehicle(Profile currentUser, String licensePlate) {
-		
+
+	public Vehicle deleteVehicle(Profile currentUser, String licensePlate) {
+
 		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
-		
+
 		Boolean isDeleted = false;
-		
+		Vehicle foundVehicle = null;
+
 		Set<Vehicle> vehicles = customer.getVehicle();
-			for (Vehicle vehicle: vehicles) {
-				if(vehicle.getLicensePlate() == licensePlate) {
-					vehicles.remove(vehicle);
-					vehicleRepository.delete(vehicle);
-					isDeleted = true;
-				}
+
+		for (Vehicle vehicle : vehicles) {
+			if (vehicle.getLicensePlate() == licensePlate) {
+				foundVehicle = vehicle;
+				vehicles.remove(vehicle);
+				vehicleRepository.delete(vehicle);
+				isDeleted = true;
 			}
-			
-		if(isDeleted) {
+		}
+
+		if (isDeleted) {
 			customer.setVehicle(vehicles);
 			customerRepository.save(customer);
 		} else { // vehicle not found
 			// TODO: exception? error message?
 		}
+		return foundVehicle;
 	}
-	
+
 	/**
-	 * Add a specialized service to the technician profile.
-	 *  
+	 * @author Jack Wei Add a specialized service to the technician profile.
+	 * 
 	 * @param technician
 	 * @param service
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
-	public void addServiceToProfile(Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service) throws invalidInputException {
-		
+
+	public void addServiceToProfile(Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service)
+			throws InvalidInputException {
+
 		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();
-		
+
 		services.add(service);
 		technician.setService(services);
-		
+
 		technicianRepository.save(technician);
 	}
-	
+
 	/**
-	 * Deletes the user profile with user profile provided.
+	 * @author Jack Wei Deletes the user profile with user profile provided.
+	 * 
 	 * @param user
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
+	@Transactional
 	public void deleteProfile(Profile user) {
 		profileRepository.delete(user);
 	}
-	
+
 	/**
-	 * Deletes the user profile with the provided profile ID.
+	 * @author Jack Wei Deletes the user profile with the provided profile ID.
+	 * 
 	 * @param profileID
 	 * 
-	 * @author Jack Wei
+	 * 
 	 */
+	@Transactional
 	public void deleteProfile(String profileID) {
 		Profile profile = profileRepository.findProfileByProfileID(profileID);
-		
-		if(profile != null) {
+
+		if (profile != null) {
 			profileRepository.delete(profile);
 		} else {
-			//TODO: exception? error message?
+			// TODO: exception? error message?
 		}
 	}
-	
+
 	/**
-	 * Gets the profile by email. 
-	 * Throws exception when profile not found.
+	 * @author Jack Wei Gets the profile by email. Throws exception when profile not
+	 *         found.
 	 * 
 	 * @param email
 	 * @return
 	 * 
-	 * @author Jack Wei
-	 * @throws invalidInputException 
+	 * @throws invalidInputException
 	 */
-	public Profile getProfile(String email) throws invalidInputException {
+
+	public Profile getProfile(String email) throws InvalidInputException {
+
 		if (email == null) {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
-		
+
 		Profile profile = profileRepository.findProfileByProfileID(String.valueOf(email.hashCode()));
-		if(profile == null) {
+		if (profile == null) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		return profile;
 	}
-  
+
 	/**
-	 * Update the availability to a specific day.
-	 * @author Zichen
+	 * @author Zichen Update the availability to a specific day.
+	 * 
+	 * 
 	 * @param tech
 	 * @param day
 	 * @param startTime
 	 * @param endTime
 	 */
 	@Transactional
-	public void updateAvailability(Technician tech, DayOfWeek day, Time startTime, 
-			Time endTime) {
+	public void updateAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {
 		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
-		for(DailyAvailability availability : availabilities) {
+		for (DailyAvailability availability : availabilities) {
 			if (availability.getDay().equals(day)) {
 				availability.setStartTime(startTime);
 				availability.setEndTime(endTime);
@@ -430,16 +458,16 @@ public class IsotopeCRService {
 				return;
 			}
 		}
-		System.out.println("Input day is invalid, please retry.");	// TODO where to check the input
+		System.out.println("Input day is invalid, please retry."); // TODO where to check the input
 	}
-	
+
 	/**
 	 * @author Zichen
 	 * @param tech
 	 * @return all dailyAvailabilities of a technician
 	 */
 	@Transactional
-	public List<DailyAvailability> viewAvailability(Technician tech){
+	public List<DailyAvailability> viewAvailability(Technician tech) {
 		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
 		return availabilities;
 	}
@@ -455,17 +483,18 @@ public class IsotopeCRService {
 		if (resourceType == null || resourceType.trim().length() == 0) {
 			throw new IllegalArgumentException("ERROR: the resource type can not be empty.");
 		} else if (resourceRepository.findResourceByResourceType(resourceType) != null) {
+
 			throw new IllegalArgumentException("ERROR: the resource type has existed inside the system.");
 		} else if (maxAvailable < 1) {
 			throw new IllegalArgumentException("ERROR: the resource should at least have one availability.");
-		}		
+		}
 		Resource resource = new Resource();
 		resource.setResourceType(resourceType);
 		resource.setMaxAvailable(maxAvailable);
 		resourceRepository.save(resource);
 		return resource;
 	}
-	
+
 	/**
 	 * @author Zichen
 	 * @param resourceType
@@ -481,7 +510,7 @@ public class IsotopeCRService {
 			throw new IllegalArgumentException("ERROR: Resource not found in the system.");
 		}
 	}
-	
+
 	/**
 	 * @author Zichen
 	 * @return all resources stored in the system
@@ -489,9 +518,9 @@ public class IsotopeCRService {
 	@Transactional
 	public List<Resource> getAllResources() {
 		List<Resource> resources = toList(resourceRepository.findAll());
-		return resources;		
+		return resources;
 	}
-	
+
 	/**
 	 * @author Zichen
 	 * @return all invoices stored in the system
@@ -499,9 +528,9 @@ public class IsotopeCRService {
 	@Transactional
 	public List<Invoice> viewAllInvoices() {
 		List<Invoice> invoices = toList(invoiceRepository.findAll());
-		return invoices;			
+		return invoices;
 	}
-	
+
 	/**
 	 * @author Zichen
 	 * @return the total income by all the appointments upto now
@@ -517,7 +546,7 @@ public class IsotopeCRService {
 		}
 		return incomeSummary;
 	}
-	
+
 	/**
 	 * @author Zichen
 	 * @return a map indicating how the resources are used.
@@ -526,19 +555,19 @@ public class IsotopeCRService {
 	public Map<String, Integer> viewResourceSummary() {
 		List<Resource> resources = toList(resourceRepository.findAll());
 		Map<String, Integer> resourceAllocation = new HashMap<String, Integer>();
-		
+
 		for (Resource resource : resources) {
 			resourceAllocation.put(resource.getResourceType(), 0);
 		}
-		
+
 		for (Appointment appointment : appointmentRepository.findAll()) {
 			String type = appointment.getService().getResource().getResourceType();
-			resourceAllocation.put(type, resourceAllocation.get(type) + 1);	// update the usage by 1;
+			resourceAllocation.put(type, resourceAllocation.get(type) + 1); // update the usage by 1;
 		}
-		
+
 		return resourceAllocation;
 	}
-	
+
 	/**
 	 * @author Zichen
 	 * @param time
@@ -550,287 +579,242 @@ public class IsotopeCRService {
 		c.setTime(utilDate);
 		int dayOfWeeki = c.get(Calendar.DAY_OF_WEEK);
 		DayOfWeek dayOfWeek = intToDayOfWeek(dayOfWeeki);
-		
+
 		// look for the first available technician in the system
 		for (Technician technician : technicianRepository.findAll()) {
 			for (DailyAvailability availability : technician.getDailyAvailability()) {
-				if (availability.getDay().equals(dayOfWeek) ) {
+				if (availability.getDay().equals(dayOfWeek)) {
 					LocalTime request = time.toLocalTime();
 					LocalTime start = availability.getStartTime().toLocalTime();
 					LocalTime end = availability.getEndTime().toLocalTime();
-					
-					if (start.isBefore(request) && end.isAfter(request)) { 
+
+					if (start.isBefore(request) && end.isAfter(request)) {
 						return technician;
 					}
 				}
 			}
 		}
-		return null; 
-	}
-	
-	/**
-	 * Helper method
-	 * @author Zichen
-	 * @param dayOfWeeki
-	 * @return
-	 */
-	private DayOfWeek intToDayOfWeek(int dayOfWeeki) {
-		switch (dayOfWeeki) {
-			case 1:
-				return DayOfWeek.Sunday;
-			case 2:
-				return DayOfWeek.Monday;
-			case 3:
-				return DayOfWeek.Tuesday;
-			case 4:
-				return DayOfWeek.Wednesday;
-			case 5:
-				return DayOfWeek.Thursday;
-			case 6: 
-				return DayOfWeek.Friday;
-			case 7:
-				return DayOfWeek.Saturday;
-		}
 		return null;
 	}
 
 	@Transactional
-	public Appointment bookAppointment(Customer customer, Vehicle vehicle,
-			Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate){
-		
-		if (!isValidCustomer(customer)||!isValidVehicle(vehicle)||!isValidTechnician(technician)||!isValidService(service)) {
+	public Appointment bookAppointment(Customer customer, Vehicle vehicle, Technician technician,
+			ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate)
+			throws IllegalArgumentException {
+
+		if (!isValidCustomer(customer) || !isValidVehicle(vehicle) || !isValidTechnician(technician)
+				|| !isValidService(service)) {
 			throw new IllegalArgumentException("Invalid input for booking an appointment.");
 		}
-		
+
 		Appointment appointment = new Appointment();
 		Integer duration = service.getDuration();
-		Integer timeslotnum = (int) Math.ceil(duration/30);
-		Set <Timeslot> timeslots = new HashSet<Timeslot>();
-		
-		for(int i=0;i<timeslotnum;i++) {
-		       Timeslot ts = new Timeslot();
-		       ts.setDate(chosenDate);
-		       ts.setTime(startTime);
-		       ts.setSlotID(String.valueOf(chosenDate)+String.valueOf(startTime));
-		       if (timeslotRepository.findTimeslotBySlotID(ts.getSlotID())==null) {
-		    	   timeslotRepository.save(ts);
-		    	   timeslots.add(ts);
-		       }else {
-		    	   Timeslot existTimeslot = timeslotRepository.findTimeslotBySlotID(ts.getSlotID());
-		    	   timeslots.add(existTimeslot);
-		       }
-		       
-		       LocalTime localtime = startTime.toLocalTime();
-		       localtime = localtime.plusMinutes(30);
-		       startTime = Time.valueOf(localtime);
+		Integer timeslotnum = (int) Math.ceil(duration / 30);
+		Set<Timeslot> timeslots = new HashSet<Timeslot>();
+
+		for (int i = 0; i < timeslotnum; i++) {
+			Timeslot ts = new Timeslot();
+			ts.setDate(chosenDate);
+			ts.setTime(startTime);
+			ts.setSlotID(String.valueOf(chosenDate) + String.valueOf(startTime));
+			if (timeslotRepository.findTimeslotBySlotID(ts.getSlotID()) == null) {
+				timeslotRepository.save(ts);
+				timeslots.add(ts);
+			} else {
+				Timeslot existTimeslot = timeslotRepository.findTimeslotBySlotID(ts.getSlotID());
+				timeslots.add(existTimeslot);
+			}
+
+			LocalTime localtime = startTime.toLocalTime();
+			localtime = localtime.plusMinutes(30);
+			startTime = Time.valueOf(localtime);
 		}
-		
+
 		Timeslot timeslot = timeslots.iterator().next();
-		appointment.setAppointmentID(String.valueOf(customer.getProfileID().hashCode()*vehicle.getLicensePlate().hashCode()*timeslot.getSlotID().hashCode()));
+		appointment.setAppointmentID(String.valueOf(customer.getProfileID().hashCode()
+				* vehicle.getLicensePlate().hashCode() * timeslot.getSlotID().hashCode()));
 		appointment.setCustomer(customer);
 		appointment.setVehicle(vehicle);
 		appointment.setTechnician(technician);
 		appointment.setService(service);
 		appointment.setTimeslot(timeslots);
 		appointment.setStatus(Status.BOOKED);
-		
+
 		appointmentRepository.save(appointment);
-		
-		for(Timeslot t: timeslots) {
-			Set <Appointment> appointments = new HashSet<Appointment>();
-			if (t.getAppointment()!=null) {
-			    appointments = t.getAppointment();
+
+		for (Timeslot t : timeslots) {
+			Set<Appointment> appointments = new HashSet<Appointment>();
+			if (t.getAppointment() != null) {
+				appointments = t.getAppointment();
 			}
-		    appointments.add(appointment);
-		    t.setAppointment(appointments);
+			appointments.add(appointment);
+			t.setAppointment(appointments);
 			timeslotRepository.save(t);
 		}
-		
+
 		return appointment;
 	}
-	
-	@Transactional 
-	public Appointment viewAppointment (Vehicle vehicle,Time starttime) {
-		List<Appointment> appointments = appointmentRepository.findAppointmentByVehicle(vehicle);
-		List<Appointment> bookedappointments = new ArrayList<Appointment>();
-		for (Appointment appointment : appointments) {
-			if (appointment.getStatus().equals(Status.BOOKED)) {
-				bookedappointments.add(appointment);
-			}
-		}
-		if (bookedappointments.equals(null)) {
-				throw new IllegalArgumentException("There is no appiontment for"+vehicle.getLicensePlate());
-		}
-		boolean found = false;
-		Appointment viewAptmt = new Appointment();
-		for(Appointment appointment:appointments) {
-			Set <Timeslot> timeslots = appointment.getTimeslot();
-			if (timeslots.iterator().next().getTime().equals(starttime)) {
-				viewAptmt = appointment;
-				found = true;
-			}
-		}
-		if (found == true) {
-			return viewAptmt;
-		}
-		else {
-			throw new IllegalArgumentException("There is no appiontment at this time for"+vehicle.getLicensePlate());
-		}
-	}
-	
+
 	@Transactional
-	public boolean cancelAppointment (Appointment appointment) {
-	
-		if (isValidAppointment(appointment)) {
-		String appointmentID =appointment.getAppointmentID();
-		boolean isCancelled = false;
-		if(appointmentRepository.existsById(appointmentID)) {
-		    Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
-		    Set <Timeslot> timeslots = aptmt.getTimeslot();
-		    Time startTime = timeslots.iterator().next().getTime();
-		    Date aDate = timeslots.iterator().next().getDate();
-		    if(isBeforeADay(aDate)) {
-		         aptmt.setStatus(Status.CANCELED);
-		    }else {
-		    	throw new IllegalArgumentException("Sorry, you are not able to cancle the appointment within 24 hours");
-		    }
-		    aptmt=appointmentRepository.findAppointmentByAppointmentID(appointmentID);
-		    if (aptmt.equals(null)) {
-			    isCancelled =true;
-		    }
-			
+	public Appointment cancelAppointment(Appointment appointment) throws IllegalArgumentException {
+
+		if (appointment == null) {
+			throw new IllegalArgumentException("There is no such appointment in the system");
 		}
-	    return isCancelled;
-		}else {
-			throw new IllegalArgumentException("Invalid input for cancelling an appointment.");
+		String appointmentID = appointment.getAppointmentID();
+
+		Appointment aptmt = appointmentRepository.findAppointmentByAppointmentID(appointmentID);
+		Set<Timeslot> timeslots = aptmt.getTimeslot();
+		Date aDate = timeslots.iterator().next().getDate();
+		if (isBeforeADay(aDate)) {
+			aptmt.setStatus(Status.CANCELED);
+
+			appointmentRepository.save(appointment);
+
+		} else {
+			throw new IllegalArgumentException("Sorry, you are not able to cancle the appointment within 24 hours");
 		}
+		return appointment;
+
 	}
-	
+
 	// do we actually need this? Or only the two getting
 	@Transactional
-	public List<Appointment> getAllAppointments(){
+	public List<Appointment> getAllAppointments() {
 		return toList(appointmentRepository.findAll());
 	}
-	
-    @Transactional 
-    public List<Appointment> getAllAppointmentsBeforeTime(List<Appointment> appointments){
-    	Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-    	Time curTime = new java.sql.Time(Calendar.getInstance().getTimeInMillis());
-    	List<Appointment> aptmtBeforeTime = new ArrayList<Appointment>();
-    	for(Appointment aptmt :appointments) {
-    		boolean isBefore = true;
-    		
-    		Set<Timeslot> timeslots = aptmt.getTimeslot();
-    		Timeslot timeslot = timeslots.iterator().next();
 
-    		if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
-    				isBefore = false;
-    		}
-    		
-    		
-    		if(isBefore ==true)
-    			aptmtBeforeTime.add(aptmt);
-    	}
-    	
-    	return aptmtBeforeTime;
-    }
-    
-    @Transactional
-    public List<Appointment> getAllAppointmentsAfterTime(List<Appointment> appointments){
-    	Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-    	Time curTime = new java.sql.Time(Calendar.getInstance().getTimeInMillis());
-    	List<Appointment> aptmtBeforeTime = new ArrayList<Appointment>();
-    	for(Appointment aptmt :appointments) {
-    		boolean isBefore = true;
-    		
-    		Set<Timeslot> timeslots = aptmt.getTimeslot();
-    		Timeslot timeslot = timeslots.iterator().next();
+	@Transactional
+	public List<Appointment> getAllAppointmentsBeforeTime(List<Appointment> appointments)
+			throws IllegalArgumentException {
+		if (appointments.isEmpty()) {
+			throw new IllegalArgumentException("There is no appointments in the past.");
+		}
+		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+		Time curTime = new java.sql.Time(Calendar.getInstance().getTimeInMillis());
+		List<Appointment> aptmtBeforeTime = new ArrayList<Appointment>();
+		for (Appointment aptmt : appointments) {
+			boolean isBefore = true;
 
-    		if (timeslot.getDate().after(curDate)||(timeslot.getDate().equals(curDate)&&timeslot.getTime().after(curTime))) {
-    				isBefore = false;
-    		}
-    		
-    		if(isBefore ==false)
-    			aptmtBeforeTime.add(aptmt);
-    	}
-    	
-    	return aptmtBeforeTime;
-    }
-    
-    @Transactional
-    public List<Appointment> getAppointmentsByCustomer(Customer aCustomer) throws invalidInputException{
-    	if(isValidCustomer(aCustomer)) {
-    	    List<Appointment> allAppointmentByPerson = appointmentRepository.findAppointmentByCustomer(aCustomer);
-    	    return allAppointmentByPerson;
-    	}else {
-    		throw new IllegalArgumentException("Invalid customer");
-    	}
-    }
-    
-    @Transactional
-    public List<Appointment> getAppointmentsByTechnician(Technician technician) throws invalidInputException{
-    	if(isValidTechnician(technician)) {
-    	    List<Appointment> allAppointmentByTechnician= appointmentRepository.findAppointmentByTechnician(technician);
-    	    return allAppointmentByTechnician;
-    	}else {
-    		throw new IllegalArgumentException("Invalid technician");
-    	}
-    }
-    
-    @Transactional
-    public List<Appointment> getAppointmentsByVehicle(Vehicle vehicle) throws invalidInputException{
-    	if(isValidVehicle(vehicle)) {
-    	    List<Appointment> allAppointmentByVehicle= appointmentRepository.findAppointmentByVehicle(vehicle);
-    	    return allAppointmentByVehicle;
-    	}else {
-    		throw new IllegalArgumentException("Invalid vehicle.");
-    	}
-    }
-    
-    @Transactional
-    public List<Appointment> getAppointmentsByService(ca.mcgill.ecse321.isotopecr.model.Service service) throws invalidInputException{
-    	if(isValidService(service)) {
-    	    List<Appointment> allAppointmentByService= appointmentRepository.findAppointmentByService((ca.mcgill.ecse321.isotopecr.model.Service) service);
-    	    return allAppointmentByService;
-    	}else {
-    		throw new IllegalArgumentException("Invalid service");
-    	}
-    }
-    
-   
+			Set<Timeslot> timeslots = aptmt.getTimeslot();
+			Timeslot timeslot = timeslots.iterator().next();
 
-	private <T> List<T> toList(Iterable<T> iterable){
+			if (timeslot.getDate().after(curDate)
+					|| (timeslot.getDate().equals(curDate) && timeslot.getTime().after(curTime))) {
+				isBefore = false;
+			}
+
+			if (isBefore == true)
+				aptmtBeforeTime.add(aptmt);
+		}
+
+		return aptmtBeforeTime;
+	}
+
+	@Transactional
+	public List<Appointment> getAllAppointmentsAfterTime(List<Appointment> appointments)
+			throws IllegalArgumentException {
+		if (appointments.isEmpty()) {
+			throw new IllegalArgumentException("There is no appointments in the future.");
+		}
+		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+		Time curTime = new java.sql.Time(Calendar.getInstance().getTimeInMillis());
+		List<Appointment> aptmtBeforeTime = new ArrayList<Appointment>();
+		for (Appointment aptmt : appointments) {
+			boolean isBefore = true;
+
+			Set<Timeslot> timeslots = aptmt.getTimeslot();
+			Timeslot timeslot = timeslots.iterator().next();
+
+			if (timeslot.getDate().after(curDate)
+					|| (timeslot.getDate().equals(curDate) && timeslot.getTime().after(curTime))) {
+				isBefore = false;
+			}
+
+			if (isBefore == false)
+				aptmtBeforeTime.add(aptmt);
+		}
+
+		return aptmtBeforeTime;
+	}
+
+	@Transactional
+	public List<Appointment> getAppointmentsByCustomer(Customer aCustomer) throws IllegalArgumentException {
+		if (isValidCustomer(aCustomer)) {
+			List<Appointment> allAppointmentByPerson = appointmentRepository.findAppointmentByCustomer(aCustomer);
+			return allAppointmentByPerson;
+		} else {
+			throw new IllegalArgumentException("Invalid customer");
+		}
+	}
+
+	@Transactional
+	public List<Appointment> getAppointmentsByTechnician(Technician technician) throws IllegalArgumentException {
+		if (isValidTechnician(technician)) {
+			List<Appointment> allAppointmentByTechnician = appointmentRepository
+					.findAppointmentByTechnician(technician);
+			return allAppointmentByTechnician;
+		} else {
+			throw new IllegalArgumentException("Invalid technician");
+		}
+	}
+
+	@Transactional
+	public List<Appointment> getAppointmentsByVehicle(Vehicle vehicle) throws IllegalArgumentException {
+		if (isValidVehicle(vehicle)) {
+			List<Appointment> allAppointmentByVehicle = appointmentRepository.findAppointmentByVehicle(vehicle);
+			return allAppointmentByVehicle;
+		} else {
+			throw new IllegalArgumentException("Invalid vehicle.");
+		}
+	}
+
+	@Transactional
+	public List<Appointment> getAppointmentsByService(ca.mcgill.ecse321.isotopecr.model.Service service)
+			throws IllegalArgumentException {
+		if (isValidService(service)) {
+			List<Appointment> allAppointmentByService = appointmentRepository
+					.findAppointmentByService((ca.mcgill.ecse321.isotopecr.model.Service) service);
+			return allAppointmentByService;
+		} else {
+			throw new IllegalArgumentException("Invalid service");
+		}
+	}
+
+	private <T> List<T> toList(Iterable<T> iterable) {
 		List<T> resultList = new ArrayList<T>();
 		for (T t : iterable) {
 			resultList.add(t);
 		}
 		return resultList;
 	}
-	
+
 	/**
-	 * This helper method checks if the input email address satisfies a standard email address format.
-	 * The format must follow RFC 5322 and there should be no no leading, trailing, or consecutive dots.
-	 * The domain name must include at least one dot, and the part of the domain name after the last dot can only consist of letters.
-	 * The method returns a boolean value.
+	 * This helper method checks if the input email address satisfies a standard
+	 * email address format. The format must follow RFC 5322 and there should be no
+	 * no leading, trailing, or consecutive dots. The domain name must include at
+	 * least one dot, and the part of the domain name after the last dot can only
+	 * consist of letters. The method returns a boolean value.
 	 * 
 	 * @param email
 	 * 
 	 * @author Jack Wei
 	 */
 	private boolean isValidEmail(String email) {
-		String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"; 
-		// format permitted by RFC 5322, no leading, trailing, or consecutive dots. 
-		// domain name must include at least one dot, and the part of the domain name after the last dot can only consist of letters.
+		String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+		// format permitted by RFC 5322, no leading, trailing, or consecutive dots.
+		// domain name must include at least one dot, and the part of the domain name
+		// after the last dot can only consist of letters.
 		// for example: john.doe@mail.mcgill.ca
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
 	}
-	
+
 	/**
-	 * This helper method checks if the email address provided (must be a valid email address), is a company email.
-	 * A company email follows the format xxxxx@isotopecr.ca.
-	 * The method returns a boolean value.
+	 * This helper method checks if the email address provided (must be a valid
+	 * email address), is a company email. A company email follows the format
+	 * xxxxx@isotopecr.ca. The method returns a boolean value.
 	 * 
 	 * @param validEmail
 	 * 
@@ -840,15 +824,15 @@ public class IsotopeCRService {
 		String regex = "^[\\w.+\\-]+@isotopecr\\.ca$";
 		// email contains "isotopecr.ca"
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(validEmail);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(validEmail);
+		return matcher.matches();
 	}
-	
+
 	/**
-	 * This helper method checks if a name (can be first name or last name) is valid, i.e. contains any kind of letter from any language 
-	 * and can include hyphens, dots or apostrophes.
-	 * The method returns a boolean value.
-	 *  
+	 * This helper method checks if a name (can be first name or last name) is
+	 * valid, i.e. contains any kind of letter from any language and can include
+	 * hyphens, dots or apostrophes. The method returns a boolean value.
+	 * 
 	 * @param name
 	 * 
 	 * @author Jack Wei
@@ -857,102 +841,109 @@ public class IsotopeCRService {
 		String regex = "^[\\p{L} .'-]+$";
 		// contains any kind of letter from any language
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(name);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(name);
+		return matcher.matches();
 	}
-	
+
 	/**
-	 * This helper method checks if a password is valid, i.e. 8 to 20 characters, one upper case, one lower case, one digit, contains no whitespace. 
-	 * The method returns a boolean value.
-	 *  
+	 * This helper method checks if a password is valid, i.e. 8 to 20 characters,
+	 * one upper case, one lower case, one digit, contains no whitespace. The method
+	 * returns a boolean value.
+	 * 
 	 * @param password
 	 * 
 	 * @author Jack Wei
 	 */
 	private boolean isValidPassword(String password) {
 		String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,20}$";
-		// format: Password between 8 to 20 characters. At least one upper case, one lower case, one digit, no whitespace.
+		// format: Password between 8 to 20 characters. At least one upper case, one
+		// lower case, one digit, no whitespace.
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(password);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
 	}
-	
+
 	/**
-	 * This helper method checks if a phoneNumber is valid, i.e. standard phone number format,
-	 * can include white spaces, dots, hyphens or parenthesis between consecutive numbers.
-	 * The number can also include an international prefix.
-	 * The method returns a boolean value.
+	 * This helper method checks if a phoneNumber is valid, i.e. standard phone
+	 * number format, can include white spaces, dots, hyphens or parenthesis between
+	 * consecutive numbers. The number can also include an international prefix. The
+	 * method returns a boolean value.
 	 * 
 	 * @param phoneNumber
 	 * 
 	 * @author Jack Wei
 	 */
 	private boolean isValidPhoneNumber(String phoneNumber) {
-		String regex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"  // Number with whitespace, dots or hyphens
-			      + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"  // Number with parentheses
-			      + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$"; // Number with international prefix
+		String regex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" // Number with whitespace,
+																								// dots or hyphens
+				+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$" // Number with parentheses
+				+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$"; // Number with international prefix
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(phoneNumber);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(phoneNumber);
+		return matcher.matches();
 	}
-	
+
 	/**
-	 * This helper method creates a vehicle with the provided arguments. The arguments are verified based on their corresponding format and range.
-	 * An invalidInputException is thrown if input is invalid.
+	 * This helper method creates a vehicle with the provided arguments. The
+	 * arguments are verified based on their corresponding format and range. An
+	 * invalidInputException is thrown if input is invalid.
 	 * 
 	 * @param licensePlate
 	 * @param year
 	 * @param model
 	 * @param brand
 	 * @return Vehicle
-	 * @throws invalidInputException
+	 * @throws InvalidInputException
 	 * 
 	 * @author Jack Wei
 	 */
-	private Vehicle createVehicle(String licensePlate, String year, String model, String brand) throws invalidInputException {
+	private Vehicle createVehicle(String licensePlate, String year, String model, String brand)
+			throws InvalidInputException {
+
 		Vehicle vehicle = new Vehicle();
-		if(isValidYear(year)) {
+		if (isValidYear(year)) {
 			vehicle.setYear(year);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
-		
-		if(isValidModelName(model)) {
+
+		if (isValidModelName(model)) {
 			vehicle.setModel(model);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
-		
-		if(isValidBrandName(brand)) {
+
+		if (isValidBrandName(brand)) {
 			vehicle.setBrand(brand);
 		} else {
-			throw new invalidInputException();
+			throw new InvalidInputException();
 		}
-		
+
 		vehicleRepository.save(vehicle);
-		
+
 		return vehicle;
 	}
-	
+
 	/**
-	 * This helper method checks if the brand name of a vehicle is valid, 
-	 * i.e. only letters and hyphen allowed and can consist only one space between words. 
-	 * This method returns a boolean value.
+	 * This helper method checks if the brand name of a vehicle is valid, i.e. only
+	 * letters and hyphen allowed and can consist only one space between words. This
+	 * method returns a boolean value.
+	 * 
 	 * @param brand
 	 * 
 	 * @author Jack Wei
 	 */
 	private boolean isValidBrandName(String brand) {
 		String regex = "^[a-zA-Z-\s]*[a-zA-Z-]+$";
-		//only letters and - allowed, only one space between words allowed
+		// only letters and - allowed, only one space between words allowed
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(brand);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(brand);
+		return matcher.matches();
 	}
 
 	/**
-	 * This helper method checks if the model name of vehicle is valid,i.e containing 1 to 30 characters.
-	 * This method returns a boolean value.
+	 * This helper method checks if the model name of vehicle is valid,i.e
+	 * containing 1 to 30 characters. This method returns a boolean value.
 	 * 
 	 * @param model
 	 * 
@@ -961,13 +952,13 @@ public class IsotopeCRService {
 	private boolean isValidModelName(String model) {
 		String regex = "^.{1,30}$"; // 1 to 30 characters
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(model);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(model);
+		return matcher.matches();
 	}
 
 	/**
-	 * This helper method checks if the year of a vehicle is valid. The year must be between 1900 to 3000.
-	 * This method returns a boolean value.
+	 * This helper method checks if the year of a vehicle is valid. The year must be
+	 * between 1900 to 3000. This method returns a boolean value.
 	 * 
 	 * @param year
 	 * 
@@ -975,18 +966,18 @@ public class IsotopeCRService {
 	 */
 	private boolean isValidYear(String year) {
 		boolean isValid = false;
-		
+
 		try {
-			if(1900 <= Integer.parseInt(year) || Integer.parseInt(year) <= 3000) { // between 1900 and 3000 for any car
+			if (1900 <= Integer.parseInt(year) || Integer.parseInt(year) <= 3000) { // between 1900 and 3000 for any car
 				isValid = true;
 			}
 		} catch (NumberFormatException e) {
 			throw e;
 		}
-		
+
 		return isValid;
 	}
-	
+
 	private boolean isValidCustomer(Customer customer) {
 		boolean isValid = false;
 		if (customer != null) {
@@ -994,7 +985,7 @@ public class IsotopeCRService {
 		}
 		return isValid;
 	}
-	
+
 	private boolean isValidTechnician(Technician technician) {
 		boolean isValid = false;
 		if (technician != null) {
@@ -1002,7 +993,7 @@ public class IsotopeCRService {
 		}
 		return isValid;
 	}
-	
+
 	private boolean isValidVehicle(Vehicle vehicle) {
 		boolean isValid = false;
 		if (vehicle != null) {
@@ -1010,7 +1001,7 @@ public class IsotopeCRService {
 		}
 		return isValid;
 	}
-	
+
 	private boolean isValidService(ca.mcgill.ecse321.isotopecr.model.Service service) {
 		boolean isValid = false;
 		if (service != null) {
@@ -1018,25 +1009,42 @@ public class IsotopeCRService {
 		}
 		return isValid;
 	}
-	
-	private boolean isValidAppointment(Appointment appointment) {
-		boolean isValid = false;
-		if (appointment != null) {
-			isValid = true;
-		}
-		return isValid;
-	}
-	
+
 	private boolean isBeforeADay(Date date) {
 		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-  
-    	boolean isBefore = false;
-    	if (date.before(curDate)) {
-    		isBefore = true;
-    	}
-    	
-    	return isBefore;
-	}
-	
-}
 
+		boolean isBefore = false;
+		if (date.before(curDate)) {
+			isBefore = true;
+		}
+
+		return isBefore;
+	}
+
+	/**
+	 * Helper method
+	 * 
+	 * @author Zichen
+	 * @param dayOfWeeki
+	 * @return
+	 */
+	private DayOfWeek intToDayOfWeek(int dayOfWeeki) {
+		switch (dayOfWeeki) {
+		case 1:
+			return DayOfWeek.Sunday;
+		case 2:
+			return DayOfWeek.Monday;
+		case 3:
+			return DayOfWeek.Tuesday;
+		case 4:
+			return DayOfWeek.Wednesday;
+		case 5:
+			return DayOfWeek.Thursday;
+		case 6:
+			return DayOfWeek.Friday;
+		case 7:
+			return DayOfWeek.Saturday;
+		}
+		return null;
+	}
+}

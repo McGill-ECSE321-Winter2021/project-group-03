@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.isotopecr.service;
 
-public class invalidInputException extends Exception {
+public class InvalidInputException extends Exception {
 
 	/**
 	 * 
