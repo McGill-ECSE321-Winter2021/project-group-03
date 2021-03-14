@@ -440,8 +440,9 @@ public class IsotopeCRService {
 	 */
 	@Transactional
 	public Resource addResource(String resourceType, Integer maxAvailable){
-		// check the input validity first:
-		if (resourceRepository.findResourceByResourceType(resourceType) != null) {
+		if (resourceType == null || resourceType.trim().length() == 0) {
+			throw new IllegalArgumentException("ERROR: the resource type can not be empty.");
+		} else if (resourceRepository.findResourceByResourceType(resourceType) != null) {
 			throw new IllegalArgumentException("ERROR: the resource type has existed inside the system.");
 		} else if (maxAvailable < 1) {
 			throw new IllegalArgumentException("ERROR: the resource should at least have one availability.");
@@ -474,7 +475,7 @@ public class IsotopeCRService {
 	 * @return all resources stored in the system
 	 */
 	@Transactional
-	public List<Resource> viewAllResources() {
+	public List<Resource> getAllResources() {
 		List<Resource> resources = toList(resourceRepository.findAll());
 		return resources;		
 	}

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.RuntimeCryptoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -78,7 +79,21 @@ public class IsotopeCRRestController {
 	 */
 	@GetMapping(value = { "/resources", "/resources/" })
 	public List<ResourceDto> getAllResources() {
-		return service.viewAllResources().stream().map(r -> convertToDto(r)).collect(Collectors.toList());
+		return service.getAllResources().stream().map(r -> convertToDto(r)).collect(Collectors.toList());
+	}
+	
+	/**
+	 * @author Zichen
+	 * @return List of ResourceDtos.
+	 */
+	@PostMapping(value = { "/resource/delete/{type}", "/resource/delete/{type}/" })
+	public ResourceDto deleteResource(@PathVariable("type") String type) {
+		try{
+			Resource resource = service.removeResource(type);
+			return convertToDto(resource);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 	
 	/**
@@ -87,7 +102,7 @@ public class IsotopeCRRestController {
 	 * @param max The maximum availability of one resource
 	 * @return A ResourceDto just created
 	 */
-	@PostMapping(value = { "/resource/{type}/{max}", "/resource/{type}/{max}/" })
+	@PostMapping(value = { "/resource/create/{type}/{max}", "/resource/create/{type}/{max}/" })
 	public ResourceDto createResource(@PathVariable("type") String type, @PathVariable("max") Integer max) 
 			throws RuntimeException{
 		try {
@@ -116,10 +131,10 @@ public class IsotopeCRRestController {
 		return service.viewIncomeSummary();
 	}
 	
-	@GetMapping(value = { "/availablities/{ID}", "/availabilities/{ID}/" })
-	public List<DailyAvailabilityDto> getTechAvailabilities(@PathVariable("ID") String profileID) 
-			throws IllegalArgumentException {
-		Technician tech = technicianRepository.findTechnicianByProfileID(profileID);
+	@GetMapping(value = { "/availablities/{email}", "/availabilities/{email}/" })
+	public List<DailyAvailabilityDto> getTechAvailabilities(@PathVariable("email") String email) {
+//		Technician tech = (Technician) service.getProfile(email);
+		Technician tech = technicianRepository.findTechnicianByProfileID(email);	// TODO: delete this line!!!
 		if (tech == null) {
 			throw new IllegalArgumentException("ERROR: Input profileID not found in system.");
 		}
@@ -185,12 +200,20 @@ public class IsotopeCRRestController {
 		return dailyAvailabilityDto;
 	}
 	
+	private VehicleDto convertToDto(Vehicle v) {
+		if (v == null) {
+			throw new IllegalArgumentException("There is no such Vehicle!");
+		}
+		VehicleDto vehicleDto = new VehicleDto(v.getLicensePlate(), v.getYear(), v.getModel(), v.getBrand());
+		return vehicleDto;
+	}
+	
 	private AppointmentDto convertToDto(Appointment a) {
 		if (a == null) {
 			throw new IllegalArgumentException("There is no such appointment!");
 		}
-		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), a.getCustomer(), a.getVehicle(),
-				a.getTechnician(), a.getInvoice(), a.getService(), a.getTimeslot());
+		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()), convertToDto(a.getVehicle()),
+				convertToDto(a.getTechnician()), convertToDto(a.getInvoice()), convertToDto(a.getService()), convertToDto(a.getTimeslot()));
 		return appointmentDto;
 	}
 
