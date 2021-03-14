@@ -54,13 +54,13 @@ public class IsotopeCRService {
 	AppointmentRepository appointmentRepository;
 
 	/**
-	 * @author Jack Wei Creates a customer profile with the provide arguments. First
-	 *         name, last name, and email are mandatory and inputs must satisfy
-	 *         their corresponding format, otherwise an invalidInputException is
-	 *         thrown. Phone number, password and vehicle information (license
-	 *         plate) can be empty (null) but otherwise they must satisfy a specific
-	 *         format. If password is null, customer profile will not be registered
-	 *         account.
+	 * 
+	 * Creates a customer profile with the provide arguments. First name, last name,
+	 * and email are mandatory and inputs must satisfy their corresponding format,
+	 * otherwise an invalidInputException is thrown. Phone number, password and
+	 * vehicle information (license plate) can be empty (null) but otherwise they
+	 * must satisfy a specific format. If password is null, customer profile will
+	 * not be registered account.
 	 * 
 	 * @param firstName
 	 * @param lastName
@@ -73,7 +73,7 @@ public class IsotopeCRService {
 	 * @param brand
 	 * @return
 	 * @throws InvalidInputException
-	 * 
+	 * @author Jack Wei
 	 * 
 	 */
 	@Transactional
@@ -94,7 +94,7 @@ public class IsotopeCRService {
 			throw new InvalidInputException();
 		}
 
-		if (phoneNumber != null) {
+		if (!phoneNumber.isEmpty()) {
 			if (isValidPhoneNumber(phoneNumber)) {
 				customer.setPhoneNumber(phoneNumber);
 			} else {
@@ -102,7 +102,7 @@ public class IsotopeCRService {
 			}
 		} // else phone number is set to null
 
-		if (password != null) {
+		if (!password.isEmpty()) {
 			if (isValidPassword(password)) {
 				customer.setPassword(password);
 				if (password != null) {
@@ -121,12 +121,11 @@ public class IsotopeCRService {
 	}
 
 	/**
-	 * @author Jack Wei Creates an admin profile with the provide arguments. The
-	 *         admin can either be the owner or administrative assistance. All
-	 *         arguments are mandatory and inputs must satisfy their corresponding
-	 *         format, otherwise an invalidInputException is thrown. All admin
-	 *         profile are registered accounts and can be used to log in the
-	 *         application.
+	 * Creates an admin profile with the provide arguments. The admin can either be
+	 * the owner or administrative assistance. All arguments are mandatory and
+	 * inputs must satisfy their corresponding format, otherwise an
+	 * invalidInputException is thrown. All admin profile are registered accounts
+	 * and can be used to log in the application.
 	 * 
 	 * @param firstName
 	 * @param lastName
@@ -135,7 +134,7 @@ public class IsotopeCRService {
 	 * @param password
 	 * @return
 	 * @throws InvalidInputException
-	 * 
+	 * @author Jack Wei
 	 * 
 	 */
 	@Transactional
@@ -148,7 +147,7 @@ public class IsotopeCRService {
 			if (isValidCompanyEmail(email)) {
 				admin.setEmail(email);
 			} else { // valid email but not company email
-				// TODO: exception? error message?
+				throw new InvalidInputException();
 			}
 		} else {
 			throw new InvalidInputException();
@@ -171,20 +170,20 @@ public class IsotopeCRService {
 		admin.setPassword(password);
 
 		admin.setIsOwner(isOwner);
-
+		
+        admin.setProfileID(String.valueOf(email.hashCode()));
 		adminRepository.save(admin);
 
-		admin.setProfileID(String.valueOf(email.hashCode()));
+		
 
 		return admin;
 	}
 
 	/**
-	 * @author Jack Wei Creates a technician profile with the provide arguments. All
-	 *         arguments are mandatory and inputs must satisfy their corresponding
-	 *         format, otherwise an invalidInputException is thrown. All technician
-	 *         profiles are registered accounts and can be used to login the
-	 *         application.
+	 * Creates a technician profile with the provide arguments. All arguments are
+	 * mandatory and inputs must satisfy their corresponding format, otherwise an
+	 * invalidInputException is thrown. All technician profiles are registered
+	 * accounts and can be used to login the application.
 	 * 
 	 * @param firstName
 	 * @param lastName
@@ -193,7 +192,7 @@ public class IsotopeCRService {
 	 * @param services
 	 * @return
 	 * @throws InvalidInputException
-	 * 
+	 * @author Jack Wei
 	 */
 	@Transactional
 	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password)
@@ -204,7 +203,7 @@ public class IsotopeCRService {
 			if (isValidCompanyEmail(email)) {
 				technician.setEmail(email);
 			} else { // valid email but not company email
-				// TODO: exception? error message?
+				throw new InvalidInputException();
 			}
 		} else {
 			throw new InvalidInputException();
@@ -224,6 +223,8 @@ public class IsotopeCRService {
 			throw new InvalidInputException();
 		}
 
+		technician.setProfileID(String.valueOf(email.hashCode()));
+
 		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
 		DailyAvailability dailyAvailability = new DailyAvailability();
 
@@ -231,12 +232,13 @@ public class IsotopeCRService {
 			dailyAvailability.setDay(day);
 			dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
 			dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
+			dailyAvailability.setAvailabilityID(String.valueOf(technician.getProfileID().hashCode()
+				*day.hashCode()));
+			dailyAvailabilityRepository.save(dailyAvailability);
 			dailyAvailabilities.add(dailyAvailability);
 		}
 
 		technician.setDailyAvailability(dailyAvailabilities);
-
-		technician.setProfileID(String.valueOf(email.hashCode()));
 
 		technicianRepository.save(technician);
 
@@ -244,12 +246,21 @@ public class IsotopeCRService {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Changes/sets the password of the profile provided with the
 	 * given password. The password must satisfy password format (one upper
 	 * case letter, one lower case letter and one number; 8-20 characters
 	 * long, otherwise an invalidInputException is thrown. If the profile is
 	 * a customer profile, calling this method will change the profile to a
 	 * registered account that can be used to log in the application.
+=======
+	 * Changes/sets the password of the profile provided with the given password.
+	 * The password must satisfy password format (one upper case letter, one lower
+	 * case letter and one number; 8-20 characters long, otherwise an
+	 * invalidInputException is thrown. If the profile is a customer profile,
+	 * calling this method will change the profile to a registered account that can
+	 * be used to log in the application.
+>>>>>>> 163d2842e969137fa388cc977b8e218e329540c0
 	 * 
 	 * @param currentUser
 	 * @param password
@@ -270,10 +281,17 @@ public class IsotopeCRService {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Edits/sets the phone number of the profile provided and the
 	 * given phone number. The phone number must satisfy standard phone
 	 * number format which can include white space, hyphen, dot and
 	 * international prefix, otherwise an invalidInputException is thrown.
+=======
+	 * Edits/sets the phone number of the profile provided and the given phone
+	 * number. The phone number must satisfy standard phone number format which can
+	 * include white space, hyphen, dot and international prefix, otherwise an
+	 * invalidInputException is thrown.
+>>>>>>> 163d2842e969137fa388cc977b8e218e329540c0
 	 * 
 	 * @param currentUser
 	 * @param phoneNumber
@@ -295,9 +313,9 @@ public class IsotopeCRService {
 	}
 
 	/**
-	 * @author Jack Wei Adds a vehicle to the customer profile with the provided
-	 *         arguments. All arguments must satisfy their corresponding input
-	 *         formats, otherwise an invalidInputException is thrown.
+	 * Adds a vehicle to the customer profile with the provided arguments. All
+	 * arguments must satisfy their corresponding input formats, otherwise an
+	 * invalidInputException is thrown.
 	 * 
 	 * @param currentUser
 	 * @param licensePlate
@@ -305,7 +323,7 @@ public class IsotopeCRService {
 	 * @param model
 	 * @param brand
 	 * @throws invalidInputException
-	 *
+	 * @author Jack Wei
 	 * 
 	 */
 	@Transactional
@@ -326,13 +344,13 @@ public class IsotopeCRService {
 	}
 
 	/**
-	 * @author Jack Wei Deletes the vehicle with the provided licensePlate from the
-	 *         database and the customer profile.
+	 * Deletes the vehicle with the provided licensePlate from the database and the
+	 * customer profile.
 	 * 
 	 * @param currentUser
 	 * @param licensePlate
 	 * 
-	 * 
+	 * @author Jack Wei
 	 */
 	@Transactional
 	public Vehicle deleteVehicle(Profile currentUser, String licensePlate) {
@@ -389,10 +407,10 @@ public class IsotopeCRService {
 	}
 
 	/**
-	 * @author Jack Wei Deletes the user profile with user profile provided.
+	 * Deletes the user profile with user profile provided.
 	 * 
 	 * @param user
-	 * 
+	 * @author Jack Wei
 	 * 
 	 */
 	@Transactional
@@ -401,10 +419,10 @@ public class IsotopeCRService {
 	}
 
 	/**
-	 * @author Jack Wei Deletes the user profile with the provided profile ID.
+	 * Deletes the user profile with the provided profile ID.
 	 * 
 	 * @param profileID
-	 * 
+	 * @author Jack Wei
 	 * 
 	 */
 	@Transactional
@@ -419,13 +437,13 @@ public class IsotopeCRService {
 	}
 
 	/**
-	 * @author Jack Wei Gets the profile by email. Throws exception when profile not
-	 *         found.
+	 * Gets the profile by email. Throws exception when profile not found.
 	 * 
 	 * @param email
 	 * @return
 	 * 
 	 * @throws invalidInputException
+	 * @author Jack Wei
 	 */
 	@Transactional
 	public Profile getProfile(String email) throws InvalidInputException {
@@ -443,13 +461,14 @@ public class IsotopeCRService {
 	}
 
 	/**
-	 * @author Zichen Update the availability to a specific day.
+	 * Update the availability to a specific day.
 	 * 
-	 * 
+	 * @author Zichen
 	 * @param tech
 	 * @param day
 	 * @param startTime
 	 * @param endTime
+	 * 
 	 */
 	@Transactional
 	public void updateAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {

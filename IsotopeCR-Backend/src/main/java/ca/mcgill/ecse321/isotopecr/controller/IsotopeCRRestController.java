@@ -560,6 +560,7 @@ public class IsotopeCRRestController {
 	}
 
 
+
 	private AdminDto convertToDto(Admin admin) {
 		if (admin == null) {
 			throw new IllegalArgumentException("Administrative account does not exist.");
@@ -605,7 +606,6 @@ public class IsotopeCRRestController {
 		}
 		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),
 				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), convertToDto(a.getService()), timeslots);
-
 		return appointmentDto;
 	}
 
