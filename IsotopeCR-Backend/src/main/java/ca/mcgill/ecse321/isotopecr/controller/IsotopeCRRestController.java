@@ -491,7 +491,7 @@ public class IsotopeCRRestController {
 		}
 	}
 
-	@GetMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
+	@PostMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
 	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) {
 		try {
 			Appointment appointment = appointmentRepository.findAppointmentByAppointmentID(aAppointmentId);
