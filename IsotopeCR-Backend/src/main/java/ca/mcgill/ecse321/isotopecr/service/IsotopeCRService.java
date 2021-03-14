@@ -257,7 +257,7 @@ public class IsotopeCRService {
 	 * 
 	 * 
 	 */
-
+	@Transactional
 	public void editPassword(Profile currentUser, String password) throws InvalidInputException {
 
 		currentUser.setPassword(password);
@@ -281,7 +281,7 @@ public class IsotopeCRService {
 	 * 
 	 * 
 	 */
-
+	@Transactional
 	public void editPhoneNumber(Profile currentUser, String phoneNumber) throws InvalidInputException {
 
 		Customer customerProfile = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
@@ -335,7 +335,7 @@ public class IsotopeCRService {
 	 * 
 	 * 
 	 */
-
+	@Transactional
 	public Vehicle deleteVehicle(Profile currentUser, String licensePlate) {
 
 		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
@@ -372,7 +372,7 @@ public class IsotopeCRService {
 	 * 
 	 * 
 	 */
-
+	@Transactional
 	public void addServiceToProfile(Technician technician, ca.mcgill.ecse321.isotopecr.model.Service service)
 			throws InvalidInputException {
 
@@ -423,7 +423,7 @@ public class IsotopeCRService {
 	 * 
 	 * @throws invalidInputException
 	 */
-
+	@Transactional
 	public Profile getProfile(String email) throws InvalidInputException {
 
 		if (email == null) {
@@ -571,6 +571,7 @@ public class IsotopeCRService {
 	 * @param time
 	 * @return a technician available at that time
 	 */
+	@Transactional
 	public Technician getFreeTechnician(Time time, Date date) {
 		java.util.Date utilDate = new java.util.Date(date.getTime());
 		Calendar c = Calendar.getInstance();
@@ -778,6 +779,90 @@ public class IsotopeCRService {
 			throw new IllegalArgumentException("Invalid service");
 		}
 	}
+	
+	@Transactional
+    public Service addService(String serviceName, int duration, double price, Resource resource) {
+    	
+    	if(isValidServiceName(serviceName) && isValidDuration(duration) && isValidPrice(price) && isValidResource(resource)) {
+    		ca.mcgill.ecse321.isotopecr.model.Service service = new ca.mcgill.ecse321.isotopecr.model.Service();
+    		service.setServiceName(serviceName);
+    		service.setDuration(duration);
+    		service.setPrice(price);
+    		service.setResource(resource);
+    		serviceRepository.save(service);
+    		return (Service) service;
+    	}else {
+			
+    		throw new IllegalArgumentException("Inputs.");
+		
+    	}
+    }
+    
+    @Transactional
+    public Service editService(String serviceName, int duration, double price, Resource resource) {
+    	
+    	if(isValidServiceName(serviceName) && isValidDuration(duration) && isValidPrice(price) && isValidResource(resource)) {
+    		ca.mcgill.ecse321.isotopecr.model.Service oldService = serviceRepository.findServiceByServiceName(serviceName);
+    		serviceRepository.delete(oldService);
+    		
+    		ca.mcgill.ecse321.isotopecr.model.Service newService = new ca.mcgill.ecse321.isotopecr.model.Service();
+    		newService.setServiceName(serviceName);
+    		newService.setDuration(duration);
+    		newService.setPrice(price);
+    		newService.setResource(resource);
+    		serviceRepository.save(newService);
+    		return (Service) newService;
+    		
+    	}else {
+			
+    		throw new IllegalArgumentException("Inputs.");
+		
+    	}
+    }
+    
+    @Transactional
+    public void removeService(String serviceName) {
+    	if(isValidServiceName(serviceName)) {
+    		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+    		serviceRepository.delete(service);
+    		
+    	}else {
+			
+    		throw new IllegalArgumentException("Inputs.");
+		
+    	}
+    }
+    
+    @Transactional
+    public CompanyProfile createCompanyProfile(String companyName, String address, String workingHours) {
+    	if(isValidCompanyName(companyName)) {
+    		CompanyProfile companyProfile = new CompanyProfile();
+    		companyProfile.setCompanyName(companyName);
+    		companyProfile.setAddress(address);
+    		companyProfile.setWorkingHours(workingHours);
+    		companyProfileRepository.save(companyProfile);
+    		return companyProfile;
+    	}else {
+    		throw new IllegalArgumentException("Inputs.");
+    	}
+    }
+    
+    @Transactional
+    public CompanyProfile editCompanyProfile(String companyName, String address, String workingHours) {
+    	if(isValidCompanyName(companyName)) {
+    		CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
+    		companyProfileRepository.delete(oldCompanyProfile);
+    		
+    		CompanyProfile newCompanyProfile = new CompanyProfile();
+    		newCompanyProfile.setCompanyName(companyName);
+    		newCompanyProfile.setAddress(address);
+    		newCompanyProfile.setWorkingHours(workingHours);
+    		companyProfileRepository.save(newCompanyProfile);
+    		return newCompanyProfile;
+    	}else {
+    		throw new IllegalArgumentException("Inputs.");
+    	}
+    }
 
 	private <T> List<T> toList(Iterable<T> iterable) {
 		List<T> resultList = new ArrayList<T>();
@@ -1017,6 +1102,46 @@ public class IsotopeCRService {
 		}
 
 		return isBefore;
+	}
+	
+	private boolean isValidResource(Resource resource) {
+		boolean isValid = false;
+		if (resource != null) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	private boolean isValidServiceName(String serviceName) {
+		String regex = "^[a-zA-Z-\s]*[a-zA-Z-]+$";
+		//only letters and - allowed, only one space between words allowed
+		Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(serviceName);
+        return matcher.matches();
+	}
+	
+	private boolean isValidDuration(int duration) {
+		boolean isValid = false;
+		if(duration%30 == 0) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	private boolean isValidPrice(double price) {
+		boolean isValid = false;
+		if(price > 0.0 && price < 1000000.0) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
+	private boolean isValidCompanyName(String companyName){
+		String regex = "^[\\p{L} .'-]+$";
+		// contains any kind of letter from any language
+		Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(companyName);
+        return matcher.matches();
 	}
 
 	/**
