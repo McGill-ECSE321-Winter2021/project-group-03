@@ -25,7 +25,6 @@ import ca.mcgill.ecse321.isotopecr.dto.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.service.IsotopeCRService;
-import ca.mcgill.ecse321.isotopecr.service.InvalidInputException;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -329,7 +328,7 @@ public class IsotopeCRRestController {
 		}
 	}
 
-	@PostMapping(value = { "customer/delete-vehicle/", "customer/delete-vehicle/" })
+	@PostMapping(value = { "customer/delete-vehicle", "customer/delete-vehicle/" })
 	public VehicleDto deleteVehicle(@RequestParam("email") String email,
 			@RequestParam("licensePlate") String licensePlate) throws Exception {
 		try {

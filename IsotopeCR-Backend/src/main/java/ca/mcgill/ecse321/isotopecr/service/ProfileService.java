@@ -359,14 +359,14 @@ public class ProfileService {
 		Set<Vehicle> vehicles = customer.getVehicle();
 
 		for (Vehicle vehicle : vehicles) {
-			if (vehicle.getLicensePlate() == licensePlate) {
+			if (vehicle.getLicensePlate().equals(licensePlate)) {
 				foundVehicle = vehicle;
-				vehicles.remove(vehicle);
-				vehicleRepository.delete(vehicle);
 				isDeleted = true;
 			}
 		}
-
+		
+        vehicles.remove(foundVehicle);
+        vehicleRepository.delete(foundVehicle);
 		if (isDeleted) {
 			customer.setVehicle(vehicles);
 			customerRepository.save(customer);
