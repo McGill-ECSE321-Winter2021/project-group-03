@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.isotopecr.dao.*;
+import ca.mcgill.ecse321.isotopecr.dto.DailyAvailabilityDto;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
@@ -52,6 +53,152 @@ public class ProfileService {
 	@Autowired
 	AppointmentRepository appointmentRepository;
 
+	/*********************************************************
+	 * Technician
+	 *********************************************************/
+	
+	/**
+	 * Creates a technician profile with the provide arguments. All arguments are
+	 * mandatory and inputs must satisfy their corresponding format, otherwise an
+	 * invalidInputException is thrown. All technician profiles are registered
+	 * accounts and can be used to login the application.
+	 * 
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param password
+	 * @param services
+	 * @return
+	 * @throws InvalidInputException
+	 * @author Jack Wei
+	 */
+	@Transactional
+	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password)
+			throws IllegalArgumentException {
+
+		if (profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
+			throw new IllegalArgumentException("ERROR: a profile with that email already exists.");
+		}
+
+		Technician technician = new Technician();
+
+		if (ServiceHelperMethods.isValidEmail(email)) {
+			if (ServiceHelperMethods.isValidCompanyEmail(email)) {
+				technician.setEmail(email);
+			} else { // valid email but not company email
+				throw new IllegalArgumentException();
+			}
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		if (ServiceHelperMethods.isValidName(firstName) && ServiceHelperMethods.isValidName(lastName)) {
+			technician.setFirstName(firstName);
+			technician.setLastName(lastName);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		if (ServiceHelperMethods.isValidPassword(password)) {
+			technician.setPassword(password);
+			technician.setIsRegisteredAccount(true);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		technician.setProfileID(String.valueOf(email.hashCode()));
+
+		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
+
+		for (DayOfWeek day : DayOfWeek.values()) {
+			DailyAvailability dailyAvailability = new DailyAvailability();
+			dailyAvailability.setDay(day);
+			dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
+			dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
+			dailyAvailability.setAvailabilityID(String.valueOf(technician.getProfileID().hashCode() * day.hashCode()));
+			dailyAvailabilityRepository.save(dailyAvailability);
+			dailyAvailabilities.add(dailyAvailability);
+		}
+
+		technician.setDailyAvailability(dailyAvailabilities);
+
+		technicianRepository.save(technician);
+
+		return technician;
+	}
+	
+	@Transactional
+	public List<DailyAvailability> getTechnicianAvailabilities(String email) throws IllegalArgumentException {
+		Technician technician = getTechnician(email);
+		return ServiceHelperMethods.toList(technician.getDailyAvailability());
+	}
+	
+	@Transactional
+	public Technician getTechnician(String email) throws IllegalArgumentException {
+		if (email == null) {
+			throw new IllegalArgumentException("ERROR: the technician email is null.");
+		}
+		Technician technician = technicianRepository.findTechnicianByEmail(email);
+		if (technician == null) {
+			throw new IllegalArgumentException("ERROR: the technician cannot be found.");
+		}
+		return technician;
+	}
+	
+	/**
+	 * Update the availability to a specific day.
+	 * 
+	 * @author Zichen
+	 * @param tech
+	 * @param day
+	 * @param startTime
+	 * @param endTime
+	 * @return a DailyAvailability modified
+	 * 
+	 */
+	@Transactional
+	public DailyAvailability editTechnicianAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {
+		List<DailyAvailability> availabilities = ServiceHelperMethods.toList(tech.getDailyAvailability());
+		for (DailyAvailability availability : availabilities) {
+			if (availability.getDay().equals(day)) {
+				availability.setStartTime(startTime);
+				availability.setEndTime(endTime);
+				dailyAvailabilityRepository.save(availability);
+				return availability;
+			}
+		}
+		throw new IllegalArgumentException("The availability for " + day.toString() + " is not found");
+	}
+	
+	/**
+	 * Add a specialized service to the technician profile.
+	 * 
+	 * @param technician
+	 * @param service
+	 * @throws InvalidInputException
+	 * 
+	 * @author Jack Wei
+	 * @return
+	 */
+	@Transactional
+	public ca.mcgill.ecse321.isotopecr.model.Service addServiceOfferedByTechnician(Technician technician, String serviceName)
+			throws IllegalArgumentException {
+		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();
+		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+		if (service != null) {
+			services.add(service);
+			technician.setService(services);
+			technicianRepository.save(technician);
+			return service;
+		} else {
+			throw new IllegalArgumentException("The service could not be added to the technician"); 
+		}
+	}
+	
+	/*********************************************************
+	 * Customer
+	 *********************************************************/
+	
 	/**
 	 * Creates a customer profile with the provide arguments. First name, last name,
 	 * and email are mandatory and inputs must satisfy their corresponding format,
@@ -122,7 +269,151 @@ public class ProfileService {
 
 		return customer;
 	}
+	
+	@Transactional
+	public Customer getCustomer(String email) throws IllegalArgumentException {
+		if (email == null) {
+			throw new IllegalArgumentException("ERROR: the customer email is null.");
+		}
+		Customer customer = customerRepository.findCustomerByEmail(email);
+		if (customer == null) {
+			throw new IllegalArgumentException("ERROR: the customer cannot be found.");
+		}
+		return customer;
+	}
+	
+	/**
+	 * @author Zichen
+	 * @return the total income by all the appointments upto now
+	 */
+	@Transactional
+	public List<Vehicle> getCustomerVehicles(Customer customer) {
+		if (customer == null) {
+			throw new IllegalArgumentException("ERROR: input customer does not exist.");
+		}
+		return ServiceHelperMethods.toList(customer.getVehicle());
+	}
 
+
+	/**
+	 * Adds a vehicle to the customer profile with the provided arguments. All
+	 * arguments must satisfy their corresponding input formats, otherwise an
+	 * invalidInputException is thrown.
+	 * 
+	 * @param currentUser
+	 * @param licensePlate
+	 * @param year
+	 * @param model
+	 * @param brand
+	 * @throws invalidInputException
+	 * @author Jack Wei
+	 * 
+	 */
+	@Transactional
+	public Vehicle createVehicle(Profile profile, String licensePlate, String year, String model, String brand)
+			throws IllegalArgumentException {
+
+		Customer customer = customerRepository.findCustomerByProfileID(profile.getProfileID());
+		try {
+			Vehicle vehicle = createNewVehicle(licensePlate, year, model, brand);
+			Set<Vehicle> vehicles = customer.getVehicle();
+			vehicles.add(vehicle);
+			customer.setVehicle(vehicles);
+			customerRepository.save(customer);
+			return vehicle;
+		} catch (IllegalArgumentException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * This helper method creates a vehicle with the provided arguments. The
+	 * arguments are verified based on their corresponding format and range. An
+	 * invalidInputException is thrown if input is invalid.
+	 * 
+	 * @param licensePlate
+	 * @param year
+	 * @param model
+	 * @param brand
+	 * @return Vehicle
+	 * @throws InvalidInputException
+	 * 
+	 * @author Jack Wei
+	 */
+	public Vehicle createNewVehicle(String licensePlate, String year, String model, String brand)
+			throws IllegalArgumentException {
+
+		Vehicle vehicle = new Vehicle();
+		if(!licensePlate.isEmpty()) {
+			vehicle.setLicensePlate(licensePlate);
+		}else {
+			throw new IllegalArgumentException();
+		}
+		if (ServiceHelperMethods.isValidYear(year)) {
+			vehicle.setYear(year);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		if (ServiceHelperMethods.isValidModelName(model)) {
+			vehicle.setModel(model);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		if (ServiceHelperMethods.isValidBrandName(brand)) {
+			vehicle.setBrand(brand);
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		vehicleRepository.save(vehicle);
+
+		return vehicle;
+	}
+	
+
+	/**
+	 * Deletes the vehicle with the provided licensePlate from the database and the
+	 * customer profile.
+	 * 
+	 * @param currentUser
+	 * @param licensePlate
+	 * 
+	 * @author Jack Wei
+	 */
+	@Transactional
+	public Vehicle deleteVehicle(Profile currentUser, String licensePlate) {
+
+		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
+
+		Boolean isDeleted = false;
+		Vehicle foundVehicle = null;
+
+		Set<Vehicle> vehicles = customer.getVehicle();
+
+		for (Vehicle vehicle : vehicles) {
+			if (vehicle.getLicensePlate().equals(licensePlate)) {
+				foundVehicle = vehicle;
+				isDeleted = true;
+			}
+		}
+		
+        vehicles.remove(foundVehicle);
+        vehicleRepository.delete(foundVehicle);
+		if (isDeleted) {
+			customer.setVehicle(vehicles);
+			customerRepository.save(customer);
+		} else { // vehicle not found
+			// TODO: exception? error message?
+		}
+		return foundVehicle;
+	}
+
+	/*********************************************************
+	 * Admin
+	 *********************************************************/
+	
 	/**
 	 * Creates an admin profile with the provide arguments. The admin can either be
 	 * the owner or administrative assistance. All arguments are mandatory and
@@ -184,75 +475,9 @@ public class ProfileService {
 		return admin;
 	}
 
-	/**
-	 * Creates a technician profile with the provide arguments. All arguments are
-	 * mandatory and inputs must satisfy their corresponding format, otherwise an
-	 * invalidInputException is thrown. All technician profiles are registered
-	 * accounts and can be used to login the application.
-	 * 
-	 * @param firstName
-	 * @param lastName
-	 * @param email
-	 * @param password
-	 * @param services
-	 * @return
-	 * @throws InvalidInputException
-	 * @author Jack Wei
-	 */
-	@Transactional
-	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password)
-			throws IllegalArgumentException {
-
-		if (profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
-			throw new IllegalArgumentException(); // TODO: exception
-		}
-
-		Technician technician = new Technician();
-
-		if (ServiceHelperMethods.isValidEmail(email)) {
-			if (ServiceHelperMethods.isValidCompanyEmail(email)) {
-				technician.setEmail(email);
-			} else { // valid email but not company email
-				throw new IllegalArgumentException();
-			}
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (ServiceHelperMethods.isValidName(firstName) && ServiceHelperMethods.isValidName(lastName)) {
-			technician.setFirstName(firstName);
-			technician.setLastName(lastName);
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (ServiceHelperMethods.isValidPassword(password)) {
-			technician.setPassword(password);
-			technician.setIsRegisteredAccount(true);
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		technician.setProfileID(String.valueOf(email.hashCode()));
-
-		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
-
-		for (DayOfWeek day : DayOfWeek.values()) {
-			DailyAvailability dailyAvailability = new DailyAvailability();
-			dailyAvailability.setDay(day);
-			dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
-			dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
-			dailyAvailability.setAvailabilityID(String.valueOf(technician.getProfileID().hashCode() * day.hashCode()));
-			dailyAvailabilityRepository.save(dailyAvailability);
-			dailyAvailabilities.add(dailyAvailability);
-		}
-
-		technician.setDailyAvailability(dailyAvailabilities);
-
-		technicianRepository.save(technician);
-
-		return technician;
-	}
+	/*********************************************************
+	 * All profiles
+	 *********************************************************/
 
 	/**
 	 * 
@@ -308,101 +533,6 @@ public class ProfileService {
 		}
 	}
 
-	/**
-	 * Adds a vehicle to the customer profile with the provided arguments. All
-	 * arguments must satisfy their corresponding input formats, otherwise an
-	 * invalidInputException is thrown.
-	 * 
-	 * @param currentUser
-	 * @param licensePlate
-	 * @param year
-	 * @param model
-	 * @param brand
-	 * @throws invalidInputException
-	 * @author Jack Wei
-	 * 
-	 */
-	@Transactional
-	public Vehicle addVehicle(Profile profile, String licensePlate, String year, String model, String brand)
-			throws IllegalArgumentException {
-
-		Customer customer = customerRepository.findCustomerByProfileID(profile.getProfileID());
-		try {
-			Vehicle vehicle = createVehicle(licensePlate, year, model, brand);
-			Set<Vehicle> vehicles = customer.getVehicle();
-			vehicles.add(vehicle);
-			customer.setVehicle(vehicles);
-			customerRepository.save(customer);
-			return vehicle;
-		} catch (IllegalArgumentException e) {
-			throw e;
-		}
-	}
-
-	/**
-	 * Deletes the vehicle with the provided licensePlate from the database and the
-	 * customer profile.
-	 * 
-	 * @param currentUser
-	 * @param licensePlate
-	 * 
-	 * @author Jack Wei
-	 */
-	@Transactional
-	public Vehicle deleteVehicle(Profile currentUser, String licensePlate) {
-
-		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
-
-		Boolean isDeleted = false;
-		Vehicle foundVehicle = null;
-
-		Set<Vehicle> vehicles = customer.getVehicle();
-
-		for (Vehicle vehicle : vehicles) {
-			if (vehicle.getLicensePlate().equals(licensePlate)) {
-				foundVehicle = vehicle;
-				isDeleted = true;
-			}
-		}
-		
-        vehicles.remove(foundVehicle);
-        vehicleRepository.delete(foundVehicle);
-		if (isDeleted) {
-			customer.setVehicle(vehicles);
-			customerRepository.save(customer);
-		} else { // vehicle not found
-			// TODO: exception? error message?
-		}
-		return foundVehicle;
-	}
-
-	/**
-	 * Add a specialized service to the technician profile.
-	 * 
-	 * @param technician
-	 * @param service
-	 * @throws InvalidInputException
-	 * 
-	 * @author Jack Wei
-	 * @return
-	 */
-	@Transactional
-	public ca.mcgill.ecse321.isotopecr.model.Service addServiceToProfile(Technician technician, String serviceName)
-			throws IllegalArgumentException {
-
-		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();
-
-		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
-
-		if (service != null) {
-			services.add(service);
-			technician.setService(services);
-			technicianRepository.save(technician);
-			return service;
-		} else {
-			throw new IllegalArgumentException(); // TODO: exceptions
-		}
-	}
 
 	/**
 	 * Deletes the user profile with user profile provided.
@@ -458,100 +588,8 @@ public class ProfileService {
 		return profile;
 	}
 
-	/**
-	 * Update the availability to a specific day.
-	 * 
-	 * @author Zichen
-	 * @param tech
-	 * @param day
-	 * @param startTime
-	 * @param endTime
-	 * @return a DailyAvailability modified
-	 * 
-	 */
-	@Transactional
-	public DailyAvailability updateAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {
-		List<DailyAvailability> availabilities = ServiceHelperMethods.toList(tech.getDailyAvailability());
-		for (DailyAvailability availability : availabilities) {
-			if (availability.getDay().equals(day)) {
-				availability.setStartTime(startTime);
-				availability.setEndTime(endTime);
-				dailyAvailabilityRepository.save(availability);
-				return availability;
-			}
-		}
-		throw new IllegalArgumentException("The availability for " + day.toString() + " is not found");
-	}
-
-	/**
-	 * @author Zichen
-	 * @param tech
-	 * @return all dailyAvailabilities of a technician
-	 */
-	@Transactional
-	public List<DailyAvailability> viewAvailability(Technician tech) {
-		List<DailyAvailability> availabilities = ServiceHelperMethods.toList(tech.getDailyAvailability());
-		return availabilities;
-	}
 	
-	/**
-	 * @author Zichen
-	 * @return the total income by all the appointments upto now
-	 */
-	@Transactional
-	public List<Vehicle> getVehiclesByCustomers(Customer customer) {
-		if (customer == null) {
-			throw new IllegalArgumentException("ERROR: input customer does not exist.");
-		}
-		return ServiceHelperMethods.toList(customer.getVehicle());
-	}
 	
-
-	/**
-	 * This helper method creates a vehicle with the provided arguments. The
-	 * arguments are verified based on their corresponding format and range. An
-	 * invalidInputException is thrown if input is invalid.
-	 * 
-	 * @param licensePlate
-	 * @param year
-	 * @param model
-	 * @param brand
-	 * @return Vehicle
-	 * @throws InvalidInputException
-	 * 
-	 * @author Jack Wei
-	 */
-	public Vehicle createVehicle(String licensePlate, String year, String model, String brand)
-			throws IllegalArgumentException {
-
-		Vehicle vehicle = new Vehicle();
-		if(!licensePlate.isEmpty()) {
-			vehicle.setLicensePlate(licensePlate);
-		}else {
-			throw new IllegalArgumentException();
-		}
-		if (ServiceHelperMethods.isValidYear(year)) {
-			vehicle.setYear(year);
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (ServiceHelperMethods.isValidModelName(model)) {
-			vehicle.setModel(model);
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (ServiceHelperMethods.isValidBrandName(brand)) {
-			vehicle.setBrand(brand);
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		vehicleRepository.save(vehicle);
-
-		return vehicle;
-	}
 	
 	
 }

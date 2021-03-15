@@ -10,6 +10,6 @@ public interface ServiceRepository extends CrudRepository<Service, String> {
 
 	List<Service> findServiceByResource(Resource resource);
 	
-	List<Service> findServiceByFrequencyGreaterThan(int minimum);
+	List<Service> findServiceByFrequencyGreaterThan(Integer minimum);
 
 }

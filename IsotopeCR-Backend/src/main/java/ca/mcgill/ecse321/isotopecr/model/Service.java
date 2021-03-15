@@ -47,9 +47,9 @@ public class Service {
 	}
 	
 	
-	private int frequency;
+	private Integer frequency;
 	
-	public void setFrequency(int frequency) {
+	public void setFrequency(Integer frequency) {
 		this.frequency = frequency;
 	}
 	

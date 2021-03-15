@@ -54,6 +54,14 @@ public class ServiceHelperMethods {
 		return isValid;
 	}
 
+	public static boolean isValidFrequency(Integer frequency) {
+		boolean isValid = false;
+		if (frequency >= 0) {
+			isValid = true;
+		}
+		return isValid;
+	}
+	
 	public static boolean isBeforeADay(Date date) {
 		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
 
