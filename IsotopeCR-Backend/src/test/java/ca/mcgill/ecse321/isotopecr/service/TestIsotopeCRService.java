@@ -18,8 +18,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -80,6 +82,10 @@ public class TestIsotopeCRService {
 	private static final double PRICE1 = 23.33;
 	private static final int FREQUENCY1 = 2;
 	private static final Integer DURATION1 = 5;
+	private static final String SERVICE2 = "TireChange";
+	private static final double PRICE2 = 35.2;
+	private static final int FREQUENCY2 = 1;
+	private static final Integer DURATION2 = 2;
 
 	/* Mock up Resources */
 	private static final String RESOURCE_TYPE1 = "Pull Car";
@@ -118,6 +124,12 @@ public class TestIsotopeCRService {
 	private static final String APPOINTMENT_ID = "appointment1";
 	private static final Status STATUS = Status.BOOKED;
 	
+	
+	private final Customer CUSTOMER = new Customer();
+	private final Vehicle VEHICLE = new Vehicle();
+	private final Technician TECHNICIAN = new Technician();
+	private final Service SERVICE = new Service();
+	
 	/**
 	 * Set up mockoutput when a find method is called to find something inside the database
 	 */
@@ -134,132 +146,11 @@ public class TestIsotopeCRService {
 	        }
 	    });
 	    
-	    /* -------------------------- AdminRepo ------------------------- */
-	    /** 
-	     * Mock behavior for findAdminByProfileID 
-	     */
-	    lenient().when(adminRepository.findAdminByProfileID(anyString())).thenAnswer( (InvocationOnMock invocation) -> {
-	        if(invocation.getArgument(0).equals(ADMIN_ID)) {
-	            Admin admin = new Admin();
-	            admin.setProfileID(ADMIN_ID);
-	            admin.setEmail(ADMIN_EMAIL);
-	            admin.setFirstName(ADMIN_ID);
-	            admin.setLastName(ADMIN_ID);
-	            admin.setIsOwner(ISOWNER);
-	            admin.setIsRegisteredAccount(ISREGISTERED);        
-	            admin.setPassword(ADMIN_ID);	            
-	            return admin;
-	        } else {
-	            return null;
-	        }
-	    });
-	    
-	    
-	    /* ---------------------------- AppointmentRepo -------------------------- */
-	    /** 
-	     * Mock behavior for findAdminByProfileID 
-	     */
-	    lenient().when(appointmentRepository.findAppointmentByAppointmentID(anyString())).thenAnswer( (InvocationOnMock invocation) -> {
-	        if(invocation.getArgument(0).equals(ADMIN_ID)) {
-	            Resource resource1 = new Resource();
-	            Resource resource2 = new Resource();
-	            resource1.setResourceType(RESOURCE_TYPE1);
-	            resource1.setMaxAvailable(MAX1);
-	            resource2.setResourceType(RESOURCE_TYPE2);
-	            resource2.setMaxAvailable(MAX2);
-	        	
-	        	Service service1 = new Service();
-	            Service service2 = new Service();
-	            service1.setServiceName(SERVICE1);
-	            service1.setResource(resource1);
-	            service1.setPrice(PRICE1);
-	            service1.setFrequency(FREQUENCY1);
-	            service1.setDuration(DURATION1);	
-	            service2.setServiceName(ADMIN_EMAIL);
-	            service2.setResource(resource2);
-	            service2.setPrice(0);
-	            service2.setFrequency(0);
-	            service2.setDuration(RESOURCE_MAX);
-	            Set<Service> services = new HashSet<Service>();
-	            services.add(service1);
-	            services.add(service2);
-	            
-	            Vehicle vehicle1 = new Vehicle();
-	            Vehicle vehicle2 = new Vehicle();
-	            vehicle1.setLicensePlate(LICENSEPLATE1);
-	            vehicle1.setBrand(BRAND1);
-	            vehicle1.setModel(MODEL1);
-	            vehicle1.setYear(YEAR1);
-	            vehicle2.setLicensePlate(LICENSEPLATE2);
-	            vehicle2.setBrand(BRAND2);
-	            vehicle2.setModel(MODEL2);
-	            vehicle2.setYear(YEAR2);
-	            Set<Vehicle> vehicles = new HashSet<Vehicle>();
-	            vehicles.add(vehicle1);
-	            vehicles.add(vehicle2);
-	            
-	            Invoice invoice = new Invoice();
-	            invoice.setInvoiceID(INVOICE_ID);
-	            invoice.setCost(COST);
-	            invoice.setIsPaid(ISPAID);	            
-	            
-	            Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
-	            Integer i = 1;
-	    		for (DayOfWeek day : DayOfWeek.values()) {
-	    			DailyAvailability dailyAvailability = new DailyAvailability();
-	    			dailyAvailability.setDay(day);
-	    			dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
-	    			dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
-	    			dailyAvailability.setAvailabilityID((i++).toString());
-	    			dailyAvailabilities.add(dailyAvailability);
-	    		}
-	    		
-	    		Timeslot slot = new Timeslot();
-	    		slot.setDate(DATE);
-	    		slot.setTime(TIME);
-	    		slot.setSlotID(SLOT_ID);
-	    		Set<Timeslot> slots = new HashSet<Timeslot>();
-	    		slots.add(slot);
-	            
-	            Technician tech = new Technician();
-	            tech.setProfileID(TECH_ID);
-	            tech.setEmail(ADMIN_EMAIL);
-	        	tech.setFirstName(TECH_FIRSTNAME);
-	        	tech.setLastName(TECH_LASTNAME);
-	        	tech.setIsRegisteredAccount(ISREGISTERED);
-	        	tech.setPassword(TECH_PASSWORD);
-	        	tech.setDailyAvailability(dailyAvailabilities);
-	        	tech.setService(services);
-	        	
-	        	Customer customer = new Customer();
-	        	customer.setEmail(CUST_EMAIL);
-	        	customer.setFirstName(CUST_FIRSTNAME);
-	        	customer.setLastName(CUST_LASTNAME);
-	        	customer.setIsRegisteredAccount(ISREGISTERED);
-	        	customer.setPassword(CUST_PASSWORD);
-	        	customer.setPhoneNumber(CUST_PHONE);
-	        	customer.setProfileID(CUST_ID);
-	        	customer.setVehicle(vehicles);
-	        	
-	        	Appointment appointment = new Appointment();
-	        	Set<Appointment> appointments = new HashSet<Appointment>();	
-	        	appointments.add(appointment);
-	        	slot.setAppointment(appointments);
-	            appointment.setAppointmentID(APPOINTMENT_ID);
-	            appointment.setStatus(STATUS);
-	            appointment.setInvoice(invoice);
-	            appointment.setService(service1);	            
-	            appointment.setTechnician(tech);
-	            appointment.setCustomer(customer);
-	            appointment.setTimeslot(slots);
-	            appointment.setVehicle(vehicle1);
-	            return appointment;
-	        } else {
-	            return null;
-	        }
-	    });
+	   
 	}
 	
+
+
 	@Test
 	public void testCreateResource() {
 		assertEquals(0, service.getAllResources().size());
@@ -310,5 +201,107 @@ public class TestIsotopeCRService {
 	}
 	
 	
+	
+	// ------------------------------ Helpers -------------------------------------
+	private <T> List<T> toList(Iterable<T> iterable) {
+		List<T> resultList = new ArrayList<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
+	}
+	
+	private Resource createResource(String type, Integer max) {
+		Resource resource = new Resource();
+		resource.setResourceType(RESOURCE_TYPE1);
+	    resource.setMaxAvailable(MAX1);
+	    return resource;
+	}
+	
+	private Service createService(String name, Resource resource, double price, Integer f, Integer d) {
+		Service service = new Service();
+	    service.setServiceName(name);
+	    service.setResource(resource);
+	    service.setPrice(price);
+	    service.setFrequency(f);
+	    service.setDuration(d);
+	    
+	    return service;
+	}
+	
+	private Vehicle createVehicle(String LicensePlate, String brand, String model, String year) {
+		Vehicle vehicle = new Vehicle();
+		vehicle.setLicensePlate(LicensePlate);
+		vehicle.setBrand(brand);
+		vehicle.setModel(model);
+		vehicle.setYear(year);
+		
+		return vehicle;
+	}
+	
+	private Invoice createInvoice(String id, double cost, boolean ispaid) {
+		Invoice invoice = new Invoice();
+	    invoice.setInvoiceID(id);
+	    invoice.setCost(cost);
+	    invoice.setIsPaid(ispaid);	 
+	    
+	    return invoice;
+	}
+    
+    private Set<DailyAvailability> createSetAvailabilities(){
+    	Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
+        Integer i = 1;
+    	for (DayOfWeek day : DayOfWeek.values()) {
+    		DailyAvailability dailyAvailability = new DailyAvailability();
+    		dailyAvailability.setDay(day);
+    		dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
+    		dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
+    		dailyAvailability.setAvailabilityID((i++).toString());
+    		dailyAvailabilities.add(dailyAvailability);
+    	}
+    	
+    	return dailyAvailabilities;
+    }
+               
+    private Timeslot createTimeslot(Date date, Time time, String id) {
+    	Timeslot slot = new Timeslot();
+    	slot.setDate(date);
+    	slot.setTime(time);
+    	slot.setSlotID(id);
+	    
+	    return slot;
+	}
+    
+    private Technician mockTechnician(Set<DailyAvailability> dailyAvailabilities, Set<Service> services) {
+    	Technician tech = new Technician();
+        tech.setProfileID(TECH_ID);
+        tech.setEmail(ADMIN_EMAIL);
+    	tech.setFirstName(TECH_FIRSTNAME);
+    	tech.setLastName(TECH_LASTNAME);
+    	tech.setIsRegisteredAccount(ISREGISTERED);
+    	tech.setPassword(TECH_PASSWORD);
+    	tech.setDailyAvailability(dailyAvailabilities);
+    	tech.setService(services);
+	    
+	    return tech;
+	}
+    
+    private Customer mockCustomer(Set<Vehicle> vehicles) {
+    	Customer customer = new Customer();
+    	customer.setEmail(CUST_EMAIL);
+    	customer.setFirstName(CUST_FIRSTNAME);
+    	customer.setLastName(CUST_LASTNAME);
+    	customer.setIsRegisteredAccount(ISREGISTERED);
+    	customer.setPassword(CUST_PASSWORD);
+    	customer.setPhoneNumber(CUST_PHONE);
+    	customer.setProfileID(CUST_ID);
+    	customer.setVehicle(vehicles);
+	    
+	    return customer;
+	}
+	
+	
 
+	
+	
 }
