@@ -214,45 +214,45 @@ public class AutoRepairShopService {
 		return companyProfiles;
 	}
 
-    /*********************************************************
-	 * Summaries
-	 *********************************************************/
-	
-	/**
-	 * @author Zichen
-	 * @return the total income by all the appointments upto now
-	 */
-	@Transactional
-	public double getIncomeSummary() {
-		List<Invoice> invoices = ServiceHelperMethods.toList(invoiceRepository.findAll());
-		double incomeSummary = 0d;
-		for (Invoice i : invoices) {
-			if (i.getIsPaid()) {
-				incomeSummary += i.getCost();
-			}
-		}
-		return incomeSummary;
-	}
-
-	/**
-	 * @author Zichen
-	 * @return a map indicating how the resources are used.
-	 */
-	@Transactional
-	public Map<String, Integer> getResourceSummary() {
-		List<Resource> resources = ServiceHelperMethods.toList(resourceRepository.findAll());
-		Map<String, Integer> resourceAllocation = new HashMap<String, Integer>();
-
-		for (Resource resource : resources) {
-			resourceAllocation.put(resource.getResourceType(), 0);
-		}
-
-		for (Appointment appointment : appointmentRepository.findAll()) {
-			String type = appointment.getService().getResource().getResourceType();
-			resourceAllocation.put(type, resourceAllocation.get(type) + 1); // update the usage by 1;
-		}
-
-		return resourceAllocation;
-	}
+//    /*********************************************************
+//	 * Summaries
+//	 *********************************************************/
+//	
+//	/**
+//	 * @author Zichen
+//	 * @return the total income by all the appointments upto now
+//	 */
+//	@Transactional
+//	public double getIncomeSummary() {
+//		List<Invoice> invoices = ServiceHelperMethods.toList(invoiceRepository.findAll());
+//		double incomeSummary = 0d;
+//		for (Invoice i : invoices) {
+//			if (i.getIsPaid()) {
+//				incomeSummary += i.getCost();
+//			}
+//		}
+//		return incomeSummary;
+//	}
+//
+//	/**
+//	 * @author Zichen
+//	 * @return a map indicating how the resources are used.
+//	 */
+//	@Transactional
+//	public Map<String, Integer> getResourceSummary() {
+//		List<Resource> resources = ServiceHelperMethods.toList(resourceRepository.findAll());
+//		Map<String, Integer> resourceAllocation = new HashMap<String, Integer>();
+//
+//		for (Resource resource : resources) {
+//			resourceAllocation.put(resource.getResourceType(), 0);
+//		}
+//
+//		for (Appointment appointment : appointmentRepository.findAll()) {
+//			String type = appointment.getService().getResource().getResourceType();
+//			resourceAllocation.put(type, resourceAllocation.get(type) + 1); // update the usage by 1;
+//		}
+//
+//		return resourceAllocation;
+//	}
 		
 }

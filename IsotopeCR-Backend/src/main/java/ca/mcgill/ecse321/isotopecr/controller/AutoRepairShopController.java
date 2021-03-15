@@ -255,32 +255,32 @@ public class AutoRepairShopController {
 		}
 	}
 
-	/*********************************************************
-	 * Summaries TODO
-	 *********************************************************/
-
-	// TODO
-	
-	/**
-	 * @author Zichen
-	 * @return the total income of the system up to now
-	 * @throws Exception
-	 */
-	@GetMapping(value = { "/invoice/incomesummary", "/invoice/incomesummary/" })
-	public double getIncomeSummary() {
-		return autoRepairShopService.getIncomeSummary();
-	}
-
-	// TODO
-	
-	/**
-	 * @author Zichen
-	 * @return the total income of the system up to now
-	 * @throws Exception
-	 */
-	@GetMapping(value = { "/invoice/resourcesummary", "/invoice/resourceummary/" })
-	public Map<String, Integer>  getResourceSummary() {
-		return autoRepairShopService.getResourceSummary();
-	}
+//	/*********************************************************
+//	 * Summaries TODO
+//	 *********************************************************/
+//
+//	// TODO
+//	
+//	/**
+//	 * @author Zichen
+//	 * @return the total income of the system up to now
+//	 * @throws Exception
+//	 */
+//	@GetMapping(value = { "/invoice/incomesummary", "/invoice/incomesummary/" })
+//	public double getIncomeSummary() {
+//		return autoRepairShopService.getIncomeSummary();
+//	}
+//
+//	// TODO
+//	
+//	/**
+//	 * @author Zichen
+//	 * @return the total income of the system up to now
+//	 * @throws Exception
+//	 */
+//	@GetMapping(value = { "/invoice/resourcesummary", "/invoice/resourceummary/" })
+//	public Map<String, Integer>  getResourceSummary() {
+//		return autoRepairShopService.getResourceSummary();
+//	}
 	
 }

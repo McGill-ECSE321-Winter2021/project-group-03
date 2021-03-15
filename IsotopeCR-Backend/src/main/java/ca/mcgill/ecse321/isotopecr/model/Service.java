@@ -53,7 +53,7 @@ public class Service {
 		this.frequency = frequency;
 	}
 	
-	public int getFrequency() {
+	public Integer getFrequency() {
 		return this.frequency;
 	}
 }
