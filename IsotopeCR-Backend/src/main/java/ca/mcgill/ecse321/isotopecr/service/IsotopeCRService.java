@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -456,20 +455,21 @@ public class IsotopeCRService {
 	 * @param day
 	 * @param startTime
 	 * @param endTime
+	 * @return a DailyAvailability modified
 	 * 
 	 */
 	@Transactional
-	public void updateAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {
+	public DailyAvailability updateAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {
 		List<DailyAvailability> availabilities = toList(tech.getDailyAvailability());
 		for (DailyAvailability availability : availabilities) {
 			if (availability.getDay().equals(day)) {
 				availability.setStartTime(startTime);
 				availability.setEndTime(endTime);
 				dailyAvailabilityRepository.save(availability);
-				return;
+				return availability;
 			}
 		}
-		System.out.println("Input day is invalid, please retry."); // TODO where to check the input
+		throw new IllegalArgumentException("The availability for "+ day.toString() + " is not found"); 
 	}
 
 	/**

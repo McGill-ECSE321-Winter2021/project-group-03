@@ -147,6 +147,62 @@ public class IsotopeCRRestController {
 			throw e;
 		}
 	}
+	
+	/**
+	 * Update an availability by a technician.
+	 * @author Zichen
+	 * @param email
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping(value = { "/availablity/update/{email}", "/availability/update/{email}/" })
+	public DailyAvailabilityDto updateAvailabilityByTechnician(@PathVariable("email") String email,
+			@RequestParam String weekday,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime end) 
+					throws Exception {
+		Profile tech = null;
+		try {
+			tech = service.getProfile(email);
+			if (tech instanceof Technician) {
+				if (!isWeekDayValid(weekday)) {
+					throw new IllegalArgumentException("ERROR: input weekday is not a legal working day.");
+				} else if (!isStartEndTimeValid(start, end)) {
+					throw new IllegalArgumentException("ERROR: input start_time is not ahead of end_time.");
+				}
+				DailyAvailability availability = service.updateAvailability((Technician) tech, DailyAvailability.
+						DayOfWeek.valueOf(weekday), Time.valueOf(start), Time.valueOf(end));
+				return convertToDto(availability);
+
+			} else {
+				throw new IllegalArgumentException("ERROR: input email is related to a non-Technician account.");
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	private boolean isStartEndTimeValid(LocalTime start, LocalTime end) {
+		return start.isBefore(end);
+	}
+
+	private boolean isWeekDayValid(String weekday) {
+		switch (weekday) {
+			case "Monday":
+				return true;
+			case "Tuesday":
+				return true;
+			case "Wednesday":
+				return true;
+			case "Thursday":
+				return true;
+			case "Friday":
+				return true;
+			default:
+				return false;				
+		}
+	}
 
 	/**
 	 * 
