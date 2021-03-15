@@ -225,9 +225,9 @@ public class IsotopeCRService {
 		technician.setProfileID(String.valueOf(email.hashCode()));
 
 		Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
-		DailyAvailability dailyAvailability = new DailyAvailability();
-
+		
 		for (DayOfWeek day : DayOfWeek.values()) {
+			DailyAvailability dailyAvailability = new DailyAvailability();
 			dailyAvailability.setDay(day);
 			dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
 			dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
@@ -873,6 +873,12 @@ public class IsotopeCRService {
     }
     
     @Transactional
+	public List<ca.mcgill.ecse321.isotopecr.model.Service> viewAllServices() {
+		List<ca.mcgill.ecse321.isotopecr.model.Service> services = toList(serviceRepository.findAll());
+		return services;
+	}
+    
+    @Transactional
     public CompanyProfile createCompanyProfile(String companyName, String address, String workingHours) {
     	if(isValidCompanyName(companyName)) {
     		CompanyProfile companyProfile = new CompanyProfile();
@@ -902,6 +908,12 @@ public class IsotopeCRService {
     		throw new IllegalArgumentException("Inputs.");
     	}
     }
+    
+    @Transactional
+	public List<CompanyProfile> viewAllCompanyProfiles() {
+		List<CompanyProfile> companyProfiles = toList(companyProfileRepository.findAll());
+		return companyProfiles;
+	}
 
 	private <T> List<T> toList(Iterable<T> iterable) {
 		List<T> resultList = new ArrayList<T>();
@@ -1023,6 +1035,11 @@ public class IsotopeCRService {
 			throws InvalidInputException {
 
 		Vehicle vehicle = new Vehicle();
+		if(!licensePlate.isEmpty()) {
+			vehicle.setLicensePlate(licensePlate);
+		}else {
+			throw new InvalidInputException();
+		}
 		if (isValidYear(year)) {
 			vehicle.setYear(year);
 		} else {
@@ -1192,9 +1209,10 @@ public class IsotopeCRService {
 	 */
 	private DayOfWeek intToDayOfWeek(int dayOfWeeki) {
 		switch (dayOfWeeki) {
-		case 1:
-			return DayOfWeek.Sunday;
+
+		
 		case 2:
+
 			return DayOfWeek.Monday;
 		case 3:
 			return DayOfWeek.Tuesday;
@@ -1204,8 +1222,7 @@ public class IsotopeCRService {
 			return DayOfWeek.Thursday;
 		case 6:
 			return DayOfWeek.Friday;
-		case 7:
-			return DayOfWeek.Saturday;
+
 		}
 		return null;
 	}

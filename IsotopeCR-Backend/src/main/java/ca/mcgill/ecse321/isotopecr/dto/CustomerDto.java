@@ -13,7 +13,7 @@ public class CustomerDto {
 	private String lastName;
 	private String email;
 	private String phoneNumber;
-	private String password;
+	//private String password;
 	private Set<VehicleDto> vehicles;
 
 	public CustomerDto() {
@@ -52,13 +52,13 @@ public class CustomerDto {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+//	public String getPassword() {
+//		return password;
+//	}
+//
+//	public void setPassword(String password) {
+//		this.password = password;
+//	}
 
 	public Set<VehicleDto> getVehicles() {
 		return vehicles;

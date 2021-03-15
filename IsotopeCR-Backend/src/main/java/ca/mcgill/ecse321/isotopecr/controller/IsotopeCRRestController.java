@@ -127,7 +127,7 @@ public class IsotopeCRRestController {
 	 * @return List of DailyAvailabilityDtos
 	 * @throws Exception
 	 */
-	@GetMapping(value = { "/availablity/{email}", "/availability/{email}/" })
+	@GetMapping(value = { "/availability/{email}", "/availability/{email}/" })
 	public List<DailyAvailabilityDto> getAvailabilitiesByTechnician(@PathVariable("email") String email) throws Exception {
 		Profile tech = null;
 		try {
@@ -259,12 +259,6 @@ public class IsotopeCRRestController {
 		}	
 		
 	}
-
-
-	
-	
-	
-	
 	
 	/* ----------------------- Jack Wei --------------------------*/
 	@PostMapping(value = { "/create-customer-profile", "/create-customer-profile/"})
@@ -297,7 +291,7 @@ public class IsotopeCRRestController {
 	@PostMapping(value = { "/create-technician-profile", "/create-technician-profile/" })
 	public TechnicianDto createTechnicianProfile(@RequestParam("email") String email,
 			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-			@RequestParam("password") String password) throws IllegalArgumentException, InvalidInputException {
+			@RequestParam("password") String password) throws Exception {
 		try {
 			Technician technician = service.createTechnicianProfile(firstName, lastName, email, password);
 			return convertToDto(technician);
@@ -428,8 +422,7 @@ public class IsotopeCRRestController {
 	 * @author Zichen
 	 * @param profileID profileID stored in database
 	 * @return List of DailyAvailabilityDto related to input technician
-	 * @throws IllegalArgumentException
-	 * @throws InvalidInputException
+	 * @throws Exception 
 	 */
 
 	@PostMapping(value = { "/appointment/{vehicle}/{service}", "/appointment/{vehicle}/{service}" })
@@ -438,7 +431,7 @@ public class IsotopeCRRestController {
 			@PathVariable("service") String serviceName,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") LocalDate date)
-			throws IllegalArgumentException, InvalidInputException {
+			throws Exception {
 
 		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 		Customer customer = customerRepository.findCustomerByVehicle(vehicle);
@@ -502,7 +495,7 @@ public class IsotopeCRRestController {
 	}
 
 	@GetMapping(value = { "/pastappointment/vehicle/{vehicle}", "/pastappointment/vehicle/{vehicle}/" })
-	public List<AppointmentDto> viewPastAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) {
+	public List<AppointmentDto> viewPastAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) throws Exception {
 		try {
 			Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 			if (vehicle == null) {
@@ -525,7 +518,7 @@ public class IsotopeCRRestController {
 	}
 
 	@GetMapping(value = { "/futureappointment/vehicle/{vehicle}", "/futureappointment/vehicle/{vehicle}/" })
-	public List<AppointmentDto> viewFutureAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) {
+	public List<AppointmentDto> viewFutureAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) throws Exception {
 		try {
 			Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
 			if (vehicle == null) {
@@ -548,7 +541,7 @@ public class IsotopeCRRestController {
 	}
 
 	@PostMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
-	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) {
+	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) throws Exception {
 		try {
 			Appointment appointment = appointmentRepository.findAppointmentByAppointmentID(aAppointmentId);
 
@@ -559,8 +552,138 @@ public class IsotopeCRRestController {
 			throw e;
 		}
 	}
+	
+	//==============================Mathieu====================================//
+	
+	@PostMapping(value = {"/service/add/{servicename}", "/service/add/{servicename}"})
+	public ServiceDto addService(@PathVariable("servicename") String serviceName, @PathVariable("duration") Integer duration,
+			@PathVariable("price") Double price, @PathVariable("resource") Resource resource) {
+		try {
+			Service service = (Service) this.service.addService(serviceName, duration, price, resource);
+			return convertToDto(service);
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		
+	}
+	
+	@PostMapping(value = {"/service/edit/{servicename}", "/service/edit/{servicename}"})
+	public ServiceDto editService(@PathVariable("servicename") String serviceName, @PathVariable("duration") Integer duration,
+			@PathVariable("price") Double price, @PathVariable("resource") Resource resource) {
+		try {
+			Service newService = (Service) this.service.editService(serviceName, duration, price, resource);
+			Service oldService = serviceRepository.findServiceByServiceName(serviceName);
+			serviceRepository.delete(oldService);
+			return convertToDto(newService);
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		
+	}
+	
+	@PostMapping(value = {"/service/remove/{servicename}", "/service/remove/{servicename}"})
+	public void removeService(@PathVariable("servicename") String serviceName) {
+		try {
+			Service oldService = serviceRepository.findServiceByServiceName(serviceName);
+			serviceRepository.delete(oldService);
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		
+	}
+	
+	@PostMapping(value = {"/service/get/{servicename}", "/service/get/{servicename}"})
+	public ServiceDto getServiceByName(@PathVariable("servicename") String serviceName) {
+		try {
+			Service service = serviceRepository.findServiceByServiceName(serviceName);
+			return convertToDto(service);
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		
+	}
+	@PostMapping(value = {"/service/get-all", "/service/get-all"})
+	public ServiceDto getAllServices(@PathVariable("servicename") String serviceName) {
+		try {
+			//return service.getAllResources().stream().map(r -> convertToDto(r)).collect(Collectors.toList());
+			return (ServiceDto) service.viewAllServices().stream().map(r -> convertToDto(r)).collect(Collectors.toList());
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		
+	}
+	
+	@PostMapping(value = {"/CompanyProfile/create/{companyprofilename}", "/CompanyProfile/create/{companyprofilename}"})
+	public CompanyProfileDto createCompanyProfile(@PathVariable("companyprofilename") String companyName, 
+			@PathVariable("address") String address, @PathVariable("workinghours") String workingHours) {
+		try {
+			CompanyProfile companyProfile = service.createCompanyProfile(companyName, address, workingHours);
+			return convertToDto(companyProfile);
+		} catch(Exception e) {
+			throw e;
+		}
+		
+	}
+	
+	@PostMapping(value = {"/CompanyProfile/delete/{companyprofilename}", "/CompanyProfile/delete/{companyprofilename}"})
+	public CompanyProfileDto editCompanyProfile(@PathVariable("companyprofilename") String companyName, 
+			@PathVariable("address") String address, @PathVariable("workinghours") String workingHours) {
+		try {
+			CompanyProfile newCompanyProfile = service.createCompanyProfile(companyName, address, workingHours);
+			CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
+			companyProfileRepository.delete(oldCompanyProfile);
+			return convertToDto(newCompanyProfile);
+		} catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	@PostMapping(value = {"/CompanyProfile/get/{address}", "/CompanyProfile/get/{address}"})
+	public CompanyProfileDto getCompanyProfileByAddress(@PathVariable("address") String address) {
+		try {
+			CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
+			return convertToDto(companyProfile);
+		} catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	@PostMapping(value = {"/CompanyProfile/delete/{address}", "/CompanyProfile/get/{address}"})
+	public void deleteCompanyProfileByAddress(@PathVariable("address") String address) {
+		try {
+			CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
+			companyProfileRepository.delete(companyProfile);
+		} catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	@PostMapping(value = {"/CompanyProfile/get-all", "/CompanyProfile/get-all"})
+	public List<CompanyProfileDto> getAllCompanyProfiles() {
+		try {
+			List<CompanyProfileDto> companyProfiles = service.viewAllCompanyProfiles().stream().map(cp -> convertToDto(cp)).collect(Collectors.toList());
+			return companyProfiles;
+		} catch(Exception e) {
+			throw e;
+		}
+	}
 
 	/* ============================== Helpers =============================== */
+	
+	private CompanyProfileDto convertToDto(CompanyProfile cp) {
+		if (cp == null) {
+			throw new IllegalArgumentException("There is no such Company Profile!");
+		}
+		CompanyProfileDto companyProfileDto = new CompanyProfileDto(cp.getCompanyName(), cp.getAddress(), cp.getWorkingHours());
+		return companyProfileDto;
+	}
+	
+	
 	private ResourceDto convertToDto(Resource r) {
 		if (r == null) {
 			throw new IllegalArgumentException("There is no such Resource!");
@@ -568,14 +691,14 @@ public class IsotopeCRRestController {
 		ResourceDto resourceDto = new ResourceDto(r.getResourceType(), r.getMaxAvailable());
 		return resourceDto;
 	}
-
+	
 	
 	private ServiceDto convertToDto(Service s) {
-		// TODO: complete this after ServiceDto
 		if (s == null) {
 			throw new IllegalArgumentException("There is no such Service!");
 		}
-		ServiceDto serviceDto = new ServiceDto();
+		
+		ServiceDto serviceDto = new ServiceDto(s.getServiceName(), s.getDuration(), s.getPrice(), convertToDto(s.getResource()));
 		return serviceDto;
 	}
 	
@@ -626,12 +749,14 @@ public class IsotopeCRRestController {
 		return adminDto;
 	}
 
-	private TechnicianDto convertToDto(Technician technician) {
+	private TechnicianDto convertToDto(Technician technician) throws Exception {
 		if (technician == null) {
 			throw new IllegalArgumentException("Technician account does not exist.");
 		}
+		List<DailyAvailabilityDto> availabilities = getAvailabilitiesByTechnician(technician.getEmail());
 		TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(),
-				technician.getEmail(), technician.getPassword());
+				technician.getEmail(), technician.getPassword(), availabilities);
+
 		return technicianDto;
 	}
 	
@@ -652,7 +777,7 @@ public class IsotopeCRRestController {
 		return timeslotDto;
 	}
 
-	private AppointmentDto convertToDto(Appointment a) {
+	private AppointmentDto convertToDto(Appointment a) throws Exception {
 		if (a == null) {
 			throw new IllegalArgumentException("There is no such appointment!");
 		}
@@ -665,7 +790,7 @@ public class IsotopeCRRestController {
 		return appointmentDto;
 	}
 
-	private List<AppointmentDto> convertToDto(List<Appointment> appointments) {
+	private List<AppointmentDto> convertToDto(List<Appointment> appointments) throws Exception {
 		if (appointments == null) {
 			throw new IllegalArgumentException("There is no appointments.");
 		}

@@ -7,7 +7,7 @@ import java.sql.Time;
 public class DailyAvailability {
 
 	public enum DayOfWeek {
-		Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+		Monday, Tuesday, Wednesday, Thursday, Friday
 	};
 
 	// private Technician technician;
