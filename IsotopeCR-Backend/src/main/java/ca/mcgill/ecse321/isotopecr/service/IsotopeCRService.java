@@ -78,6 +78,11 @@ public class IsotopeCRService {
 	@Transactional
 	public Customer createCustomerProfile(String firstName, String lastName, String email, String phoneNumber,
 			String password) throws InvalidInputException {
+		
+		if(profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
+			throw new InvalidInputException(); //TODO: exception
+		}
+		
 		Customer customer = new Customer();
 
 		if (isValidEmail(email)) {
@@ -140,6 +145,10 @@ public class IsotopeCRService {
 	public Admin createAdminProfile(String firstName, String lastName, String email, Boolean isOwner, String password)
 			throws InvalidInputException {
 
+		if(profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
+			throw new InvalidInputException(); //TODO: exception
+		}
+		
 		Admin admin = new Admin();
 
 		if (isValidEmail(email)) {
@@ -196,6 +205,11 @@ public class IsotopeCRService {
 	@Transactional
 	public Technician createTechnicianProfile(String firstName, String lastName, String email, String password)
 			throws InvalidInputException {
+		
+		if(profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
+			throw new InvalidInputException(); //TODO: exception
+		}
+		
 		Technician technician = new Technician();
 
 		if (isValidEmail(email)) {
