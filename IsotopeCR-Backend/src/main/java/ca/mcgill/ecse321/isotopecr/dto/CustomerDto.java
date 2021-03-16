@@ -14,7 +14,7 @@ public class CustomerDto {
 	private String email;
 	private String phoneNumber;
 	//private String password;
-	private Set<VehicleDto> vehicles;
+	//private Set<VehicleDto> vehicles;
 
 	public CustomerDto() {
 	}
@@ -60,12 +60,12 @@ public class CustomerDto {
 //		this.password = password;
 //	}
 
-	public Set<VehicleDto> getVehicles() {
-		return vehicles;
-	}
-
-	public void setVehicles(Set<VehicleDto> vehicles) {
-		this.vehicles = vehicles;
-	}
+//	public Set<VehicleDto> getVehicles() {
+//		return vehicles;
+//	}
+//
+//	public void setVehicles(Set<VehicleDto> vehicles) {
+//		this.vehicles = vehicles;
+//	}
 
 }

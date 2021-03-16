@@ -235,6 +235,13 @@ public class TestIsotopeCRPersistence {
 		c = customerRepository.findCustomerByVehicle(v2);
 		assertNotNull(c);
 		assertEquals(profileID, c.getProfileID());
+
+		// Test findCustomerByEmail
+		c = null;
+
+		c = customerRepository.findCustomerByEmail(email);
+		assertNotNull(c);
+		assertEquals(profileID, c.getProfileID());
 	}
 
 	/**
@@ -255,7 +262,8 @@ public class TestIsotopeCRPersistence {
 		String serviceName = "Service Name";
 		int duration = 3;
 		double price = 20.00;
-		Service s = createService(resource, serviceName, duration, price);
+		Integer frequency = 3;
+		Service s = createService(resource, serviceName, duration, price, frequency);
 
 		// Test findServiceByServiceName
 		s = null;
@@ -354,7 +362,8 @@ public class TestIsotopeCRPersistence {
 		String serviceName = "Service Name";
 		double price = 20.00;
 		int duration = 3;
-		Service service = createService(resource, serviceName, duration, price);
+		int frequency = 4;
+		Service service = createService(resource, serviceName, duration, price, frequency);
 
 		Set<Service> services = new HashSet<Service>();
 		services.add(service);
@@ -374,6 +383,14 @@ public class TestIsotopeCRPersistence {
 		t = technicianRepository.findTechnicianByProfileID(profileID);
 		assertNotNull(t);
 		assertEquals(t.getProfileID(), profileID);
+
+		// Test findTechnicianByEmail
+		t = null;
+
+		t = technicianRepository.findTechnicianByEmail(email);
+		assertNotNull(t);
+		assertEquals(t.getProfileID(), profileID);
+		assertEquals(t.getEmail(), email);
 	}
 
 	/**
@@ -425,7 +442,8 @@ public class TestIsotopeCRPersistence {
 		String name = "Service Name";
 		double price = 20.00;
 		int duration = 3;
-		Service service = createService(resource, name, duration, price);
+		int frequency = 4;
+		Service service = createService(resource, name, duration, price, frequency);
 
 		Set<Service> services = new HashSet<Service>();
 		services.add(service);
@@ -585,12 +603,14 @@ public class TestIsotopeCRPersistence {
 	}
 
 	// Helper method to create a Service
-	private Service createService(Resource resource, String serviceName, Integer duration, double price) {
+	private Service createService(Resource resource, String serviceName, Integer duration, double price,
+			Integer frequency) {
 		Service service = new Service();
 		service.setResource(resource);
 		service.setServiceName(serviceName);
 		service.setDuration(duration);
 		service.setPrice(price);
+		service.setFrequency(frequency);
 		serviceRepository.save(service);
 		return service;
 	}
