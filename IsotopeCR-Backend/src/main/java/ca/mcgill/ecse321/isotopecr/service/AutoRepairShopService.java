@@ -119,6 +119,21 @@ public class AutoRepairShopService {
 		return invoices;
 	}
 	
+	//This was just added, isPaid method maybe?
+	@Transactional
+	public Invoice createInvoice(String invoiceID, double cost, Boolean isPaid) {
+    	if(ServiceHelperMethods.isValidPrice(cost)) {
+    		Invoice invoice = new Invoice();
+    		invoice.setInvoiceID(invoiceID);
+    		invoice.setCost(cost);
+    		invoice.setIsPaid(isPaid);
+    		invoiceRepository.save(invoice);
+    		return invoice;
+    	}else {
+    		throw new IllegalArgumentException("ERROR: Unable to create Invoice.");
+    	}
+	}
+	
 	/*********************************************************
 	 * Service
 	 *********************************************************/

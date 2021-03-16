@@ -1,40 +1,17 @@
 package ca.mcgill.ecse321.isotopecr.service;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import ca.mcgill.ecse321.isotopecr.model.Customer;
-import ca.mcgill.ecse321.isotopecr.model.DailyAvailability;
-import ca.mcgill.ecse321.isotopecr.model.Invoice;
 import ca.mcgill.ecse321.isotopecr.model.Resource;
 import ca.mcgill.ecse321.isotopecr.model.Service;
-import ca.mcgill.ecse321.isotopecr.model.Technician;
-import ca.mcgill.ecse321.isotopecr.model.Timeslot;
-import ca.mcgill.ecse321.isotopecr.model.Vehicle;
-import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,24 +20,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.isotopecr.dao.AppointmentRepository;
 import ca.mcgill.ecse321.isotopecr.dao.ResourceRepository;
 import ca.mcgill.ecse321.isotopecr.dao.ServiceRepository;
-import ca.mcgill.ecse321.isotopecr.dao.TechnicianRepository;
-import ca.mcgill.ecse321.isotopecr.dao.TimeslotRepository;
-import ca.mcgill.ecse321.isotopecr.model.Appointment;
-import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
-import ca.mcgill.ecse321.isotopecr.model.Customer;
-import ca.mcgill.ecse321.isotopecr.model.DailyAvailability;
-import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
-import ca.mcgill.ecse321.isotopecr.model.Invoice;
-import ca.mcgill.ecse321.isotopecr.model.Resource;
-import ca.mcgill.ecse321.isotopecr.model.Service;
-import ca.mcgill.ecse321.isotopecr.model.Technician;
-import ca.mcgill.ecse321.isotopecr.model.Timeslot;
-import ca.mcgill.ecse321.isotopecr.model.Vehicle;;
 
 @ExtendWith(MockitoExtension.class)
 public class TestServiceAndResourceService {
@@ -383,104 +345,5 @@ public class TestServiceAndResourceService {
 		
 }
 			
-	
-	/* ------------------------------ Helpers ------------------------------------- */
-//	private <T> List<T> toList(Iterable<T> iterable) {
-//		List<T> resultList = new ArrayList<T>();
-//		for (T t : iterable) {
-//			resultList.add(t);
-//		}
-//		return resultList;
-//	}
-//	
-//	private Resource createResource(String type, Integer max) {
-//		Resource resource = new Resource();
-//		resource.setResourceType(RESOURCE_TYPE1);
-//	    resource.setMaxAvailable(MAX1);
-//	    return resource;
-//	}
-//	
-//	private Service createService(String name, Resource resource, double price, Integer f, Integer d) {
-//		Service service = new Service();
-//	    service.setServiceName(name);
-//	    service.setResource(resource);
-//	    service.setPrice(price);
-//	    service.setFrequency(f);
-//	    service.setDuration(d);
-//	    
-//	    return service;
-//	}
-//	
-//}
-	
-//	private Vehicle createVehicle(String LicensePlate, String brand, String model, String year) {
-//		Vehicle vehicle = new Vehicle();
-//		vehicle.setLicensePlate(LicensePlate);
-//		vehicle.setBrand(brand);
-//		vehicle.setModel(model);
-//		vehicle.setYear(year);
-//		
-//		return vehicle;
-//	}
-	
-//	private Invoice createInvoice(String id, double cost, boolean ispaid) {
-//		Invoice invoice = new Invoice();
-//	    invoice.setInvoiceID(id);
-//	    invoice.setCost(cost);
-//	    invoice.setIsPaid(ispaid);	 
-//	    
-//	    return invoice;
-//	}
-//    
-//    private Set<DailyAvailability> createSetAvailabilities(){
-//    	Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
-//        Integer i = 1;
-//    	for (DayOfWeek day : DayOfWeek.values()) {
-//    		DailyAvailability dailyAvailability = new DailyAvailability();
-//    		dailyAvailability.setDay(day);
-//    		dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
-//    		dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
-//    		dailyAvailability.setAvailabilityID((i++).toString());
-//    		dailyAvailabilities.add(dailyAvailability);
-//    	}
-//    	
-//    	return dailyAvailabilities;
-//    }
-//               
-//    private Timeslot createTimeslot(Date date, Time time, String id) {
-//    	Timeslot slot = new Timeslot();
-//    	slot.setDate(date);
-//    	slot.setTime(time);
-//    	slot.setSlotID(id);
-//	    
-//	    return slot;
-//	}
-    
-//    private Technician mockTechnician(Set<DailyAvailability> dailyAvailabilities, Set<Service> services) {
-//    	Technician tech = new Technician();
-//        tech.setProfileID(TECH_ID);
-//        tech.setEmail(TECH_EMAIL);
-//    	tech.setFirstName(TECH_FIRSTNAME);
-//    	tech.setLastName(TECH_LASTNAME);
-//    	tech.setIsRegisteredAccount(ISREGISTERED);
-//    	tech.setPassword(TECH_PASSWORD);
-//    	tech.setDailyAvailability(dailyAvailabilities);
-//    	tech.setService(services);
-//	    
-//	    return tech;
-//	}
-//    
-//    private Customer mockCustomer(Set<Vehicle> vehicles) {
-//    	Customer customer = new Customer();
-//    	customer.setEmail(CUST_EMAIL);
-//    	customer.setFirstName(CUST_FIRSTNAME);
-//    	customer.setLastName(CUST_LASTNAME);
-//    	customer.setIsRegisteredAccount(ISREGISTERED);
-//    	customer.setPassword(CUST_PASSWORD);
-//    	customer.setPhoneNumber(CUST_PHONE);
-//    	customer.setProfileID(CUST_ID);
-//    	customer.setVehicle(vehicles);
-//	    
-//	    return customer;
-//	}
+
 	
