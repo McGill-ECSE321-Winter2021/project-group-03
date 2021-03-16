@@ -132,7 +132,7 @@ public class TestCompanyProfileAndInvoice {
 		companyProfile1 = autoRepairShopService.createCompanyProfile(COMPANY_NAME1, ADDRESS1, WORKING_HOURS1);
 		companyProfile2 = autoRepairShopService.createCompanyProfile(COMPANY_NAME2, ADDRESS2, WORKING_HOURS2);
 		
-		List<CompanyProfile> companyProfiles = autoRepairShopService.getAllCompanyProfiles();
+		List<CompanyProfile> companyProfiles = autoRepairShopService.getCompanyProfiles();
 		
 		companyProfiles.add(companyProfile1);
 		companyProfiles.add(companyProfile2);
