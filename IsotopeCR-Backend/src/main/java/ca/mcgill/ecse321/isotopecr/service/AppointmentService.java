@@ -111,7 +111,7 @@ public class AppointmentService {
 
 		Appointment appointment = new Appointment();
 		Integer duration = service.getDuration();
-		Integer timeslotnum = (int) Math.ceil(duration / 30);
+		Integer timeslotnum = (int) Math.ceil(duration / 30.0);
 		Set<Timeslot> timeslots = new HashSet<Timeslot>();
 
 		for (int i = 0; i < timeslotnum; i++) {

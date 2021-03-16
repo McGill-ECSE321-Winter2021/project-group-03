@@ -25,9 +25,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.isotopecr.dao.AppointmentRepository;
 import ca.mcgill.ecse321.isotopecr.dao.TechnicianRepository;
+import ca.mcgill.ecse321.isotopecr.dao.TimeslotRepository;
 import ca.mcgill.ecse321.isotopecr.model.Appointment;
 import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.model.Customer;
@@ -46,6 +48,8 @@ public class TestAppointmentService {
 	private AppointmentRepository appointmentRepository;
 	@Mock
 	private TechnicianRepository technicianRepository;
+	@Mock
+	private TimeslotRepository timeslotRepository;
 
 	@InjectMocks
 	private AppointmentService appointmentService;
@@ -127,10 +131,17 @@ public class TestAppointmentService {
 	private static final Status STATUS = Status.BOOKED;
 	
 	
+	private static final java.sql.Time STARTTIME = java.sql.Time.valueOf(LocalTime.of(15, 00));
+	private static final java.sql.Date CHOSENDATE = java.sql.Date.valueOf(LocalDate.of(2021, Month.MARCH, 15));
+	private static final String SLOTID = String.valueOf(CHOSENDATE)+String.valueOf(STARTTIME);
+	
+	
 	private final Customer CUSTOMER = new Customer();
 	private final Vehicle VEHICLE = new Vehicle();
 	private final Technician TECHNICIAN = new Technician();
 	private final Service SERVICE = new Service();
+	
+	private Appointment APPOINTMENT = new Appointment();
 	
 	
 	@BeforeEach
@@ -182,7 +193,52 @@ public class TestAppointmentService {
 				appointment.setTimeslot(slots);
 				appointment.setVehicle(vehicle1);
 				return appointment;
-			} else {
+			} 
+			else if(invocation.getArgument(0).equals(APPOINTMENT_ID2)) {
+				Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+				Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);
+
+				Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+				Service service2 = createService(SERVICE2, resource2, PRICE2, FREQUENCY2, DURATION2);	         
+				Set<Service> services = new HashSet<Service>();
+				services.add(service1);
+				services.add(service2);
+
+				Vehicle vehicle1 = createVehicle(LICENSEPLATE1, BRAND1, MODEL1, YEAR1);
+				Vehicle vehicle2 = createVehicle(LICENSEPLATE2, BRAND2, MODEL2, YEAR2);	           
+				Set<Vehicle> vehicles = new HashSet<Vehicle>();
+				vehicles.add(vehicle1);
+				vehicles.add(vehicle2);
+
+				Invoice invoice = createInvoice(INVOICE_ID, COST, ISPAID);                       
+
+				Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();	           
+
+				Timeslot slot = createTimeslot(DATE1, TIME1, SLOT_ID1);
+				Set<Timeslot> slots = new HashSet<Timeslot>();
+				slots.add(slot);
+
+				Technician tech = mockTechnician(dailyAvailabilities, services);	            
+
+				Customer customer = mockCustomer(vehicles);	        	
+
+				Appointment appointment = new Appointment();
+				Set<Appointment> appointments = new HashSet<Appointment>();	
+				appointments.add(appointment);
+				slot.setAppointment(appointments);
+
+				appointment.setAppointmentID(APPOINTMENT_ID1);
+				appointment.setStatus(STATUS);
+				appointment.setInvoice(invoice);
+				appointment.setService(service1);	            
+				appointment.setTechnician(tech);
+				appointment.setCustomer(customer);
+				appointment.setTimeslot(slots);
+				appointment.setVehicle(vehicle1);
+				return appointment;
+			
+			} 
+			else {
 				return null;
 			}
 		});
@@ -336,16 +392,6 @@ public class TestAppointmentService {
 			}
 		});
 
-		// TODO: not found inside Service!!!! =============================
-		//==============================================================
-		//	    lenient().when(appointmentRepository.findAppointmentByTimeslot(any(Technician.class))).thenAnswer( (InvocationOnMock invocation) -> {
-		//	        if(invocation.getArgument(0).equals(CUSTOMER)) {
-		//	        	
-		//	        } else {
-		//	            return null;
-		//	        }
-		//	    });
-
 		lenient().when(appointmentRepository.findAppointmentByService(any(Service.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if(invocation.getArgument(0).equals(SERVICE)) {
 
@@ -436,6 +482,33 @@ public class TestAppointmentService {
 			appointmentList.add(appointment2);
 			return appointmentList;
 		});
+		
+		
+		lenient().when(timeslotRepository.findTimeslotBySlotID(anyString())).thenAnswer((InvocationOnMock invocation) ->{
+			if(invocation.getArgument(0).equals(SLOTID)) {
+				Timeslot timeslot = new Timeslot();
+				Set <Appointment> appointments = new HashSet<Appointment>();
+				appointments.add(APPOINTMENT);
+				
+				timeslot.setAppointment(appointments);
+				timeslot.setTime(STARTTIME);
+				timeslot.setDate(CHOSENDATE);
+				timeslot.setSlotID(SLOTID);
+
+				return timeslot;
+				
+			}else {
+				return null;
+			}
+		});
+		
+		
+		// Whenever anything is saved, just return the parameter object
+		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
+			return invocation.getArgument(0);
+		};
+		lenient().when(appointmentRepository.save(any(Appointment.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(timeslotRepository.save(any(Timeslot.class))).thenAnswer(returnParameterAsAnswer);
 	}
 	
 	/**
@@ -475,13 +548,274 @@ public class TestAppointmentService {
 	 */
 	@Test
 	public void testBookAppointment() {
+		Appointment appointment = null;
 		
+		Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+		Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);
+
+		Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+		Service service2 = createService(SERVICE2, resource2, PRICE2, FREQUENCY2, DURATION2);	         
+		Set<Service> services = new HashSet<Service>();
+		services.add(service1);
+		services.add(service2);
 		
+		Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();	  
+		
+		Vehicle vehicle1 = createVehicle(LICENSEPLATE1, BRAND1, MODEL1, YEAR1);
+		Vehicle vehicle2 = createVehicle(LICENSEPLATE2, BRAND2, MODEL2, YEAR2);	           
+		Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		vehicles.add(vehicle1);
+		vehicles.add(vehicle2);
+		
+		Customer customer = mockCustomer(vehicles);
+		
+		Technician technician = mockTechnician(dailyAvailabilities, services);	 
+		try {
+			appointment = appointmentService.bookAppointment(customer, vehicle1, technician, service1, STARTTIME, CHOSENDATE);		
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(appointment);
+		// check the appointment is the correct one just created
+		assertEquals(customer.getProfileID(), appointment.getCustomer().getProfileID());
+		assertEquals(technician.getProfileID(), appointment.getTechnician().getProfileID());
+		assertEquals(vehicle1.getLicensePlate(), appointment.getVehicle().getLicensePlate());
+		assertEquals(service1.getServiceName(), appointment.getService().getServiceName());
+		assertEquals(true, appointment.getTimeslot().iterator().hasNext());
+		Timeslot timeSlot = appointment.getTimeslot().iterator().next();
+		assertEquals(STARTTIME, timeSlot.getTime());
+		assertEquals(CHOSENDATE, timeSlot.getDate());
 	}
 	
+	
+	/**
+	 * Test BookAppointment when input customer has problem.
+	 * @author Zichen
+	 */
 	@Test
-	public void cancelAppointment() {
+	public void testBookAppointmentCustomerNull() {
+		Appointment appointment = null;
+		String error = null;
 		
+		Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+		Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);
+
+		Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+		Service service2 = createService(SERVICE2, resource2, PRICE2, FREQUENCY2, DURATION2);	         
+		Set<Service> services = new HashSet<Service>();
+		services.add(service1);
+		services.add(service2);
+		
+		Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();	  
+		
+		Vehicle vehicle1 = createVehicle(LICENSEPLATE1, BRAND1, MODEL1, YEAR1);
+		Vehicle vehicle2 = createVehicle(LICENSEPLATE2, BRAND2, MODEL2, YEAR2);	           
+		Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		vehicles.add(vehicle1);
+		vehicles.add(vehicle2);
+		
+		Customer customer = mockCustomer(vehicles);
+		
+		Technician technician = mockTechnician(dailyAvailabilities, services);	 
+		try {
+			appointment = appointmentService.bookAppointment(null, vehicle1, technician, service1, STARTTIME, CHOSENDATE);		
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(appointment);
+		assertNotNull(error);
+		assertEquals("Invalid input for booking an appointment.", error);
+	}
+	
+	
+	/**
+	 * Test BookAppointment when input vehicle has problem.
+	 * @author Zichen
+	 */
+	@Test
+	public void testBookAppointmentVehicleNull() {
+		Appointment appointment = null;
+		String error = null;
+		
+		Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+		Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);
+
+		Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+		Service service2 = createService(SERVICE2, resource2, PRICE2, FREQUENCY2, DURATION2);	         
+		Set<Service> services = new HashSet<Service>();
+		services.add(service1);
+		services.add(service2);
+		
+		Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();	  
+		
+		Vehicle vehicle1 = createVehicle(LICENSEPLATE1, BRAND1, MODEL1, YEAR1);
+		Vehicle vehicle2 = createVehicle(LICENSEPLATE2, BRAND2, MODEL2, YEAR2);	           
+		Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		vehicles.add(vehicle1);
+		vehicles.add(vehicle2);
+		
+		Customer customer = mockCustomer(vehicles);
+		
+		Technician technician = mockTechnician(dailyAvailabilities, services);	 
+		try {
+			appointment = appointmentService.bookAppointment(customer, null, technician, service1, STARTTIME, CHOSENDATE);		
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(appointment);
+		assertNotNull(error);
+		assertEquals("Invalid input for booking an appointment.", error);
+	}
+	
+	
+	/**
+	 * Test BookAppointment when input technician has problem.
+	 * @author Zichen
+	 */
+	@Test
+	public void testBookAppointmentTechnicianNull() {
+		Appointment appointment = null;
+		String error = null;
+		
+		Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+		Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);
+
+		Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+		Service service2 = createService(SERVICE2, resource2, PRICE2, FREQUENCY2, DURATION2);	         
+		Set<Service> services = new HashSet<Service>();
+		services.add(service1);
+		services.add(service2);
+		
+		Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();	  
+		
+		Vehicle vehicle1 = createVehicle(LICENSEPLATE1, BRAND1, MODEL1, YEAR1);
+		Vehicle vehicle2 = createVehicle(LICENSEPLATE2, BRAND2, MODEL2, YEAR2);	           
+		Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		vehicles.add(vehicle1);
+		vehicles.add(vehicle2);
+		
+		Customer customer = mockCustomer(vehicles);
+		
+		Technician technician = mockTechnician(dailyAvailabilities, services);	 
+		try {
+			appointment = appointmentService.bookAppointment(customer, vehicle1, null, service1, STARTTIME, CHOSENDATE);		
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(appointment);
+		assertNotNull(error);
+		assertEquals("Invalid input for booking an appointment.", error);
+	}
+	
+	
+
+	/**
+	 * Test BookAppointment when input service has problem.
+	 * @author Zichen
+	 */
+	@Test
+	public void testBookAppointmentServiceNull() {
+		Appointment appointment = null;
+		String error = null;
+		
+		Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+		Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);
+
+		Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+		Service service2 = createService(SERVICE2, resource2, PRICE2, FREQUENCY2, DURATION2);	         
+		Set<Service> services = new HashSet<Service>();
+		services.add(service1);
+		services.add(service2);
+		
+		Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();	  
+		
+		Vehicle vehicle1 = createVehicle(LICENSEPLATE1, BRAND1, MODEL1, YEAR1);
+		Vehicle vehicle2 = createVehicle(LICENSEPLATE2, BRAND2, MODEL2, YEAR2);	           
+		Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		vehicles.add(vehicle1);
+		vehicles.add(vehicle2);
+		
+		Customer customer = mockCustomer(vehicles);
+		
+		Technician technician = mockTechnician(dailyAvailabilities, services);	 
+		try {
+			appointment = appointmentService.bookAppointment(customer, vehicle1, technician, null, STARTTIME, CHOSENDATE);		
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(appointment);
+		assertNotNull(error);
+		assertEquals("Invalid input for booking an appointment.", error);
+	}
+	
+		
+	
+	/**
+	 * Test CancelAppointment in normal use case(the appointment is at least 24hrs after now);
+	 * @author Zichen
+	 */
+	@Test
+	public void testCancelAppointment() {
+		Appointment appointment = new Appointment();
+		appointment.setAppointmentID(APPOINTMENT_ID2);
+		
+		Appointment canceledAppointment = null;
+		try {
+			canceledAppointment = appointmentService.cancelAppointment(appointment);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(canceledAppointment);
+	}
+	
+	/**
+	 * Test CancelAppointment when input is null;
+	 * @author Zichen
+	 */
+	@Test
+	public void testCancelAppointmentNull() {
+		Appointment appointment = null;
+		String error = null;
+		
+		try {
+			appointment = appointmentService.cancelAppointment(appointment);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(appointment);
+		assertNotNull(error);
+		assertEquals("There is no such appointment in the system", error);
+	}
+	
+	/**
+	 * Test CancelAppointment when the appointment is already 24 hrs away;
+	 * @author Zichen
+	 */
+	@Test
+	public void testCancelAppointmentWithIn24Hrs() {
+		String error = null;
+		Appointment appointment = new Appointment();
+		appointment.setAppointmentID(APPOINTMENT_ID1);   	// appointment_ID1 is the appointment passed
+		
+		Appointment canceledAppointment = null;
+		try {
+			canceledAppointment = appointmentService.cancelAppointment(appointment);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();	
+			System.out.println(error);
+		}
+		
+		assertNull(canceledAppointment);
+		assertEquals("Sorry, you are not able to cancle the appointment within 24 hours", error);
 	}
 	
 	/**

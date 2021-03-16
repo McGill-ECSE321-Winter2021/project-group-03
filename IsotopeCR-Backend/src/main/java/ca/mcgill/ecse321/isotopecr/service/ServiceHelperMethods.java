@@ -66,7 +66,7 @@ public class ServiceHelperMethods {
 		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
 
 		boolean isBefore = false;
-		if (date.before(curDate)) {
+		if (curDate.before(date)) {
 			isBefore = true;
 		}
 
