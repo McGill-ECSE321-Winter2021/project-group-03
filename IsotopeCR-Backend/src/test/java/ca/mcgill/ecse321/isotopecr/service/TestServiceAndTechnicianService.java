@@ -82,12 +82,12 @@ public class TestServiceAndTechnicianService {
 	private static final java.sql.Date CHOSENDATE = java.sql.Date.valueOf(LocalDate.of(2021, 3, 15));
 	private static final String SLOTID = String.valueOf(CHOSENDATE)+String.valueOf(STARTTIME);
 	
-	private static final String TECHNICIAN_ID ="123456";
+	
 	private static final String EMAIL_1 = "1234@isotopecr.ca";
 	private static final String FIRSTNAME_1 = "Abc";
 	private static final String LASTNAME_1 = "Abc";
 	private static final String PASSWORD_1 = "Aa123456";
-	private static final String PROFILEID_1 = "Aa123";
+	private static final String PROFILEID_1 = String.valueOf(EMAIL_1.hashCode());
 	
 	
 	
@@ -216,30 +216,7 @@ public class TestServiceAndTechnicianService {
 			}
 		});
 				
-		lenient().when(technicianRepository.findById(anyString())).thenAnswer((InvocationOnMock invocation) ->{
-			if(invocation.getArgument(0).equals(TECHNICIAN_ID)) {
-				Technician  technician = new Technician(); 
-				Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
-				dailyavailabilities.add(DAILYAVAILABILITY_1);
-				Set <Service> services = new HashSet<Service>();
-				services.add(SERVICE_1);
-				
-				technician.setDailyAvailability(dailyavailabilities);
-				technician.setEmail(EMAIL_1);
-				technician.setFirstName(FIRSTNAME_1);
-				technician.setLastName(LASTNAME_1);
-				technician.setIsRegisteredAccount(true);
-				technician.setPassword(PASSWORD_1);
-				technician.setProfileID(PROFILEID_1);
-				technician.setService(services);
-				
-
-				return technician;
-				
-			}else {
-				return null;
-			}
-		});
+	
 		
 		lenient().when(technicianRepository.findTechnicianByEmail(anyString())).thenAnswer((InvocationOnMock invocation) ->{
 			if(invocation.getArgument(0).equals(EMAIL_1)) {
