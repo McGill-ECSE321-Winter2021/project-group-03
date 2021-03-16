@@ -106,7 +106,7 @@ public class ServiceHelperMethods {
 	}
 	
 	public static boolean isValidCompanyName(String companyName){
-		String regex = "^[\\p{L} .'-]+$";
+		String regex = "^[A-Z]([a-zA-Z0-9]|[- @\\.#&!]){1,20}$";
 		// contains any kind of letter from any language
 		Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(companyName);

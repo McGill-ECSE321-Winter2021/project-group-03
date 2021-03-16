@@ -194,37 +194,48 @@ public class AutoRepairShopService {
     
     @Transactional
     public CompanyProfile createCompanyProfile(String companyName, String address, String workingHours) {
-    	if(ServiceHelperMethods.isValidCompanyName(companyName)) {
-    		CompanyProfile companyProfile = new CompanyProfile();
-    		companyProfile.setCompanyName(companyName);
-    		companyProfile.setAddress(address);
-    		companyProfile.setWorkingHours(workingHours);
-    		companyProfileRepository.save(companyProfile);
-    		return companyProfile;
+    	if(!getCompanyProfiles().isEmpty()) {
+    		throw new IllegalArgumentException("ERROR: Company Profile already exists.");
+    	}
+    	if(!address.isEmpty()) {
+    		if(ServiceHelperMethods.isValidCompanyName(companyName) ) {
+    			CompanyProfile companyProfile = new CompanyProfile();
+        		companyProfile.setCompanyName(companyName);
+        		companyProfile.setAddress(address);
+        		companyProfile.setWorkingHours(workingHours);
+        		companyProfileRepository.save(companyProfile);
+        		return companyProfile;
+    		} else {
+    			throw new IllegalArgumentException("ERROR: Invalid company name.");
+    		}
     	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to create Company Profile.");
+    		throw new IllegalArgumentException("ERROR: Address cannot be empty.");
     	}
     }
     
     @Transactional
     public CompanyProfile editCompanyProfile(String companyName, String address, String workingHours) {
-    	if(ServiceHelperMethods.isValidCompanyName(companyName)) {
-    		CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
-    		companyProfileRepository.delete(oldCompanyProfile);
-    		
-    		CompanyProfile newCompanyProfile = new CompanyProfile();
-    		newCompanyProfile.setCompanyName(companyName);
-    		newCompanyProfile.setAddress(address);
-    		newCompanyProfile.setWorkingHours(workingHours);
-    		companyProfileRepository.save(newCompanyProfile);
-    		return newCompanyProfile;
-    	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to edit Company Profile.");
+    	if(!address.isEmpty()) {
+        	if(ServiceHelperMethods.isValidCompanyName(companyName)) {
+        		CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
+        		companyProfileRepository.delete(oldCompanyProfile);
+        		
+        		CompanyProfile newCompanyProfile = new CompanyProfile();
+        		newCompanyProfile.setCompanyName(companyName);
+        		newCompanyProfile.setAddress(address);
+        		newCompanyProfile.setWorkingHours(workingHours);
+        		companyProfileRepository.save(newCompanyProfile);
+        		return newCompanyProfile;
+        	}else {
+        		throw new IllegalArgumentException("ERROR: Invalid company name.");
+        	}
+    	} else {
+    		throw new IllegalArgumentException("ERROR: Address cannot be empty.");
     	}
     }
     
     @Transactional
-	public List<CompanyProfile> getAllCompanyProfiles() {
+	public List<CompanyProfile> getCompanyProfiles() {
 		List<CompanyProfile> companyProfiles = ServiceHelperMethods.toList(companyProfileRepository.findAll());
 		return companyProfiles;
 	}
