@@ -54,6 +54,9 @@ public class TestServiceAndTechnicianService {
 	@Mock 
 	private ProfileRepository profileRepository;
 	
+	@Mock 
+	private DailyAvailabilityRepository dailyAvailabilityRepository;
+	
 	@InjectMocks
 	private ProfileService profileService;
 	
@@ -66,12 +69,12 @@ public class TestServiceAndTechnicianService {
 	private static final String RESOURCE_KEY_2 = "TestResource2";
 	private static final Integer RESOURCE_MAX_2 = 4;
 	
-	private static final String SERVICE_NAME_1 = "Car Wash";
-	private static final Integer SERVICE_DURATION_1 = 45 ;
+	private static final String SERVICE_NAME_1 = "CarWash";
+	private static final Integer SERVICE_DURATION_1 = 30 ;
 	private static final int SERVICE_FREQUENCY_1 = 3;
 	private static final double SERVICE_PRICE_1 = 5.99;
-	private static final String SERVICE_NAME_2 = "Oil change";
-	private static final Integer SERVICE_DURATION_2 = 50;
+	private static final String SERVICE_NAME_2 = "Oilchange";
+	private static final Integer SERVICE_DURATION_2 = 60;
 	private static final int SERVICE_FREQUENCY_2 = 3;
 	private static final double SERVICE_PRICE_2 = 9.99;
 	
@@ -83,8 +86,8 @@ public class TestServiceAndTechnicianService {
 	private static final String EMAIL_1 = "1234@isotopecr.ca";
 	private static final String FIRSTNAME_1 = "Abc";
 	private static final String LASTNAME_1 = "Abc";
-	private static final String PASSWORD_1 = "12345";
-	private static final String PROFILEID_1 = "123456";
+	private static final String PASSWORD_1 = "Aa123456";
+	private static final String PROFILEID_1 = "Aa123";
 	
 	
 	
@@ -317,6 +320,7 @@ public class TestServiceAndTechnicianService {
 		lenient().when(technicianRepository.save(any(Technician.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(resourceRepository.save(any(Resource.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(profileRepository.save(any(Profile.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(dailyAvailabilityRepository.save(any(DailyAvailability.class))).thenAnswer(returnParameterAsAnswer);
 	}
 	
 	@Test
@@ -417,7 +421,7 @@ public class TestServiceAndTechnicianService {
 		assertEquals(LASTNAME_1,technician.getLastName());
 		assertEquals(EMAIL_1,technician.getEmail());
 		assertEquals(PASSWORD_1,technician.getPassword());
-		assertEquals(PROFILEID_1,technician.getService());	
+		assertEquals(PROFILEID_1,technician.getProfileID());	
 	}
 	
 	@Test
