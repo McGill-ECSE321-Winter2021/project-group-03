@@ -124,7 +124,7 @@ public class AutoRepairShopService {
 	 *********************************************************/
 	
 	@Transactional
-    public Service createService(String serviceName, int duration, double price, Resource resource, Integer frequency) {
+    public ca.mcgill.ecse321.isotopecr.model.Service createService(String serviceName, int duration, double price, Resource resource, Integer frequency) {
     	
     	if(ServiceHelperMethods.isValidServiceName(serviceName) && ServiceHelperMethods.isValidDuration(duration) && ServiceHelperMethods.isValidPrice(price) && ServiceHelperMethods.isValidResource(resource) && ServiceHelperMethods.isValidFrequency(frequency)) {
     		ca.mcgill.ecse321.isotopecr.model.Service service = new ca.mcgill.ecse321.isotopecr.model.Service();
@@ -134,14 +134,14 @@ public class AutoRepairShopService {
     		service.setResource(resource);
     		service.setFrequency(frequency);
     		serviceRepository.save(service);
-    		return (Service) service;
+    		return service;
     	}else {
     		throw new IllegalArgumentException("ERROR: Unable to create Service.");
     	}
     }
     
     @Transactional
-    public Service editService(String serviceName, int duration, double price, Resource resource, Integer frequency) {
+    public ca.mcgill.ecse321.isotopecr.model.Service editService(String serviceName, int duration, double price, Resource resource, Integer frequency) {
     	if(ServiceHelperMethods.isValidServiceName(serviceName) && ServiceHelperMethods.isValidDuration(duration) && ServiceHelperMethods.isValidPrice(price) && ServiceHelperMethods.isValidResource(resource) && ServiceHelperMethods.isValidFrequency(frequency)) {
     		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
     		service.setServiceName(serviceName);
@@ -150,18 +150,18 @@ public class AutoRepairShopService {
     		service.setResource(resource);
     		service.setFrequency(frequency);
     		serviceRepository.save(service);
-    		return (Service) service;
+    		return service;
     	}else {
     		throw new IllegalArgumentException("ERROR: Unable to edit Service.");
     	}
     }
     
     @Transactional
-    public Service deleteService(String serviceName) {
+    public ca.mcgill.ecse321.isotopecr.model.Service deleteService(String serviceName) {
     	if(ServiceHelperMethods.isValidServiceName(serviceName)) {
     		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
     		serviceRepository.delete(service);
-    		return (Service) service;
+    		return  service;
     	}else {
     		throw new IllegalArgumentException("ERROR: Unable to delete Service.");
     	}
