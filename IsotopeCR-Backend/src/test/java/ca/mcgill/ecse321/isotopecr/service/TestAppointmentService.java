@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.isotopecr.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +27,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ca.mcgill.ecse321.isotopecr.dao.AppointmentRepository;
+import ca.mcgill.ecse321.isotopecr.dao.TechnicianRepository;
 import ca.mcgill.ecse321.isotopecr.model.Appointment;
 import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.model.Customer;
@@ -42,6 +44,8 @@ import ca.mcgill.ecse321.isotopecr.model.Vehicle;;
 public class TestAppointmentService {
 	@Mock
 	private AppointmentRepository appointmentRepository;
+	@Mock
+	private TechnicianRepository technicianRepository;
 
 	@InjectMocks
 	private AppointmentService appointmentService;
@@ -108,12 +112,18 @@ public class TestAppointmentService {
 	private static final String AVAILABILITY_5 = "5";
 	
 	/* Mock up Timeslot */
-	private static final Date DATE = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+	/* Before */
+	private static final Date DATE = java.sql.Date.valueOf(LocalDate.of(2021, Month.MARCH, 15));
 	private static final Time TIME = java.sql.Time.valueOf(LocalTime.of(11, 35));
 	private static final String SLOT_ID = "slotID";
+	/* Future */
+	private static final Date DATE1 = java.sql.Date.valueOf(LocalDate.of(2033, Month.MARCH, 15));
+	private static final Time TIME1 = java.sql.Time.valueOf(LocalTime.of(11, 35));
+	private static final String SLOT_ID1 = "slotID1";
 	
 	/* Mock up Appointment */
-	private static final String APPOINTMENT_ID = "appointment1";
+	private static final String APPOINTMENT_ID1 = "appointment1";
+	private static final String APPOINTMENT_ID2 = "appointment2";
 	private static final Status STATUS = Status.BOOKED;
 	
 	
@@ -130,7 +140,7 @@ public class TestAppointmentService {
 		 * Mock behavior for findAdminByProfileID 
 		 */
 		lenient().when(appointmentRepository.findAppointmentByAppointmentID(anyString())).thenAnswer( (InvocationOnMock invocation) -> {
-			if(invocation.getArgument(0).equals(APPOINTMENT_ID)) {
+			if(invocation.getArgument(0).equals(APPOINTMENT_ID1)) {
 				Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
 				Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);
 
@@ -163,7 +173,7 @@ public class TestAppointmentService {
 				appointments.add(appointment);
 				slot.setAppointment(appointments);
 
-				appointment.setAppointmentID(APPOINTMENT_ID);
+				appointment.setAppointmentID(APPOINTMENT_ID1);
 				appointment.setStatus(STATUS);
 				appointment.setInvoice(invoice);
 				appointment.setService(service1);	            
@@ -212,7 +222,7 @@ public class TestAppointmentService {
 				appointments.add(appointment);
 				slot.setAppointment(appointments);
 
-				appointment.setAppointmentID(APPOINTMENT_ID);
+				appointment.setAppointmentID(APPOINTMENT_ID1);
 				appointment.setStatus(STATUS);
 				appointment.setInvoice(invoice);
 				appointment.setService(service1);	            
@@ -262,7 +272,7 @@ public class TestAppointmentService {
 				appointments.add(appointment);
 				slot.setAppointment(appointments);
 
-				appointment.setAppointmentID(APPOINTMENT_ID);
+				appointment.setAppointmentID(APPOINTMENT_ID1);
 				appointment.setStatus(STATUS);
 				appointment.setInvoice(invoice);
 				appointment.setService(service1);	            
@@ -311,7 +321,7 @@ public class TestAppointmentService {
 				appointments.add(appointment);
 				slot.setAppointment(appointments);
 
-				appointment.setAppointmentID(APPOINTMENT_ID);
+				appointment.setAppointmentID(APPOINTMENT_ID1);
 				appointment.setStatus(STATUS);
 				appointment.setInvoice(invoice);
 				appointment.setService(service1);	            
@@ -370,7 +380,7 @@ public class TestAppointmentService {
 				appointments.add(appointment);
 				slot.setAppointment(appointments);
 
-				appointment.setAppointmentID(APPOINTMENT_ID);
+				appointment.setAppointmentID(APPOINTMENT_ID1);
 				appointment.setStatus(STATUS);
 				appointment.setInvoice(invoice);
 				appointment.setService(service1);	            
@@ -383,27 +393,352 @@ public class TestAppointmentService {
 				return null;
 			}
 		});
+		
+		
+		lenient().when(technicianRepository.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
+			Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+			Resource resource2 = createResource(RESOURCE_TYPE2, MAX2);			
+			
+			Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+			Service service2 = createService(SERVICE2, resource2, PRICE2, FREQUENCY2, DURATION2);	         
+			Set<Service> services = new HashSet<Service>();
+			services.add(service1);
+			services.add(service2);			
+			
+			Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();	   			
+			
+			Technician tech = mockTechnician(dailyAvailabilities, services);		
+			List<Technician> technicianList = new ArrayList<>();
+			technicianList.add(tech);
+			return technicianList;
+		});
+		
+		
+		lenient().when(appointmentRepository.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
+			Appointment appointment1 = new Appointment();
+			appointment1.setAppointmentID(APPOINTMENT_ID1);
+			
+			Appointment appointment2 = new Appointment();
+			appointment2.setAppointmentID(APPOINTMENT_ID2);
+			
+			Timeslot slot = createTimeslot(DATE, TIME, SLOT_ID);
+			Set<Timeslot> slots = new HashSet<Timeslot>();
+			slots.add(slot);
+			appointment1.setTimeslot(slots);
+			
+			Timeslot slotFuture = createTimeslot(DATE1, TIME1, SLOT_ID1);
+			Set<Timeslot> slotsFuture = new HashSet<Timeslot>();			
+			slotsFuture.add(slotFuture);		
+			appointment2.setTimeslot(slotsFuture);
+															
+			List<Appointment> appointmentList = new ArrayList<Appointment>();
+			appointmentList.add(appointment1);
+			appointmentList.add(appointment2);
+			return appointmentList;
+		});
+	}
+	
+	/**
+	 * Test if getfreetechnician in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void testGetFreeTechnician() {
+		// Monday normal working hours
+		Time time = Time.valueOf(LocalTime.of(11, 35));
+		Date date = Date.valueOf(LocalDate.of(2021, Month.MARCH, 15));
+		
+		Technician tech = appointmentService.getFreeTechnician(time, date);
+		
+		assertEquals(TECH_ID, tech.getProfileID());
 	}
 	
 	
+	/**
+	 * Test getFreeTechnician when a offday is passed
+	 * @author Zichen
+	 */
+	@Test
+	public void testGetFreeTechnicianOnOffDay() {
+		// that's a Sunday
+		Time time = Time.valueOf(LocalTime.of(11, 35));
+		Date date = Date.valueOf(LocalDate.of(2021, Month.MARCH, 14));
+		
+		Technician tech = appointmentService.getFreeTechnician(time, date);
+		
+		assertEquals(null, tech);
+	}
+	
+	/**
+	 * Test BookAppointment in normal use case.
+	 * @author Zichen
+	 */
 	@Test
 	public void testBookAppointment() {
-		appointmentService.bookAppointment(CUSTOMER, VEHICLE, TECHNICIAN, SERVICE, TIME, DATE);
 		
-		assertEquals(0, appointmentService.getAllResources().size());		
-		String type = RESOURCE_KEY;
-		Integer max = MAX1;
-		Resource resource = null;
+		
+	}
+	
+	@Test
+	public void cancelAppointment() {
+		
+	}
+	
+	/**
+	 * Test getAllAppointments.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAllAppointments() {
+		List<Appointment> appointments = appointmentService.getAllAppointments();
+		
+		assertNotNull(appointments);
+		assertEquals(2, appointments.size());
+		assertEquals(APPOINTMENT_ID1, appointments.get(0).getAppointmentID());
+		assertEquals(APPOINTMENT_ID2, appointments.get(1).getAppointmentID());
+	}
+	
+	/**
+	 * Test getAllAppointmentsBeforeTime in normal case.
+	 * Inside all appointments, one appointment is before and one is in future
+	 * @author Zichen
+	 */
+	@Test
+	public void getAllAppointmentsBeforeTime() {
+		List<Appointment> appointments = (List<Appointment>) appointmentRepository.findAll();
+		List<Appointment> appointmentsBefore = null;
 		try {
-			resource = service.addResource(type, max);
+			appointmentsBefore = appointmentService.getAllAppointmentsBeforeTime(appointments);
 		} catch (IllegalArgumentException e) {
-			// Check that no error occurred
+			e.printStackTrace();
+			fail(e.getMessage());
+		}	
+		
+		assertNotNull(appointmentsBefore);
+		assertEquals(1, appointmentsBefore.size());
+		assertEquals(APPOINTMENT_ID1, appointmentsBefore.get(0).getAppointmentID());	
+	}
+	
+	
+	/**
+	 * Test getAllAppointmentsBeforeTime when there're no appointments yet in db.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAllAppointmentsBeforeTimeNoAppointments() {
+		List<Appointment> appointments = new ArrayList<Appointment>();
+		List<Appointment> appointmentsBefore = null;
+		String error = null;
+		try {
+			appointmentsBefore = appointmentService.getAllAppointmentsBeforeTime(appointments);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(appointmentsBefore);
+		assertEquals("There is no appointments in the past.", error);	
+	}
+	
+	
+	/**
+	 * Test getAllAppointmentsAfterTime in normal case.
+	 * Inside all appointments, one appointment is before and one is in future
+	 * @author Zichen
+	 */
+	@Test
+	public void getAllAppointmentsAfterTime() {
+		List<Appointment> appointments = (List<Appointment>) appointmentRepository.findAll();
+		List<Appointment> appointmentsAfter = null;
+		try {
+			appointmentsAfter = appointmentService.getAllAppointmentsAfterTime(appointments);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}	
+		
+		assertNotNull(appointmentsAfter);
+		assertEquals(1, appointmentsAfter.size());
+		assertEquals(APPOINTMENT_ID2, appointmentsAfter.get(0).getAppointmentID());
+	}
+	
+	/**
+	 * Test getAllAppointmentsAfterTime when there're no appointments yet in db.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAllAppointmentsAfterTimeNoAppointments() {
+		List<Appointment> appointments = new ArrayList<Appointment>();
+		List<Appointment> appointmentsAfter = null;
+		String error = null;
+		try {
+			appointmentsAfter = appointmentService.getAllAppointmentsAfterTime(appointments);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(appointmentsAfter);
+		assertEquals("There is no appointments in the future.", error);	
+	}
+	
+	/**
+	 * Test getAppointmentsByCustomer in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByCustomer() {
+		List<Appointment> appointmentsByCustomer = null;
+		try {
+			appointmentsByCustomer = appointmentService.getAppointmentsByCustomer(CUSTOMER);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			fail(e.getMessage());
 		}
-		assertNotNull(resource);
-		assertEquals(type, resource.getResourceType());
-		assertEquals(max, resource.getMaxAvailable());
+		
+		assertNotNull(appointmentsByCustomer);
+		// the returned appointment should contain CUSTOMER
+		assertEquals(CUSTOMER, appointmentsByCustomer.get(0).getCustomer());
+		// the returned appointment should have id = APPOINTMENT_ID1
+		assertEquals(APPOINTMENT_ID1, appointmentsByCustomer.get(0).getAppointmentID());
 	}
+	
+	/**
+	 * Test getAppointmentsByCustomer when input customer does not exist.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByCustomerNull() {
+		List<Appointment> appointmentsByCustomer = null;
+		String error = null;
+		try {
+			appointmentsByCustomer = appointmentService.getAppointmentsByCustomer(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(appointmentsByCustomer);
+		assertEquals("Invalid customer", error);
+	}
+	
+	/**
+	 * Test getAppointmentsByTechnician in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByTechnician() {
+		List<Appointment> appointmentsByTechnician = null;
+		try {
+			appointmentsByTechnician = appointmentService.getAppointmentsByTechnician(TECHNICIAN);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(appointmentsByTechnician);
+		// the returned appointment should contain CUSTOMER
+		assertEquals(TECHNICIAN, appointmentsByTechnician.get(0).getTechnician());
+		// the returned appointment should have id = APPOINTMENT_ID1
+		assertEquals(APPOINTMENT_ID1, appointmentsByTechnician.get(0).getAppointmentID());
+	}
+	
+	/**
+	 * Test getAppointmentsByTechnician when input technician does not exist.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByTechnicianNull() {
+		List<Appointment> appointmentsByTechnician = null;
+		String error = null;
+		try {
+			appointmentsByTechnician = appointmentService.getAppointmentsByTechnician(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(appointmentsByTechnician);
+		assertEquals("Invalid technician", error);
+	}
+	
+	/**
+	 * Test getAppointmentsByVehicle in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByVehicle() {
+		List<Appointment> appointmentsByVehicle = null;
+		try {
+			appointmentsByVehicle = appointmentService.getAppointmentsByVehicle(VEHICLE);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(appointmentsByVehicle);
+		// the returned appointment should contain CUSTOMER
+		assertEquals(VEHICLE, appointmentsByVehicle.get(0).getVehicle());
+		// the returned appointment should have id = APPOINTMENT_ID1
+		assertEquals(APPOINTMENT_ID1, appointmentsByVehicle.get(0).getAppointmentID());
+	}
+	
+	/**
+	 * Test getAppointmentsByVehicle when input vehicle does not exist.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByVehicleNull() {
+		List<Appointment> appointmentsByVehicle = null;
+		String error = null;	
+		try {
+			appointmentsByVehicle = appointmentService.getAppointmentsByVehicle(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(appointmentsByVehicle);
+		assertEquals("Invalid vehicle.", error);
+	}
+	
+	/**
+	 * Test getAppointmentsByService in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByService() {
+		List<Appointment> appointmentsByService = null;
+		try {
+			appointmentsByService = appointmentService.getAppointmentsByService(SERVICE);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(appointmentsByService);
+		// the returned appointment should contain CUSTOMER
+		assertEquals(SERVICE, appointmentsByService.get(0).getService());
+		// the returned appointment should have id = APPOINTMENT_ID1
+		assertEquals(APPOINTMENT_ID1, appointmentsByService.get(0).getAppointmentID());
+	}
+	
+	/**
+	 * Test getAppointmentsByService when input service does not exist.
+	 * @author Zichen
+	 */
+	@Test
+	public void getAppointmentsByServiceNull() {
+		List<Appointment> appointmentsByService = null;
+		String error = null;	
+		try {
+			appointmentsByService = appointmentService.getAppointmentsByService(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(appointmentsByService);
+		assertEquals("Invalid service", error);
+	}
+	
 	
 	
 	/* ------------------------------ Helpers ------------------------------------- */
