@@ -2,4 +2,5 @@
 build/
 .settings/
 .project
+bin/
 
