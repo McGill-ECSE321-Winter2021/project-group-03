@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
@@ -34,12 +35,28 @@ import ca.mcgill.ecse321.isotopecr.model.*;
 public class TestIsotopeCRService {
 	@Mock
 	private ResourceRepository resourceDao;
-
+	
+	@Mock
+	private CompanyProfileRepository companyProfileDao;
+	
+	@Mock
+	private CustomerRepository customerDao;
+	
+	@Mock
+	private DailyAvailabilityRepository dailyAvailability;
+	
 	@InjectMocks
 	private IsotopeCRService service;
 
 	private static final String RESOURCE_KEY = "TestResource";
 	private static final Integer RESOURCE_MAX = 6;
+	private static final String ADDRESS1 = "Rue TestAddress1";
+	private static final String ADDRESS2 = "Rue TestAddress2";
+	private static final String COMPANY_NAME = "Isotope";
+	private static final String COMPANY_NAME2 = "Isotop 2";
+	private static final String INVALID_COMPANY_NAME = "!!!!###";
+	private static final String WORKING_HOURS = "9:00 AM - 5:00 PM, MON - FRI";
+	private static final String WORKING_HOURS2 = "9:00 AM - 9:00 PM. MON - SAT";
 	
 	@BeforeEach
 	public void setResourceMockOutput() {
@@ -53,6 +70,86 @@ public class TestIsotopeCRService {
 	            return null;
 	        }
 	    });
+	}
+	
+	@BeforeEach
+	public void setCompanyProfileMockOutput() {
+	    lenient().when(companyProfileDao.findCompanyProfileByAddress(anyString())).thenAnswer( (InvocationOnMock invocation) -> {
+	        if(invocation.getArgument(0).equals(ADDRESS1)) {
+	        	CompanyProfile companyProfile = new CompanyProfile();
+	        	companyProfile.setAddress(ADDRESS1);
+	            companyProfile.setCompanyName(COMPANY_NAME);
+	            companyProfile.setWorkingHours(WORKING_HOURS);
+	            return companyProfile;
+	        } else {
+	            return null;
+	        }
+	    });
+	}
+	
+	@Test
+	public void testCreateCompanyProfile() {
+		CompanyProfile companyProfile = null;
+		try {
+			companyProfile = service.createCompanyProfile(COMPANY_NAME, ADDRESS1, WORKING_HOURS);
+		} catch (IllegalArgumentException e) {
+			fail(e.getMessage());
+		}
+		assertNotNull(companyProfile);
+		assertEquals(COMPANY_NAME, companyProfile.getCompanyName());
+		assertEquals(ADDRESS1, companyProfile.getAddress());
+		assertEquals(WORKING_HOURS, companyProfile.getWorkingHours());
+	}
+	
+	@Test
+	public void testCreateCompanyProfileWithInvalidName() {
+		CompanyProfile companyProfile = null;
+		try {
+			companyProfile = service.createCompanyProfile(INVALID_COMPANY_NAME, ADDRESS1, WORKING_HOURS);
+		} catch (IllegalArgumentException e) {
+			assertEquals("Invalid input: Company Name", e.getMessage());
+		}
+		assertNull(companyProfile);
+	}
+	
+	@Test
+	public void testCreateMultipleCompanyProfile() {
+		CompanyProfile companyProfile1 = null;
+		CompanyProfile companyProfile2 = null;
+		
+		try {
+			companyProfile1 = service.createCompanyProfile(COMPANY_NAME, ADDRESS1, WORKING_HOURS);
+			companyProfile2 = service.createCompanyProfile(COMPANY_NAME, ADDRESS2, WORKING_HOURS);
+		} catch (Exception e) {
+			assertEquals("Cannot create more than 1 profile", e.getMessage());
+		}
+		assertNull(companyProfile2);
+		assertNotNull(companyProfile1);
+		assertEquals(COMPANY_NAME, companyProfile1.getCompanyName());
+		assertEquals(ADDRESS1, companyProfile1.getAddress());
+		assertEquals(WORKING_HOURS, companyProfile1.getWorkingHours());
+	}
+	
+	@Test
+	public void testEditCompanyProfile() {
+		CompanyProfile companyProfile = null;
+		
+		try {
+			companyProfile = service.createCompanyProfile(COMPANY_NAME, ADDRESS2, WORKING_HOURS);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		try {
+			companyProfile = service.editCompanyProfile(COMPANY_NAME2, ADDRESS2, WORKING_HOURS2);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(companyProfile);
+		assertEquals(COMPANY_NAME2, companyProfile.getCompanyName());
+		assertEquals(ADDRESS2, companyProfile.getAddress());
+		assertEquals(WORKING_HOURS2, companyProfile.getWorkingHours());
 	}
 	
 	@Test
