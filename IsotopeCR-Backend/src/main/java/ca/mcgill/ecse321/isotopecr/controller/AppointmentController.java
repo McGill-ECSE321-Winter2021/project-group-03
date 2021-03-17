@@ -179,4 +179,16 @@ public class AppointmentController {
 		}
 	}
 
+	@PostMapping(value = { "/createInvoice/{appointment}", "/createInvoice/{appointment}/" })
+	public InvoiceDto createInvoice(@PathVariable("appointment") String aAppointmentId) {
+		try {
+			Appointment appointment = appointmentService.getAppointmentsByID(aAppointmentId);
+
+			Invoice invoice = appointmentService.createInvoice(appointment);
+
+			return ControllerHelperMethods.convertToDto(invoice);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 }

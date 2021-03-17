@@ -210,7 +210,16 @@ public class AppointmentService {
 
 	}
 
-	// do we actually need this? Or only the two getting
+	@Transactional 
+	public Invoice createInvoice(Appointment appointment) {
+		Invoice invoice = new Invoice();
+		invoice.setCost(appointment.getService().getPrice());
+		invoice.setInvoiceID(String.valueOf(appointment.getService().getPrice()*appointment.getAppointmentID().hashCode()));
+		invoice.setIsPaid(false);
+		invoiceRepository.save(invoice);
+		return invoice;
+	}
+	
 	@Transactional
 	public List<Appointment> getAllAppointments() {
 		return ServiceHelperMethods.toList(appointmentRepository.findAll());
