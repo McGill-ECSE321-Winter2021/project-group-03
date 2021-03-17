@@ -6,6 +6,7 @@ import ca.mcgill.ecse321.isotopecr.model.Invoice;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -46,6 +47,9 @@ public class TestInvoice {
 	private static final double COST2 = 123.45;
 	private static final Boolean ISPAID2 = true;
 	
+	private static final double INVALID_COST = Math.pow(10, 10);
+	private static final String INVALID_ID = "_________------21mfmsk";
+	
 	
 	@BeforeEach
 	public void setMockOutput() {
@@ -80,6 +84,21 @@ public class TestInvoice {
 		assertEquals(COST1, invoice.getCost());
 		assertEquals(ISPAID1, invoice.getIsPaid());
 	}
+	
+	@Test
+	public void testCreateInvoiceInvalidCost() {
+		Invoice invoice = null;
+		
+		try {
+			invoice = autoRepairShopService.createInvoice(INVOICEID1, INVALID_COST, ISPAID1);
+		}catch(IllegalArgumentException e) {
+			assertEquals("ERROR: Unable to create Invoice, invalid cost.", e.getMessage());
+		}
+		
+		assertNull(invoice);
+	
+	}
+	
 	
 	@Test
 	public void testGetAllInvoices() {
