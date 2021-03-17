@@ -151,7 +151,7 @@ public class AutoRepairShopService {
     		serviceRepository.save(service);
     		return service;
     	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to create Service.");
+    		throw new IllegalArgumentException("ERROR: Unable to create service.");
     	}
     }
     
@@ -167,7 +167,7 @@ public class AutoRepairShopService {
     		serviceRepository.save(service);
     		return service;
     	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to edit Service.");
+    		throw new IllegalArgumentException("ERROR: Unable to edit service.");
     	}
     }
     
@@ -178,7 +178,7 @@ public class AutoRepairShopService {
     		serviceRepository.delete(service);
     		return  service;
     	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to delete Service.");
+    		throw new IllegalArgumentException("ERROR: Unable to delete service.");
     	}
     }
     

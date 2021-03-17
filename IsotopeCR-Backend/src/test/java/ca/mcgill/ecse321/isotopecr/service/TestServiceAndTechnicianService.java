@@ -89,6 +89,11 @@ public class TestServiceAndTechnicianService {
 	private static final String PASSWORD_1 = "Aa123456";
 	private static final String PROFILEID_1 = String.valueOf(EMAIL_1.hashCode());
 	
+	private static final String EMAIL_2 = "21234@isotopecr.ca";
+	private static final String FIRSTNAME_2 = "Abcd";
+	private static final String LASTNAME_2 = "Abcd";
+	private static final String PASSWORD_2 = "Aaa123456";
+	private static final String PROFILEID_2 = String.valueOf(EMAIL_2.hashCode());
 	
 	
 	
@@ -269,14 +274,14 @@ public class TestServiceAndTechnicianService {
 		});
 		
 		lenient().when(profileRepository.findProfileByProfileID(anyString())).thenAnswer((InvocationOnMock invocation) ->{
-			if(invocation.getArgument(0).equals(PROFILEID_1)) {
+			if(invocation.getArgument(0).equals(PROFILEID_2)) {
 				Profile profile = new Profile();
 				
-				profile.setEmail(EMAIL_1);
-				profile.setFirstName(FIRSTNAME_1);
-				profile.setLastName(LASTNAME_1);
-				profile.setPassword(PASSWORD_1);
-				profile.setProfileID(PROFILEID_1);
+				profile.setEmail(EMAIL_2);
+				profile.setFirstName(FIRSTNAME_2);
+				profile.setLastName(LASTNAME_2);
+				profile.setPassword(PASSWORD_2);
+				profile.setProfileID(PROFILEID_2);
 				profile.setIsRegisteredAccount(true);
 
 				return profile;
@@ -325,6 +330,111 @@ public class TestServiceAndTechnicianService {
 	}
 	
 	@Test
+	public void testcreateServiceInvalidName() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.createService("123456",SERVICE_DURATION_1, SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to create service.",error);
+	
+	}
+	
+	@Test
+	public void testcreateServiceInvalidDuration() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.createService(SERVICE_NAME_1,45, SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to create service.",error);
+	
+	}
+	
+	@Test
+	public void testcreateServiceInvalidPrice() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.createService(SERVICE_NAME_1,SERVICE_DURATION_1, -SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to create service.",error);
+	
+	}
+	
+	@Test
+	public void testcreateServiceInvalidResource() {
+		Service service = null;
+		Resource resource = null;
+		String error = null;
+		
+		
+		try {
+		    service = autoRepairShopService.createService(SERVICE_NAME_1,SERVICE_DURATION_1,SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to create service.",error);
+	
+	}
+	
+	@Test
+	public void testcreateServiceInvalidFrequency() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.createService(SERVICE_NAME_1,SERVICE_DURATION_1,SERVICE_PRICE_1, resource, -SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to create service.",error);
+	
+	}
+	
+	
+	@Test
 	public void testeditService() {
 		Service service = null;
 		Resource resource = new Resource();
@@ -350,6 +460,109 @@ public class TestServiceAndTechnicianService {
 	}
 	
 	@Test
+	public void testeditServiceInvalidName() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.editService("123456",SERVICE_DURATION_1, SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to edit service.",error);	
+	}
+	
+	@Test
+	public void testeditServiceInvalidDuration() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.editService(SERVICE_NAME_1,45, SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to edit service.",error);
+	
+	}
+	
+	@Test
+	public void testeditServiceInvalidPrice() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.editService(SERVICE_NAME_1,SERVICE_DURATION_1, -SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to edit service.",error);
+	
+	}
+	
+	@Test
+	public void testeditServiceInvalidResource() {
+		Service service = null;
+		Resource resource = null;
+		String error = null;
+		
+		
+		try {
+		    service = autoRepairShopService.editService(SERVICE_NAME_1,SERVICE_DURATION_1,SERVICE_PRICE_1, resource, SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to edit service.",error);
+	
+	}
+	
+	@Test
+	public void testeditServiceInvalidFrequency() {
+		Service service = null;
+		Resource resource = new Resource();
+		String error = null;
+		
+		resource.setMaxAvailable(RESOURCE_MAX_1);
+		resource.setResourceType(RESOURCE_KEY_1);
+		try {
+		    service = autoRepairShopService.editService(SERVICE_NAME_1,SERVICE_DURATION_1,SERVICE_PRICE_1, resource, -SERVICE_FREQUENCY_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to edit service.",error);
+	
+	}
+	
+	@Test
 	public void testdeleteService() {	
 		Service canceledService = null;
 		
@@ -361,6 +574,25 @@ public class TestServiceAndTechnicianService {
 		}
 		
 		assertNotNull(canceledService);	
+	}
+	
+	@Test
+	public void testdeleteServiceInvalidServiceName() {
+		Service service = null;
+	
+		String error = null;
+		
+		try {
+		    service = autoRepairShopService.deleteService("1234567");
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(service);
+		assertNotNull(error);
+		assertEquals("ERROR: Unable to delete service.",error);
+	
 	}
 	
 	@Test
@@ -402,25 +634,49 @@ public class TestServiceAndTechnicianService {
 	}
 	
 	@Test
+	public void testgetTechnicianNullEmail() {
+        Technician technician = null;
+		String error = null;
+		try {
+			technician = profileService.getTechnician(null);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(technician);
+		assertNotNull(error);
+		assertEquals("ERROR: the technician email is null.",error);
+	
+	}
+	
+	@Test
+	public void testgetTechnicianInvalidEmail() {
+        Technician technician = null;
+		String error = null;
+		try {
+			technician = profileService.getTechnician("123456");
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+			
+		}
+		
+		assertNull(technician);
+		assertNotNull(error);
+		assertEquals("ERROR: the technician cannot be found.",error);
+	
+	}
+	
+	
+	@Test
 	public void addServiceOfferedByTechnician() {
-		Technician  technician = new Technician(); 
 		Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
 		dailyavailabilities.add(DAILYAVAILABILITY_1);
-		Set <Service> services = new HashSet<Service>();
-		
-		technician.setDailyAvailability(dailyavailabilities);
-		technician.setEmail(EMAIL_1);
-		technician.setFirstName(FIRSTNAME_1);
-		technician.setLastName(LASTNAME_1);
-		technician.setIsRegisteredAccount(true);
-		technician.setPassword(PASSWORD_1);
-		technician.setProfileID(PROFILEID_1);
-		technician.setService(services);
-		
+				
 		Service service = null;
 		
 		try {
-			service = profileService.addServiceOfferedByTechnician(technician, SERVICE_NAME_1);
+			service = profileService.addServiceOfferedByTechnician(EMAIL_1, SERVICE_NAME_1);
 		}catch(IllegalArgumentException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -433,4 +689,43 @@ public class TestServiceAndTechnicianService {
 		assertEquals(SERVICE_FREQUENCY_1,service.getFrequency());
 	}
 	
+	@Test
+	public void addServiceOfferedByTechnicianInvalidEmail() {
+		Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
+		dailyavailabilities.add(DAILYAVAILABILITY_1);
+		String error = null;
+	
+		
+		Service service = null;
+		
+		try {
+			service = profileService.addServiceOfferedByTechnician("12345", SERVICE_NAME_1);
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(service);
+		assertEquals("ERROR: the technician cannot be found.",error);
+	}
+	
+	@Test
+	public void addServiceOfferedByTechnicianInvalidServiceName() {
+		Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
+		dailyavailabilities.add(DAILYAVAILABILITY_1);
+		String error = null;
+	
+		
+		Service service = null;
+		
+		try {
+			service = profileService.addServiceOfferedByTechnician(EMAIL_1, "12345");
+		}catch(IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(service);
+		assertEquals("The service does not exist.",error);
+	}
 }
