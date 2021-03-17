@@ -726,6 +726,6 @@ public class TestServiceAndTechnicianService {
 		
 		assertNotNull(error);
 		assertNull(service);
-		assertEquals("The service does not exist.",error);
+		assertEquals("ERROR: Service does not exist.",error);
 	}
 }

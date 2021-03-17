@@ -571,7 +571,7 @@ public class TestAppointmentService {
 		
 		Technician technician = mockTechnician(dailyAvailabilities, services);	 
 		try {
-			appointment = appointmentService.bookAppointment(customer, vehicle1, technician, service1, STARTTIME, CHOSENDATE);		
+			appointment = appointmentService.createAppointment(customer, vehicle1, technician, service1, STARTTIME, CHOSENDATE);		
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -620,7 +620,7 @@ public class TestAppointmentService {
 		
 		Technician technician = mockTechnician(dailyAvailabilities, services);	 
 		try {
-			appointment = appointmentService.bookAppointment(null, vehicle1, technician, service1, STARTTIME, CHOSENDATE);		
+			appointment = appointmentService.createAppointment(null, vehicle1, technician, service1, STARTTIME, CHOSENDATE);		
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -661,7 +661,7 @@ public class TestAppointmentService {
 		
 		Technician technician = mockTechnician(dailyAvailabilities, services);	 
 		try {
-			appointment = appointmentService.bookAppointment(customer, null, technician, service1, STARTTIME, CHOSENDATE);		
+			appointment = appointmentService.createAppointment(customer, null, technician, service1, STARTTIME, CHOSENDATE);		
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -702,7 +702,7 @@ public class TestAppointmentService {
 		
 		Technician technician = mockTechnician(dailyAvailabilities, services);	 
 		try {
-			appointment = appointmentService.bookAppointment(customer, vehicle1, null, service1, STARTTIME, CHOSENDATE);		
+			appointment = appointmentService.createAppointment(customer, vehicle1, null, service1, STARTTIME, CHOSENDATE);		
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -744,7 +744,7 @@ public class TestAppointmentService {
 		
 		Technician technician = mockTechnician(dailyAvailabilities, services);	 
 		try {
-			appointment = appointmentService.bookAppointment(customer, vehicle1, technician, null, STARTTIME, CHOSENDATE);		
+			appointment = appointmentService.createAppointment(customer, vehicle1, technician, null, STARTTIME, CHOSENDATE);		
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
