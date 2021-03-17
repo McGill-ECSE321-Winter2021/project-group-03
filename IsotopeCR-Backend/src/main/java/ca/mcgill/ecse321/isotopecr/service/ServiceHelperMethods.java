@@ -253,7 +253,7 @@ public class ServiceHelperMethods {
 		boolean isValid = false;
 
 		try {
-			if (1900 <= Integer.parseInt(year) || Integer.parseInt(year) <= 3000) { // between 1900 and 3000 for any car
+			if (1900 <= Integer.parseInt(year) && Integer.parseInt(year) <= 3000) { // between 1900 and 3000 for any car
 				isValid = true;
 			}
 		} catch (NumberFormatException e) {
