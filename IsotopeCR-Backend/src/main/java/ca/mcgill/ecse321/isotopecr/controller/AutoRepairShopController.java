@@ -198,10 +198,10 @@ public class AutoRepairShopController {
 	 * Company Profile
 	 *********************************************************/
 
-	@PostMapping(value = { "/CompanyProfile/create/{companyprofilename}",
-			"/CompanyProfile/create/{companyprofilename}/" })
-	public CompanyProfileDto createCompanyProfile(@PathVariable("companyprofilename") String companyName,
-			@PathVariable("address") String address, @PathVariable("workinghours") String workingHours) {
+	@PostMapping(value = { "/CompanyProfile/create",
+			"/CompanyProfile/create/" })
+	public CompanyProfileDto createCompanyProfile(@RequestParam String companyName,
+			@RequestParam String address, @RequestParam String workingHours) {
 		try {
 			CompanyProfile companyProfile = autoRepairShopService.createCompanyProfile(companyName, address, workingHours);
 			return ControllerHelperMethods.convertToDto(companyProfile);
@@ -210,39 +210,6 @@ public class AutoRepairShopController {
 		}
 	}
 
-//	@PostMapping(value = { "/CompanyProfile/delete/{companyprofilename}",
-//			"/CompanyProfile/delete/{companyprofilename}/" })
-//	public CompanyProfileDto editCompanyProfile(@PathVariable("companyprofilename") String companyName,
-//			@PathVariable("address") String address, @PathVariable("workinghours") String workingHours) {
-//		try {
-//			CompanyProfile newCompanyProfile = service.createCompanyProfile(companyName, address, workingHours);
-//			CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
-//			companyProfileRepository.delete(oldCompanyProfile);
-//			return convertToDto(newCompanyProfile);
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
-
-//	@PostMapping(value = { "/CompanyProfile/get/{address}", "/CompanyProfile/get/{address}" })
-//	public CompanyProfileDto getCompanyProfileByAddress(@PathVariable("address") String address) {
-//		try {
-//			CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
-//			return convertToDto(companyProfile);
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
-//
-//	@PostMapping(value = { "/CompanyProfile/delete/{address}", "/CompanyProfile/get/{address}" })
-//	public void deleteCompanyProfileByAddress(@PathVariable("address") String address) {
-//		try {
-//			CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
-//			companyProfileRepository.delete(companyProfile);
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
 
 	@PostMapping(value = { "/CompanyProfile/get", "/CompanyProfile/get/" })
 	public CompanyProfileDto getCompanyProfile() {
@@ -255,32 +222,6 @@ public class AutoRepairShopController {
 		}
 	}
 
-//	/*********************************************************
-//	 * Summaries TODO
-//	 *********************************************************/
-//
-//	// TODO
-//	
-//	/**
-//	 * @author Zichen
-//	 * @return the total income of the system up to now
-//	 * @throws Exception
-//	 */
-//	@GetMapping(value = { "/invoice/incomesummary", "/invoice/incomesummary/" })
-//	public double getIncomeSummary() {
-//		return autoRepairShopService.getIncomeSummary();
-//	}
-//
-//	// TODO
-//	
-//	/**
-//	 * @author Zichen
-//	 * @return the total income of the system up to now
-//	 * @throws Exception
-//	 */
-//	@GetMapping(value = { "/invoice/resourcesummary", "/invoice/resourceummary/" })
-//	public Map<String, Integer>  getResourceSummary() {
-//		return autoRepairShopService.getResourceSummary();
-//	}
+
 	
 }
