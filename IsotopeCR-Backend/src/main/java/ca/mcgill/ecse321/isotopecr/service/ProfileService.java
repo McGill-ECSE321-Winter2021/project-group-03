@@ -181,8 +181,14 @@ public class ProfileService {
 	 * @return
 	 */
 	@Transactional
-	public ca.mcgill.ecse321.isotopecr.model.Service addServiceOfferedByTechnician(Technician technician, String serviceName)
+	public ca.mcgill.ecse321.isotopecr.model.Service addServiceOfferedByTechnician(String email, String serviceName)
 			throws IllegalArgumentException {
+		
+		Technician technician =  technicianRepository.findTechnicianByEmail(email);
+		if (technician == null) {
+			throw new IllegalArgumentException("ERROR: the technician cannot be found.");
+		}
+		
 		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();
 		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
 		if (service != null) {
@@ -191,7 +197,7 @@ public class ProfileService {
 			technicianRepository.save(technician);
 			return service;
 		} else {
-			throw new IllegalArgumentException("The service could not be added to the technician"); 
+			throw new IllegalArgumentException("The service does not exist."); 
 		}
 	}
 	

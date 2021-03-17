@@ -84,11 +84,41 @@ public class AppointmentService {
 		return null;
 	}
 	
-
+	@Transactional
+	public Vehicle getVehicle(String licensePlate) {
+		if (licensePlate == null) {
+			throw new IllegalArgumentException("ERROR: the vehicle licensePlate is null.");
+		}
+		Vehicle vehicle = vehicleRepository.findVehicleByLicensePlate(licensePlate);
+		if (vehicle == null) {
+			throw new IllegalArgumentException("ERROR: the vehicle cannot be found.");
+		}
+		return vehicle;
+	}
 	
+	@Transactional
+	public Customer getCustomerOfVehicle(Vehicle vehicle) {
+		if (vehicle == null) {
+			throw new IllegalArgumentException("ERROR: the vehicle is null.");
+		}
+		Customer customer = customerRepository.findCustomerByVehicle(vehicle);
+		if (customer == null) {
+			throw new IllegalArgumentException("ERROR: the customer cannot be found.");
+		}
+		return customer;
+	}
 	
-	
-	
+	@Transactional
+	public ca.mcgill.ecse321.isotopecr.model.Service getService(String serviceName) {
+		if (serviceName == null) {
+			throw new IllegalArgumentException("ERROR: the service name is null.");
+		}
+		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+		if (service == null) {
+			throw new IllegalArgumentException("ERROR: the service cannot be found.");
+		}
+		return service;
+	}
 	/**
 	 * @author Jiatong
 	 * @param customer
@@ -100,7 +130,7 @@ public class AppointmentService {
 	 * @return An appointment just created
 	 */
 	@Transactional
-	public Appointment bookAppointment(Customer customer, Vehicle vehicle, Technician technician,
+	public Appointment createAppointment(Customer customer, Vehicle vehicle, Technician technician,
 			ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate)
 			throws IllegalArgumentException {
 
@@ -232,11 +262,9 @@ public class AppointmentService {
 					|| (timeslot.getDate().equals(curDate) && timeslot.getTime().after(curTime))) {
 				isBefore = false;
 			}
-
 			if (isBefore == false)
 				aptmtBeforeTime.add(aptmt);
 		}
-
 		return aptmtBeforeTime;
 	}
 
@@ -280,6 +308,17 @@ public class AppointmentService {
 			return allAppointmentByService;
 		} else {
 			throw new IllegalArgumentException("Invalid service");
+		}
+	}
+	
+	@Transactional
+	public Appointment getAppointmentsByID(String id)
+			throws IllegalArgumentException {
+		if (id != null) {
+			Appointment appointment = appointmentRepository.findAppointmentByAppointmentID(id);
+			return appointment;
+		} else {
+			throw new IllegalArgumentException("Invalid appointment id");
 		}
 	}
 	
