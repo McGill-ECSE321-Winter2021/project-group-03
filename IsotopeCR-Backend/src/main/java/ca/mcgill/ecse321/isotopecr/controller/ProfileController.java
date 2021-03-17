@@ -146,8 +146,8 @@ public class ProfileController {
 	public ServiceDto addServiceOfferedByTechnician(@PathVariable("email") String email,
 			@RequestParam("serviceName") String serviceName) throws Exception {
 		try {
-			Technician technician = profileService.getTechnician(email);
-			Service service = (Service) profileService.addServiceOfferedByTechnician(technician, serviceName);
+			
+			Service service = (Service) profileService.addServiceOfferedByTechnician(email, serviceName);
 			return ControllerHelperMethods.convertToDto(service);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
