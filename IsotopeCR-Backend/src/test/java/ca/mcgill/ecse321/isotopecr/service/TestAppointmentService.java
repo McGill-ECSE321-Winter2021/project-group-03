@@ -28,8 +28,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.isotopecr.dao.AppointmentRepository;
+import ca.mcgill.ecse321.isotopecr.dao.CustomerRepository;
+import ca.mcgill.ecse321.isotopecr.dao.InvoiceRepository;
+import ca.mcgill.ecse321.isotopecr.dao.ServiceRepository;
 import ca.mcgill.ecse321.isotopecr.dao.TechnicianRepository;
 import ca.mcgill.ecse321.isotopecr.dao.TimeslotRepository;
+import ca.mcgill.ecse321.isotopecr.dao.VehicleRepository;
 import ca.mcgill.ecse321.isotopecr.model.Appointment;
 import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.model.Customer;
@@ -50,6 +54,15 @@ public class TestAppointmentService {
 	private TechnicianRepository technicianRepository;
 	@Mock
 	private TimeslotRepository timeslotRepository;
+	@Mock
+	private VehicleRepository vehicleRepository;
+	@Mock
+	private CustomerRepository customerRepository;
+	@Mock
+	private ServiceRepository serviceRepository;
+	@Mock
+	private InvoiceRepository invoiceRepository;
+	
 
 	@InjectMocks
 	private AppointmentService appointmentService;
@@ -503,12 +516,48 @@ public class TestAppointmentService {
 		});
 		
 		
+		lenient().when(vehicleRepository.findVehicleByLicensePlate(anyString())).thenAnswer((InvocationOnMock invocation) ->{
+			if(invocation.getArgument(0).equals(LICENSEPLATE1)) {
+				Vehicle vehicle = new Vehicle();
+				vehicle.setLicensePlate(LICENSEPLATE1);
+				return vehicle;
+			}else {
+				return null;
+			}
+		});
+		
+		
+		lenient().when(serviceRepository.findServiceByServiceName(anyString())).thenAnswer((InvocationOnMock invocation) ->{
+			if(invocation.getArgument(0).equals(SERVICE1)) {
+				Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+				Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);
+
+				return service1;
+			}else {
+				return null;
+			}
+		});
+		
+		lenient().when(customerRepository.findCustomerByVehicle(any(Vehicle.class))).thenAnswer((InvocationOnMock invocation) ->{
+			if(invocation.getArgument(0).equals(VEHICLE)) {
+				Set<Vehicle> vehicles = new HashSet<Vehicle>();
+				vehicles.add(VEHICLE);
+				
+				Customer customer = mockCustomer(vehicles);
+				return customer;
+			}else {
+				return null;
+			}
+		});
+		
+		
 		// Whenever anything is saved, just return the parameter object
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
 		lenient().when(appointmentRepository.save(any(Appointment.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(timeslotRepository.save(any(Timeslot.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(invoiceRepository.save(any(Invoice.class))).thenAnswer(returnParameterAsAnswer);
 	}
 	
 	/**
@@ -1073,6 +1122,255 @@ public class TestAppointmentService {
 		assertEquals("Invalid service", error);
 	}
 	
+	/**
+	 * Test getVehicle in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetVehicle() {
+		Vehicle vehicle = null;
+		
+		try {
+			vehicle = appointmentService.getVehicle(LICENSEPLATE1);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(vehicle);
+		assertEquals(LICENSEPLATE1, vehicle.getLicensePlate());
+	}
+	
+	/**
+	 * Test getVehicle when licensePlate does not registered in db.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetVehicleNotExistLicensePlate() {
+		Vehicle vehicle = null;
+		String error = null;
+		
+		try {
+			vehicle = appointmentService.getVehicle("NotExistLicense");
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(vehicle);
+		assertEquals("ERROR: the vehicle cannot be found.", error);
+	}
+	
+	/**
+	 * Test getVehicle when licensePlate passed is null.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetVehicleNullLicensePlate() {
+		Vehicle vehicle = null;
+		String error = null;
+		
+		try {
+			vehicle = appointmentService.getVehicle(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(vehicle);
+		assertEquals("ERROR: the vehicle licensePlate is null.", error);
+	}
+	
+	
+	/**
+	 * Test getCustomerOfVehicle in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetCustomerOfVehicle() {
+		Customer customer = null;
+		
+		try {
+			customer = appointmentService.getCustomerOfVehicle(VEHICLE);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(customer);
+		assertEquals(true, customer.getVehicle().iterator().hasNext());
+		assertEquals(VEHICLE, customer.getVehicle().iterator().next());
+	}
+	
+	/**
+	 * Test getCustomerOfVehicle when input vehicle is null.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetCustomerOfVehicleNullVehicle() {
+		Customer customer = null;
+		String error = null;
+		
+		try {
+			customer = appointmentService.getCustomerOfVehicle(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(customer);
+		assertEquals("ERROR: the vehicle is null.", error);
+	}
+	
+	/**
+	 * Test getCustomerOfVehicle when input vehicle is not registered in database with any customer.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetCustomerOfVehicleCustomerNotFound() {
+		Customer customer = null;
+		String error = null;
+		Vehicle vehicle = new Vehicle();
+		vehicle.setLicensePlate("xxx3");
+		
+		try {
+			customer = appointmentService.getCustomerOfVehicle(vehicle);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(customer);
+		assertEquals("ERROR: the customer cannot be found.", error);
+	}
+	
+	
+	/**
+	 * Test getService in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetService() {
+		Service service = null;
+		
+		try {
+			service = appointmentService.getService(SERVICE1);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(service);
+		assertEquals(SERVICE1, service.getServiceName());
+	}
+	
+	/**
+	 * Test getService when input a null service name.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetServiceNullServiceName() {
+		Service service = null;
+		String error = null;
+		
+		try {
+			service = appointmentService.getService(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(service);
+		assertEquals("ERROR: the service name is null.", error);
+	}
+	
+	/**
+	 * Test getService when in db can't find such a service
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetServiceServiceNotExist() {
+		Service service = null;
+		String error = null;
+		
+		try {
+			service = appointmentService.getService("TomCat");
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(service);
+		assertEquals("ERROR: the service cannot be found.", error);
+	}
+	
+	
+	/**
+	 * Test createInvoice in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestcreateInvoice() {
+		Resource resource1 = createResource(RESOURCE_TYPE1, MAX1);
+		Service service1 = createService(SERVICE1, resource1, PRICE1, FREQUENCY1, DURATION1);         
+		Appointment appointment = new Appointment();
+		appointment.setAppointmentID(APPOINTMENT_ID1);
+		appointment.setService(service1);
+		
+		Invoice invoice = null;
+		
+		try {
+			invoice = appointmentService.createInvoice(appointment);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(invoice);
+		assertEquals(service1.getPrice(), invoice.getCost());
+		assertEquals(false, invoice.getIsPaid());
+		assertEquals(String.valueOf(service1.getPrice()*appointment.getAppointmentID().hashCode()), invoice.getInvoiceID());
+	}
+	
+	
+	/**
+	 * Test getAppointmentsByID in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetAppointmentsByID() {		
+		Appointment appointment = null;
+		
+		try {
+			appointment = appointmentService.getAppointmentsByID(APPOINTMENT_ID1);
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(appointment);
+		assertEquals(APPOINTMENT_ID1, appointment.getAppointmentID());
+	}
+	
+	/**
+	 * Test getAppointmentsByID in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestgetAppointmentsByIDNullID() {		
+		Appointment appointment = null;
+		String error = null;
+		
+		try {
+			appointment = appointmentService.getAppointmentsByID(null);
+		} catch(Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(appointment);
+		assertEquals("Invalid appointment id", error);
+	}
 	
 	
 	/* ------------------------------ Helpers ------------------------------------- */
