@@ -104,6 +104,16 @@ public class AutoRepairShopService {
 		List<Resource> resources = ServiceHelperMethods.toList(resourceRepository.findAll());
 		return resources;
 	}
+	
+	@Transactional
+	public Resource getResourceByType(String resourceType) {
+		if (resourceRepository.existsById(resourceType)) {
+			Resource resource = resourceRepository.findResourceByResourceType(resourceType);
+			return resource;
+		} else {
+			throw new IllegalArgumentException("ERROR: Resource not found in the system.");
+		}
+	}
 
 	/*********************************************************
 	 * Invoice
