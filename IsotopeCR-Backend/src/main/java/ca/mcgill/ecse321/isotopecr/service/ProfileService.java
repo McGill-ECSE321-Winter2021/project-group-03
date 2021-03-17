@@ -158,7 +158,7 @@ public class ProfileService {
 	 */
 	@Transactional
 	public DailyAvailability editTechnicianAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {
-		List<DailyAvailability> availabilities = ServiceHelperMethods.toList(tech.getDailyAvailability());
+		Set <DailyAvailability> availabilities = tech.getDailyAvailability();
 		for (DailyAvailability availability : availabilities) {
 			if (availability.getDay().equals(day)) {
 				availability.setStartTime(startTime);
@@ -167,6 +167,8 @@ public class ProfileService {
 				return availability;
 			}
 		}
+		tech.setDailyAvailability(availabilities);
+		technicianRepository.save(tech);
 		throw new IllegalArgumentException("The availability for " + day.toString() + " is not found");
 	}
 	

@@ -65,10 +65,10 @@ public class ProfileController {
 	 * Technician
 	 *********************************************************/
 
-	@PostMapping(value = { "technician/create/{email}", "technician/create/{email}/" })
-	public TechnicianDto createTechnicianProfile(@RequestParam("email") String email,
-			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-			@RequestParam("password") String password) throws Exception {
+	@PostMapping(value = { "technician/create", "technician/create/" })
+	public TechnicianDto createTechnicianProfile(@RequestParam String email,
+			@RequestParam String firstName, @RequestParam String lastName,
+			@RequestParam String password) throws Exception {
 		try {
 			Technician technician = profileService.createTechnicianProfile(firstName, lastName, email, password);
 			return ControllerHelperMethods.convertToDto(technician);
@@ -103,7 +103,7 @@ public class ProfileController {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping(value = { "/availablity/edit/{email}", "/availability/edit/{email}/" })
+	@PostMapping(value = { "/availability/edit/{email}", "/availability/edit/{email}/" })
 	public DailyAvailabilityDto editTechnicianAvailability(@PathVariable("email") String email,
 			@RequestParam String weekday,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start,
@@ -179,10 +179,10 @@ public class ProfileController {
 	 * Customer
 	 *********************************************************/
 
-	@PostMapping(value = { "/customer/create/{email}", "/customer/create/{email}/" })
-	public CustomerDto createCustomerProfile(@RequestParam("email") String email,
-			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password)
+	@PostMapping(value = { "/customer/create", "/customer/create/" })
+	public CustomerDto createCustomerProfile(@RequestParam String email,
+			@RequestParam String firstName, @RequestParam String lastName,
+			@RequestParam String phoneNumber, @RequestParam String password)
 			throws IllegalArgumentException {
 		try {
 			Customer customer = profileService.createCustomerProfile(firstName, lastName, email, phoneNumber, password);
@@ -222,9 +222,9 @@ public class ProfileController {
 		}
 	}
 
-	@PostMapping(value = { "/customer/vehicle/delete/{email}", "/customer/vehicle/delete/{email}/" })
-	public VehicleDto deleteVehicle(@RequestParam("email") String email,
-			@RequestParam("licensePlate") String licensePlate) throws Exception {
+	@PostMapping(value = { "/customer/vehicle/delete", "/customer/vehicle/delete/" })
+	public VehicleDto deleteVehicle(@RequestParam String email,
+			@RequestParam String licensePlate) throws Exception {
 		try {
 			Customer customer = profileService.getCustomer(email);
 			Vehicle vehicle = profileService.deleteVehicle(customer, licensePlate);
@@ -238,10 +238,10 @@ public class ProfileController {
 	 * Admin
 	 *********************************************************/
 
-	@PostMapping(value = { "/admin/create/{email}", "/admin/create/{email}/" })
-	public AdminDto createAdminProfile(@RequestParam("email") String email, @RequestParam("firstName") String firstName,
-			@RequestParam("lastName") String lastName, @RequestParam("password") String password,
-			@RequestParam("isOwner") boolean isOwner) throws IllegalArgumentException {
+	@PostMapping(value = { "/admin/create", "/admin/create/" })
+	public AdminDto createAdminProfile(@RequestParam String email, @RequestParam String firstName,
+			@RequestParam String lastName, @RequestParam String password,
+			@RequestParam boolean isOwner) throws IllegalArgumentException {
 		try {
 			Admin admin = profileService.createAdminProfile(firstName, lastName, email, isOwner, password);
 			return ControllerHelperMethods.convertToDto(admin);
@@ -278,9 +278,9 @@ public class ProfileController {
 		}
 	}
 
-	@PostMapping(value = { "profiles/edit-phonenumber/{email}", "/profiles/edit-phonenumber/{email}/"  })
-	public CustomerDto editPhoneNumber(@RequestParam("email") String email,
-			@RequestParam("phoneNumber") String phoneNumber) throws Exception {
+	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/"  })
+	public CustomerDto editPhoneNumber(@RequestParam String email,
+			@RequestParam String phoneNumber) throws Exception {
 		try {
 			Profile profile = profileService.getProfile(email);
 			if (profile instanceof Customer) {
@@ -295,7 +295,7 @@ public class ProfileController {
 	}
 
 	@PostMapping(value = { "/login", "/login/" })
-	public Profile login(@RequestParam("email") String email, @RequestParam("password") String password,
+	public Profile login(@RequestParam String email, @RequestParam String password,
 			HttpSession session) throws IllegalArgumentException {
 
 		try {
