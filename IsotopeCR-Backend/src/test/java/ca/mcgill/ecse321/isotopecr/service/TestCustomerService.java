@@ -14,6 +14,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,20 +41,28 @@ public class TestCustomerService {
 	
 	private static final String VALID_EMAIL1 = "john.doe@gmail.com";
 	private static final String VALID_EMAIL2 = "jane.doe@gmail.com";
+	private static final String EMAIL_NULL = null;
 	private static final String INVALID_EMAIL = "john.doe";
+	
 	private static final String ProfileID1 = String.valueOf(VALID_EMAIL1.hashCode());
 	private static final String ProfileID2 = String.valueOf(VALID_EMAIL2.hashCode());
+	
 	private static final String FIRSTNAME = "John";
 	private static final String LASTNAME = "Doe";
 	private static final String INVALID_FIRSTNAME = "@#$%^&";
+	
 	private static final String VALID_PASSWORD = "Aa123456";
 	private static final String VALID_PASSWORD2 = "Bb123456";
+	
 	private static final String INVALID_PASSWORD1 = "password";
 	private static final String INVALID_PASSWORD2 = "123456";
 	private static final String INVALID_PASSWORD3 = "Password";
+	
 	private static final String VALID_PHONE_NUMBER = "1234567890";
 	private static final String VALID_PHONE_NUMBER2 = "4134567890";
+	private static final String DEFAULT_PHONE_NUMBER = null;
 	private static final String INVALID_PHONE_NUMBER = "xx1234567890";
+	
 	private static final String LICENSEPLATE = "afefea123";
 	private static final String YEAR = "2008";
 	private static final String INVALID_YEAR = "1008";
@@ -147,6 +156,7 @@ public class TestCustomerService {
 		assertTrue(customer.getIsRegisteredAccount());
 		assertTrue(customer.getVehicle().isEmpty());
 	}
+	
 	
 	@Test
 	public void testCreateCustomerProfileWithEmptyPassword() {
@@ -290,6 +300,98 @@ public class TestCustomerService {
 		assertTrue(customer1.getIsRegisteredAccount());
 		assertTrue(customer1.getVehicle().isEmpty());
 
+	}
+	
+	@Test
+	public void testGetCustomer() {
+		Customer foundCustomer = null;
+		try {
+			foundCustomer = service.getCustomer(VALID_EMAIL2);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(foundCustomer);
+		assertEquals(FIRSTNAME, foundCustomer.getFirstName());
+		assertEquals(LASTNAME, foundCustomer.getLastName());
+		assertEquals(VALID_EMAIL2, foundCustomer.getEmail());
+		assertEquals(DEFAULT_PHONE_NUMBER, foundCustomer.getPhoneNumber());
+		assertEquals(VALID_PASSWORD, foundCustomer.getPassword());
+		assertEquals(ProfileID2, foundCustomer.getProfileID());
+		assertTrue(foundCustomer.getIsRegisteredAccount());
+		assertFalse(foundCustomer.getVehicle().isEmpty());
+	}
+	
+	@Test
+	public void testGetCustomerNullEmail() {
+		Customer customer = null;
+		String error = null;
+		try {
+			customer = service.getCustomer(EMAIL_NULL);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(customer);
+		assertNotNull(error);
+		assertEquals("ERROR: the customer email is null.", error);
+	
+	}
+	
+	@Test
+	public void testGetCustomerNotFound() {
+		Customer customer = null;
+		String error = null;
+		try {
+			customer = service.getCustomer(VALID_EMAIL1);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(customer);
+		assertNotNull(error);
+		assertEquals("ERROR: the customer cannot be found.", error);
+	
+	}
+	
+	@Test
+	public void testGetCustomerVehicles() {
+		Customer customer = null;
+		customer = service.getCustomer(VALID_EMAIL2);
+		List<Vehicle> vehicles = null;
+		
+		try {
+			vehicles = service.getCustomerVehicles(customer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(vehicles);
+		assertEquals(1, vehicles.size());
+		assertEquals(BRAND, vehicles.get(0).getBrand());
+		assertEquals(LICENSEPLATE, vehicles.get(0).getLicensePlate());
+		assertEquals(MODEL, vehicles.get(0).getModel());
+		assertEquals(YEAR, vehicles.get(0).getYear());
+	
+	}
+	
+	@Test
+	public void testGetCustomerVehiclesNotFound() {
+		Customer customer = null;
+		String error = null;
+		List<Vehicle> vehicles = null;
+		try {
+			vehicles = service.getCustomerVehicles(customer);
+		} catch (Exception e) {
+			error = e.getMessage();
+		}
+		
+		assertNull(vehicles);
+		assertNotNull(error);
+		assertEquals("ERROR: input customer does not exist.", error);
+	
 	}
 	
 	@Test

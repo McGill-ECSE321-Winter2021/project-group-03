@@ -295,7 +295,7 @@ public class ProfileService {
 	
 	/**
 	 * @author Zichen
-	 * @return the total income by all the appointments upto now
+	 * @return the total income by all the appointments up to now
 	 */
 	@Transactional
 	public List<Vehicle> getCustomerVehicles(Customer customer) {
