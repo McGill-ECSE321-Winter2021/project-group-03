@@ -86,7 +86,7 @@ public class AutoRepairShopService {
 	 */
 	@Transactional
 	public Resource removeResource(String resourceType) {
-		if (resourceRepository.existsById(resourceType)) {
+		if (resourceRepository.findResourceByResourceType(resourceType) != null) {
 			Resource resource = resourceRepository.findResourceByResourceType(resourceType);
 			resourceRepository.delete(resource);
 			return resource;
@@ -119,7 +119,6 @@ public class AutoRepairShopService {
 		return invoices;
 	}
 	
-	//This was just added, isPaid method maybe?
 	@Transactional
 	public Invoice createInvoice(String invoiceID, double cost, Boolean isPaid) {
     	if(ServiceHelperMethods.isValidPrice(cost)) {
@@ -130,7 +129,7 @@ public class AutoRepairShopService {
     		invoiceRepository.save(invoice);
     		return invoice;
     	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to create Invoice.");
+    		throw new IllegalArgumentException("ERROR: Unable to create Invoice, invalid cost.");
     	}
 	}
 	
