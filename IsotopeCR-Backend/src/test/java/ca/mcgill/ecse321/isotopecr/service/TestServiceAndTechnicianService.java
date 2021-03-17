@@ -84,6 +84,7 @@ public class TestServiceAndTechnicianService {
 	
 	
 	private static final String EMAIL_1 = "1234@isotopecr.ca";
+	private static final String INVALID_EMAIL = "adfafs";
 	private static final String FIRSTNAME_1 = "Abc";
 	private static final String LASTNAME_1 = "Abc";
 	private static final String PASSWORD_1 = "Aa123456";
@@ -95,13 +96,15 @@ public class TestServiceAndTechnicianService {
 	private static final String PASSWORD_2 = "Aaa123456";
 	private static final String PROFILEID_2 = String.valueOf(EMAIL_2.hashCode());
 	
-	
+	private static final Time AVAILABILITY_DEFAULT_START_TIME = Time.valueOf(LocalTime.of(9, 00));
+	private static final Time AVAILABILITY_DEFAULT_END_TIME = Time.valueOf(LocalTime.of(17, 00));
+	private static final Time AVAILABILITY_START_TIME = Time.valueOf(LocalTime.of(11, 00));
+	private static final Time AVAILABILITY_END_TIME = Time.valueOf(LocalTime.of(20, 00));
 	
 	
 	
 	private Resource RESOURCE = new Resource();
 	private Appointment APPOINTMENT = new Appointment();
-	private DailyAvailability DAILYAVAILABILITY_1 = new DailyAvailability();
 	private Service SERVICE_1 = new Service();
 	
 	@BeforeEach
@@ -226,12 +229,10 @@ public class TestServiceAndTechnicianService {
 		lenient().when(technicianRepository.findTechnicianByEmail(anyString())).thenAnswer((InvocationOnMock invocation) ->{
 			if(invocation.getArgument(0).equals(EMAIL_1)) {
 				Technician  technician = new Technician(); 
-				Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
-				dailyavailabilities.add(DAILYAVAILABILITY_1);
+
 				Set <Service> services = new HashSet<Service>();
 				services.add(SERVICE_1);
 				
-				technician.setDailyAvailability(dailyavailabilities);
 				technician.setEmail(EMAIL_1);
 				technician.setFirstName(FIRSTNAME_1);
 				technician.setLastName(LASTNAME_1);
@@ -240,6 +241,18 @@ public class TestServiceAndTechnicianService {
 				technician.setProfileID(PROFILEID_1);
 				technician.setService(services);
 				
+				Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
+
+				for (DayOfWeek day : DayOfWeek.values()) {
+					DailyAvailability dailyAvailability = new DailyAvailability();
+					dailyAvailability.setDay(day);
+					dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
+					dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
+					dailyAvailability.setAvailabilityID(String.valueOf(technician.getProfileID().hashCode() * day.hashCode()));
+					dailyAvailabilities.add(dailyAvailability);
+				}
+				
+				technician.setDailyAvailability(dailyAvailabilities);
 
 				return technician;
 				
@@ -251,12 +264,10 @@ public class TestServiceAndTechnicianService {
 		lenient().when(technicianRepository.findTechnicianByProfileID(anyString())).thenAnswer((InvocationOnMock invocation) ->{
 			if(invocation.getArgument(0).equals(PROFILEID_1)) {
 				Technician  technician = new Technician(); 
-				Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
-				dailyavailabilities.add(DAILYAVAILABILITY_1);
+
 				Set <Service> services = new HashSet<Service>();
 				services.add(SERVICE_1);
-				
-				technician.setDailyAvailability(dailyavailabilities);
+
 				technician.setEmail(EMAIL_1);
 				technician.setFirstName(FIRSTNAME_1);
 				technician.setLastName(LASTNAME_1);
@@ -265,6 +276,18 @@ public class TestServiceAndTechnicianService {
 				technician.setProfileID(PROFILEID_1);
 				technician.setService(services);
 				
+				Set<DailyAvailability> dailyAvailabilities = new HashSet<DailyAvailability>();
+
+				for (DayOfWeek day : DayOfWeek.values()) {
+					DailyAvailability dailyAvailability = new DailyAvailability();
+					dailyAvailability.setDay(day);
+					dailyAvailability.setStartTime(Time.valueOf(LocalTime.of(9, 00)));
+					dailyAvailability.setEndTime(Time.valueOf(LocalTime.of(17, 00)));
+					dailyAvailability.setAvailabilityID(String.valueOf(technician.getProfileID().hashCode() * day.hashCode()));
+					dailyAvailabilities.add(dailyAvailability);
+				}
+				
+				technician.setDailyAvailability(dailyAvailabilities);
 
 				return technician;
 				
@@ -611,7 +634,11 @@ public class TestServiceAndTechnicianService {
 		assertEquals(LASTNAME_1,technician.getLastName());
 		assertEquals(EMAIL_1,technician.getEmail());
 		assertEquals(PASSWORD_1,technician.getPassword());
-
+		
+		for(DailyAvailability availability : technician.getDailyAvailability()) {
+			assertEquals(AVAILABILITY_DEFAULT_START_TIME, availability.getStartTime());
+			assertEquals(AVAILABILITY_DEFAULT_END_TIME, availability.getEndTime());
+		}
 	}
 	
 	@Test 
@@ -634,19 +661,18 @@ public class TestServiceAndTechnicianService {
 	}
 	
 	@Test
-	public void testgetTechnicianNullEmail() {
+	public void testgetTechnicianEmptyEmail() {
         Technician technician = null;
 		String error = null;
 		try {
-			technician = profileService.getTechnician(null);
+			technician = profileService.getTechnician("");
 		}catch(IllegalArgumentException e) {
 			error = e.getMessage();
 			
 		}
 		
 		assertNull(technician);
-		assertNotNull(error);
-		assertEquals("ERROR: the technician email is null.",error);
+		assertEquals("ERROR: the technician email is empty.",error);
 	
 	}
 	
@@ -662,17 +688,13 @@ public class TestServiceAndTechnicianService {
 		}
 		
 		assertNull(technician);
-		assertNotNull(error);
-		assertEquals("ERROR: the technician cannot be found.",error);
+		assertEquals("ERROR: The technician does not exist.",error);
 	
 	}
 	
 	
 	@Test
-	public void addServiceOfferedByTechnician() {
-		Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
-		dailyavailabilities.add(DAILYAVAILABILITY_1);
-				
+	public void addServiceOfferedByTechnician() {				
 		Service service = null;
 		
 		try {
@@ -691,8 +713,6 @@ public class TestServiceAndTechnicianService {
 	
 	@Test
 	public void addServiceOfferedByTechnicianInvalidEmail() {
-		Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
-		dailyavailabilities.add(DAILYAVAILABILITY_1);
 		String error = null;
 	
 		
@@ -704,15 +724,13 @@ public class TestServiceAndTechnicianService {
 			error = e.getMessage();
 		}
 		
-		assertNotNull(error);
 		assertNull(service);
 		assertEquals("ERROR: the technician cannot be found.",error);
 	}
 	
 	@Test
 	public void addServiceOfferedByTechnicianInvalidServiceName() {
-		Set <DailyAvailability> dailyavailabilities = new HashSet<DailyAvailability>();
-		dailyavailabilities.add(DAILYAVAILABILITY_1);
+
 		String error = null;
 	
 		
@@ -724,8 +742,55 @@ public class TestServiceAndTechnicianService {
 			error = e.getMessage();
 		}
 		
-		assertNotNull(error);
 		assertNull(service);
 		assertEquals("ERROR: Service does not exist.",error);
 	}
+	
+	@Test
+	public void testEditTechnicianAvailability() {
+		DailyAvailability availability = null;
+		
+		try {
+			availability = profileService.editTechnicianAvailability(EMAIL_1, DayOfWeek.Monday, AVAILABILITY_START_TIME, AVAILABILITY_END_TIME);
+		} catch(IllegalArgumentException e) {
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(availability);
+		assertEquals(DayOfWeek.Monday, availability.getDay());
+		assertEquals(AVAILABILITY_START_TIME, availability.getStartTime());
+		assertEquals(AVAILABILITY_END_TIME, availability.getEndTime());
+	}
+	
+	@Test
+	public void testEditTechnicianAvailabilityTechnicianNotFound() {
+		DailyAvailability availability = null;
+		
+		try {
+			availability = profileService.editTechnicianAvailability(INVALID_EMAIL, DayOfWeek.Monday, AVAILABILITY_START_TIME, AVAILABILITY_END_TIME);
+		} catch(IllegalArgumentException e) {
+			assertEquals("ERROR: The technician does not exist.", e.getMessage());
+		}
+		
+		assertNull(availability);
+
+	}
+	
+	@Test
+	public void getTechnicianAvailabilities() {
+		Set <DailyAvailability> availabilities = null;
+		
+		try {
+			availabilities = profileService.getTechnicianAvailabilities(EMAIL_1);
+		} catch(IllegalArgumentException e) {
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(availabilities);
+		for(DailyAvailability availability : availabilities) {
+			assertEquals(AVAILABILITY_DEFAULT_START_TIME, availability.getStartTime());
+			assertEquals(AVAILABILITY_DEFAULT_END_TIME, availability.getEndTime());
+		}
+	}
+	
 }

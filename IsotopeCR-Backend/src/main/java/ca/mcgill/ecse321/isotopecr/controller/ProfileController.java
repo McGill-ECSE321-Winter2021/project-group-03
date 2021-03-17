@@ -116,8 +116,7 @@ public class ProfileController {
 		}
 
 		try {
-			Technician technician = profileService.getTechnician(email);
-			DailyAvailability availability = profileService.editTechnicianAvailability(technician,
+			DailyAvailability availability = profileService.editTechnicianAvailability(email,
 					DailyAvailability.DayOfWeek.valueOf(weekday), Time.valueOf(start), Time.valueOf(end));
 			return ControllerHelperMethods.convertToDto(availability);
 		} catch (IllegalArgumentException e) {

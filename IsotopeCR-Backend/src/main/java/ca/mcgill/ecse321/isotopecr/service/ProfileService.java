@@ -128,19 +128,19 @@ public class ProfileService {
 	}
 	
 	@Transactional
-	public List<DailyAvailability> getTechnicianAvailabilities(String email) throws IllegalArgumentException {
+	public Set<DailyAvailability> getTechnicianAvailabilities(String email) throws IllegalArgumentException {
 		Technician technician = getTechnician(email);
-		return ServiceHelperMethods.toList(technician.getDailyAvailability());
+		return technician.getDailyAvailability();
 	}
 	
 	@Transactional
 	public Technician getTechnician(String email) throws IllegalArgumentException {
-		if (email == null) {
-			throw new IllegalArgumentException("ERROR: the technician email is null.");
+		if (email.isEmpty()) {
+			throw new IllegalArgumentException("ERROR: the technician email is empty.");
 		}
 		Technician technician = technicianRepository.findTechnicianByEmail(email);
 		if (technician == null) {
-			throw new IllegalArgumentException("ERROR: the technician cannot be found.");
+			throw new IllegalArgumentException("ERROR: The technician does not exist.");
 		}
 		return technician;
 	}
@@ -157,19 +157,25 @@ public class ProfileService {
 	 * 
 	 */
 	@Transactional
-	public DailyAvailability editTechnicianAvailability(Technician tech, DayOfWeek day, Time startTime, Time endTime) {
-		Set <DailyAvailability> availabilities = tech.getDailyAvailability();
+	public DailyAvailability editTechnicianAvailability(String email, DayOfWeek day, Time startTime, Time endTime) {
+		
+		Technician technician = getTechnician(email);
+		
+		DailyAvailability foundAvailability = null;
+		
+		Set <DailyAvailability> availabilities = technician.getDailyAvailability();
 		for (DailyAvailability availability : availabilities) {
 			if (availability.getDay().equals(day)) {
 				availability.setStartTime(startTime);
 				availability.setEndTime(endTime);
 				dailyAvailabilityRepository.save(availability);
-				return availability;
+				foundAvailability = availability;
 			}
 		}
-		tech.setDailyAvailability(availabilities);
-		technicianRepository.save(tech);
-		throw new IllegalArgumentException("The availability for " + day.toString() + " is not found");
+		
+		technician.setDailyAvailability(availabilities);
+		technicianRepository.save(technician);
+		return foundAvailability;
 	}
 	
 	/**
@@ -459,7 +465,7 @@ public class ProfileService {
 			throws IllegalArgumentException {
 
 		if (profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
-			throw new IllegalArgumentException(); // TODO: exception
+			throw new IllegalArgumentException("ERROR: Administrative account with that email already exists."); // TODO: exception
 		}
 
 		Admin admin = new Admin();
@@ -468,27 +474,25 @@ public class ProfileService {
 			if (ServiceHelperMethods.isValidCompanyEmail(email)) {
 				admin.setEmail(email);
 			} else { // valid email but not company email
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("ERROR: Administrative account creation forbidden. Not a company email.");
 			}
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid email.");
 		}
 
 		if (ServiceHelperMethods.isValidName(firstName) && ServiceHelperMethods.isValidName(lastName)) {
 			admin.setFirstName(firstName);
 			admin.setLastName(lastName);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid name.");
 		}
 
 		if (ServiceHelperMethods.isValidPassword(password)) {
 			admin.setPassword(password);
 			admin.setIsRegisteredAccount(true);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid password.");
 		}
-
-		admin.setPassword(password);
 
 		admin.setIsOwner(isOwner);
 
