@@ -217,9 +217,8 @@ public class AppointmentService {
 	}
 
 	@Transactional
-	public List<Appointment> getAllAppointmentsBeforeTime(Customer customer)
+	public List<Appointment> getAllAppointmentsBeforeTime(List<Appointment> appointments)
 			throws IllegalArgumentException {
-		List<Appointment> appointments = appointmentRepository.findAppointmentByCustomer(customer);
 		if (appointments.isEmpty()) {
 			throw new IllegalArgumentException("There is no appointments in the past.");
 		}
@@ -245,9 +244,8 @@ public class AppointmentService {
 	}
 
 	@Transactional
-	public List<Appointment> getAllAppointmentsAfterTime(Customer customer)
+	public List<Appointment> getAllAppointmentsAfterTime(List<Appointment> appointments)
 			throws IllegalArgumentException {
-		List<Appointment> appointments = appointmentRepository.findAppointmentByCustomer(customer);
 		if (appointments.isEmpty()) {
 			throw new IllegalArgumentException("There is no appointments in the future.");
 		}

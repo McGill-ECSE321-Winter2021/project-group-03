@@ -95,7 +95,8 @@ public class AppointmentController {
 			throws Exception {
 		try {
 			Customer customer = profileService.getCustomer(email);
-			List<Appointment> appointments = appointmentService.getAllAppointmentsBeforeTime(customer);
+			List<Appointment> appointments = appointmentService.getAppointmentsByCustomer(customer);
+			appointments = appointmentService.getAllAppointmentsBeforeTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
 				if (appointment.getStatus().equals(Status.BOOKED)) {
@@ -113,7 +114,8 @@ public class AppointmentController {
 			throws Exception {
 		try {
 			Customer customer = profileService.getCustomer(email);
-			List<Appointment> appointments = appointmentService.getAllAppointmentsAfterTime(customer);
+			List<Appointment> appointments = appointmentService.getAppointmentsByCustomer(customer);
+			appointments = appointmentService.getAllAppointmentsBeforeTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
 				if (appointment.getStatus().equals(Status.BOOKED)) {
@@ -131,7 +133,8 @@ public class AppointmentController {
 		try {
 			Vehicle vehicle = appointmentService.getVehicle(licensePlate);
 			Customer customer = appointmentService.getCustomerOfVehicle(vehicle);
-			List<Appointment> appointments = appointmentService.getAllAppointmentsBeforeTime(customer);
+			List<Appointment> appointments = appointmentService.getAppointmentsByCustomer(customer);
+			appointments = appointmentService.getAllAppointmentsBeforeTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
 				if (appointment.getStatus().equals(Status.BOOKED)) {
@@ -149,7 +152,8 @@ public class AppointmentController {
 		try {
 			Vehicle vehicle = appointmentService.getVehicle(licensePlate);
 			Customer customer = appointmentService.getCustomerOfVehicle(vehicle);
-			List<Appointment> appointments = appointmentService.getAllAppointmentsAfterTime(customer);
+			List<Appointment> appointments = appointmentService.getAppointmentsByCustomer(customer);
+			appointments = appointmentService.getAllAppointmentsAfterTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
 				if (appointment.getStatus().equals(Status.BOOKED)) {
