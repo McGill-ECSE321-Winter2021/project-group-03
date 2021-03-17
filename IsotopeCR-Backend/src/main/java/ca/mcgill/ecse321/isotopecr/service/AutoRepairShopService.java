@@ -63,7 +63,7 @@ public class AutoRepairShopService {
 	 * @return a resource created by request
 	 */
 	@Transactional
-	public Resource addResource(String resourceType, Integer maxAvailable){
+	public Resource addResource(String resourceType, Integer maxAvailable) {
 		if (resourceType == null || resourceType.trim().length() == 0) {
 			throw new IllegalArgumentException("ERROR: the resource type can not be empty.");
 		} else if (resourceRepository.findResourceByResourceType(resourceType) != null) {
@@ -71,7 +71,7 @@ public class AutoRepairShopService {
 		} else if (maxAvailable < 1) {
 			throw new IllegalArgumentException("ERROR: the resource should at least have one availability.");
 		}
-		
+
 		Resource resource = new Resource();
 		resource.setResourceType(resourceType);
 		resource.setMaxAvailable(maxAvailable);
@@ -108,7 +108,7 @@ public class AutoRepairShopService {
 	/*********************************************************
 	 * Invoice
 	 *********************************************************/
-	
+
 	/**
 	 * @author Zichen
 	 * @return all invoices stored in the system
@@ -118,123 +118,140 @@ public class AutoRepairShopService {
 		List<Invoice> invoices = ServiceHelperMethods.toList(invoiceRepository.findAll());
 		return invoices;
 	}
-	
-	//This was just added, isPaid method maybe?
+
+	// This was just added, isPaid method maybe?
 	@Transactional
 	public Invoice createInvoice(String invoiceID, double cost, Boolean isPaid) {
-    	if(ServiceHelperMethods.isValidPrice(cost)) {
-    		Invoice invoice = new Invoice();
-    		invoice.setInvoiceID(invoiceID);
-    		invoice.setCost(cost);
-    		invoice.setIsPaid(isPaid);
-    		invoiceRepository.save(invoice);
-    		return invoice;
-    	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to create Invoice.");
-    	}
+		if (ServiceHelperMethods.isValidPrice(cost)) {
+			Invoice invoice = new Invoice();
+			invoice.setInvoiceID(invoiceID);
+			invoice.setCost(cost);
+			invoice.setIsPaid(isPaid);
+			invoiceRepository.save(invoice);
+			return invoice;
+		} else {
+			throw new IllegalArgumentException("ERROR: Unable to create Invoice.");
+		}
 	}
-	
+
 	/*********************************************************
 	 * Service
 	 *********************************************************/
-	
+
 	@Transactional
-    public ca.mcgill.ecse321.isotopecr.model.Service createService(String serviceName, int duration, double price, Resource resource, Integer frequency) {
-    	
-    	if(ServiceHelperMethods.isValidServiceName(serviceName) && ServiceHelperMethods.isValidDuration(duration) && ServiceHelperMethods.isValidPrice(price) && ServiceHelperMethods.isValidResource(resource) && ServiceHelperMethods.isValidFrequency(frequency)) {
-    		ca.mcgill.ecse321.isotopecr.model.Service service = new ca.mcgill.ecse321.isotopecr.model.Service();
-    		service.setServiceName(serviceName);
-    		service.setDuration(duration);
-    		service.setPrice(price);
-    		service.setResource(resource);
-    		service.setFrequency(frequency);
-    		serviceRepository.save(service);
-    		return service;
-    	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to create service.");
-    	}
-    }
-    
-    @Transactional
-    public ca.mcgill.ecse321.isotopecr.model.Service editService(String serviceName, int duration, double price, Resource resource, Integer frequency) {
-    	if(ServiceHelperMethods.isValidServiceName(serviceName) && ServiceHelperMethods.isValidDuration(duration) && ServiceHelperMethods.isValidPrice(price) && ServiceHelperMethods.isValidResource(resource) && ServiceHelperMethods.isValidFrequency(frequency)) {
-    		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
-    		service.setServiceName(serviceName);
-    		service.setDuration(duration);
-    		service.setPrice(price);
-    		service.setResource(resource);
-    		service.setFrequency(frequency);
-    		serviceRepository.save(service);
-    		return service;
-    	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to edit service.");
-    	}
-    }
-    
-    @Transactional
-    public ca.mcgill.ecse321.isotopecr.model.Service deleteService(String serviceName) {
-    	if(ServiceHelperMethods.isValidServiceName(serviceName)) {
-    		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
-    		serviceRepository.delete(service);
-    		return  service;
-    	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to delete service.");
-    	}
-    }
-    
-    @Transactional
+	public ca.mcgill.ecse321.isotopecr.model.Service createService(String serviceName, int duration, double price,
+			Resource resource, Integer frequency) {
+
+		if (ServiceHelperMethods.isValidServiceName(serviceName) && ServiceHelperMethods.isValidDuration(duration)
+				&& ServiceHelperMethods.isValidPrice(price) && ServiceHelperMethods.isValidResource(resource)
+				&& ServiceHelperMethods.isValidFrequency(frequency)) {
+			ca.mcgill.ecse321.isotopecr.model.Service service = new ca.mcgill.ecse321.isotopecr.model.Service();
+			service.setServiceName(serviceName);
+			service.setDuration(duration);
+			service.setPrice(price);
+			service.setResource(resource);
+			service.setFrequency(frequency);
+			serviceRepository.save(service);
+			return service;
+		} else {
+			throw new IllegalArgumentException("ERROR: Unable to create service.");
+		}
+	}
+
+	@Transactional
+	public ca.mcgill.ecse321.isotopecr.model.Service editService(String serviceName, int duration, double price,
+			Resource resource, Integer frequency) {
+		if (ServiceHelperMethods.isValidServiceName(serviceName) && ServiceHelperMethods.isValidDuration(duration)
+				&& ServiceHelperMethods.isValidPrice(price) && ServiceHelperMethods.isValidResource(resource)
+				&& ServiceHelperMethods.isValidFrequency(frequency)) {
+			ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+			service.setServiceName(serviceName);
+			service.setDuration(duration);
+			service.setPrice(price);
+			service.setResource(resource);
+			service.setFrequency(frequency);
+			serviceRepository.save(service);
+			return service;
+		} else {
+			throw new IllegalArgumentException("ERROR: Unable to edit service.");
+		}
+	}
+
+	@Transactional
+	public ca.mcgill.ecse321.isotopecr.model.Service deleteService(String serviceName) {
+		if (ServiceHelperMethods.isValidServiceName(serviceName)) {
+			ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+			serviceRepository.delete(service);
+			return service;
+		} else {
+			throw new IllegalArgumentException("ERROR: Unable to delete service.");
+		}
+	}
+
+	@Transactional
 	public List<ca.mcgill.ecse321.isotopecr.model.Service> getAllServices() {
-		List<ca.mcgill.ecse321.isotopecr.model.Service> services = ServiceHelperMethods.toList(serviceRepository.findAll());
+		List<ca.mcgill.ecse321.isotopecr.model.Service> services = ServiceHelperMethods
+				.toList(serviceRepository.findAll());
 		return services;
 	}
-    
-    /*********************************************************
+
+	@Transactional
+	public ca.mcgill.ecse321.isotopecr.model.Service getService(String serviceName) {
+		if (ServiceHelperMethods.isValidServiceName(serviceName)) {
+			ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+			return service;
+		} else {
+			throw new IllegalArgumentException("ERROR: Unable to find service.");
+		}
+	}
+
+	/*********************************************************
 	 * CompanyProfile
 	 *********************************************************/
-    
-    @Transactional
-    public CompanyProfile createCompanyProfile(String companyName, String address, String workingHours) {
-    	if(!getCompanyProfiles().isEmpty()) {
-    		throw new IllegalArgumentException("ERROR: Company Profile already exists.");
-    	}
-    	if(!address.isEmpty()) {
-    		if(ServiceHelperMethods.isValidCompanyName(companyName) ) {
-    			CompanyProfile companyProfile = new CompanyProfile();
-        		companyProfile.setCompanyName(companyName);
-        		companyProfile.setAddress(address);
-        		companyProfile.setWorkingHours(workingHours);
-        		companyProfileRepository.save(companyProfile);
-        		return companyProfile;
-    		} else {
-    			throw new IllegalArgumentException("ERROR: Invalid company name.");
-    		}
-    	}else {
-    		throw new IllegalArgumentException("ERROR: Address cannot be empty.");
-    	}
-    }
-    
-    @Transactional
-    public CompanyProfile editCompanyProfile(String companyName, String address, String workingHours) {
-    	if(!address.isEmpty()) {
-        	if(ServiceHelperMethods.isValidCompanyName(companyName)) {
-        		CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
-        		companyProfileRepository.delete(oldCompanyProfile);
-        		
-        		CompanyProfile newCompanyProfile = new CompanyProfile();
-        		newCompanyProfile.setCompanyName(companyName);
-        		newCompanyProfile.setAddress(address);
-        		newCompanyProfile.setWorkingHours(workingHours);
-        		companyProfileRepository.save(newCompanyProfile);
-        		return newCompanyProfile;
-        	}else {
-        		throw new IllegalArgumentException("ERROR: Invalid company name.");
-        	}
-    	} else {
-    		throw new IllegalArgumentException("ERROR: Address cannot be empty.");
-    	}
-    }
-    
-    @Transactional
+
+	@Transactional
+	public CompanyProfile createCompanyProfile(String companyName, String address, String workingHours) {
+		if (!getCompanyProfiles().isEmpty()) {
+			throw new IllegalArgumentException("ERROR: Company Profile already exists.");
+		}
+		if (!address.isEmpty()) {
+			if (ServiceHelperMethods.isValidCompanyName(companyName)) {
+				CompanyProfile companyProfile = new CompanyProfile();
+				companyProfile.setCompanyName(companyName);
+				companyProfile.setAddress(address);
+				companyProfile.setWorkingHours(workingHours);
+				companyProfileRepository.save(companyProfile);
+				return companyProfile;
+			} else {
+				throw new IllegalArgumentException("ERROR: Invalid company name.");
+			}
+		} else {
+			throw new IllegalArgumentException("ERROR: Address cannot be empty.");
+		}
+	}
+
+	@Transactional
+	public CompanyProfile editCompanyProfile(String companyName, String address, String workingHours) {
+		if (!address.isEmpty()) {
+			if (ServiceHelperMethods.isValidCompanyName(companyName)) {
+				CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
+				companyProfileRepository.delete(oldCompanyProfile);
+
+				CompanyProfile newCompanyProfile = new CompanyProfile();
+				newCompanyProfile.setCompanyName(companyName);
+				newCompanyProfile.setAddress(address);
+				newCompanyProfile.setWorkingHours(workingHours);
+				companyProfileRepository.save(newCompanyProfile);
+				return newCompanyProfile;
+			} else {
+				throw new IllegalArgumentException("ERROR: Invalid company name.");
+			}
+		} else {
+			throw new IllegalArgumentException("ERROR: Address cannot be empty.");
+		}
+	}
+
+	@Transactional
 	public List<CompanyProfile> getCompanyProfiles() {
 		List<CompanyProfile> companyProfiles = ServiceHelperMethods.toList(companyProfileRepository.findAll());
 		return companyProfiles;
@@ -280,5 +297,5 @@ public class AutoRepairShopService {
 //
 //		return resourceAllocation;
 //	}
-		
+
 }

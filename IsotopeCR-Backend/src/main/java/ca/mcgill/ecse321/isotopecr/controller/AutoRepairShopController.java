@@ -178,19 +178,18 @@ public class AutoRepairShopController {
 
 	}
 
-//	/**
-//	 * @author Mathieu
-//	 */
-//	@PostMapping(value = { "/service/get/{servicename}", "/service/get/{servicename}" })
-//	public ServiceDto getServiceByName(@PathVariable("servicename") String serviceName) {
-//		try {
-//			Service service = serviceRepository.findServiceByServiceName(serviceName);
-//			return convertToDto(service);
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//
-//	}
+	/**
+	 * @author Mathieu
+	 */
+	@PostMapping(value = { "/service/get/{servicename}", "/service/get/{servicename}" })
+	public ServiceDto getServiceByName(@PathVariable("servicename") String serviceName) {
+		try {
+			Service service = autoRepairShopService.getService(serviceName);
+			return ControllerHelperMethods.convertToDto(service);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 
 	
 
