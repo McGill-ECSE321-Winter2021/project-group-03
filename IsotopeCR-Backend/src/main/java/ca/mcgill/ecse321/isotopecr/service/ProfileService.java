@@ -191,7 +191,7 @@ public class ProfileService {
 			technicianRepository.save(technician);
 			return service;
 		} else {
-			throw new IllegalArgumentException("The service could not be added to the technician"); 
+			throw new IllegalArgumentException("ERROR: Service does not exist."); 
 		}
 	}
 	
@@ -226,29 +226,34 @@ public class ProfileService {
 			String password) throws IllegalArgumentException {
 
 		if (profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Profile with the provided email exists.");
 		}
 
 		Customer customer = new Customer();
 
+		Set<Vehicle> vehicles = new HashSet<Vehicle>();
+		
+		customer.setIsRegisteredAccount(false);
+		customer.setVehicle(vehicles);
+		
 		if (ServiceHelperMethods.isValidEmail(email)) {
 			customer.setEmail(email);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid email.");
 		}
 
 		if (ServiceHelperMethods.isValidName(firstName) && ServiceHelperMethods.isValidName(lastName)) {
 			customer.setFirstName(firstName);
 			customer.setLastName(lastName);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid name.");
 		}
 
 		if (!phoneNumber.isEmpty()) {
 			if (ServiceHelperMethods.isValidPhoneNumber(phoneNumber)) {
 				customer.setPhoneNumber(phoneNumber);
 			} else {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("ERROR: Invalid phonenumber.");
 			}
 		} // else phone number is set to null
 
@@ -259,7 +264,7 @@ public class ProfileService {
 					customer.setIsRegisteredAccount(true);
 				}
 			} else {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("ERROR: Invalid password.");
 			}
 		}
 
@@ -310,10 +315,15 @@ public class ProfileService {
 	 * 
 	 */
 	@Transactional
-	public Vehicle createVehicle(Profile profile, String licensePlate, String year, String model, String brand)
+	public Vehicle createVehicle(String email, String licensePlate, String year, String model, String brand)
 			throws IllegalArgumentException {
-
-		Customer customer = customerRepository.findCustomerByProfileID(profile.getProfileID());
+		
+		Customer customer = customerRepository.findCustomerByEmail(email);
+		
+		if(customer == null) {
+			throw new IllegalArgumentException("ERROR: Customer does not exist.");
+		}
+		
 		try {
 			Vehicle vehicle = createNewVehicle(licensePlate, year, model, brand);
 			Set<Vehicle> vehicles = customer.getVehicle();
@@ -321,7 +331,7 @@ public class ProfileService {
 			customer.setVehicle(vehicles);
 			customerRepository.save(customer);
 			return vehicle;
-		} catch (IllegalArgumentException e) {
+		} catch(IllegalArgumentException e) {
 			throw e;
 		}
 	}
@@ -340,31 +350,31 @@ public class ProfileService {
 	 * 
 	 * @author Jack Wei
 	 */
-	public Vehicle createNewVehicle(String licensePlate, String year, String model, String brand)
+	private Vehicle createNewVehicle(String licensePlate, String year, String model, String brand)
 			throws IllegalArgumentException {
 
 		Vehicle vehicle = new Vehicle();
 		if(!licensePlate.isEmpty()) {
 			vehicle.setLicensePlate(licensePlate);
 		}else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: License plate cannot be empty.");
 		}
 		if (ServiceHelperMethods.isValidYear(year)) {
 			vehicle.setYear(year);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Year is invalid.");
 		}
 
 		if (ServiceHelperMethods.isValidModelName(model)) {
 			vehicle.setModel(model);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Model name is invalid.");
 		}
 
 		if (ServiceHelperMethods.isValidBrandName(brand)) {
 			vehicle.setBrand(brand);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Brand name is invalid.");
 		}
 
 		vehicleRepository.save(vehicle);
@@ -383,9 +393,14 @@ public class ProfileService {
 	 * @author Jack Wei
 	 */
 	@Transactional
-	public Vehicle deleteVehicle(Profile currentUser, String licensePlate) {
+	public Vehicle deleteVehicle(String email, String licensePlate) 
+			throws IllegalArgumentException {
 
-		Customer customer = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
+		Customer customer = customerRepository.findCustomerByEmail(email);
+		
+		if(customer == null) {
+			throw new IllegalArgumentException("ERROR: Customer does not exist.");
+		}
 
 		Boolean isDeleted = false;
 		Vehicle foundVehicle = null;
@@ -495,16 +510,20 @@ public class ProfileService {
 	 * 
 	 */
 	@Transactional
-	public Profile editPassword(Profile profile, String password) throws IllegalArgumentException {
-
-		profile.setPassword(password);
-		if (profile instanceof Customer) {
-			profile.setIsRegisteredAccount(true);
-			profileRepository.save(profile);
-			return profile;
+	public Profile editPassword(String email, String password) throws IllegalArgumentException {
+		
+		Profile profile = getProfile(email);
+		if(ServiceHelperMethods.isValidPassword(password)) {
+			profile.setPassword(password);
+			if (profile instanceof Customer) {
+				profile.setIsRegisteredAccount(true);
+			}
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid password.");
 		}
+		
+		profileRepository.save(profile);
+		return profile;
 	}
 
 	/**
@@ -520,30 +539,21 @@ public class ProfileService {
 	 * 
 	 */
 	@Transactional
-	public Customer editPhoneNumber(Profile currentUser, String phoneNumber) throws IllegalArgumentException {
+	public Customer editPhoneNumber(String email, String phoneNumber) throws IllegalArgumentException {
 
-		Customer customerProfile = customerRepository.findCustomerByProfileID(currentUser.getProfileID());
+		Customer customerProfile = customerRepository.findCustomerByEmail(email);
+		
+		if(customerProfile == null) {
+			throw new IllegalArgumentException("ERROR: Customer does not exist.");
+		}
 
 		if (ServiceHelperMethods.isValidPhoneNumber(phoneNumber)) {
 			customerProfile.setPhoneNumber(phoneNumber);
 			customerRepository.save(customerProfile);
 			return customerProfile;
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid phonenumber.");
 		}
-	}
-
-
-	/**
-	 * Deletes the user profile with user profile provided.
-	 * 
-	 * @param user
-	 * @author Jack Wei
-	 * 
-	 */
-	@Transactional
-	public void deleteProfile(Profile user) {
-		profileRepository.delete(user);
 	}
 
 	/**
@@ -554,13 +564,14 @@ public class ProfileService {
 	 * 
 	 */
 	@Transactional
-	public void deleteProfile(String profileID) {
-		Profile profile = profileRepository.findProfileByProfileID(profileID);
+	public Profile deleteProfile(String email) {
+		Profile profile = profileRepository.findProfileByProfileID(String.valueOf(email.hashCode()));
 
 		if (profile != null) {
 			profileRepository.delete(profile);
+			return profile;
 		} else {
-			// TODO: exception? error message?
+			throw new IllegalArgumentException("ERROR: Profile does not exist.");
 		}
 	}
 
@@ -576,13 +587,9 @@ public class ProfileService {
 	@Transactional
 	public Profile getProfile(String email) throws IllegalArgumentException {
 
-		if (email == null) {
-			throw new IllegalArgumentException();
-		}
-
 		Profile profile = profileRepository.findProfileByProfileID(String.valueOf(email.hashCode()));
 		if (profile == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Profile does not exist.");
 		}
 
 		return profile;

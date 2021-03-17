@@ -215,7 +215,7 @@ public class ProfileController {
 			@RequestParam("model") String model, @RequestParam("brand") String brand) throws Exception {
 		try {
 			Customer customer = profileService.getCustomer(email);
-			Vehicle vehicle = profileService.createVehicle(customer, licensePlate, year, model, brand);
+			Vehicle vehicle = profileService.createVehicle(email, licensePlate, year, model, brand);
 			return ControllerHelperMethods.convertToDto(vehicle);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
@@ -226,8 +226,7 @@ public class ProfileController {
 	public VehicleDto deleteVehicle(@RequestParam("email") String email,
 			@RequestParam("licensePlate") String licensePlate) throws Exception {
 		try {
-			Customer customer = profileService.getCustomer(email);
-			Vehicle vehicle = profileService.deleteVehicle(customer, licensePlate);
+			Vehicle vehicle = profileService.deleteVehicle(email, licensePlate);
 				return ControllerHelperMethods.convertToDto(vehicle);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
@@ -258,8 +257,7 @@ public class ProfileController {
 	public ProfileDto deleteProfile(@PathVariable("email") String email)
 			throws IllegalArgumentException{
 		try {
-			Profile profile = profileService.getProfile(email);
-			profileService.deleteProfile(profile);
+			Profile profile = profileService.deleteProfile(email);
 			return ControllerHelperMethods.convertToDto(profile);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
@@ -270,8 +268,7 @@ public class ProfileController {
 	public ProfileDto editPassword(@RequestParam("email") String email, @RequestParam("password") String password)
 			throws Exception {
 		try {
-			Profile profile = profileService.getProfile(email);
-			profile = profileService.editPassword(profile, password);
+			Profile profile = profileService.editPassword(email, password);
 			return ControllerHelperMethods.convertToDto(profile);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
@@ -282,13 +279,8 @@ public class ProfileController {
 	public CustomerDto editPhoneNumber(@RequestParam("email") String email,
 			@RequestParam("phoneNumber") String phoneNumber) throws Exception {
 		try {
-			Profile profile = profileService.getProfile(email);
-			if (profile instanceof Customer) {
-				Customer customer = profileService.editPhoneNumber(profile, phoneNumber);
+				Customer customer = profileService.editPhoneNumber(email, phoneNumber);
 				return ControllerHelperMethods.convertToDto(customer);
-			} else {
-				throw new IllegalArgumentException();
-			}
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
 		}
