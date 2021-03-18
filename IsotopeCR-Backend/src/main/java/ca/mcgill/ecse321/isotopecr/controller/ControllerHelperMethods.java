@@ -32,6 +32,12 @@ import ca.mcgill.ecse321.isotopecr.model.Timeslot;
 import ca.mcgill.ecse321.isotopecr.model.Vehicle;
 
 public class ControllerHelperMethods {
+	
+	/**
+	 * @authors Jiatong, Victoria, Zichen, Jack, Mathieu
+	 * @param These methods all take in an object of any given class.
+	 * @return These methods return the corresponding DTO of the converted object.
+	 */
 
 	public static CompanyProfileDto convertToDto(CompanyProfile cp) {
 		if (cp == null) {

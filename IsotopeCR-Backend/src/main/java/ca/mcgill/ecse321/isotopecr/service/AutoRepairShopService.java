@@ -128,7 +128,15 @@ public class AutoRepairShopService {
 		List<Invoice> invoices = ServiceHelperMethods.toList(invoiceRepository.findAll());
 		return invoices;
 	}
-
+	
+	/**
+	 * Creates an invoice.
+	 * @author Mathieu
+	 * @param invoiceID - ID of the invoice
+	 * @param cost - Cost of the invoice
+	 * @param isPaid - Status of the invoice (has it been paid or not?)
+	 * @return The created invoice is returned.
+	 */
 	@Transactional
 	public Invoice createInvoice(String invoiceID, double cost, Boolean isPaid) {
 		if (ServiceHelperMethods.isValidPrice(cost)) {
@@ -148,6 +156,16 @@ public class AutoRepairShopService {
 	 * Service
 	 *********************************************************/
 
+	/**
+	 * Creates a service.
+	 * @author Mathieu
+	 * @param serviceName - Name of the service
+	 * @param duration - Duration in minutes of the service, must be a multiple of 30
+	 * @param price - Price of the service
+	 * @param resource - The resource needed to offer the service
+	 * @param frequency - Frequency of the service
+	 * @return The created service.
+	 */
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service createService(String serviceName, int duration, double price,
 			Resource resource, Integer frequency) {
@@ -167,7 +185,16 @@ public class AutoRepairShopService {
 			throw new IllegalArgumentException("ERROR: Unable to create service.");
 		}
 	}
-
+	
+	/**
+	 * @author Mathieu
+	 * @param serviceName
+	 * @param duration
+	 * @param price
+	 * @param resource
+	 * @param frequency
+	 * @return The edited service.
+	 */
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service editService(String serviceName, int duration, double price,
 			Resource resource, Integer frequency) {
@@ -186,7 +213,12 @@ public class AutoRepairShopService {
 			throw new IllegalArgumentException("ERROR: Unable to edit service.");
 		}
 	}
-
+	
+	/**
+	 * @author Mathieu
+	 * @param serviceName
+	 * @return The deleted service is returned.
+	 */
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service deleteService(String serviceName) {
 		if (ServiceHelperMethods.isValidServiceName(serviceName)) {
@@ -197,7 +229,11 @@ public class AutoRepairShopService {
 			throw new IllegalArgumentException("ERROR: Unable to delete service.");
 		}
 	}
-
+	
+	/**
+	 * @author Mathieu
+	 * @return A list of all services.
+	 */
 	@Transactional
 	public List<ca.mcgill.ecse321.isotopecr.model.Service> getAllServices() {
 		List<ca.mcgill.ecse321.isotopecr.model.Service> services = ServiceHelperMethods
@@ -205,6 +241,11 @@ public class AutoRepairShopService {
 		return services;
 	}
 
+	/**
+	 * @author Mathieu
+	 * @param serviceName
+	 * @return A searched service
+	 */
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service getService(String serviceName) {
 		if (serviceName == null) {
@@ -220,7 +261,14 @@ public class AutoRepairShopService {
 	/*********************************************************
 	 * CompanyProfile
 	 *********************************************************/
-
+	
+	/**
+	 * @author Mathieu
+	 * @param companyName - Name of the company
+	 * @param address - Address of the company
+	 * @param workingHours - Hours during which the company operates
+	 * @return The created companyProfile
+	 */
 	@Transactional
 	public CompanyProfile createCompanyProfile(String companyName, String address, String workingHours) {
 		if (!getCompanyProfiles().isEmpty()) {
@@ -242,6 +290,13 @@ public class AutoRepairShopService {
 		}
 	}
 
+	/**
+	 * @author Mathieu
+	 * @param companyName
+	 * @param address
+	 * @param workingHours
+	 * @return The edited companyProfile is returned
+	 */
 	@Transactional
 	public CompanyProfile editCompanyProfile(String companyName, String address, String workingHours) {
 		if (!address.isEmpty()) {
@@ -263,12 +318,22 @@ public class AutoRepairShopService {
 		}
 	}
 
+	/**
+	 * @author Mathieu
+	 * @return A list of companyProfiles are returned.
+	 */
 	@Transactional
 	public List<CompanyProfile> getCompanyProfiles() {
 		List<CompanyProfile> companyProfiles = ServiceHelperMethods.toList(companyProfileRepository.findAll());
 		return companyProfiles;
 	}
 
+//*********************************************************************************	
+//* These methods haven't been deleted as they may feature in later deliverables. *
+//*********************************************************************************	
+//	
+//	
+//	
 //    /*********************************************************
 //	 * Summaries
 //	 *********************************************************/

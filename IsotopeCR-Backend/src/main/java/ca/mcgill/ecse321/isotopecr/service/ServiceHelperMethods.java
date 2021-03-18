@@ -72,7 +72,7 @@ public class ServiceHelperMethods {
 	 * 
 	 * @author Jiatong
 	 * @param service
-	 * @return
+	 * @return a boolean which indicates if the service is valid.
 	 */
 	public static boolean isValidService(ca.mcgill.ecse321.isotopecr.model.Service service) {
 		boolean isValid = false;
@@ -81,7 +81,12 @@ public class ServiceHelperMethods {
 		}
 		return isValid;
 	}
-
+	
+	/**
+	 * @author Jiatong
+	 * @param frequency
+	 * @return a boolean which indicates whether or not the frequency is valid
+	 */
 	public static boolean isValidFrequency(Integer frequency) {
 		boolean isValid = false;
 		if (frequency >= 0) {
@@ -89,7 +94,12 @@ public class ServiceHelperMethods {
 		}
 		return isValid;
 	}
-
+	
+	/**
+	 * @author Zichen
+	 * @param date
+	 * @return a boolean which indicates whether or not the date is before the current date
+	 */
 	public static boolean isBeforeADay(Date date) {
 		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
 
@@ -100,7 +110,12 @@ public class ServiceHelperMethods {
 
 		return isBefore;
 	}
-
+	
+	/**
+	 * @author Mathieu
+	 * @param resource
+	 * @return a boolean which checks if a resource is valid or not.
+	 */
 	public static boolean isValidResource(Resource resource) {
 		boolean isValid = false;
 		if (resource != null) {
@@ -108,7 +123,12 @@ public class ServiceHelperMethods {
 		}
 		return isValid;
 	}
-
+	
+	/**
+	 * @author Mathieu
+	 * @param serviceName
+	 * @return a boolean which indicates whether or not a service name is valid.
+	 */
 	public static boolean isValidServiceName(String serviceName) {
 		String regex = "^[a-zA-Z-\s]*[a-zA-Z-]+$";
 		// only letters and - allowed, only one space between words allowed
@@ -116,7 +136,12 @@ public class ServiceHelperMethods {
 		Matcher matcher = pattern.matcher(serviceName);
 		return matcher.matches();
 	}
-
+	
+	/**
+	 * @author Mathieu
+	 * @param duration
+	 * @return a boolean that checks whether a given duration is a multiple of 30.
+	 */
 	public static boolean isValidDuration(int duration) {
 		boolean isValid = false;
 		if (duration % 30 == 0) {
@@ -125,6 +150,11 @@ public class ServiceHelperMethods {
 		return isValid;
 	}
 
+	/**
+	 * @author Mathieu
+	 * @param price
+	 * @return a boolean that indicates whether a valid price has been inputed or not.
+	 */
 	public static boolean isValidPrice(double price) {
 		boolean isValid = false;
 		if (price > 0.0 && price < 1000000.0) {
@@ -132,7 +162,12 @@ public class ServiceHelperMethods {
 		}
 		return isValid;
 	}
-
+	
+	/**
+	 * @author Mathieu
+	 * @param companyName
+	 * @return a boolean that checks if the company name is a valid name.
+	 */
 	public static boolean isValidCompanyName(String companyName) {
 		String regex = "^[A-Z]([a-zA-Z0-9]|[- @\\.#&!]){1,20}$";
 		// contains any kind of letter from any language

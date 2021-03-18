@@ -126,7 +126,9 @@ public class AutoRepairShopController {
 	 *********************************************************/
 
 	/**
+	 * Lists all services.
 	 * @author Mathieu
+	 * @return All the services offered by the garage
 	 */
 	@GetMapping(value = { "/service/get-all", "/service/get-all/" })
 	public List<ServiceDto> getAllServices() {
@@ -135,7 +137,14 @@ public class AutoRepairShopController {
 	}
 
 	/**
+	 * Creates a service
 	 * @author Mathieu
+	 * @param serviceName - Name of the service
+	 * @param duration - Duration in minutes of the service, must be a multiple of 30
+	 * @param price - Price of the service
+	 * @param resourceType - Type of resource the service needs
+	 * @param frequency - Frequency of the service
+	 * @return The created service
 	 */
 	@PostMapping(value = { "/service/create/{servicename}", "/service/create/{servicename}/" })
 	public ServiceDto createService(@PathVariable("servicename") String serviceName, @RequestParam Integer duration,
@@ -150,7 +159,14 @@ public class AutoRepairShopController {
 	}
 
 	/**
+	 * Edits a service.
 	 * @author Mathieu
+	 * @param serviceName
+	 * @param duration
+	 * @param price
+	 * @param resourceType
+	 * @param frequency
+	 * @return The edited service is returned
 	 */
 	@PostMapping(value = { "/service/edit/{servicename}", "/service/edit/{servicename}/" })
 	public ServiceDto editService(@PathVariable("servicename") String serviceName, @RequestParam Integer duration,
@@ -166,7 +182,10 @@ public class AutoRepairShopController {
 	}
 
 	/**
+	 * Deletes a service.
 	 * @author Mathieu
+	 * @param serviceName
+	 * @return A deleted service is returned
 	 */
 	@PostMapping(value = { "/service/delete/{servicename}", "/service/delete/{servicename}" })
 	public ServiceDto deleteService(@PathVariable("servicename") String serviceName) {
@@ -180,7 +199,10 @@ public class AutoRepairShopController {
 	}
 
 	/**
+	 * Gets a service by its name.
 	 * @author Mathieu
+	 * @param serviceName
+	 * @return The looked up service is returned.
 	 */
 	@GetMapping(value = { "/service/get/{servicename}", "/service/get/{servicename}" })
 	public ServiceDto getServiceByName(@PathVariable("servicename") String serviceName) {
@@ -195,6 +217,15 @@ public class AutoRepairShopController {
 	/*********************************************************
 	 * Company Profile
 	 *********************************************************/
+	
+	/**
+	 * Creates a company profile.
+	 * @author Mathieu
+	 * @param companyName - Name of the company
+	 * @param address - The address of the company
+	 * @param workingHours - The working hours of when the company is opened
+	 * @return The created company profile is returned. 
+	 */
 
 	@PostMapping(value = { "/CompanyProfile/create", "/CompanyProfile/create/" })
 	public CompanyProfileDto createCompanyProfile(@RequestParam String companyName, @RequestParam String address,
@@ -207,7 +238,11 @@ public class AutoRepairShopController {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
+	/**
+	 * Gets a Company Profile
+	 * @author Mathieu
+	 * @return The serched company Profile is returned
+	 */
 	@GetMapping(value = { "/CompanyProfile/get", "/CompanyProfile/get/" })
 	public CompanyProfileDto getCompanyProfile() {
 		try {

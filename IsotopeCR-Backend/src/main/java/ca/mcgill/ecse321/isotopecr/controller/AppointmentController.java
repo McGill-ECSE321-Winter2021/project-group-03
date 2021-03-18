@@ -228,7 +228,12 @@ public class AppointmentController {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
+	/**
+	 * @author Victoria
+	 * @param aAppointmentId
+	 * @return The created invoice
+	 * @throws Illegal Argument Exception
+	 */
 	@PostMapping(value = { "/createInvoice/{appointment}", "/createInvoice/{appointment}/" })
 	public InvoiceDto createInvoice(@PathVariable("appointment") String aAppointmentId) {
 		try {
