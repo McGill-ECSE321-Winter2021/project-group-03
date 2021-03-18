@@ -210,9 +210,12 @@ public class AutoRepairShopService {
 	public ca.mcgill.ecse321.isotopecr.model.Service getService(String serviceName) {
 		if (ServiceHelperMethods.isValidServiceName(serviceName)) {
 			ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+			if (service == null) {
+				throw new IllegalArgumentException("ERROR: Unable to find service.");
+			}			
 			return service;
 		} else {
-			throw new IllegalArgumentException("ERROR: Unable to find service.");
+			throw new IllegalArgumentException("ERROR: Unable to find service due to illegal service name.");
 		}
 	}
 
