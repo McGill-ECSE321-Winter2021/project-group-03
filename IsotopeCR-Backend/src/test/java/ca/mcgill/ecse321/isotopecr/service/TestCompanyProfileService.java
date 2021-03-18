@@ -305,7 +305,7 @@ public class TestCompanyProfileService {
 		
 		assertNotNull(error);
 		assertNull(shopService);
-		assertEquals("ERROR: Unable to find service due to illegal service name.", error);
+		assertEquals("ERROR: the service cannot be found.", error);
 	}
 	
 	/**
@@ -325,7 +325,7 @@ public class TestCompanyProfileService {
 		
 		assertNotNull(error);
 		assertNull(shopService);
-		assertEquals("ERROR: Unable to find service.", error);
+		assertEquals("ERROR: the service cannot be found.", error);
 	}
 	
 	
