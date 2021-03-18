@@ -1,28 +1,18 @@
 package ca.mcgill.ecse321.isotopecr.service;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.isotopecr.dao.*;
-import ca.mcgill.ecse321.isotopecr.dto.DailyAvailabilityDto;
 import ca.mcgill.ecse321.isotopecr.model.*;
 import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
-
-import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 
 @Service
 public class ProfileService {
@@ -67,8 +57,7 @@ public class ProfileService {
 	 * @param lastName
 	 * @param email
 	 * @param password
-	 * @param services
-	 * @return
+	 * @return the technician created
 	 * @throws InvalidInputException
 	 * @author Jack Wei
 	 */
@@ -127,12 +116,28 @@ public class ProfileService {
 		return technician;
 	}
 	
+	/**
+	 * Gets all the daily availabilities of the technician with the provided email. 
+	 * 
+	 * @param email
+	 * @return all the daily availabilities of the technician found
+	 * @throws IllegalArgumentException
+	 * @author Zichen
+	 */
 	@Transactional
 	public Set<DailyAvailability> getTechnicianAvailabilities(String email) throws IllegalArgumentException {
 		Technician technician = getTechnician(email);
 		return technician.getDailyAvailability();
 	}
 	
+	/**
+	 * Gets the technician by the email provided.
+	 * 
+	 * @param email
+	 * @return the technician found
+	 * @throws IllegalArgumentException
+	 * @author Zichen
+	 */
 	@Transactional
 	public Technician getTechnician(String email) throws IllegalArgumentException {
 		if (email.isEmpty()) {
@@ -146,15 +151,14 @@ public class ProfileService {
 	}
 	
 	/**
-	 * Update the availability to a specific day.
+	 * Updates the availability for a specific day in week.
 	 * 
-	 * @author Zichen
 	 * @param tech
 	 * @param day
 	 * @param startTime
 	 * @param endTime
-	 * @return a DailyAvailability modified
-	 * 
+	 * @return the DailyAvailability modified
+	 * @author Zichen
 	 */
 	@Transactional
 	public DailyAvailability editTechnicianAvailability(String email, DayOfWeek day, Time startTime, Time endTime) {
@@ -179,14 +183,13 @@ public class ProfileService {
 	}
 	
 	/**
-	 * Add a specialized service to the technician profile.
+	 * Add a service offered by the technician to the technician profile.
 	 * 
-	 * @param technician
-	 * @param service
+	 * @param email
+	 * @param serviceName
+	 * @return the service with the provided service name
 	 * @throws InvalidInputException
-	 * 
 	 * @author Jack Wei
-	 * @return
 	 */
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service addServiceOfferedByTechnician(String email, String serviceName)
@@ -216,21 +219,16 @@ public class ProfileService {
 	/**
 	 * Creates a customer profile with the provide arguments. First name, last name,
 	 * and email are mandatory and inputs must satisfy their corresponding format,
-	 * otherwise an invalidInputException is thrown. Phone number, password and
-	 * vehicle information (license plate) can be empty (null) but otherwise they
-	 * must satisfy a specific format. If password is null, customer profile will
-	 * not be registered account.
+	 * otherwise an invalidInputException is thrown. Phone number and password can
+	 * be empty but otherwise they must satisfy a specific format. If password is
+	 * empty, customer profile will not be a registered account.
 	 * 
 	 * @param firstName
 	 * @param lastName
 	 * @param email
 	 * @param phoneNumber
 	 * @param password
-	 * @param licensePlate
-	 * @param year
-	 * @param model
-	 * @param brand
-	 * @return
+	 * @return the customer created
 	 * @throws IllegalArgumentException
 	 * @author Jack Wei
 	 * 
@@ -289,6 +287,13 @@ public class ProfileService {
 		return customer;
 	}
 	
+	/**
+	 * Gets a customer by the provided email.
+	 * 
+	 * @param email
+	 * @return the customer found.
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
 	public Customer getCustomer(String email) throws IllegalArgumentException {
 		if (email == null) {
@@ -302,6 +307,8 @@ public class ProfileService {
 	}
 	
 	/**
+	 * Gets the vehicles for customers. 
+	 * 
 	 * @author Zichen
 	 * @return the total income by all the appointments up to now
 	 */
@@ -315,15 +322,16 @@ public class ProfileService {
 
 
 	/**
-	 * Adds a vehicle to the customer profile with the provided arguments. All
-	 * arguments must satisfy their corresponding input formats, otherwise an
-	 * invalidInputException is thrown.
+	 * Adds a vehicle with the provided info to the customer profile with the
+	 * given email. All arguments must satisfy their corresponding input formats, 
+	 * otherwise an invalidInputException is thrown.
 	 * 
-	 * @param currentUser
+	 * @param email
 	 * @param licensePlate
 	 * @param year
 	 * @param model
 	 * @param brand
+	 * @return the created vehicle
 	 * @throws invalidInputException
 	 * @author Jack Wei
 	 * 
@@ -359,7 +367,7 @@ public class ProfileService {
 	 * @param year
 	 * @param model
 	 * @param brand
-	 * @return Vehicle
+	 * @return the created vehicle
 	 * @throws InvalidInputException
 	 * 
 	 * @author Jack Wei
@@ -399,11 +407,11 @@ public class ProfileService {
 
 	/**
 	 * Deletes the vehicle with the provided licensePlate from the database and the
-	 * customer profile.
+	 * customer profile with the given email.
 	 * 
-	 * @param currentUser
+	 * @param email
 	 * @param licensePlate
-	 * 
+	 * @return the deleted vehicle
 	 * @author Jack Wei
 	 */
 	@Transactional
@@ -455,7 +463,7 @@ public class ProfileService {
 	 * @param email
 	 * @param isOwner
 	 * @param password
-	 * @return
+	 * @return the created admin
 	 * @throws InvalidInputException
 	 * @author Jack Wei
 	 * 
@@ -515,8 +523,9 @@ public class ProfileService {
 	 * calling this method will change the profile to a registered account that can
 	 * be used to log in the application.
 	 * 
-	 * @param currentUser
+	 * @param email
 	 * @param password
+	 * @return the edited profile
 	 * @throws InvalidInputException
 	 * @author Jack Wei
 	 * 
@@ -544,8 +553,9 @@ public class ProfileService {
 	 * include white space, hyphen, dot and international prefix, otherwise an
 	 * invalidInputException is thrown.
 	 * 
-	 * @param currentUser
+	 * @param email
 	 * @param phoneNumber
+	 * @return the edited customer profile
 	 * @throws InvalidInputException
 	 * @author Jack Wei
 	 * 
@@ -571,7 +581,8 @@ public class ProfileService {
 	/**
 	 * Deletes the user profile with the provided profile ID.
 	 * 
-	 * @param profileID
+	 * @param email
+	 * @return the deleted profile
 	 * @author Jack Wei
 	 * 
 	 */
@@ -591,8 +602,7 @@ public class ProfileService {
 	 * Gets the profile by email. Throws exception when profile not found.
 	 * 
 	 * @param email
-	 * @return
-	 * 
+	 * @return the profile found
 	 * @throws invalidInputException
 	 * @author Jack Wei
 	 */
@@ -606,9 +616,5 @@ public class ProfileService {
 
 		return profile;
 	}
-
-	
-	
-	
 	
 }

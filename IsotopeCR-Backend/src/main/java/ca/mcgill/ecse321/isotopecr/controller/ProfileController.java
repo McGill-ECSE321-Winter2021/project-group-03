@@ -1,13 +1,8 @@
 package ca.mcgill.ecse321.isotopecr.controller;
 
-import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import ca.mcgill.ecse321.isotopecr.dao.*;
 import ca.mcgill.ecse321.isotopecr.dto.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
-import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.service.ProfileService;
 
 @CrossOrigin(origins = "*")
@@ -65,6 +59,17 @@ public class ProfileController {
 	 * Technician
 	 *********************************************************/
 
+	/**
+	 * Creates a technician profile with the given arguments.
+	 * 
+	 * @param email
+	 * @param firstName
+	 * @param lastName
+	 * @param password
+	 * @return technicianDto
+	 * @throws Exception
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "technician/create", "technician/create/" })
 	public TechnicianDto createTechnicianProfile(@RequestParam String email,
 			@RequestParam String firstName, @RequestParam String lastName,
@@ -78,6 +83,8 @@ public class ProfileController {
 	}
 
 	/**
+	 * Gets all the availabilities of the technician found by the given email.
+	 * 
 	 * @author Zichen
 	 * @param email
 	 * @return List of DailyAvailabilityDtos
@@ -100,7 +107,7 @@ public class ProfileController {
 	 * 
 	 * @author Zichen
 	 * @param email
-	 * @return
+	 * @return the DailyAvailabilityDto of the updated daily availability
 	 * @throws Exception
 	 */
 	@PostMapping(value = { "/availability/edit/{email}", "/availability/edit/{email}/" })
@@ -125,10 +132,12 @@ public class ProfileController {
 	}
 
 	/**
+	 * Gets the list of services provided by the technician with the given email.
 	 * 
 	 * @param email
 	 * @return List of ServiceDtos
 	 * @throws Exception
+	 * @author Zichen
 	 */
 	@GetMapping(value = { "/technician/service/get-all/{email}", "/technician/service/get-all/{email}/" })
 	public List<ServiceDto> getTechnicianServices(@PathVariable("email") String email) throws Exception {
@@ -141,6 +150,15 @@ public class ProfileController {
 		}
 	}
 
+	/**
+	 * Adds a service offered by the technician which is found via the provided email.
+	 * 
+	 * @param email
+	 * @param serviceName
+	 * @return ServiceDto of the service added
+	 * @throws Exception
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "technician/service/add/{email}", "customer/service/add/{email}/" })
 	public ServiceDto addServiceOfferedByTechnician(@PathVariable("email") String email,
 			@RequestParam("serviceName") String serviceName) throws Exception {
@@ -178,6 +196,18 @@ public class ProfileController {
 	 * Customer
 	 *********************************************************/
 
+	/**
+	 * Creates a customer profile with the provided arguments.
+	 * 
+	 * @param email
+	 * @param firstName
+	 * @param lastName
+	 * @param phoneNumber
+	 * @param password
+	 * @return the CustomerDto of the customer created
+	 * @throws IllegalArgumentException
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "/customer/create", "/customer/create/" })
 	public CustomerDto createCustomerProfile(@RequestParam String email,
 			@RequestParam String firstName, @RequestParam String lastName,
@@ -190,8 +220,30 @@ public class ProfileController {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
+	
+	/**
+	 * Sets/updates the phone number of the profile found by the given email.
+	 *  
+	 * @param email
+	 * @param phoneNumber
+	 * @return the CustomerDto of the updated customer profile
+	 * @throws Exception
+	 * @author Jack Wei
+	 */
+	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/"  })
+	public CustomerDto editPhoneNumber(@RequestParam String email,
+			@RequestParam String phoneNumber) throws Exception {
+		try {
+				Customer customer = profileService.editPhoneNumber(email, phoneNumber);
+				return ControllerHelperMethods.convertToDto(customer);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 
 	/**
+	 * Gets all the vehicles owned by the customer that is by the given email.
+	 * 
 	 * @author Zichen
 	 * @param email
 	 * @return List of VehicleDto
@@ -208,12 +260,23 @@ public class ProfileController {
 		}
 	}
 
+	/**
+	 * Creates a vehicle for the customer that is found by the given email.
+	 * 
+	 * @param email
+	 * @param licensePlate
+	 * @param year
+	 * @param model
+	 * @param brand
+	 * @return the VehicleDto of the created vehicle
+	 * @throws Exception
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "/customer/vehicle/create/{email}", "/customer/vehicle/create/{email}/" })
 	public VehicleDto createVehicle(@PathVariable("email") String email,
 			@RequestParam("licensePlate") String licensePlate, @RequestParam("year") String year,
 			@RequestParam("model") String model, @RequestParam("brand") String brand) throws Exception {
 		try {
-			Customer customer = profileService.getCustomer(email);
 			Vehicle vehicle = profileService.createVehicle(email, licensePlate, year, model, brand);
 			return ControllerHelperMethods.convertToDto(vehicle);
 		} catch (IllegalArgumentException e) {
@@ -221,6 +284,15 @@ public class ProfileController {
 		}
 	}
 
+	/**
+	 * Deletes the vehicle with the provided license plate from the customer with the provided email.
+	 * 
+	 * @param email
+	 * @param licensePlate
+	 * @return the VehicleDto of the deleted vehicle
+	 * @throws Exception
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "/customer/vehicle/delete", "/customer/vehicle/delete/" })
 	public VehicleDto deleteVehicle(@RequestParam String email,
 			@RequestParam String licensePlate) throws Exception {
@@ -236,6 +308,18 @@ public class ProfileController {
 	 * Admin
 	 *********************************************************/
 
+	/**
+	 * Creates an admin profile with the provided arguments.
+	 * 
+	 * @param email
+	 * @param firstName
+	 * @param lastName
+	 * @param password
+	 * @param isOwner
+	 * @return the AdminDto of the admin profile created
+	 * @throws IllegalArgumentException
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "/admin/create", "/admin/create/" })
 	public AdminDto createAdminProfile(@RequestParam String email, @RequestParam String firstName,
 			@RequestParam String lastName, @RequestParam String password,
@@ -252,6 +336,14 @@ public class ProfileController {
 	 * All profiles
 	 *********************************************************/
 	
+	/**
+	 * Deletes the profile with the given email.
+	 * 
+	 * @param email
+	 * @return the ProfileDto of the deleted profile
+	 * @throws IllegalArgumentException
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "profiles/delete/{email}", "/profiles/delete/{email}/" })
 	public ProfileDto deleteProfile(@PathVariable("email") String email)
 			throws IllegalArgumentException{
@@ -263,6 +355,15 @@ public class ProfileController {
 		}
 	}
 
+	/**
+	 * Sets/updates the password of the profile found by the given email.
+	 * 
+	 * @param email
+	 * @param password
+	 * @return the ProfileDto of the updated profile
+	 * @throws Exception
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "profiles/edit-password", "/profiles/edit-password/" })
 	public ProfileDto editPassword(@RequestParam String email, @RequestParam String password)
 			throws Exception {
@@ -274,19 +375,18 @@ public class ProfileController {
 		}
 	}
 
-	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/"  })
-	public CustomerDto editPhoneNumber(@RequestParam String email,
-			@RequestParam String phoneNumber) throws Exception {
-		try {
-				Customer customer = profileService.editPhoneNumber(email, phoneNumber);
-				return ControllerHelperMethods.convertToDto(customer);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
+	/**
+	 * Login method for the system. Authenticates the account with the given email and password.
+	 * 
+	 * @param email
+	 * @param password
+	 * @param session
+	 * @return the ProfileDto of the logged in profile
+	 * @throws IllegalArgumentException
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "/login", "/login/" })
-	public Profile login(@RequestParam String email, @RequestParam String password,
+	public ProfileDto login(@RequestParam String email, @RequestParam String password,
 			HttpSession session) throws IllegalArgumentException {
 
 		try {
@@ -295,17 +395,24 @@ public class ProfileController {
 				if (password != null && profile.getPassword().equals(password)) {
 					session.setAttribute(email, profile);
 				} else {
-					throw new IllegalArgumentException(); // TODO: Needs specific exception
+					throw new IllegalArgumentException("ERROR: Incorrect password.");
 				}
 			} else {
-				throw new IllegalArgumentException(); // TODO: Needs specific exception
+				throw new IllegalArgumentException("ERROR: Not a registered account."); 
 			}
-			return profile;
+			return ControllerHelperMethods.convertToDto(profile);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
 
+	/**
+	 * Logs out the user.
+	 * 
+	 * @param session
+	 * @return a message confirming log out
+	 * @author Jack Wei
+	 */
 	@PostMapping(value = { "/logout", "/logout/" })
 	public String logout(HttpSession session) {
 		session.removeAttribute("username");
