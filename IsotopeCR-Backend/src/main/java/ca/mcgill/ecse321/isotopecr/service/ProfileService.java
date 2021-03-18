@@ -46,7 +46,7 @@ public class ProfileService {
 	/*********************************************************
 	 * Technician
 	 *********************************************************/
-	
+
 	/**
 	 * Creates a technician profile with the provide arguments. All arguments are
 	 * mandatory and inputs must satisfy their corresponding format, otherwise an
@@ -149,7 +149,7 @@ public class ProfileService {
 		}
 		return technician;
 	}
-	
+
 	/**
 	 * Updates the availability for a specific day in week.
 	 * 
@@ -162,12 +162,12 @@ public class ProfileService {
 	 */
 	@Transactional
 	public DailyAvailability editTechnicianAvailability(String email, DayOfWeek day, Time startTime, Time endTime) {
-		
+
 		Technician technician = getTechnician(email);
-		
+
 		DailyAvailability foundAvailability = null;
-		
-		Set <DailyAvailability> availabilities = technician.getDailyAvailability();
+
+		Set<DailyAvailability> availabilities = technician.getDailyAvailability();
 		for (DailyAvailability availability : availabilities) {
 			if (availability.getDay().equals(day)) {
 				availability.setStartTime(startTime);
@@ -176,12 +176,12 @@ public class ProfileService {
 				foundAvailability = availability;
 			}
 		}
-		
+
 		technician.setDailyAvailability(availabilities);
 		technicianRepository.save(technician);
 		return foundAvailability;
 	}
-	
+
 	/**
 	 * Add a service offered by the technician to the technician profile.
 	 * 
@@ -194,12 +194,12 @@ public class ProfileService {
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service addServiceOfferedByTechnician(String email, String serviceName)
 			throws IllegalArgumentException {
-		
-		Technician technician =  technicianRepository.findTechnicianByEmail(email);
+
+		Technician technician = technicianRepository.findTechnicianByEmail(email);
 		if (technician == null) {
 			throw new IllegalArgumentException("ERROR: the technician cannot be found.");
 		}
-		
+
 		Set<ca.mcgill.ecse321.isotopecr.model.Service> services = technician.getService();
 		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
 		if (service != null) {
@@ -208,14 +208,14 @@ public class ProfileService {
 			technicianRepository.save(technician);
 			return service;
 		} else {
-			throw new IllegalArgumentException("ERROR: Service does not exist."); 
+			throw new IllegalArgumentException("ERROR: Service does not exist.");
 		}
 	}
-	
+
 	/*********************************************************
 	 * Customer
 	 *********************************************************/
-	
+
 	/**
 	 * Creates a customer profile with the provide arguments. First name, last name,
 	 * and email are mandatory and inputs must satisfy their corresponding format,
@@ -244,10 +244,10 @@ public class ProfileService {
 		Customer customer = new Customer();
 
 		Set<Vehicle> vehicles = new HashSet<Vehicle>();
-		
+
 		customer.setIsRegisteredAccount(false);
 		customer.setVehicle(vehicles);
-		
+
 		if (ServiceHelperMethods.isValidEmail(email)) {
 			customer.setEmail(email);
 		} else {
@@ -305,7 +305,7 @@ public class ProfileService {
 		}
 		return customer;
 	}
-	
+
 	/**
 	 * Gets the vehicles for customers. 
 	 * 
@@ -319,7 +319,6 @@ public class ProfileService {
 		}
 		return ServiceHelperMethods.toList(customer.getVehicle());
 	}
-
 
 	/**
 	 * Adds a vehicle with the provided info to the customer profile with the
@@ -339,13 +338,13 @@ public class ProfileService {
 	@Transactional
 	public Vehicle createVehicle(String email, String licensePlate, String year, String model, String brand)
 			throws IllegalArgumentException {
-		
+
 		Customer customer = customerRepository.findCustomerByEmail(email);
-		
-		if(customer == null) {
+
+		if (customer == null) {
 			throw new IllegalArgumentException("ERROR: Customer does not exist.");
 		}
-		
+
 		try {
 			Vehicle vehicle = createNewVehicle(licensePlate, year, model, brand);
 			Set<Vehicle> vehicles = customer.getVehicle();
@@ -353,7 +352,7 @@ public class ProfileService {
 			customer.setVehicle(vehicles);
 			customerRepository.save(customer);
 			return vehicle;
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			throw e;
 		}
 	}
@@ -376,9 +375,9 @@ public class ProfileService {
 			throws IllegalArgumentException {
 
 		Vehicle vehicle = new Vehicle();
-		if(!licensePlate.isEmpty()) {
+		if (!licensePlate.isEmpty()) {
 			vehicle.setLicensePlate(licensePlate);
-		}else {
+		} else {
 			throw new IllegalArgumentException("ERROR: License plate cannot be empty.");
 		}
 		if (ServiceHelperMethods.isValidYear(year)) {
@@ -403,7 +402,6 @@ public class ProfileService {
 
 		return vehicle;
 	}
-	
 
 	/**
 	 * Deletes the vehicle with the provided licensePlate from the database and the
@@ -415,12 +413,11 @@ public class ProfileService {
 	 * @author Jack Wei
 	 */
 	@Transactional
-	public Vehicle deleteVehicle(String email, String licensePlate) 
-			throws IllegalArgumentException {
+	public Vehicle deleteVehicle(String email, String licensePlate) throws IllegalArgumentException {
 
 		Customer customer = customerRepository.findCustomerByEmail(email);
-		
-		if(customer == null) {
+
+		if (customer == null) {
 			throw new IllegalArgumentException("ERROR: Customer does not exist.");
 		}
 
@@ -435,9 +432,9 @@ public class ProfileService {
 				isDeleted = true;
 			}
 		}
-		
-        vehicles.remove(foundVehicle);
-        vehicleRepository.delete(foundVehicle);
+
+		vehicles.remove(foundVehicle);
+		vehicleRepository.delete(foundVehicle);
 		if (isDeleted) {
 			customer.setVehicle(vehicles);
 			customerRepository.save(customer);
@@ -450,7 +447,7 @@ public class ProfileService {
 	/*********************************************************
 	 * Admin
 	 *********************************************************/
-	
+
 	/**
 	 * Creates an admin profile with the provide arguments. The admin can either be
 	 * the owner or administrative assistance. All arguments are mandatory and
@@ -473,7 +470,8 @@ public class ProfileService {
 			throws IllegalArgumentException {
 
 		if (profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
-			throw new IllegalArgumentException("ERROR: Administrative account with that email already exists."); // TODO: exception
+			throw new IllegalArgumentException("ERROR: Administrative account with that email already exists."); // TODO:
+																													// exception
 		}
 
 		Admin admin = new Admin();
@@ -482,7 +480,8 @@ public class ProfileService {
 			if (ServiceHelperMethods.isValidCompanyEmail(email)) {
 				admin.setEmail(email);
 			} else { // valid email but not company email
-				throw new IllegalArgumentException("ERROR: Administrative account creation forbidden. Not a company email.");
+				throw new IllegalArgumentException(
+						"ERROR: Administrative account creation forbidden. Not a company email.");
 			}
 		} else {
 			throw new IllegalArgumentException("ERROR: Invalid email.");
@@ -532,9 +531,9 @@ public class ProfileService {
 	 */
 	@Transactional
 	public Profile editPassword(String email, String password) throws IllegalArgumentException {
-		
+
 		Profile profile = getProfile(email);
-		if(ServiceHelperMethods.isValidPassword(password)) {
+		if (ServiceHelperMethods.isValidPassword(password)) {
 			profile.setPassword(password);
 			if (profile instanceof Customer) {
 				profile.setIsRegisteredAccount(true);
@@ -542,7 +541,7 @@ public class ProfileService {
 		} else {
 			throw new IllegalArgumentException("ERROR: Invalid password.");
 		}
-		
+
 		profileRepository.save(profile);
 		return profile;
 	}
@@ -564,8 +563,8 @@ public class ProfileService {
 	public Customer editPhoneNumber(String email, String phoneNumber) throws IllegalArgumentException {
 
 		Customer customerProfile = customerRepository.findCustomerByEmail(email);
-		
-		if(customerProfile == null) {
+
+		if (customerProfile == null) {
 			throw new IllegalArgumentException("ERROR: Customer does not exist.");
 		}
 
@@ -616,5 +615,5 @@ public class ProfileService {
 
 		return profile;
 	}
-	
+
 }

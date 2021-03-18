@@ -52,8 +52,6 @@ public class AppointmentService {
 	@Autowired
 	AppointmentRepository appointmentRepository;
 
-
-
 	/**
 	 * @author Zichen
 	 * @param time
@@ -83,7 +81,7 @@ public class AppointmentService {
 		}
 		return null;
 	}
-	
+
 	@Transactional
 	public Vehicle getVehicle(String licensePlate) {
 		if (licensePlate == null) {
@@ -95,7 +93,7 @@ public class AppointmentService {
 		}
 		return vehicle;
 	}
-	
+
 	@Transactional
 	public Customer getCustomerOfVehicle(Vehicle vehicle) {
 		if (vehicle == null) {
@@ -107,7 +105,7 @@ public class AppointmentService {
 		}
 		return customer;
 	}
-	
+
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service getService(String serviceName) {
 		if (serviceName == null) {
@@ -119,6 +117,7 @@ public class AppointmentService {
 		}
 		return service;
 	}
+
 	/**
 	 * @author Jiatong
 	 * @param customer
@@ -127,14 +126,16 @@ public class AppointmentService {
 	 * @param service
 	 * @param startTime
 	 * @param chosenDate
-	 * @return An appointment just created
+	 * @return an appointment that is just created
+	 * @throws IllegalArgumentException
 	 */
 	@Transactional
 	public Appointment createAppointment(Customer customer, Vehicle vehicle, Technician technician,
 			ca.mcgill.ecse321.isotopecr.model.Service service, Time startTime, Date chosenDate)
 			throws IllegalArgumentException {
 
-		if (!ServiceHelperMethods.isValidCustomer(customer) || !ServiceHelperMethods.isValidVehicle(vehicle) || !ServiceHelperMethods.isValidTechnician(technician)
+		if (!ServiceHelperMethods.isValidCustomer(customer) || !ServiceHelperMethods.isValidVehicle(vehicle)
+				|| !ServiceHelperMethods.isValidTechnician(technician)
 				|| !ServiceHelperMethods.isValidService(service)) {
 			throw new IllegalArgumentException("Invalid input for booking an appointment.");
 		}
@@ -187,6 +188,12 @@ public class AppointmentService {
 		return appointment;
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param appointment
+	 * @return appointment that is cancelled
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
 	public Appointment cancelAppointment(Appointment appointment) throws IllegalArgumentException {
 
@@ -210,21 +217,36 @@ public class AppointmentService {
 
 	}
 
-	@Transactional 
+	/**
+	 * @author Victoria
+	 * @param appointment
+	 * @return invoice that is just created
+	 */
+	@Transactional
 	public Invoice createInvoice(Appointment appointment) {
 		Invoice invoice = new Invoice();
 		invoice.setCost(appointment.getService().getPrice());
-		invoice.setInvoiceID(String.valueOf(appointment.getService().getPrice()*appointment.getAppointmentID().hashCode()));
+		invoice.setInvoiceID(
+				String.valueOf(appointment.getService().getPrice() * appointment.getAppointmentID().hashCode()));
 		invoice.setIsPaid(false);
 		invoiceRepository.save(invoice);
 		return invoice;
 	}
-	
+
+	/**
+	 * @author Jiatong
+	 * @return A list of all appointments that is in the system
+	 */
 	@Transactional
 	public List<Appointment> getAllAppointments() {
 		return ServiceHelperMethods.toList(appointmentRepository.findAll());
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param appointment: a list of appointments that we want to go through
+	 * @return A list of appointment that is before current time (past appointments)
+	 */
 	@Transactional
 	public List<Appointment> getAllAppointmentsBeforeTime(List<Appointment> appointments)
 			throws IllegalArgumentException {
@@ -252,6 +274,13 @@ public class AppointmentService {
 		return aptmtBeforeTime;
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param appointment: a list of appointments that we want to go through
+	 * @return A list of appointment that is after current time (future
+	 *         appointments)
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
 	public List<Appointment> getAllAppointmentsAfterTime(List<Appointment> appointments)
 			throws IllegalArgumentException {
@@ -277,6 +306,13 @@ public class AppointmentService {
 		return aptmtBeforeTime;
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param aCustomer
+	 * @return A list of appointment that the customer of the appointment is the
+	 *         input customer
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
 	public List<Appointment> getAppointmentsByCustomer(Customer aCustomer) throws IllegalArgumentException {
 		if (ServiceHelperMethods.isValidCustomer(aCustomer)) {
@@ -287,6 +323,13 @@ public class AppointmentService {
 		}
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param technician
+	 * @return A list of appointment that the technician of the appointment is the
+	 *         input technician
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
 	public List<Appointment> getAppointmentsByTechnician(Technician technician) throws IllegalArgumentException {
 		if (ServiceHelperMethods.isValidTechnician(technician)) {
@@ -298,6 +341,13 @@ public class AppointmentService {
 		}
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param vehicle
+	 * @return A list of appointment that the vehicle of the appointment is the
+	 *         input vehicle
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
 	public List<Appointment> getAppointmentsByVehicle(Vehicle vehicle) throws IllegalArgumentException {
 		if (ServiceHelperMethods.isValidVehicle(vehicle)) {
@@ -308,6 +358,13 @@ public class AppointmentService {
 		}
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param service
+	 * @return A list of appointment that the service technician of the appointment
+	 *         is the input service
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
 	public List<Appointment> getAppointmentsByService(ca.mcgill.ecse321.isotopecr.model.Service service)
 			throws IllegalArgumentException {
@@ -319,10 +376,15 @@ public class AppointmentService {
 			throw new IllegalArgumentException("Invalid service");
 		}
 	}
-	
+
+	/**
+	 * @author Jiatong
+	 * @param id
+	 * @return An appointment that the id of the appointment is the input id
+	 * @throws IllegalArgumentException
+	 */
 	@Transactional
-	public Appointment getAppointmentsByID(String id)
-			throws IllegalArgumentException {
+	public Appointment getAppointmentsByID(String id) throws IllegalArgumentException {
 		if (id != null) {
 			Appointment appointment = appointmentRepository.findAppointmentByAppointmentID(id);
 			return appointment;
@@ -330,8 +392,7 @@ public class AppointmentService {
 			throw new IllegalArgumentException("Invalid appointment id");
 		}
 	}
-	
-	
+
 	/**
 	 * Helper method
 	 * 
@@ -342,7 +403,6 @@ public class AppointmentService {
 	private DayOfWeek intToDayOfWeek(int dayOfWeeki) {
 		switch (dayOfWeeki) {
 
-		
 		case 2:
 
 			return DayOfWeek.Monday;

@@ -37,11 +37,11 @@ public class ControllerHelperMethods {
 		if (cp == null) {
 			throw new IllegalArgumentException("There is no such Company Profile!");
 		}
-		CompanyProfileDto companyProfileDto = new CompanyProfileDto(cp.getCompanyName(), cp.getAddress(), cp.getWorkingHours());
+		CompanyProfileDto companyProfileDto = new CompanyProfileDto(cp.getCompanyName(), cp.getAddress(),
+				cp.getWorkingHours());
 		return companyProfileDto;
 	}
-	
-	
+
 	public static ResourceDto convertToDto(Resource r) {
 		if (r == null) {
 			throw new IllegalArgumentException("There is no such Resource!");
@@ -49,24 +49,23 @@ public class ControllerHelperMethods {
 		ResourceDto resourceDto = new ResourceDto(r.getResourceType(), r.getMaxAvailable());
 		return resourceDto;
 	}
-	
-	
+
 	public static ServiceDto convertToDto(Service s) {
 		if (s == null) {
 			throw new IllegalArgumentException("There is no such Service!");
 		}
-		
-		ServiceDto serviceDto = new ServiceDto(s.getServiceName(), s.getDuration(), s.getPrice(), convertToDto(s.getResource()));
+
+		ServiceDto serviceDto = new ServiceDto(s.getServiceName(), s.getDuration(), s.getPrice(),
+				convertToDto(s.getResource()));
 		return serviceDto;
 	}
-	
 
 	public static InvoiceDto convertToDto(Invoice i) {
 		if (i == null) {
 			throw new IllegalArgumentException("There is no such Invoice!");
 		}
-	 InvoiceDto inovoiceDto = new InvoiceDto(i.getCost(), i.getIsPaid(), i.getInvoiceID());
-	 return inovoiceDto;
+		InvoiceDto inovoiceDto = new InvoiceDto(i.getCost(), i.getIsPaid(), i.getInvoiceID());
+		return inovoiceDto;
 	}
 
 	public static DailyAvailabilityDto convertToDto(DailyAvailability d) {
@@ -87,7 +86,6 @@ public class ControllerHelperMethods {
 		return customerDto;
 	}
 
-	
 	public static VehicleDto convertToDto(Vehicle v) {
 		if (v == null) {
 			throw new IllegalArgumentException("There is no such Vehicle!");
@@ -95,8 +93,6 @@ public class ControllerHelperMethods {
 		VehicleDto vehicleDto = new VehicleDto(v.getLicensePlate(), v.getYear(), v.getModel(), v.getBrand());
 		return vehicleDto;
 	}
-
-
 
 	public static AdminDto convertToDto(Admin admin) {
 		if (admin == null) {
@@ -111,15 +107,16 @@ public class ControllerHelperMethods {
 		if (technician == null) {
 			throw new IllegalArgumentException("Technician account does not exist.");
 		}
-		List<DailyAvailabilityDto> availabilities = technician.getDailyAvailability().stream().map(r -> ControllerHelperMethods.convertToDto(r))
+		List<DailyAvailabilityDto> availabilities = technician.getDailyAvailability().stream()
+				.map(r -> ControllerHelperMethods.convertToDto(r)).collect(Collectors.toList());
+		List<ServiceDto> services = technician.getService().stream().map(r -> ControllerHelperMethods.convertToDto(r))
 				.collect(Collectors.toList());
-		List<ServiceDto> services = technician.getService().stream().map(r -> ControllerHelperMethods.convertToDto(r)).collect(Collectors.toList());
 		TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(),
 				technician.getEmail(), technician.getPassword(), availabilities);
 		technicianDto.setServices(services);
 		return technicianDto;
 	}
-	
+
 	public static ProfileDto convertToDto(Profile profile) {
 		if (profile == null) {
 			throw new IllegalArgumentException("Profile does not exist.");

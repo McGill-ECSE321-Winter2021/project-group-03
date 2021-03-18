@@ -133,17 +133,16 @@ public class AutoRepairShopController {
 		return autoRepairShopService.getAllServices().stream().map(r -> ControllerHelperMethods.convertToDto(r))
 				.collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * @author Mathieu
 	 */
 	@PostMapping(value = { "/service/create/{servicename}", "/service/create/{servicename}/" })
-	public ServiceDto createService(@PathVariable("servicename") String serviceName,
-			@RequestParam Integer duration, @RequestParam Double price,
-			@RequestParam String resourceType, @RequestParam Integer frequency) {
+	public ServiceDto createService(@PathVariable("servicename") String serviceName, @RequestParam Integer duration,
+			@RequestParam Double price, @RequestParam String resourceType, @RequestParam Integer frequency) {
 		try {
 			Resource resource = autoRepairShopService.getResourceByType(resourceType);
-			Service service =  autoRepairShopService.createService(serviceName, duration, price, resource, frequency);
+			Service service = autoRepairShopService.createService(serviceName, duration, price, resource, frequency);
 			return ControllerHelperMethods.convertToDto(service);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
@@ -154,12 +153,12 @@ public class AutoRepairShopController {
 	 * @author Mathieu
 	 */
 	@PostMapping(value = { "/service/edit/{servicename}", "/service/edit/{servicename}/" })
-	public ServiceDto editService(@PathVariable("servicename") String serviceName,
-			@RequestParam Integer duration, @RequestParam Double price,
-			@RequestParam String resourceType, @RequestParam Integer frequency)  {
+	public ServiceDto editService(@PathVariable("servicename") String serviceName, @RequestParam Integer duration,
+			@RequestParam Double price, @RequestParam String resourceType, @RequestParam Integer frequency) {
 		try {
 			Resource resource = autoRepairShopService.getResourceByType(resourceType);
-			Service service = (Service) autoRepairShopService.editService(serviceName, duration, price, resource, frequency);
+			Service service = (Service) autoRepairShopService.editService(serviceName, duration, price, resource,
+					frequency);
 			return ControllerHelperMethods.convertToDto(service);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
@@ -193,24 +192,21 @@ public class AutoRepairShopController {
 		}
 	}
 
-	
-
 	/*********************************************************
 	 * Company Profile
 	 *********************************************************/
 
-	@PostMapping(value = { "/CompanyProfile/create",
-			"/CompanyProfile/create/" })
-	public CompanyProfileDto createCompanyProfile(@RequestParam String companyName,
-			@RequestParam String address, @RequestParam String workingHours) {
+	@PostMapping(value = { "/CompanyProfile/create", "/CompanyProfile/create/" })
+	public CompanyProfileDto createCompanyProfile(@RequestParam String companyName, @RequestParam String address,
+			@RequestParam String workingHours) {
 		try {
-			CompanyProfile companyProfile = autoRepairShopService.createCompanyProfile(companyName, address, workingHours);
+			CompanyProfile companyProfile = autoRepairShopService.createCompanyProfile(companyName, address,
+					workingHours);
 			return ControllerHelperMethods.convertToDto(companyProfile);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
 
 	@GetMapping(value = { "/CompanyProfile/get", "/CompanyProfile/get/" })
 	public CompanyProfileDto getCompanyProfile() {
@@ -223,6 +219,4 @@ public class AutoRepairShopController {
 		}
 	}
 
-
-	
 }

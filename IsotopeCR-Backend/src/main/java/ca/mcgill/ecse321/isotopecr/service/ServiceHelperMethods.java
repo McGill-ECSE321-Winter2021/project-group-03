@@ -22,6 +22,13 @@ public class ServiceHelperMethods {
 		return resultList;
 	}
 
+	/**
+	 * this method checks if the customer is null or not
+	 * 
+	 * @author Jiatong
+	 * @param customer
+	 * @return a boolean indicates whether the customer is valid
+	 */
 	public static boolean isValidCustomer(Customer customer) {
 		boolean isValid = false;
 		if (customer != null) {
@@ -30,6 +37,13 @@ public class ServiceHelperMethods {
 		return isValid;
 	}
 
+	/**
+	 * this method checks if the technician is null or not
+	 * 
+	 * @author Jiatong
+	 * @param technician
+	 * @return a boolean indicates whether the technician is valid
+	 */
 	public static boolean isValidTechnician(Technician technician) {
 		boolean isValid = false;
 		if (technician != null) {
@@ -38,6 +52,13 @@ public class ServiceHelperMethods {
 		return isValid;
 	}
 
+	/**
+	 * this method checks if the vehicle is null or not
+	 * 
+	 * @author Jiatong
+	 * @param vehicle
+	 * @return a boolean indicates whether the vehicle is valid
+	 */
 	public static boolean isValidVehicle(Vehicle vehicle) {
 		boolean isValid = false;
 		if (vehicle != null) {
@@ -46,6 +67,13 @@ public class ServiceHelperMethods {
 		return isValid;
 	}
 
+	/**
+	 * this method checks if the service is null or not
+	 * 
+	 * @author Jiatong
+	 * @param service
+	 * @return
+	 */
 	public static boolean isValidService(ca.mcgill.ecse321.isotopecr.model.Service service) {
 		boolean isValid = false;
 		if (service != null) {
@@ -61,7 +89,7 @@ public class ServiceHelperMethods {
 		}
 		return isValid;
 	}
-	
+
 	public static boolean isBeforeADay(Date date) {
 		Date curDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
 
@@ -72,7 +100,7 @@ public class ServiceHelperMethods {
 
 		return isBefore;
 	}
-	
+
 	public static boolean isValidResource(Resource resource) {
 		boolean isValid = false;
 		if (resource != null) {
@@ -80,39 +108,39 @@ public class ServiceHelperMethods {
 		}
 		return isValid;
 	}
-	
+
 	public static boolean isValidServiceName(String serviceName) {
 		String regex = "^[a-zA-Z-\s]*[a-zA-Z-]+$";
-		//only letters and - allowed, only one space between words allowed
+		// only letters and - allowed, only one space between words allowed
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(serviceName);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(serviceName);
+		return matcher.matches();
 	}
-	
+
 	public static boolean isValidDuration(int duration) {
 		boolean isValid = false;
-		if(duration%30 == 0) {
+		if (duration % 30 == 0) {
 			isValid = true;
 		}
 		return isValid;
 	}
-	
+
 	public static boolean isValidPrice(double price) {
 		boolean isValid = false;
-		if(price > 0.0 && price < 1000000.0) {
+		if (price > 0.0 && price < 1000000.0) {
 			isValid = true;
 		}
 		return isValid;
 	}
-	
-	public static boolean isValidCompanyName(String companyName){
+
+	public static boolean isValidCompanyName(String companyName) {
 		String regex = "^[A-Z]([a-zA-Z0-9]|[- @\\.#&!]){1,20}$";
 		// contains any kind of letter from any language
 		Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(companyName);
-        return matcher.matches();
+		Matcher matcher = pattern.matcher(companyName);
+		return matcher.matches();
 	}
-	
+
 	/**
 	 * This helper method checks if the input email address satisfies a standard
 	 * email address format. The format must follow RFC 5322 and there should be no
@@ -206,8 +234,6 @@ public class ServiceHelperMethods {
 		Matcher matcher = pattern.matcher(phoneNumber);
 		return matcher.matches();
 	}
-	
-	
 
 	/**
 	 * This helper method checks if the brand name of a vehicle is valid, i.e. only
@@ -262,5 +288,5 @@ public class ServiceHelperMethods {
 
 		return isValid;
 	}
-	
+
 }

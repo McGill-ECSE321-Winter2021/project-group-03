@@ -45,14 +45,13 @@ public class Service {
 	public double getPrice() {
 		return this.price;
 	}
-	
-	
+
 	private Integer frequency;
-	
+
 	public void setFrequency(Integer frequency) {
 		this.frequency = frequency;
 	}
-	
+
 	public Integer getFrequency() {
 		return this.frequency;
 	}

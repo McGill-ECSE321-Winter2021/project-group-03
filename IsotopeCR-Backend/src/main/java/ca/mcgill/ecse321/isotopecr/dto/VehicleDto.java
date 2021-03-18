@@ -5,7 +5,7 @@ public class VehicleDto {
 	private String year;
 	private String model;
 	private String brand;
-	//private CustomerDto owner;
+	// private CustomerDto owner;
 
 	public VehicleDto() {
 
