@@ -231,12 +231,8 @@ public class ProfileController {
 	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/"  })
 	public CustomerDto editPhoneNumber(@RequestParam String email,
 			@RequestParam String phoneNumber) throws Exception {
-		try {
-				Customer customer = profileService.editPhoneNumber(email, phoneNumber);
-				return ControllerHelperMethods.convertToDto(customer);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e.getMessage());
-		}
+			Customer customer = profileService.editPhoneNumber(email, phoneNumber);
+			return ControllerHelperMethods.convertToDto(customer);
 	}
 
 	/**
@@ -332,7 +328,6 @@ public class ProfileController {
 	/*********************************************************
 	 * All profiles
 	 *********************************************************/
-<<<<<<< HEAD
 	
 	/**
 	 * Deletes the profile with the given email.
@@ -342,9 +337,6 @@ public class ProfileController {
 	 * @throws IllegalArgumentException
 	 * @author Jack Wei
 	 */
-=======
-
->>>>>>> eab5810319202438445b3f9bbad766ee67d9b0a6
 	@PostMapping(value = { "profiles/delete/{email}", "/profiles/delete/{email}/" })
 	public ProfileDto deleteProfile(@PathVariable("email") String email) throws IllegalArgumentException {
 		try {
@@ -374,7 +366,6 @@ public class ProfileController {
 		}
 	}
 
-<<<<<<< HEAD
 	/**
 	 * Login method for the system. Authenticates the account with the given email and password.
 	 * 
@@ -388,22 +379,6 @@ public class ProfileController {
 	@PostMapping(value = { "/login", "/login/" })
 	public ProfileDto login(@RequestParam String email, @RequestParam String password,
 			HttpSession session) throws IllegalArgumentException {
-=======
-	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/" })
-	public CustomerDto editPhoneNumber(@RequestParam String email, @RequestParam String phoneNumber) throws Exception {
-		try {
-			Customer customer = profileService.editPhoneNumber(email, phoneNumber);
-			return ControllerHelperMethods.convertToDto(customer);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@PostMapping(value = { "/login", "/login/" })
-	public Profile login(@RequestParam String email, @RequestParam String password, HttpSession session)
-			throws IllegalArgumentException {
->>>>>>> eab5810319202438445b3f9bbad766ee67d9b0a6
-
 		try {
 			Profile profile = profileService.getProfile(email);
 			if (profile.getIsRegisteredAccount()) {

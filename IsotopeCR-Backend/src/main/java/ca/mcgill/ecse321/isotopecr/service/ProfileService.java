@@ -439,7 +439,7 @@ public class ProfileService {
 			customer.setVehicle(vehicles);
 			customerRepository.save(customer);
 		} else { // vehicle not found
-			// TODO: exception? error message?
+			throw new IllegalArgumentException("ERROR: Vehicle does not exist.");
 		}
 		return foundVehicle;
 	}
@@ -470,8 +470,7 @@ public class ProfileService {
 			throws IllegalArgumentException {
 
 		if (profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
-			throw new IllegalArgumentException("ERROR: Administrative account with that email already exists."); // TODO:
-																													// exception
+			throw new IllegalArgumentException("ERROR: Administrative account with that email already exists."); 
 		}
 
 		Admin admin = new Admin();
