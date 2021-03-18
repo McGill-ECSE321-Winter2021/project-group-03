@@ -104,7 +104,7 @@ public class AutoRepairShopService {
 		List<Resource> resources = ServiceHelperMethods.toList(resourceRepository.findAll());
 		return resources;
 	}
-	
+
 	@Transactional
 	public Resource getResourceByType(String resourceType) {
 		if (resourceRepository.existsById(resourceType)) {
@@ -129,19 +129,18 @@ public class AutoRepairShopService {
 		return invoices;
 	}
 
-	
 	@Transactional
 	public Invoice createInvoice(String invoiceID, double cost, Boolean isPaid) {
-    	if(ServiceHelperMethods.isValidPrice(cost)) {
-    		Invoice invoice = new Invoice();
-    		invoice.setInvoiceID(invoiceID);
-    		invoice.setCost(cost);
-    		invoice.setIsPaid(isPaid);
-    		invoiceRepository.save(invoice);
-    		return invoice;
-    	}else {
-    		throw new IllegalArgumentException("ERROR: Unable to create Invoice, invalid cost.");
-    	}
+		if (ServiceHelperMethods.isValidPrice(cost)) {
+			Invoice invoice = new Invoice();
+			invoice.setInvoiceID(invoiceID);
+			invoice.setCost(cost);
+			invoice.setIsPaid(isPaid);
+			invoiceRepository.save(invoice);
+			return invoice;
+		} else {
+			throw new IllegalArgumentException("ERROR: Unable to create Invoice, invalid cost.");
+		}
 
 	}
 

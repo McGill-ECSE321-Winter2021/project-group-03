@@ -66,9 +66,8 @@ public class ProfileController {
 	 *********************************************************/
 
 	@PostMapping(value = { "technician/create", "technician/create/" })
-	public TechnicianDto createTechnicianProfile(@RequestParam String email,
-			@RequestParam String firstName, @RequestParam String lastName,
-			@RequestParam String password) throws Exception {
+	public TechnicianDto createTechnicianProfile(@RequestParam String email, @RequestParam String firstName,
+			@RequestParam String lastName, @RequestParam String password) throws Exception {
 		try {
 			Technician technician = profileService.createTechnicianProfile(firstName, lastName, email, password);
 			return ControllerHelperMethods.convertToDto(technician);
@@ -145,7 +144,7 @@ public class ProfileController {
 	public ServiceDto addServiceOfferedByTechnician(@PathVariable("email") String email,
 			@RequestParam("serviceName") String serviceName) throws Exception {
 		try {
-			
+
 			Service service = (Service) profileService.addServiceOfferedByTechnician(email, serviceName);
 			return ControllerHelperMethods.convertToDto(service);
 		} catch (IllegalArgumentException e) {
@@ -179,9 +178,8 @@ public class ProfileController {
 	 *********************************************************/
 
 	@PostMapping(value = { "/customer/create", "/customer/create/" })
-	public CustomerDto createCustomerProfile(@RequestParam String email,
-			@RequestParam String firstName, @RequestParam String lastName,
-			@RequestParam String phoneNumber, @RequestParam String password)
+	public CustomerDto createCustomerProfile(@RequestParam String email, @RequestParam String firstName,
+			@RequestParam String lastName, @RequestParam String phoneNumber, @RequestParam String password)
 			throws IllegalArgumentException {
 		try {
 			Customer customer = profileService.createCustomerProfile(firstName, lastName, email, phoneNumber, password);
@@ -222,11 +220,10 @@ public class ProfileController {
 	}
 
 	@PostMapping(value = { "/customer/vehicle/delete", "/customer/vehicle/delete/" })
-	public VehicleDto deleteVehicle(@RequestParam String email,
-			@RequestParam String licensePlate) throws Exception {
+	public VehicleDto deleteVehicle(@RequestParam String email, @RequestParam String licensePlate) throws Exception {
 		try {
 			Vehicle vehicle = profileService.deleteVehicle(email, licensePlate);
-				return ControllerHelperMethods.convertToDto(vehicle);
+			return ControllerHelperMethods.convertToDto(vehicle);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
 		}
@@ -238,8 +235,8 @@ public class ProfileController {
 
 	@PostMapping(value = { "/admin/create", "/admin/create/" })
 	public AdminDto createAdminProfile(@RequestParam String email, @RequestParam String firstName,
-			@RequestParam String lastName, @RequestParam String password,
-			@RequestParam boolean isOwner) throws IllegalArgumentException {
+			@RequestParam String lastName, @RequestParam String password, @RequestParam boolean isOwner)
+			throws IllegalArgumentException {
 		try {
 			Admin admin = profileService.createAdminProfile(firstName, lastName, email, isOwner, password);
 			return ControllerHelperMethods.convertToDto(admin);
@@ -251,10 +248,9 @@ public class ProfileController {
 	/*********************************************************
 	 * All profiles
 	 *********************************************************/
-	
+
 	@PostMapping(value = { "profiles/delete/{email}", "/profiles/delete/{email}/" })
-	public ProfileDto deleteProfile(@PathVariable("email") String email)
-			throws IllegalArgumentException{
+	public ProfileDto deleteProfile(@PathVariable("email") String email) throws IllegalArgumentException {
 		try {
 			Profile profile = profileService.deleteProfile(email);
 			return ControllerHelperMethods.convertToDto(profile);
@@ -264,8 +260,7 @@ public class ProfileController {
 	}
 
 	@PostMapping(value = { "profiles/edit-password", "/profiles/edit-password/" })
-	public ProfileDto editPassword(@RequestParam String email, @RequestParam String password)
-			throws Exception {
+	public ProfileDto editPassword(@RequestParam String email, @RequestParam String password) throws Exception {
 		try {
 			Profile profile = profileService.editPassword(email, password);
 			return ControllerHelperMethods.convertToDto(profile);
@@ -274,20 +269,19 @@ public class ProfileController {
 		}
 	}
 
-	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/"  })
-	public CustomerDto editPhoneNumber(@RequestParam String email,
-			@RequestParam String phoneNumber) throws Exception {
+	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/" })
+	public CustomerDto editPhoneNumber(@RequestParam String email, @RequestParam String phoneNumber) throws Exception {
 		try {
-				Customer customer = profileService.editPhoneNumber(email, phoneNumber);
-				return ControllerHelperMethods.convertToDto(customer);
+			Customer customer = profileService.editPhoneNumber(email, phoneNumber);
+			return ControllerHelperMethods.convertToDto(customer);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
 
 	@PostMapping(value = { "/login", "/login/" })
-	public Profile login(@RequestParam String email, @RequestParam String password,
-			HttpSession session) throws IllegalArgumentException {
+	public Profile login(@RequestParam String email, @RequestParam String password, HttpSession session)
+			throws IllegalArgumentException {
 
 		try {
 			Profile profile = profileService.getProfile(email);

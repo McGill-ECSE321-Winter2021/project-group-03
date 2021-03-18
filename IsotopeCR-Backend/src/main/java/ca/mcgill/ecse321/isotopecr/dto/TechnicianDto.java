@@ -15,19 +15,19 @@ public class TechnicianDto {
 	private String firstName;
 	private String lastName;
 	private String email;
-	//private String password;
+	// private String password;
 	private List<ServiceDto> services;
 	private List<DailyAvailabilityDto> dailyAvailabilities;
 
 	public TechnicianDto() {
 	}
 
-
-	public TechnicianDto(String firstName, String lastName, String email, String password, List<DailyAvailabilityDto> dailyAvailabilities) {
+	public TechnicianDto(String firstName, String lastName, String email, String password,
+			List<DailyAvailabilityDto> dailyAvailabilities) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		//this.password = password;
+		// this.password = password;
 		this.services = Collections.emptyList();
 		this.dailyAvailabilities = dailyAvailabilities;
 	}

@@ -77,12 +77,12 @@ public class AppointmentController {
 	TechnicianRepository technicianRepository;
 	@Autowired
 	AppointmentRepository appointmentRepository;
-	
+
 	/**
 	 * @author Zichen
 	 * @param profileID profileID stored in database
 	 * @return List of DailyAvailabilityDto related to input technician
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	@PostMapping(value = { "/create/{vehicle}/{service}", "/create/{vehicle}/{service}" })
@@ -91,19 +91,26 @@ public class AppointmentController {
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd") LocalDate date)
 			throws Exception {
-		
+
 		Time startTime = Time.valueOf(start);
 		Date appointmentDate = Date.valueOf(date);
 		Technician technician = appointmentService.getFreeTechnician(startTime, appointmentDate);
 		Vehicle vehicle = appointmentService.getVehicle(licensePlate);
 		Customer customer = appointmentService.getCustomerOfVehicle(vehicle);
 		Service aptService = appointmentService.getService(serviceName);
-		
-		Appointment appointment = appointmentService.createAppointment(customer, vehicle, technician, aptService, startTime,
-				appointmentDate);
+
+		Appointment appointment = appointmentService.createAppointment(customer, vehicle, technician, aptService,
+				startTime, appointmentDate);
 		return ControllerHelperMethods.convertToDto(appointment);
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param email
+	 * @return a list of past appointmentdtos related to customer find by the given
+	 *         email
+	 * @throws Exception
+	 */
 	@GetMapping(value = { "/pastappointment/customer/{customer}", "/pastappointment/customer/{customer}/" })
 	public List<AppointmentDto> viewPastAppointmentForCustomer(@PathVariable("customer") String email)
 			throws Exception {
@@ -123,6 +130,13 @@ public class AppointmentController {
 		}
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param email
+	 * @return a list of future appointmentdtos related to customer find by the
+	 *         given email
+	 * @throws Exception
+	 */
 	@GetMapping(value = { "/futureappointment/customer/{customer}", "/futureappointment/customer/{customer}/" })
 	public List<AppointmentDto> viewFutureAppointmentForCustomer(@PathVariable("customer") String email)
 			throws Exception {
@@ -142,8 +156,16 @@ public class AppointmentController {
 		}
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param licensePlate
+	 * @return a list of past appointmentdtos related to vehicle find by the given
+	 *         licensePlate
+	 * @throws Exception
+	 */
 	@GetMapping(value = { "/pastappointment/vehicle/{vehicle}", "/pastappointment/vehicle/{vehicle}/" })
-	public List<AppointmentDto> viewPastAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) throws Exception {
+	public List<AppointmentDto> viewPastAppointmentForVehicle(@PathVariable("vehicle") String licensePlate)
+			throws Exception {
 		try {
 			Vehicle vehicle = appointmentService.getVehicle(licensePlate);
 			Customer customer = appointmentService.getCustomerOfVehicle(vehicle);
@@ -161,8 +183,16 @@ public class AppointmentController {
 		}
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param licensePlate
+	 * @return a list of future appointmentdtos related to vehicle find by the given
+	 *         licensePlate
+	 * @throws Exception
+	 */
 	@GetMapping(value = { "/futureappointment/vehicle/{vehicle}", "/futureappointment/vehicle/{vehicle}/" })
-	public List<AppointmentDto> viewFutureAppointmentForVehicle(@PathVariable("vehicle") String licensePlate) throws Exception {
+	public List<AppointmentDto> viewFutureAppointmentForVehicle(@PathVariable("vehicle") String licensePlate)
+			throws Exception {
 		try {
 			Vehicle vehicle = appointmentService.getVehicle(licensePlate);
 			Customer customer = appointmentService.getCustomerOfVehicle(vehicle);
@@ -180,6 +210,12 @@ public class AppointmentController {
 		}
 	}
 
+	/**
+	 * @author Jiatong
+	 * @param aAppointmentId
+	 * @return the appointmentdto that is cancelled
+	 * @throws Exception
+	 */
 	@PostMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
 	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) throws Exception {
 		try {
