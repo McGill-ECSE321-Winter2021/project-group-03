@@ -263,8 +263,8 @@ public class ProfileController {
 		}
 	}
 
-	@PostMapping(value = { "profiles/edit-password/{email}", "/profiles/edit-password/{email}/" })
-	public ProfileDto editPassword(@RequestParam("email") String email, @RequestParam("password") String password)
+	@PostMapping(value = { "profiles/edit-password", "/profiles/edit-password/" })
+	public ProfileDto editPassword(@RequestParam String email, @RequestParam String password)
 			throws Exception {
 		try {
 			Profile profile = profileService.editPassword(email, password);

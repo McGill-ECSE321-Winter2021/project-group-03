@@ -115,7 +115,7 @@ public class AppointmentController {
 		try {
 			Customer customer = profileService.getCustomer(email);
 			List<Appointment> appointments = appointmentService.getAppointmentsByCustomer(customer);
-			appointments = appointmentService.getAllAppointmentsBeforeTime(appointments);
+			appointments = appointmentService.getAllAppointmentsAfterTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
 				if (appointment.getStatus().equals(Status.BOOKED)) {
