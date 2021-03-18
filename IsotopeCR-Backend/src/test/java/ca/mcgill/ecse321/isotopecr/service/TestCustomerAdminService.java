@@ -70,6 +70,7 @@ public class TestCustomerAdminService {
 	private static final String INVALID_PHONE_NUMBER = "xx1234567890";
 
 	private static final String LICENSEPLATE = "afefea123";
+	private static final String LICENSEPLATE2 = "aavadasd";
 	private static final String YEAR = "2008";
 	private static final String INVALID_YEAR = "1008";
 	private static final String MODEL = "CDX13";
@@ -607,6 +608,20 @@ public class TestCustomerAdminService {
 			deletedVehicle = service.deleteVehicle(INVALID_EMAIL, LICENSEPLATE);
 		} catch (Exception e) {
 			assertEquals("ERROR: Customer does not exist.", e.getMessage());
+		}
+
+		assertNull(deletedVehicle);
+
+	}
+	
+	@Test
+	public void testDeleteVehicleVehicleNotExists() {
+		Vehicle deletedVehicle = null;
+
+		try {
+			deletedVehicle = service.deleteVehicle(VALID_CUSTOMER_EMAIL2, LICENSEPLATE2);
+		} catch (Exception e) {
+			assertEquals("ERROR: Vehicle does not exist.", e.getMessage());
 		}
 
 		assertNull(deletedVehicle);
