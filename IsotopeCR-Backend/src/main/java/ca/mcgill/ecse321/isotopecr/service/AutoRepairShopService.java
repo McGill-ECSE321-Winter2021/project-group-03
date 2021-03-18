@@ -208,12 +208,14 @@ public class AutoRepairShopService {
 
 	@Transactional
 	public ca.mcgill.ecse321.isotopecr.model.Service getService(String serviceName) {
-		if (ServiceHelperMethods.isValidServiceName(serviceName)) {
-			ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
-			return service;
-		} else {
-			throw new IllegalArgumentException("ERROR: Unable to find service.");
+		if (serviceName == null) {
+			throw new IllegalArgumentException("ERROR: the service name is null.");
 		}
+		ca.mcgill.ecse321.isotopecr.model.Service service = serviceRepository.findServiceByServiceName(serviceName);
+		if (service == null) {
+			throw new IllegalArgumentException("ERROR: the service cannot be found.");
+		}
+		return service;
 	}
 
 	/*********************************************************

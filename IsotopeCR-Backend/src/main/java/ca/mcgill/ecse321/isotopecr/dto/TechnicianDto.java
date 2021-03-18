@@ -16,7 +16,7 @@ public class TechnicianDto {
 	private String lastName;
 	private String email;
 	//private String password;
-	private Set<ServiceDto> services;
+	private List<ServiceDto> services;
 	private List<DailyAvailabilityDto> dailyAvailabilities;
 
 	public TechnicianDto() {
@@ -28,7 +28,7 @@ public class TechnicianDto {
 		this.lastName = lastName;
 		this.email = email;
 		//this.password = password;
-		this.services = Collections.EMPTY_SET;
+		this.services = Collections.emptyList();
 		this.dailyAvailabilities = dailyAvailabilities;
 	}
 
@@ -44,11 +44,11 @@ public class TechnicianDto {
 		return lastName;
 	}
 
-	public Set<ServiceDto> getServices() {
+	public List<ServiceDto> getServices() {
 		return services;
 	}
 
-	public void setServices(Set<ServiceDto> services) {
+	public void setServices(List<ServiceDto> services) {
 		this.services = services;
 	}
 

@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,8 @@ public class TestCompanyProfileService {
 	
 	@Mock
 	private CompanyProfileRepository companyProfileRepository;
+	@Mock
+	private ServiceRepository serviceRepository;
 	
 	@InjectMocks
 	private AutoRepairShopService service;
@@ -42,6 +45,14 @@ public class TestCompanyProfileService {
 	private static final String INVALID_COMPANY_NAME = "!!!!###";
 	private static final String WORKING_HOURS = "9:00 AM - 5:00 PM, MON - FRI";
 	private static final String WORKING_HOURS2 = "9:00 AM - 9:00 PM. MON - SAT";
+	/* Mock up Resources */
+	private static final String RESOURCE_TYPE1 = "Pull Car";
+	private static final Integer MAX1 = 5;
+	/* Mock up Services */
+	private static final String SERVICE1 = "CarWash";
+	private static final double PRICE1 = 23.33;
+	private static final int FREQUENCY1 = 2;
+	private static final Integer DURATION1 = 5;
 	
 	private static boolean companyProfileIsCreated = false;
 	
@@ -74,11 +85,49 @@ public class TestCompanyProfileService {
 			}
 		});
 	    
+		lenient().when(serviceRepository.findServiceByServiceName(anyString())).thenAnswer((InvocationOnMock invocation) ->{
+			if(invocation.getArgument(0).equals(SERVICE1)) {
+				Resource resource1 = new Resource();
+				resource1.setResourceType(RESOURCE_TYPE1);
+				resource1.setMaxAvailable(MAX1);
+				
+				Service service1 = new Service();
+				service1.setServiceName(SERVICE1);
+				service1.setResource(resource1);
+				service1.setPrice(PRICE1);
+				service1.setFrequency(FREQUENCY1);
+				service1.setDuration(DURATION1);
+				
+				return service1;
+			}else {
+				return null;
+			}
+		});
+		
+		lenient().when(serviceRepository.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
+			List<Service> serviceList = new ArrayList<Service>();
+			Resource resource1 = new Resource();
+			resource1.setResourceType(RESOURCE_TYPE1);
+			resource1.setMaxAvailable(MAX1);
+
+			Service service1 = new Service();
+			service1.setServiceName(SERVICE1);
+			service1.setResource(resource1);
+			service1.setPrice(PRICE1);
+			service1.setFrequency(FREQUENCY1);
+			service1.setDuration(DURATION1);
+			
+			serviceList.add(service1);
+			return serviceList;
+		
+		});
+		
 		// Whenever anything is saved, just return the parameter object
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
 		lenient().when(companyProfileRepository.save(any(CompanyProfile.class))).thenAnswer(returnParameterAsAnswer);
+
 	}
 	
 	@Test
@@ -219,4 +268,84 @@ public class TestCompanyProfileService {
 		assertEquals(WORKING_HOURS, companyProfile.getWorkingHours());
 	}
 	
+	
+	/**
+	 * Test getService in normal case.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestGetService() {
+		Service shopService = null;
+		
+		try {
+			shopService = service.getService(SERVICE1);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(shopService);
+		assertEquals(SERVICE1, shopService.getServiceName());
+	}
+	
+	/**
+	 * Test getService when input an invalid service name.
+	 * @author Zichen
+	 */
+	@Test
+	public void TestGetServiceInvalidServiceName() {
+		Service shopService = null;
+		String error = null;
+		
+		try {
+			shopService = service.getService("123456");
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(shopService);
+		assertEquals("ERROR: Unable to find service due to illegal service name.", error);
+	}
+	
+	/**
+	 * Test getService when in db can't find such a service
+	 * @author Zichen
+	 */
+	@Test
+	public void TestGetServiceServiceNotExist() {
+		Service shopService = null;
+		String error = null;
+		
+		try {
+			shopService = service.getService("TomCat");
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(shopService);
+		assertEquals("ERROR: Unable to find service.", error);
+	}
+	
+	
+	/**
+	 * Test getService when in db can't find such a service
+	 * @author Zichen
+	 */
+	@Test
+	public void TestGetAllService() {
+		List<Service> serviceList = null;
+		
+		try {
+			serviceList = service.getAllServices();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(serviceList);
+		assertEquals(true, serviceList.iterator().hasNext());
+		assertEquals(SERVICE1, serviceList.get(0).getServiceName());
+	}
 }

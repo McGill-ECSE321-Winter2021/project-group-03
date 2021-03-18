@@ -793,4 +793,63 @@ public class TestServiceAndTechnicianService {
 		}
 	}
 	
+	/**
+	 * Test getService in normal case.
+	 * @author Victoria
+	 */
+	@Test
+	public void TestgetService() {
+		Service service = null;
+		
+		try {
+			service = autoRepairShopService.getService(SERVICE_NAME_1);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		assertNotNull(service);
+		assertEquals(SERVICE_NAME_1, service.getServiceName());
+	}
+	
+	/**
+	 * Test getService when input a null service name.
+	 * @author Victoria
+	 */
+	@Test
+	public void TestgetServiceNullServiceName() {
+		Service service = null;
+		String error = null;
+		
+		try {
+			service = autoRepairShopService.getService(null);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(service);
+		assertEquals("ERROR: the service name is null.", error);
+	}
+	
+	/**
+	 * Test getService when in db can't find such a service
+	 * @author Victoria
+	 */
+	@Test
+	public void TestgetServiceServiceNotExist() {
+		Service service = null;
+		String error = null;
+		
+		try {
+			service = autoRepairShopService.getService("TomCat");
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		
+		assertNotNull(error);
+		assertNull(service);
+		assertEquals("ERROR: the service cannot be found.", error);
+	}
+	
 }
