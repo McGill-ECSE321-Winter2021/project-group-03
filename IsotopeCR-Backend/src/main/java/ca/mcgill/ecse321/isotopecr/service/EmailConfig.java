@@ -10,6 +10,12 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 public class EmailConfig {
 
+	/**
+	 * Configuration for sending emails
+	 * 
+	 * @author Victoria
+	 * @return JavaMailSenderImpl
+	 */
 	@Bean
 	public JavaMailSender mailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

@@ -29,10 +29,6 @@ public class EmailService {
 
 	private String serviceEmail = "${spring.mail.username}";
 
-//    @Value("${baseurl}")
-//    private String url;
-//    
-
 	@Autowired
 	CustomerRepository customerRepository;
 	@Autowired
@@ -40,6 +36,12 @@ public class EmailService {
 	@Autowired
 	AppointmentRepository appointmentRepository;
 
+	/**
+	 * Sending the invoice of an appointment to the customer
+	 * @author Victoria
+	 * @param admin
+	 * @param appointment
+	 */
 	public void sendInvoice(Admin admin, Appointment appointment) {
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setFrom(serviceEmail);
@@ -56,6 +58,12 @@ public class EmailService {
 		}
 	}
 
+	/**
+	 * Sending a reminder for a recurring service 
+	 * @author Victoria 
+	 * @param customer
+	 * @param service
+	 */
 	public void sendReminder(Customer customer, ca.mcgill.ecse321.isotopecr.model.Service service) {
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setFrom(serviceEmail);
@@ -70,6 +78,10 @@ public class EmailService {
 		}
 	}
 
+	/**
+	 * Services that need to be reminded are checked automatically once a month
+	 * @author Victoria
+	 */
 	@Scheduled(cron = "0 30 9 1 * *")
 	public void checkForServiceReminders() {
 		for (Customer customer : customerRepository.findAll()) {
@@ -88,6 +100,11 @@ public class EmailService {
 		}
 	}
 
+	/**
+	 * When an appointment is created, the technician is notified by email
+	 * @author Victoria
+	 * @param appointment
+	 */
 	public void notifyTechnician(Appointment appointment) {
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setFrom(serviceEmail);
