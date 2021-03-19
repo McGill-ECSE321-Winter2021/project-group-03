@@ -27,7 +27,7 @@ Jack is a U2 student in the Computer Engineering program at McGill.
  | Name                 | Role                           | Deliverable 1 | Deliverable 2     | Deliverable 3     | Deliverable 4     | 
 |----------------------|--------------------------------|---------------|-------------------|-------------------|-------------------|
 | Zichen Chang         | Project Manager                |     30hrs     |      45hrs        | Going to be a lot | Going to be a lot | 
-| Victoria Iannotti    | Software Developper            |     33hrs     |      45hrs        | Going to be a lot | Going to be a lot | 
+| Victoria Iannotti    | Software Developer            |     33hrs     |      45hrs        | Going to be a lot | Going to be a lot | 
 | Mathieu-Joseph Magri | QA Lead                        |     33hrs     |      40hrs        | Going to be a lot | Going to be a lot |
 | Jiatong Niu          | Software Consultant            |     33hrs     |      45hrs        | Going to be a lot | Going to be a lot |
 | Jack Wei             | Software Architecture Engineer |     33hrs     |      45hrs        | Going to be a lot | Going to be a lot | 
