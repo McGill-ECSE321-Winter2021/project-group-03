@@ -337,7 +337,7 @@ public class ProfileController {
 	 * @throws IllegalArgumentException
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "profiles/delete/{email}", "/profiles/delete/{email}/" })
+	@PostMapping(value = { "/profiles/delete/{email}", "/profiles/delete/{email}/" })
 	public ProfileDto deleteProfile(@PathVariable("email") String email) throws IllegalArgumentException {
 		try {
 			Profile profile = profileService.deleteProfile(email);
@@ -356,7 +356,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "profiles/edit-password", "/profiles/edit-password/" })
+	@PostMapping(value = { "/profiles/edit-password", "/profiles/edit-password/" })
 	public ProfileDto editPassword(@RequestParam String email, @RequestParam String password) throws Exception {
 		try {
 			Profile profile = profileService.editPassword(email, password);
