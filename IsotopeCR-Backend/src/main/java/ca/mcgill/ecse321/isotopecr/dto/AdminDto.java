@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.isotopecr.dto;
 
-import java.util.Set;
-
 /**
  * Data transfer object class for admin profile.
  * 
@@ -36,14 +34,6 @@ public class AdminDto {
 	public String getLastName() {
 		return lastName;
 	}
-
-//	public String getPassword() {
-//		return password;
-//	}
-//
-//	public void setPassword(String password) {
-//		this.password = password;
-//	}
 
 	public Boolean getIsOwner() {
 		return isOwner;

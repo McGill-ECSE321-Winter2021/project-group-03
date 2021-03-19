@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.isotopecr.dto;
 
-import ca.mcgill.ecse321.isotopecr.model.Resource;
-
 public class ServiceDto {
 
 	private String serviceName;

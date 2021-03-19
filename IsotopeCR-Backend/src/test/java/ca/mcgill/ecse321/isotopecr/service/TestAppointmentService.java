@@ -67,13 +67,7 @@ public class TestAppointmentService {
 	private AppointmentService appointmentService;
 
 	private static final boolean ISREGISTERED = true;
-	/* Mock up Admin */
-	private static final String ADMIN_ID = "admin1";
-	private static final String ADMIN_EMAIL = "admin1@isotopecr.com";
-	private static final String ADMIN_FIRSTNAME = "Peter";
-	private static final String ADMIN_LASTNAME = "Clark";
-	private static final boolean ISOWNER = false;
-	private static final String ADMIN_PASSWORD = "Admin_password1";
+
 	/* Mock up Technician */
 	private static final String TECH_ID = "tech1";
 	private static final String TECH_EMAIL = "tech1@isotopecr.com";
@@ -118,13 +112,6 @@ public class TestAppointmentService {
 	private static final String INVOICE_ID = "12345";
 	private static final double COST = 150;
 	private static final boolean ISPAID = true;
-
-	/* Mock up DailyAvailabilities */
-	private static final String AVAILABILITY_1 = "1";
-	private static final String AVAILABILITY_2 = "2";
-	private static final String AVAILABILITY_3 = "3";
-	private static final String AVAILABILITY_4 = "4";
-	private static final String AVAILABILITY_5 = "5";
 
 	/* Mock up Timeslot */
 	/* Before */
@@ -660,8 +647,6 @@ public class TestAppointmentService {
 		vehicles.add(vehicle1);
 		vehicles.add(vehicle2);
 
-		Customer customer = mockCustomer(vehicles);
-
 		Technician technician = mockTechnician(dailyAvailabilities, services);
 		try {
 			appointment = appointmentService.createAppointment(null, vehicle1, technician, service1, STARTTIME,
@@ -736,8 +721,6 @@ public class TestAppointmentService {
 		services.add(service1);
 		services.add(service2);
 
-		Set<DailyAvailability> dailyAvailabilities = createSetAvailabilities();
-
 		Vehicle vehicle1 = createVehicle(LICENSEPLATE1, BRAND1, MODEL1, YEAR1);
 		Vehicle vehicle2 = createVehicle(LICENSEPLATE2, BRAND2, MODEL2, YEAR2);
 		Set<Vehicle> vehicles = new HashSet<Vehicle>();
@@ -746,7 +729,6 @@ public class TestAppointmentService {
 
 		Customer customer = mockCustomer(vehicles);
 
-		Technician technician = mockTechnician(dailyAvailabilities, services);
 		try {
 			appointment = appointmentService.createAppointment(customer, vehicle1, null, service1, STARTTIME,
 					CHOSENDATE);

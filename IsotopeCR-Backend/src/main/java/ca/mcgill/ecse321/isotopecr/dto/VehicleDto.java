@@ -5,8 +5,7 @@ public class VehicleDto {
 	private String year;
 	private String model;
 	private String brand;
-	// private CustomerDto owner;
-
+	
 	public VehicleDto() {
 
 	}
@@ -33,8 +32,4 @@ public class VehicleDto {
 	public String getBrand() {
 		return brand;
 	}
-
-//	public CustomerDto getOwner() {
-//		return owner;
-//	}
 }

@@ -1,17 +1,6 @@
 package ca.mcgill.ecse321.isotopecr.service;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.isotopecr.dao.*;
 import ca.mcgill.ecse321.isotopecr.model.*;
-import ca.mcgill.ecse321.isotopecr.model.DailyAvailability.DayOfWeek;
-
-import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 
 @Service
 public class AutoRepairShopService {

@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.isotopecr.dto;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Data transfer object class for technician profile.
@@ -27,7 +26,6 @@ public class TechnicianDto {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		// this.password = password;
 		this.services = Collections.emptyList();
 		this.dailyAvailabilities = dailyAvailabilities;
 	}
@@ -51,10 +49,6 @@ public class TechnicianDto {
 	public void setServices(List<ServiceDto> services) {
 		this.services = services;
 	}
-
-//	public String getPassword() {
-//		return password;
-//	}
 
 	public List<DailyAvailabilityDto> getDailyAvailabilities() {
 		return dailyAvailabilities;

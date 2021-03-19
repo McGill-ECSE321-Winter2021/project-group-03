@@ -1,13 +1,9 @@
 package ca.mcgill.ecse321.isotopecr.service;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.Period;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

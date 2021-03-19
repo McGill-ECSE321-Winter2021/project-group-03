@@ -18,11 +18,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.isotopecr.dao.CompanyProfileRepository;
 import ca.mcgill.ecse321.isotopecr.dao.InvoiceRepository;
-import ca.mcgill.ecse321.isotopecr.model.CompanyProfile;
 
 @ExtendWith(MockitoExtension.class)
 public class TestInvoice {
@@ -48,7 +46,6 @@ public class TestInvoice {
 	private static final Boolean ISPAID2 = true;
 
 	private static final double INVALID_COST = Math.pow(10, 10);
-	private static final String INVALID_ID = "_________------21mfmsk";
 
 	@BeforeEach
 	public void setMockOutput() {

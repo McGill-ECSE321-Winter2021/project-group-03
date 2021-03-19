@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.isotopecr.dto;
 
-import java.util.Set;
-
 /**
  * Data transfer object class for customer profile.
  * 
@@ -13,8 +11,6 @@ public class CustomerDto {
 	private String lastName;
 	private String email;
 	private String phoneNumber;
-	// private String password;
-	// private Set<VehicleDto> vehicles;
 
 	public CustomerDto() {
 	}
