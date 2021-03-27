@@ -130,7 +130,7 @@ public class ServiceHelperMethods {
 	 * @return a boolean which indicates whether or not a service name is valid.
 	 */
 	public static boolean isValidServiceName(String serviceName) {
-		String regex = "^[a-zA-Z-\s]*[a-zA-Z-]+$";
+		String regex = "^[a-zA-Z-\\s]*[a-zA-Z-]+$";
 		// only letters and - allowed, only one space between words allowed
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(serviceName);
@@ -280,7 +280,7 @@ public class ServiceHelperMethods {
 	 * @author Jack Wei
 	 */
 	public static boolean isValidBrandName(String brand) {
-		String regex = "^[a-zA-Z-\s]*[a-zA-Z-]+$";
+		String regex = "^[a-zA-Z-\\s]*[a-zA-Z-]+$";
 		// only letters and - allowed, only one space between words allowed
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(brand);
