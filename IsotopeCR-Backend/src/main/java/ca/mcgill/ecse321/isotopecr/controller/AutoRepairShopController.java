@@ -5,16 +5,35 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.mcgill.ecse321.isotopecr.dao.*;
-import ca.mcgill.ecse321.isotopecr.dto.*;
-import ca.mcgill.ecse321.isotopecr.model.*;
+import ca.mcgill.ecse321.isotopecr.dao.AdminRepository;
+import ca.mcgill.ecse321.isotopecr.dao.AppointmentRepository;
+import ca.mcgill.ecse321.isotopecr.dao.AutoRepairShopRepository;
+import ca.mcgill.ecse321.isotopecr.dao.CompanyProfileRepository;
+import ca.mcgill.ecse321.isotopecr.dao.CustomerRepository;
+import ca.mcgill.ecse321.isotopecr.dao.DailyAvailabilityRepository;
+import ca.mcgill.ecse321.isotopecr.dao.InvoiceRepository;
+import ca.mcgill.ecse321.isotopecr.dao.ProfileRepository;
+import ca.mcgill.ecse321.isotopecr.dao.ResourceRepository;
+import ca.mcgill.ecse321.isotopecr.dao.ServiceRepository;
+import ca.mcgill.ecse321.isotopecr.dao.TechnicianRepository;
+import ca.mcgill.ecse321.isotopecr.dao.TimeslotRepository;
+import ca.mcgill.ecse321.isotopecr.dao.VehicleRepository;
+import ca.mcgill.ecse321.isotopecr.dto.CompanyProfileDto;
+import ca.mcgill.ecse321.isotopecr.dto.InvoiceDto;
+import ca.mcgill.ecse321.isotopecr.dto.ResourceDto;
+import ca.mcgill.ecse321.isotopecr.dto.ServiceDto;
+import ca.mcgill.ecse321.isotopecr.model.CompanyProfile;
+import ca.mcgill.ecse321.isotopecr.model.Resource;
+import ca.mcgill.ecse321.isotopecr.model.Service;
 import ca.mcgill.ecse321.isotopecr.service.AutoRepairShopService;
 
 @CrossOrigin(origins = "*")
@@ -86,7 +105,7 @@ public class AutoRepairShopController {
 	 * @author Zichen
 	 * @return List of ResourceDtos.
 	 */
-	@PostMapping(value = { "/resource/delete/{type}", "/resource/delete/{type}/" })
+	@DeleteMapping(value = { "/resource/delete/{type}", "/resource/delete/{type}/" })
 	public ResourceDto deleteResource(@PathVariable("type") String type) {
 		try {
 			Resource resource = autoRepairShopService.removeResource(type);
@@ -157,7 +176,7 @@ public class AutoRepairShopController {
 	 * @param frequency
 	 * @return The edited service is returned
 	 */
-	@PostMapping(value = { "/service/edit/{servicename}", "/service/edit/{servicename}/" })
+	@PutMapping(value = { "/service/edit/{servicename}", "/service/edit/{servicename}/" })
 	public ServiceDto editService(@PathVariable("servicename") String serviceName, @RequestParam Integer duration,
 			@RequestParam Double price, @RequestParam String resourceType, @RequestParam Integer frequency) {
 		try {
@@ -176,7 +195,7 @@ public class AutoRepairShopController {
 	 * @param serviceName
 	 * @return A deleted service is returned
 	 */
-	@PostMapping(value = { "/service/delete/{servicename}", "/service/delete/{servicename}" })
+	@DeleteMapping(value = { "/service/delete/{servicename}", "/service/delete/{servicename}" })
 	public ServiceDto deleteService(@PathVariable("servicename") String serviceName) {
 		try {
 			Service service = (Service) autoRepairShopService.deleteService(serviceName);

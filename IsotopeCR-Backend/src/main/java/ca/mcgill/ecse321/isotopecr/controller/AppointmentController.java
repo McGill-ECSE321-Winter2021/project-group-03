@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -216,7 +217,7 @@ public class AppointmentController {
 	 * @return the appointmentdto that is cancelled
 	 * @throws Exception
 	 */
-	@PostMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
+	@PutMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
 	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) throws Exception {
 		try {
 			Appointment appointment = appointmentService.getAppointmentsByID(aAppointmentId);
