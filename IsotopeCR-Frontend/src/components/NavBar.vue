@@ -1,26 +1,22 @@
+import 'bulma/css/bulma.css';
+
 <template>
-<nav class="navbar container" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="/">
-      <strong class="is-size-4">Isotope Car Repair Shop</strong>
-    </a>
-  </div>
-  <div class="nav">
-    <ul class="navbar-start">
-      <router-link to="/" class="navbar-item">Home</router-link>
-      <router-link to="/about" class="navbar-item">About</router-link>
-    </ul>
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-dark">
-            <a @click="routeTo('login')" class="button is-dark"><strong>Login</strong></a>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+<div>
+    <b-navbar type="dark" variant="dark">
+        <b-navbar-brand href="#">Isotope Car Repair Shop</b-navbar-brand>        
+        <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+                <b-nav-item @click="routeTo('')">Home</b-nav-item>
+                <b-nav-item @click="routeTo('about')">About</b-nav-item>
+            </b-navbar-nav>
+
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item @click="routeTo('login')">Log In</b-nav-item>
+                <b-nav-item @click="routeTo('signup')">Sign Up</b-nav-item>
+            </b-navbar-nav>
+        </b-collapse>
+    </b-navbar>
+</div>
 </template>
 <script>
 export default {
