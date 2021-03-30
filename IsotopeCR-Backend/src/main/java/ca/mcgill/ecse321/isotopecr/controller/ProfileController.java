@@ -379,13 +379,12 @@ public class ProfileController {
 	 * @author Jack Wei
 	 */
 	@PostMapping(value = { "/login", "/login/" })
-	public ProfileDto login(@RequestParam String email, @RequestParam String password,
-			HttpSession session) throws IllegalArgumentException {
+	public ProfileDto login(@RequestParam String email, @RequestParam String password) throws IllegalArgumentException {
 		try {
 			Profile profile = profileService.getProfile(email);
 			if (profile.getIsRegisteredAccount()) {
 				if (password != null && profile.getPassword().equals(password)) {
-					session.setAttribute(email, profile);
+//					session.setAttribute(email, profile);
 				} else {
 					throw new IllegalArgumentException("ERROR: Incorrect password.");
 				}
