@@ -3,7 +3,7 @@ import axios from 'axios'
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port;
-var backendUrl = 'http://' + config.build.backendHost + ':' + config.build.port;
+var backendUrl = 'http://' + config.build.backendHost;
 
 var AXIOS = axios.create({
     baseURL: backendUrl,
@@ -18,7 +18,7 @@ function ProfileDto(email, firstName, lastName, password) {
 }
 
 export default {
-    name: 'app',
+    name: 'login',
     data() {
         return {
             profile: [],
@@ -30,34 +30,33 @@ export default {
             response: []
         }
     },
-    
+
 
     methods: {
 
         login: function(email,password){
-
             if(email == "" || password == "") {
               this.errorMessage = 'Email or password cannot be empty.'
               return false
             } else {
-
-                AXIOS.get(backendUrl+'/login', {
-                    email,
-                    password
-                })
+                
+                AXIOS.get(backendUrl+'/api/profile/login', {},{params:{
+                    email: email,
+                    password: password
+                }})
 
                 .then(response => {
                     // JSON responses are automatically parsed.
-                    this.profile = response.data
-                    this.email = ''
-                    this.password = ''
-                    this.errorMessage = ''
+                    // this.profile = response.data
+                    // this.email = ''
+                    // this.password = ''
+                    // this.errorMessage = ''
+                    console.log(response)
 
                   })
                   .catch(e => {
-                    // Set logged in tutor to empty
-                    this.errorMessage = e.response.data.message
-
+                    console.log("hello")
+                    console.log(e) 
                 });
 
             }

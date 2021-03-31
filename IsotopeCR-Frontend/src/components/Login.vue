@@ -12,7 +12,7 @@
     </div>
 </template>
 
-<script src='./login.js'>
+<script src='./loginScript.js'>
 export default {
   name: 'Login'
 }
