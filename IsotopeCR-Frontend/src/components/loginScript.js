@@ -40,7 +40,7 @@ export default {
               return false
             } else {
                 
-                AXIOS.get(backendUrl+'/api/profile/login', {},{params:{
+                AXIOS.post(backendUrl+'/api/profile/login', {},{params:{
                     email: email,
                     password: password
                 }})

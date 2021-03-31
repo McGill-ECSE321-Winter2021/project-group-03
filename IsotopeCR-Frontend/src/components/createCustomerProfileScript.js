@@ -56,7 +56,7 @@ export default {
                     .then(
                         (response) => {
                             console.log("hello");
-                            console.log(reponse.data);
+                            console.log(response.data);
                         },
                         () => {
                             console.log("not");

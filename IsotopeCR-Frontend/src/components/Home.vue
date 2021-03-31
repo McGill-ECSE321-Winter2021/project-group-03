@@ -1,3 +1,4 @@
+<!-- 
 <template>
 <div class="home">
   <section class="hero is-dark">
@@ -65,3 +66,4 @@ export default {
     font-size: 1.7rem;
   }
 </style>
+-->
