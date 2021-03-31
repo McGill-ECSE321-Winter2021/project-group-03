@@ -44,6 +44,11 @@
                 <button  @click="createCompanyProfile(newCompanyProfile, newAddress, newWorkingHours)">Register</button>
             </td>
         </tr>
+        <tr>
+            <td>
+                <button  @click="deleteCompanyProfile(newCompanyProfile, newAddress, newWorkingHours)">Delete</button>
+            </td>
+        </tr>
        
         </table>
 

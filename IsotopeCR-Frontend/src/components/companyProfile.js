@@ -53,6 +53,7 @@ function CompanyProfileDTO(companyName, address, workingHours) {
         })
               .then(response => {
                 console.log('responsed got')
+                console.log(response)
                 // JSON responses are automatically parsed.
                 this.companyProfiles.push(response.data)
                 this.errorCompanyProfile = ''
@@ -64,7 +65,32 @@ function CompanyProfileDTO(companyName, address, workingHours) {
                 console.log(errorMsg)
                 this.errorPerson = errorMsg
               });
-        }
+        },
+
+        deleteCompanyProfile: function (companyName, address, workingHours) {
+          // CREATE a CompanyProfile
+          AXIOS.post(backendUrl+'/api/autorepairshop/CompanyProfile/create', {}, {
+            params: {
+              companyName: companyName,
+              address: address,
+              workingHours: workingHours
+            }
+          })
+                .then(response => {
+                  console.log('responsed got')
+                  console.log(response)
+                  // JSON responses are automatically parsed.
+                  this.companyProfiles.push(response.data)
+                  this.errorCompanyProfile = ''
+                  this.newCompanyProfile = ''
+                })
+                .catch(e => {
+                  console.log('Ahoh! Error got')
+                  var errorMsg = e.message
+                  console.log(errorMsg)
+                  this.errorPerson = errorMsg
+                });
+          }
   
     } // end of methods
   
