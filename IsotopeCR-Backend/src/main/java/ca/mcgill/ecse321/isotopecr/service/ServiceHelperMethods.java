@@ -163,18 +163,18 @@ public class ServiceHelperMethods {
 		return isValid;
 	}
 	
-	/**
-	 * @author Mathieu
-	 * @param companyName
-	 * @return a boolean that checks if the company name is a valid name.
-	 */
-	public static boolean isValidCompanyName(String companyName) {
-		String regex = "^[A-Z]([a-zA-Z0-9]|[- @\\.#&!]){1,20}$";
-		// contains any kind of letter from any language
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(companyName);
-		return matcher.matches();
-	}
+//	/**
+//	 * @author Mathieu
+//	 * @param companyName
+//	 * @return a boolean that checks if the company name is a valid name.
+//	 */
+//	public static boolean isValidCompanyName(String companyName) {
+//		String regex = "^[A-Z]([a-zA-Z0-9]|[- @\\.#&!]){1,20}$";
+//		// contains any kind of letter from any language
+//		Pattern pattern = Pattern.compile(regex);
+//		Matcher matcher = pattern.matcher(companyName);
+//		return matcher.matches();
+//	}
 
 	/**
 	 * This helper method checks if the input email address satisfies a standard

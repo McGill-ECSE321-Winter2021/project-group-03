@@ -2,7 +2,7 @@ import axios from 'axios'
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
-var backendUrl = 'http://' + config.build.backendHost+":"+config.build.backendPort
+var backendUrl = 'http://' + config.build.backendHost
 
 var AXIOS = axios.create({
   baseURL: backendUrl,
@@ -21,21 +21,17 @@ function CompanyProfileDTO(companyName, address, workingHours) {
     name: 'companyProfile',
     data() {
       return {
-        // courses: [],
-        // courseName: '',
-        // courseID: '',
-        // level: '',
-        // subject: '',
-  
         companyProfiles: [],
         newCompanyProfile: '',
+        newAddress: '',
+        newWorkingHours: '',
         errorCompanyProfile: '',
         response: []
       }
     },
     
     created: function() {
-        AXIOS.get('/CompanyProfile/get')
+        AXIOS.get('/api/autorepairshop/CompanyProfile/get')
             .then(response => {
                 // JSON responses are automatically parsed.
                 this.companyProfiles = response.data
@@ -48,7 +44,7 @@ function CompanyProfileDTO(companyName, address, workingHours) {
     methods: { 
         createCompanyProfile: function (companyName, address, workingHours) {
         // CREATE a CompanyProfile
-        AXIOS.post(backendUrl+'/CompanyProfile/create', {}, {
+        AXIOS.post(backendUrl+'/api/autorepairshop/CompanyProfile/create', {}, {
           params: {
             companyName: companyName,
             address: address,
@@ -56,13 +52,15 @@ function CompanyProfileDTO(companyName, address, workingHours) {
           }
         })
               .then(response => {
+                console.log('responsed got')
                 // JSON responses are automatically parsed.
                 this.companyProfiles.push(response.data)
                 this.errorCompanyProfile = ''
                 this.newCompanyProfile = ''
               })
               .catch(e => {
-                var errorMsg = e.response.data.message
+                console.log('Ahoh! Error got')
+                var errorMsg = e.message
                 console.log(errorMsg)
                 this.errorPerson = errorMsg
               });

@@ -3,7 +3,7 @@
     <div id="companyProfile" class="container">
     <div class="inner_container shadow">
 
-    <div class="large_text">Company Information</div>
+    <div class="large_text"> <b>Company Information</b> </div>
 
     <hr>
    
@@ -32,16 +32,16 @@
         </tr>
         <tr>
             <td>
-                <input type="text" v-model="CompanyName" placeholder="Company Name">
+                <input type="text" v-model="newCompanyProfile" placeholder="Company Name">
             </td>
             <td>
-                <input type="text" v-model="address" placeholder="address">
+                <input type="text" v-model="newAddress" placeholder="address">
             </td>
             <td>
-                <input type="text" v-model="WorkingHours" placeholder="working hrs">
+                <input type="text" v-model="newWorkingHours" placeholder="working hrs">
             </td>
             <td>
-                <button  @click="createCompanyProfile(CompanyName, address, WorkingHours)">Register</button>
+                <button  @click="createCompanyProfile(newCompanyProfile, newAddress, newWorkingHours)">Register</button>
             </td>
         </tr>
        
