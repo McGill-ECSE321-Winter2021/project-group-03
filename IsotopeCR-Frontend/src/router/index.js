@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
+<<<<<<< HEAD
 import Login from '@/components/Login'
 import CompanyProfile from '@/components/CompanyProfile.vue'
+=======
+import Login from '@/components/Login.vue'
+>>>>>>> e3291bd973793055e7c143dc2457e2f67a177ba4
 
 Vue.use(Router)
 

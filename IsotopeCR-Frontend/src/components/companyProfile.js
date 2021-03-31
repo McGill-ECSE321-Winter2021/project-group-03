@@ -2,7 +2,7 @@ import axios from 'axios'
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
-var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
+var backendUrl = 'http://' + config.build.backendHost+":"+config.build.backendPort
 
 var AXIOS = axios.create({
   baseURL: backendUrl,
@@ -48,7 +48,13 @@ function CompanyProfileDTO(companyName, address, workingHours) {
     methods: { 
         createCompanyProfile: function (companyName, address, workingHours) {
         // CREATE a CompanyProfile
-        AXIOS.post(backendUrl+'/CompanyProfile/create?companyName='+companyName+'?address='+address+'?workingHours='+workingHours, {}, {})
+        AXIOS.post(backendUrl+'/CompanyProfile/create', {}, {
+          params: {
+            companyName: companyName,
+            address: address,
+            workingHours: workingHours
+          }
+        })
               .then(response => {
                 // JSON responses are automatically parsed.
                 this.companyProfiles.push(response.data)

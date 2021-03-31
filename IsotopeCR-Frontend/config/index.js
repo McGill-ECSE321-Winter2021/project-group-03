@@ -5,7 +5,7 @@ module.exports = {
   build: {
     env: require('./prod.env'),
     host: 'isotopecr-frontend-ecse321.herokuapp.com',
-    port: 443,
+    port: 8080,
     backendHost: 'isotopecr-backend-ecse321.herokuapp.com',
     backendPort: 443,
     index: path.resolve(__dirname, '../dist/index.html'),
