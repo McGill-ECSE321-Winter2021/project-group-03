@@ -4,10 +4,11 @@ import Hello from '@/components/Hello'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
 import CreateCustomerProfile from '@/components/CreateCustomerProfile'
-
+import CompanyProfile from '@/components/CompanyProfile.vue'
 Vue.use(Router)
 
 export default new Router({
+  mode: "history",
   routes: [
     {
       path: '/hello',
@@ -28,6 +29,11 @@ export default new Router({
       path: '/',
       name: 'CreateCustomerProfile',
       component: CreateCustomerProfile
+    },
+    {
+      path: "/company",
+      name: "Company",
+      component: CompanyProfile
     }
   ]
 })

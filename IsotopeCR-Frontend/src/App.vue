@@ -1,13 +1,23 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+      <NavBar/>
+        <router-view/>        
   </div>
 </template>
 
 <script>
+import Login from './components/Login'
+import NavBar from './components/NavBar.vue';
+import CompanyProfile from './components/CompanyProfile.vue'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components:{
+    Login,
+    NavBar,
+    CompanyProfile
+  },
+
 }
 </script>
 

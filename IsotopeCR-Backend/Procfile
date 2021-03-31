@@ -1,1 +1,1 @@
-web: java -jar EventRegistration-Backend/build/libs/EventRegistration-Backend-0.0.1-SNAPSHOT.jar
+web: java -jar IsotopeCR-Backend/build/libs/IsotopeCR-Backend-0.0.1-SNAPSHOT.jar

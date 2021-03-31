@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -109,7 +111,7 @@ public class ProfileController {
 	 * @return the DailyAvailabilityDto of the updated daily availability
 	 * @throws Exception
 	 */
-	@PostMapping(value = { "/availability/edit/{email}", "/availability/edit/{email}/" })
+	@PutMapping(value = { "/availability/edit/{email}", "/availability/edit/{email}/" })
 	public DailyAvailabilityDto editTechnicianAvailability(@PathVariable("email") String email,
 			@RequestParam String weekday,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "HH:mm:ss") LocalTime start,
@@ -158,7 +160,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "technician/service/add/{email}", "customer/service/add/{email}/" })
+	@PutMapping(value = { "technician/service/add/{email}", "customer/service/add/{email}/" })
 	public ServiceDto addServiceOfferedByTechnician(@PathVariable("email") String email,
 			@RequestParam("serviceName") String serviceName) throws Exception {
 		try {
@@ -228,7 +230,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/"  })
+	@PutMapping(value = { "profiles/edit-phonenumber", "/profiles/edit-phonenumber/"  })
 	public CustomerDto editPhoneNumber(@RequestParam String email,
 			@RequestParam String phoneNumber) throws Exception {
 			Customer customer = profileService.editPhoneNumber(email, phoneNumber);
@@ -287,7 +289,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "/customer/vehicle/delete", "/customer/vehicle/delete/" })
+	@DeleteMapping(value = { "/customer/vehicle/delete", "/customer/vehicle/delete/" })
 	public VehicleDto deleteVehicle(@RequestParam String email, @RequestParam String licensePlate) throws Exception {
 		try {
 			Vehicle vehicle = profileService.deleteVehicle(email, licensePlate);
@@ -337,7 +339,7 @@ public class ProfileController {
 	 * @throws IllegalArgumentException
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "/profiles/delete/{email}", "/profiles/delete/{email}/" })
+	@DeleteMapping(value = { "/profiles/delete/{email}", "/profiles/delete/{email}/" })
 	public ProfileDto deleteProfile(@PathVariable("email") String email) throws IllegalArgumentException {
 		try {
 			Profile profile = profileService.deleteProfile(email);
@@ -356,7 +358,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "/profiles/edit-password", "/profiles/edit-password/" })
+	@PutMapping(value = { "/profiles/edit-password", "/profiles/edit-password/" })
 	public ProfileDto editPassword(@RequestParam String email, @RequestParam String password) throws Exception {
 		try {
 			Profile profile = profileService.editPassword(email, password);
@@ -377,13 +379,12 @@ public class ProfileController {
 	 * @author Jack Wei
 	 */
 	@PostMapping(value = { "/login", "/login/" })
-	public ProfileDto login(@RequestParam String email, @RequestParam String password,
-			HttpSession session) throws IllegalArgumentException {
+	public ProfileDto login(@RequestParam String email, @RequestParam String password) throws IllegalArgumentException {
 		try {
 			Profile profile = profileService.getProfile(email);
 			if (profile.getIsRegisteredAccount()) {
 				if (password != null && profile.getPassword().equals(password)) {
-					session.setAttribute(email, profile);
+//					session.setAttribute(email, profile);
 				} else {
 					throw new IllegalArgumentException("ERROR: Incorrect password.");
 				}
