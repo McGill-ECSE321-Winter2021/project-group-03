@@ -34,7 +34,7 @@ function CompanyProfileDTO(companyName, address, workingHours) {
         AXIOS.get('/api/autorepairshop/CompanyProfile/get')
             .then(response => {
                 // JSON responses are automatically parsed.
-                this.companyProfiles = response.data
+                this.companyProfiles.push(response.data)
             })
             .catch(e => {
                 this.errorCompanyProfile = e

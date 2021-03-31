@@ -12,9 +12,9 @@
       <th>Address</th>
       <th>WorkingHours</th>
       <tr v-for="companyProfile in companyProfiles">
-        <td>{{ companyProfile.CompanyName }}</td>
+        <td>{{ companyProfile.companyName }}</td>
         <td>{{ companyProfile.address }}</td>
-        <td>{{ companyProfile.WorkingHours }}</td>
+        <td>{{ companyProfile.workingHours }}</td>
       </tr>
     </table>
    
@@ -24,7 +24,7 @@
 
         <div class="small_text left_text brand_color_text">Registration Table</div>
         
-        <table style="width:80%">
+        <table style="width:90%">
         <tr>
             <th>CompanyName</th>
             <th>Address</th>
