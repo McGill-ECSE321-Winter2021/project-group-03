@@ -72,7 +72,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "technician/create", "technician/create/" })
+	@PostMapping(value = { "/technician/create", "/technician/create/" })
 	public TechnicianDto createTechnicianProfile(@RequestParam String email, @RequestParam String firstName,
 			@RequestParam String lastName, @RequestParam String password) throws Exception {
 		try {
@@ -91,7 +91,7 @@ public class ProfileController {
 	 * @return List of DailyAvailabilityDtos
 	 * @throws Exception
 	 */
-	@GetMapping(value = { "technician/availability/get-all/{email}", "technician/availability/get-all/{email}/" })
+	@GetMapping(value = { "/technician/availability/get-all/{email}", "/technician/availability/get-all/{email}/" })
 	public List<DailyAvailabilityDto> getTechnicianAvailabilities(@PathVariable("email") String email)
 			throws Exception {
 		try {
@@ -160,7 +160,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PutMapping(value = { "technician/service/add/{email}", "customer/service/add/{email}/" })
+	@PutMapping(value = { "/technician/service/add/{email}", "/technician/service/add/{email}/" })
 	public ServiceDto addServiceOfferedByTechnician(@PathVariable("email") String email,
 			@RequestParam("serviceName") String serviceName) throws Exception {
 		try {
