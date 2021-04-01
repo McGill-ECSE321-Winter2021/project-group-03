@@ -5,21 +5,31 @@
       <strong class="is-size-4">Isotope Car Repair Shop</strong>
     </a>
   </div>
+  <div class = "navbar-appointment">
+       <div class="buttons">
+          <a class="button is-dark">
+            <a @click="routeTo('appointment')" class="button is-dark"><strong>Appointment</strong></a>
+          </a>
+        </div>
+      </div>
   <div class="nav">
     <ul class="navbar-start">
-      <router-link to="/" class="navbar-item">Home</router-link>
-      <router-link to="/about" class="navbar-item">About</router-link>
+      <router-link to="/" class="navbar-item"><strong>Home</strong></router-link>
+      <router-link to="/about" class="navbar-item"><strong>About</strong></router-link>
     </ul>
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
           <a class="button is-dark">
             <a @click="routeTo('login')" class="button is-dark"><strong>Login</strong></a>
+
           </a>
         </div>
       </div>
     </div>
-  </div>
+    
+    </div>
+  
 </nav>
 </template>
 <script>
