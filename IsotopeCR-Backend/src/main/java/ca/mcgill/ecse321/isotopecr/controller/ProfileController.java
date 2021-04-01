@@ -317,10 +317,11 @@ public class ProfileController {
 	 */
 	@PostMapping(value = { "/admin/create", "/admin/create/" })
 	public AdminDto createAdminProfile(@RequestParam String email, @RequestParam String firstName,
-			@RequestParam String lastName, @RequestParam String password, @RequestParam boolean isOwner)
+			@RequestParam String lastName, @RequestParam String password, @RequestParam String isOwner)
 			throws IllegalArgumentException {
 		try {
-			Admin admin = profileService.createAdminProfile(firstName, lastName, email, isOwner, password);
+			boolean isOwner1 = Boolean.parseBoolean(isOwner);
+			Admin admin = profileService.createAdminProfile(firstName, lastName, email, isOwner1, password);
 			return ControllerHelperMethods.convertToDto(admin);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
