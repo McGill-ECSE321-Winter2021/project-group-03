@@ -7,12 +7,10 @@ var AXIOS = axios.create({
   headers: { "Access-Control-Allow-Origin": frontendUrl },
 })
 
-function CustomerDto(firstName, lastName, email, password, phoneNumber) {
+function ProfileDto(firstName, lastName, email, password, phoneNumber) {
     this.firstName = firstName
     this.lastName = lastName
     this.email = email
-    this.password = password
-    this.phoneNumber = phoneNumber
 }
 
 export default {
@@ -31,10 +29,10 @@ export default {
 
     created: function () {
         AXIOS.get('/api/profile/profiles/get-all')
-          .then(response => {            
-            this.companyProfiles = response.data
-            console.log(response)
-            alert("Vehicles displayed!")
+          .then(response => {  
+            console.log('response got')          
+            this.profiles = response.data
+            console.log(response.data)           
           })
           .catch(e => {
             if (e.response) {

@@ -5,20 +5,18 @@
       <div class="container-fluid">
         <div class="input">
 
-         <table id="vehicle" class="table">
-          <th>FirstName</th>
-          <th>LastName</th>
-          <th>Email</th>
-          <th>Password</th>
-          <th>PhoneNumber</th>
-          <tr v-for="profile in profiles">
-            <td>{{ profile.firstName }}</td>
-            <td>{{ profile.lastName }}</td>
-            <td>{{ profile.email }}</td>
-          </tr>
-        </table>
+          <table id="profiles" class="table">
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <tr v-for="profile in profiles">
+              <td>{{ profile.firstName }}</td>
+              <td>{{ profile.lastName }}</td>
+              <td>{{ profile.email }}</td>
+            </tr>
+          </table>
 
-        <!--
+          <!--
           <div class="inputbox">
             <input
               type="text"
@@ -60,7 +58,6 @@
             />
           </div>
           -->
-         
         </div>
       </div>
       <!-- <button class="btn btn-danger" @click="createAdminAccount(email, firstName, lastName, password, isOwner)">Create Account</button> -->
