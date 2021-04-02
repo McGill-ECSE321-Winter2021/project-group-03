@@ -62,7 +62,7 @@ export default new Router({
       component: Registration
     },
     {
-      path: "/profileInfo",
+      path: "/allProfiles",
       name: "ProfileInfo",
       component: Profile
     }

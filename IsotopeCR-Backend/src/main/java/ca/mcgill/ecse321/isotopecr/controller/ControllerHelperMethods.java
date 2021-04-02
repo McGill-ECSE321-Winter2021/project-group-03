@@ -136,9 +136,12 @@ public class ControllerHelperMethods {
 		ProfileDto profileDto = new ProfileDto(profile.getEmail(), profile.getFirstName(), profile.getLastName());
 		if (profile instanceof Customer) {
 			profileDto.setPhoneNumber(((Customer) profile).getPhoneNumber());
+			profileDto.setType("Customer");
 		} else if (profile instanceof Admin) {
 			profileDto.setIsOwner(((Admin) profile).getIsOwner().toString());
+			profileDto.setType("Admin");
 		}
+		profileDto.setType("Technician");
 		return profileDto;
 	}
 
