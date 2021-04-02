@@ -261,16 +261,16 @@ public class AutoRepairShopService {
 			throw new IllegalArgumentException("ERROR: Company Profile already exists.");
 		}
 		if (!address.isEmpty()) {
-			if (ServiceHelperMethods.isValidCompanyName(companyName)) {
+//			if (ServiceHelperMethods.isValidCompanyName(companyName)) {
 				CompanyProfile companyProfile = new CompanyProfile();
 				companyProfile.setCompanyName(companyName);
 				companyProfile.setAddress(address);
 				companyProfile.setWorkingHours(workingHours);
 				companyProfileRepository.save(companyProfile);
 				return companyProfile;
-			} else {
-				throw new IllegalArgumentException("ERROR: Invalid company name.");
-			}
+//			} else {
+//				throw new IllegalArgumentException("ERROR: Invalid company name.");
+//			}
 		} else {
 			throw new IllegalArgumentException("ERROR: Address cannot be empty.");
 		}
@@ -286,7 +286,7 @@ public class AutoRepairShopService {
 	@Transactional
 	public CompanyProfile editCompanyProfile(String companyName, String address, String workingHours) {
 		if (!address.isEmpty()) {
-			if (ServiceHelperMethods.isValidCompanyName(companyName)) {
+//			if (ServiceHelperMethods.isValidCompanyName(companyName)) {
 				CompanyProfile oldCompanyProfile = companyProfileRepository.findCompanyProfileByAddress(address);
 				companyProfileRepository.delete(oldCompanyProfile);
 
@@ -296,9 +296,9 @@ public class AutoRepairShopService {
 				newCompanyProfile.setWorkingHours(workingHours);
 				companyProfileRepository.save(newCompanyProfile);
 				return newCompanyProfile;
-			} else {
-				throw new IllegalArgumentException("ERROR: Invalid company name.");
-			}
+//			} else {
+//				throw new IllegalArgumentException("ERROR: Invalid company name.");
+//			}
 		} else {
 			throw new IllegalArgumentException("ERROR: Address cannot be empty.");
 		}

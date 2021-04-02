@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <NavBar />
+      <NavBar/>
         <router-view/>        
   </div>
 </template>
@@ -9,8 +9,7 @@
 import Login from './components/Login'
 import NavBar from './components/NavBar.vue'
 import Appointment from './components/Appointment.vue'
-
-
+import CompanyProfile from './components/CompanyProfile.vue'
 
 export default {
   name: 'app',
@@ -18,7 +17,7 @@ export default {
     Login,
     NavBar,
     Appointment,
-    
+    CompanyProfile,
   },
 
 }

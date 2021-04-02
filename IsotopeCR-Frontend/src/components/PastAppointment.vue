@@ -1,7 +1,10 @@
 <template>
     <div id="pastappointment" class="container">
         <div>
-            <input type="button" onclick="location.href='http://127.0.0.1:8087/appointment';" value="Back"/>
+           <input type="button" onclick="location.href='http://127.0.0.1:8087/pastappointment/vehicle';" value="View Past Appointment for Vehicle"/>
+        </div>
+        <div>
+            <input type="button" onclick="location.href='http://127.0.0.1:8087/pastappointment/customer';" value="View Past Appointment for Customer"/>
         </div>
         <router-view/>
     </div>
@@ -11,11 +14,6 @@
 
 export default {
     name: 'PastAppointment',
-    methods: {
-        routeTo: function (to) {
-        this.$router.push("./"+to);
-    }
-  }
 }
 </script>
 

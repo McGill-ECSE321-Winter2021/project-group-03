@@ -20,11 +20,7 @@
 
 export default {
     name: 'Appointment',
-    methods: {
-        routeTo: function (to) {
-        this.$router.push("./"+to);
-    }
-  }
+  
 }
 </script>
 

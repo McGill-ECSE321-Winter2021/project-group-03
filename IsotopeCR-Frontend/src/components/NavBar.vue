@@ -1,43 +1,33 @@
-<template>
-<nav class="navbar container" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="/">
-      <strong class="is-size-4">Isotope Car Repair Shop</strong>
-    </a>
-  </div>
-  <div class = "navbar-appointment">
-       <div class="buttons">
-          <a class="button is-dark">
-            <a @click="routeTo('appointment')" class="button is-dark"><strong>Appointment</strong></a>
-          </a>
-        </div>
-      </div>
-  <div class="nav">
-    <ul class="navbar-start">
-      <router-link to="/" class="navbar-item"><strong>Home</strong></router-link>
-      <router-link to="/about" class="navbar-item"><strong>About</strong></router-link>
-    </ul>
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-dark">
-            <a @click="routeTo('login')" class="button is-dark"><strong>Login</strong></a>
+import 'bulma/css/bulma.css';
 
-          </a>
-        </div>
-      </div>
-    </div>
-    
-    </div>
-  
-</nav>
+<template>
+
+
+<div>
+    <b-navbar type="dark" variant="dark">
+        <b-navbar-brand href="#">Isotope Car Repair Shop</b-navbar-brand>        
+        <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+                <b-nav-item @click="routeTo('')">Home</b-nav-item>
+                <b-nav-item @click="routeTo('about')">About</b-nav-item>
+            </b-navbar-nav>
+
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item @click="routeTo('appointment')">Appointment</b-nav-item>
+                <b-nav-item @click="routeTo('login')">Log In</b-nav-item>
+                <b-nav-item @click="routeTo('signup')">Sign Up</b-nav-item>
+            </b-navbar-nav>
+        </b-collapse>
+    </b-navbar>
+</div>
+
 </template>
 <script>
 export default {
     name: 'Nav',
     methods: {
         routeTo: function (to) {
-        this.$router.push("./"+to);
+        location.href='http://127.0.0.1:8087/'+to;
     }
   }
 }
