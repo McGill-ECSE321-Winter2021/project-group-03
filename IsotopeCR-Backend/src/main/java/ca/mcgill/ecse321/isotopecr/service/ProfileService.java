@@ -75,24 +75,24 @@ public class ProfileService {
 			if (ServiceHelperMethods.isValidCompanyEmail(email)) {
 				technician.setEmail(email);
 			} else { // valid email but not company email
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("ERROR: Invalid CompanyEmail.");
 			}
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid Email format.");
 		}
 
 		if (ServiceHelperMethods.isValidName(firstName) && ServiceHelperMethods.isValidName(lastName)) {
 			technician.setFirstName(firstName);
 			technician.setLastName(lastName);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid name input.");
 		}
 
 		if (ServiceHelperMethods.isValidPassword(password)) {
 			technician.setPassword(password);
 			technician.setIsRegisteredAccount(true);
 		} else {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("ERROR: Invalid password input.");
 		}
 
 		technician.setProfileID(String.valueOf(email.hashCode()));
@@ -613,6 +613,25 @@ public class ProfileService {
 		}
 
 		return profile;
+	}
+	
+	/**
+	 * Gets the profile by email. Throws exception when profile not found.
+	 * 
+	 * @param email
+	 * @return the profile found
+	 * @throws invalidInputException
+	 * @author Jack Wei
+	 */
+	@Transactional
+	public List<Profile> getAllProfiles() throws IllegalArgumentException {
+
+		List<Profile> profiles = ServiceHelperMethods.toList(profileRepository.findAll());
+		if (profiles == null) {
+			throw new IllegalArgumentException("ERROR: Profiles do not exist.");
+		}
+
+		return profiles;
 	}
 
 }

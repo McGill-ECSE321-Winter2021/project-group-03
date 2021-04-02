@@ -58,6 +58,7 @@ export default {
           this.companyProfiles.push(response.data)
           this.errorCompanyProfile = ''
           this.newCompanyProfile = ''
+          alert('Your company info is registered!')
         })
         .catch(e => {
           console.log('Ahoh! Error got')
@@ -76,6 +77,7 @@ export default {
           // JSON responses are automatically parsed.
           this.companyProfiles = []
           this.newCompanyProfile = ''
+          alert('Your company info is reseted!')
         })
         .catch(e => {
           console.log('Ahoh! Error got')

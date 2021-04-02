@@ -7,27 +7,58 @@ var AXIOS = axios.create({
   headers: { "Access-Control-Allow-Origin": frontendUrl },
 })
 
-function AdminDto(firstName, lastName, email, isOwner) {
+function ProfileDto(firstName, lastName, email, password, phoneNumber) {
     this.firstName = firstName
     this.lastName = lastName
     this.email = email
-    this.isOwner = isOwner
 }
 
 export default {
-    name: 'createAdminProfile',
+    name: 'customerProfile',
     data() {
         return {
+            profiles: [],
             firstName: '',
             lastName: '',
             email: '',
             password: '',         
-            isOwner: '',
-            confirmPassword: '',
-            error: '',
+            phoneNumber: '',
+            error: ''
         }
     },
+
+    created: function () {
+        AXIOS.get('/api/profile/profiles/get-all')
+          .then(response => {  
+            console.log('response got')          
+            this.profiles = response.data
+            console.log(response.data)           
+          })
+          .catch(e => {
+            if (e.response) {
+                console.log(e.response.data)
+                console.log(e.response.status)
+            }
+            this.error = e
+          })
+      },
+
     methods: {
+        displayInfo: function (email) {
+            AXIOS.get('/api/profile/profiles/get-all')
+                .then(response => {                              
+                    this.profiles = response.data
+                    alert("Vehicles displayed!")
+                })
+                .catch(e => {
+                    if (e.response) {
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                    }
+                    this.error = e
+                })
+        },
+
         createAdminAccount: function (email, firstName, lastName, password, isOwner) {
             if (firstName == "") {
                 this.error = "Please enter your first name";
