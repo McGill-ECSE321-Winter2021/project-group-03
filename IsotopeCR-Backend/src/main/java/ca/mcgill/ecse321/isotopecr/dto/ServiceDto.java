@@ -5,16 +5,18 @@ public class ServiceDto {
 	private String serviceName;
 	private int duration;
 	private double price;
+	private int frequency;
 	private ResourceDto resource;
 
 	public ServiceDto() {
 
 	}
 
-	public ServiceDto(String serviceName, int duration, double price, ResourceDto resource) {
+	public ServiceDto(String serviceName, int duration, double price, int frequency, ResourceDto resource) {
 		this.serviceName = serviceName;
 		this.duration = duration;
 		this.price = price;
+		this.frequency = frequency;
 		this.resource = resource;
 	}
 
@@ -30,6 +32,10 @@ public class ServiceDto {
 		return this.price;
 	}
 
+	public int getFrequency() {
+		return this.frequency;
+	}
+
 	public ResourceDto getResource() {
 		return this.resource;
 	}
@@ -40,6 +46,10 @@ public class ServiceDto {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
+	}
+
+	public void setFrequency(int frequency) {
+		this.frequency = frequency;
 	}
 
 	public void setPrice(double price) {

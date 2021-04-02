@@ -9,13 +9,15 @@
 import Login from './components/Login'
 import NavBar from './components/NavBar.vue';
 import CompanyProfile from './components/CompanyProfile.vue'
+import Service from './components/Service.vue'
 
 export default {
   name: 'app',
   components:{
     Login,
     NavBar,
-    CompanyProfile
+    CompanyProfile,
+    Service
   },
 
 }
