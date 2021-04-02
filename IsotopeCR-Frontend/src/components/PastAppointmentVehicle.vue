@@ -7,7 +7,7 @@
         
         <table class= "pastappointmentv">
         <thead>
-        
+        <tr>
         <th scope="col" style="text-align: left; width: 10rem;">Date
         </th>
         <th scope="col" style="text-align: left; width: 10rem;">Start time
@@ -20,6 +20,7 @@
         </th>
         <th scope="col" style="text-align: left; width: 10rem;">Technician
         </th>
+        </tr>
         <tr v-for ="pastappointmentv in pastappointments">
             <td>{{pastappointmentv.date}}</td>
             <td>{{pastappointmentv.starttime}}</td>
@@ -28,8 +29,10 @@
             <td>{{pastappointmentv.service}}</td>
             <td>{{pastappointmentv.technician}}</td>
         </tr>
+    
         </thead>
-        </table>         
+        </table>   
+        <span v-if="errorPastappointmentv" style="color:red">{{errorPastappointmentv}} </span>      
     </div>
 </template>
 

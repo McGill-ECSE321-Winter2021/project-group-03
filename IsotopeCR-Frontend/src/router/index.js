@@ -6,17 +6,17 @@ import Login from '@/components/Login'
 
 import Appointment from '@/components/Appointment'
 import PastAppointment from '@/components/PastAppointment'
-import BookAppointment from '@/components/BookAppointment'
+import BookAppointment from '@/components/BookAppointment.vue'
 import FutureAppointment from '@/components/FutureAppointment'
 import CancelAppointment from '@/components/CancelAppointment'
 
 import CreateCustomerProfile from '@/components/CreateCustomerProfile'
 import CompanyProfile from '@/components/CompanyProfile.vue'
 
-import PastAppointmentCustomer from '@/components/PastAppointmentCustomer'
-import PastAppointmentVehicle from '@/components/PastAppointmentVehicle'
-import FutureAppointmentCustomer from '@/components/FutureAppointmentCustomer'
-import FutureAppointmentVehicle from '@/components/FutureAppointmentVehicle'
+import PastAppointmentCustomer from '@/components/PastAppointmentCustomer.vue'
+import PastAppointmentVehicle from '@/components/PastAppointmentVehicle.vue'
+import FutureAppointmentCustomer from '@/components/FutureAppointmentCustomer.vue'
+import FutureAppointmentVehicle from '@/components/FutureAppointmentVehicle.vue'
 
 import CreateAdminProfile from '@/components/CreateAdminProfile'
 import CreateTechProfile from '@/components/CreateTechProfile'

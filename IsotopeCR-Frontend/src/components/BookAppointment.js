@@ -20,17 +20,14 @@ function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
 }
 
 export default {
-    name: 'pastappointmentc',
+    name: 'bookappointment',
     data() {
         return {
-            appointments: [],
             date: '',
-            starttime: '',
-            customer: '',
-            vehicle: '',
-            service: '',
-            technician: '',
-            errorPastappointmentc: '',
+            startTime: '',
+            license: '',
+            serviceName: '',
+            errorMessage: '',
             response: []
         }
     },
@@ -38,30 +35,25 @@ export default {
 
     methods: {
 
-        pastappointmentc: function(customeremail){
-            if(customeremail == "" ) {
-              this.errorMessage = 'Email cannot be empty.'
+        createAppointment: function(license,serviceName,startTime,date){
+            if(license == "" || serviceName=="" || startTime==""||date=="" ) {
+              this.errorMessage = 'Input cannot be empty.'
               return false
             } else {
                 
-                AXIOS.post(backendUrl+'/api/appointment/futureappointment/customer/{customer}', {},{params:{
-                    email: customeremail,
+                AXIOS.post(backendUrl+'/api/appointment/create/'+ license + serviceName, {},{params:{
+                   start:startTime,
+                   date:date
                 }})
 
-                .then(response => {
-                    // JSON responses are automatically parsed.
-                    // this.profile = response.data
-                    // this.email = ''
-                    // this.password = ''
-                    // this.errorMessage = ''
-                    console.log(response)
-
-                  })
-                  .catch(e => {
-                    console.log("hello")
-                    console.log(e) 
-                });
-
+                .then(
+                    (response) => {
+                        console.log("Appointment booked created successfully!")
+                        console.log(response.data)
+                        this.error = ''
+                    }
+                )
+                  
             }
 
         }

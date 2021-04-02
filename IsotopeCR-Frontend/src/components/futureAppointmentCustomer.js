@@ -30,6 +30,7 @@ export default {
             vehicle: '',
             service: '',
             technician: '',
+            customeremail:'',
             errorFutureappointmentc: '',
             response: []
         }
@@ -44,10 +45,7 @@ export default {
               return false
             } else {
                 
-                AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/{customer}', {},
-                {params:{
-                    email: customeremail,
-                }})
+                AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + customeremail)
 
                 .then(response => {
                    this.futureappointments=response.data

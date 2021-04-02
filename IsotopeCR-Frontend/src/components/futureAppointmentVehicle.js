@@ -30,6 +30,7 @@ export default {
             vehicle: '',
             service: '',
             technician: '',
+            licenseplate:'',
             errorPastappointmentv: '',
             response: []
         }
@@ -44,10 +45,7 @@ export default {
               return false
             } else {
                 
-                AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/{vehicle}', {},
-                {params:{
-                    licensePlate: licenseplate,
-                }})
+                AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/'+ licenseplate)
 
                 .then(response => {
                    this.pastappointments=response.data
