@@ -115,12 +115,18 @@ public class ControllerHelperMethods {
 		}
 		List<DailyAvailabilityDto> availabilities = technician.getDailyAvailability().stream()
 				.map(r -> ControllerHelperMethods.convertToDto(r)).collect(Collectors.toList());
-		List<ServiceDto> services = technician.getService().stream().map(r -> ControllerHelperMethods.convertToDto(r))
-				.collect(Collectors.toList());
-		TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(),
-				technician.getEmail(), technician.getPassword(), availabilities);
-		technicianDto.setServices(services);
-		return technicianDto;
+		if (technician.getService() != null) {
+			List<ServiceDto> services = technician.getService().stream().map(r -> ControllerHelperMethods.convertToDto(r))
+					.collect(Collectors.toList());
+			TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(),
+					technician.getEmail(), technician.getPassword(), availabilities);
+			technicianDto.setServices(services);
+			return technicianDto;
+		} else {
+			TechnicianDto technicianDto = new TechnicianDto(technician.getFirstName(), technician.getLastName(),
+					technician.getEmail(), technician.getPassword(), availabilities);
+			return technicianDto;
+		}
 	}
 
 	public static ProfileDto convertToDto(Profile profile) {
