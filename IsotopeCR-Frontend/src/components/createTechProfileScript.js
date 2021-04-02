@@ -14,7 +14,7 @@ function TechDto(firstName, lastName, email) {
 }
 
 export default {
-    name: 'createcustomerprofile',
+    name: 'createTechProfile',
     data() {
         return {
             firstName: '',

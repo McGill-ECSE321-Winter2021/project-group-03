@@ -261,5 +261,20 @@ public class AutoRepairShopController {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
+	/**
+	 * Delete all Company Profiles
+	 * @author Zichen
+	 * @return The serched company Profile is returned
+	 */
+	@DeleteMapping(value = { "/CompanyProfile/delete", "/CompanyProfile/delete/" })
+	public CompanyProfileDto CompanyProfile() {
+		try {
+			List<CompanyProfileDto> companyProfiles = autoRepairShopService.deleteCompanyProfiles().stream()
+					.map(cp -> ControllerHelperMethods.convertToDto(cp)).collect(Collectors.toList());
+			return companyProfiles.get(0);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 
 }

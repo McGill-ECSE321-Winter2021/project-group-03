@@ -15,7 +15,7 @@ function AdminDto(firstName, lastName, email, isOwner) {
 }
 
 export default {
-    name: 'createcustomerprofile',
+    name: 'createAdminProfile',
     data() {
         return {
             firstName: '',

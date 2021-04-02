@@ -46,7 +46,7 @@
         </tr>
         <tr>
             <td>
-                <button  @click="deleteCompanyProfile(newCompanyProfile, newAddress, newWorkingHours)">Delete</button>
+                <button  @click="deleteCompanyProfile()">Delete</button>
             </td>
         </tr>
        

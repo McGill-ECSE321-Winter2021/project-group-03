@@ -7,6 +7,9 @@ import CreateCustomerProfile from '@/components/CreateCustomerProfile'
 import CompanyProfile from '@/components/CompanyProfile.vue'
 import CreateAdminProfile from '@/components/CreateAdminProfile'
 import CreateTechProfile from '@/components/CreateTechProfile'
+import Vehicle from '@/components/Vehicle.vue'
+import Registration from '@/components/RegistrationNav.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -46,6 +49,16 @@ export default new Router({
       path: "/createTechProfile",
       name: "CreateTechProfile",
       component: CreateTechProfile
+    },
+    {
+      path: "/vehicle",
+      name: "Vehicle",
+      component: Vehicle
+    },
+    {
+      path: "/signup",
+      name: "Registration",
+      component: Registration
     }
   ]
 })

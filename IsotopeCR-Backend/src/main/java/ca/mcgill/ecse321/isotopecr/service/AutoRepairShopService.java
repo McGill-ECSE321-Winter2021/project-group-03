@@ -313,4 +313,16 @@ public class AutoRepairShopService {
 		List<CompanyProfile> companyProfiles = ServiceHelperMethods.toList(companyProfileRepository.findAll());
 		return companyProfiles;
 	}
+	
+	/**
+	 * Delete all companyProfiles.
+	 * @author Zichen
+	 * @return A list of companyProfiles are returned.
+	 */
+	@Transactional
+	public List<CompanyProfile> deleteCompanyProfiles() {
+		List<CompanyProfile> companyProfiles = ServiceHelperMethods.toList(companyProfileRepository.findAll());
+		companyProfileRepository.deleteAll();
+		return companyProfiles;
+	}
 }
