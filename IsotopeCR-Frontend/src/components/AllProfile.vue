@@ -66,7 +66,7 @@
   </html>
 </template>
 
-<script src='./customerProfileScript.js'>
+<script src='./allProfileScript.js'>
 </script>
 
 <style scoped>

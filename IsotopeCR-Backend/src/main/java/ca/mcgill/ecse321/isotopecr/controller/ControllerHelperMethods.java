@@ -134,6 +134,11 @@ public class ControllerHelperMethods {
 			throw new IllegalArgumentException("Profile does not exist.");
 		}
 		ProfileDto profileDto = new ProfileDto(profile.getEmail(), profile.getFirstName(), profile.getLastName());
+		if (profile instanceof Customer) {
+			profileDto.setPhoneNumber(((Customer) profile).getPhoneNumber());
+		} else if (profile instanceof Admin) {
+			profileDto.setIsOwner(((Admin) profile).getIsOwner().toString());
+		}
 		return profileDto;
 	}
 

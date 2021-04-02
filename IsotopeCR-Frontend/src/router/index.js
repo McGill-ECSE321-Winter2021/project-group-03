@@ -9,7 +9,7 @@ import CreateAdminProfile from '@/components/CreateAdminProfile'
 import CreateTechProfile from '@/components/CreateTechProfile'
 import Vehicle from '@/components/Vehicle.vue'
 import Registration from '@/components/RegistrationNav.vue'
-import Profile from '@/components/CustomerProfile.vue'
+import Profile from '@/components/AllProfile.vue'
 
 Vue.use(Router)
 

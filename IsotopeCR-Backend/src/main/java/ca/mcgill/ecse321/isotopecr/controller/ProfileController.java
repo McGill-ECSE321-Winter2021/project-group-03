@@ -332,6 +332,11 @@ public class ProfileController {
 	/*********************************************************
 	 * All profiles
 	 *********************************************************/	
+	/**
+	 * Get all profiles from the system
+	 * @return a list of ProfileDtos
+	 * @throws RuntimeException
+	 */
 	@GetMapping(value = { "/profiles/get-all", "/profiles/get-all/" })
 	public List<ProfileDto> getAllProfiles() throws RuntimeException {
 		try {
@@ -340,6 +345,20 @@ public class ProfileController {
 				profilesDto.add(ControllerHelperMethods.convertToDto(profile));
 			}
 			return profilesDto;
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}	
+	
+	/**
+	 * Get all profiles from the system
+	 * @return a list of ProfileDtos
+	 * @throws RuntimeException
+	 */
+	@GetMapping(value = { "/profiles/get/{email}", "/profiles/get/{email}/" })
+	public ProfileDto getProfile(@PathVariable("email") String email) throws RuntimeException {
+		try {
+			return ControllerHelperMethods.convertToDto(profileService.getProfile(email));
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
 		}
