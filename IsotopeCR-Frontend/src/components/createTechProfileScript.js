@@ -50,7 +50,9 @@ export default {
                     .then(
                         (response) => {
                             console.log("response got!");
+                            alert("Registration complete!")
                             console.log(response.data);
+                            this.error = ''
                         }
                     )
                     .catch(e => {

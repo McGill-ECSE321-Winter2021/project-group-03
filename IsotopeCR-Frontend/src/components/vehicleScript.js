@@ -29,21 +29,6 @@ export default {
         }
     },
 
-    // created: function () {
-    //     // AXIOS.get('/api/profile/customer/vehicle/get-all/'+this.email)      
-    //     //     .then(response => {
-    //     //         // JSON responses are automatically parsed.
-    //     //         this.vehicles.push(response.data)
-    //     //     })
-    //     //     .catch(e => {
-    //     //         if (e.response) {
-    //     //             console.log(e.response.data)
-    //     //             console.log(e.response.status)
-    //     //         }
-    //     //         this.errorVehicle = e
-    //     //     })  
-    // }, 
-
     methods: {
         displayVehicle: function (email) {
             AXIOS.get('/api/profile/customer/vehicle/get-all/'+email)

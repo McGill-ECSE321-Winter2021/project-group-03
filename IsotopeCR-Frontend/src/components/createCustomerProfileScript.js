@@ -55,7 +55,9 @@ export default {
                     .then(
                         (response) => {
                             console.log("hello");
-                            console.log(response.data);
+                            alert("Registration complete!")
+                            console.log(response.data);                           
+                            this.error = '';
                         },
                         () => {
                             console.log("not");
