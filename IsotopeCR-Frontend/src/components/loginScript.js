@@ -51,7 +51,14 @@ export default {
                     // this.email = ''
                     // this.password = ''
                     // this.errorMessage = ''
+                    this.response = response.data 
                     console.log(response)
+                    if (this.response != ''){
+                        localStorage.setItem('loggedIn', 'user')
+                        this.$cookie.set('name', this.response['name'], { expires: '1h'})
+                        this.$cookie.set('email', this.response['email'], { expires: '1h'})
+                        window.location.href = "/"
+                    }
 
                   })
                   .catch(e => {

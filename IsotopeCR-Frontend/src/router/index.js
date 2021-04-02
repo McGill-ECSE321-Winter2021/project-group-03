@@ -17,12 +17,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
-    },
-    {
-      path: '/app',
-      name: 'Home',
+      name: 'home',
       component: Home
     },
     {
