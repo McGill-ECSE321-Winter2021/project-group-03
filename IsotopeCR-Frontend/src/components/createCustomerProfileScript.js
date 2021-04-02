@@ -1,8 +1,7 @@
 import axios from "axios";
 var config = require("../../config");
 var frontendUrl = "http://" + config.dev.host + ':' + config.dev.port;
-var backendUrl =
-  "http://" + config.build.backendHost;
+var backendUrl = "http://" + config.build.backendHost;
 var AXIOS = axios.create({
   baseURL: backendUrl,
   headers: { "Access-Control-Allow-Origin": frontendUrl },
@@ -56,7 +55,9 @@ export default {
                     .then(
                         (response) => {
                             console.log("hello");
-                            console.log(response.data);
+                            alert("Registration complete!")
+                            console.log(response.data);                           
+                            this.error = '';
                         },
                         () => {
                             console.log("not");

@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.isotopecr.controller;
 
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,7 +73,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PostMapping(value = { "technician/create", "technician/create/" })
+	@PostMapping(value = { "/technician/create", "/technician/create/" })
 	public TechnicianDto createTechnicianProfile(@RequestParam String email, @RequestParam String firstName,
 			@RequestParam String lastName, @RequestParam String password) throws Exception {
 		try {
@@ -91,7 +92,7 @@ public class ProfileController {
 	 * @return List of DailyAvailabilityDtos
 	 * @throws Exception
 	 */
-	@GetMapping(value = { "technician/availability/get-all/{email}", "technician/availability/get-all/{email}/" })
+	@GetMapping(value = { "/technician/availability/get-all/{email}", "/technician/availability/get-all/{email}/" })
 	public List<DailyAvailabilityDto> getTechnicianAvailabilities(@PathVariable("email") String email)
 			throws Exception {
 		try {
@@ -160,7 +161,7 @@ public class ProfileController {
 	 * @throws Exception
 	 * @author Jack Wei
 	 */
-	@PutMapping(value = { "technician/service/add/{email}", "customer/service/add/{email}/" })
+	@PutMapping(value = { "/technician/service/add/{email}", "/technician/service/add/{email}/" })
 	public ServiceDto addServiceOfferedByTechnician(@PathVariable("email") String email,
 			@RequestParam("serviceName") String serviceName) throws Exception {
 		try {
@@ -317,10 +318,11 @@ public class ProfileController {
 	 */
 	@PostMapping(value = { "/admin/create", "/admin/create/" })
 	public AdminDto createAdminProfile(@RequestParam String email, @RequestParam String firstName,
-			@RequestParam String lastName, @RequestParam String password, @RequestParam boolean isOwner)
+			@RequestParam String lastName, @RequestParam String password, @RequestParam String isOwner)
 			throws IllegalArgumentException {
 		try {
-			Admin admin = profileService.createAdminProfile(firstName, lastName, email, isOwner, password);
+			boolean isOwner1 = Boolean.parseBoolean(isOwner);
+			Admin admin = profileService.createAdminProfile(firstName, lastName, email, isOwner1, password);
 			return ControllerHelperMethods.convertToDto(admin);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e.getMessage());
@@ -329,7 +331,38 @@ public class ProfileController {
 
 	/*********************************************************
 	 * All profiles
-	 *********************************************************/
+	 *********************************************************/	
+	/**
+	 * Get all profiles from the system
+	 * @return a list of ProfileDtos
+	 * @throws RuntimeException
+	 */
+	@GetMapping(value = { "/profiles/get-all", "/profiles/get-all/" })
+	public List<ProfileDto> getAllProfiles() throws RuntimeException {
+		try {
+			List<ProfileDto> profilesDto = new ArrayList<ProfileDto>();
+			for (Profile profile : profileService.getAllProfiles()) {
+				profilesDto.add(ControllerHelperMethods.convertToDto(profile));
+			}
+			return profilesDto;
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}	
+	
+	/**
+	 * Get all profiles from the system
+	 * @return a list of ProfileDtos
+	 * @throws RuntimeException
+	 */
+	@GetMapping(value = { "/profiles/get/{email}", "/profiles/get/{email}/" })
+	public ProfileDto getProfile(@PathVariable("email") String email) throws RuntimeException {
+		try {
+			return ControllerHelperMethods.convertToDto(profileService.getProfile(email));
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}	
 	
 	/**
 	 * Deletes the profile with the given email.

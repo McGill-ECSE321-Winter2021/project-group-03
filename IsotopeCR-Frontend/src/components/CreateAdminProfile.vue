@@ -1,7 +1,7 @@
 <template>
   <html lang="en">
     <div id="createAccount">
-      <h3>Create Customer Profile</h3>
+      <h3>Create Admin Profile</h3>
       <div class="container-fluid">
         <div class="input">
           <div class="inputbox">
@@ -30,14 +30,6 @@
           </div>
           <div class="inputbox">
             <input
-              type="text"
-              class="form-control input-style"
-              v-model="phoneNumber"
-              placeholder="Phone Number"
-            />
-          </div>
-          <div class="inputbox">
-            <input
               type="password"
               class="form-control input-style"
               v-model="password"
@@ -52,19 +44,21 @@
               placeholder="Confirm Password"
             />
           </div>
+          <input type="checkbox" id="checkbox" v-model="isOwner" />
+          <label for="checkbox" class="bold">Owner of the company?: {{ isOwner }}</label>
         </div>
       </div>
-      <button class="btn btn-danger" @click="createAc">Create Account</button>
-      <p>{{ error }}</p>
+      <button class="btn btn-danger" @click="createAdminAccount(email, firstName, lastName, password, isOwner)">Create Account</button>
+      <p v-if="error" style="color: red">Error: {{ error }}</p>
     </div>
   </html>
 </template>
 
-<script src="./createCustomerProfileScript.js">
+<script src='./createAdminProfileScript.js'>
 </script>
 
 <style scoped>
-#createAccount {    
+#createAccount {
   padding-top: 20vh;
 }
 .input {

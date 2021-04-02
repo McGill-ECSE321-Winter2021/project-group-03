@@ -17,13 +17,20 @@ import PastAppointmentCustomer from '@/components/PastAppointmentCustomer'
 import PastAppointmentVehicle from '@/components/PastAppointmentVehicle'
 import FutureAppointmentCustomer from '@/components/FutureAppointmentCustomer'
 import FutureAppointmentVehicle from '@/components/FutureAppointmentVehicle'
+
+import CreateAdminProfile from '@/components/CreateAdminProfile'
+import CreateTechProfile from '@/components/CreateTechProfile'
+import Vehicle from '@/components/Vehicle.vue'
+import Registration from '@/components/RegistrationNav.vue'
+import Profile from '@/components/AllProfile.vue'
+
 Vue.use(Router)
 
 export default new Router({
   mode: "history",
   routes: [
     {
-      path: '/hello',
+      path: '/',
       name: 'Hello',
       component: Hello
     },
@@ -83,16 +90,39 @@ export default new Router({
       component: CancelAppointment
     },
     {
-      path:'/',
-      name: 'CreateCustomerProfile',
-      component: CreateCustomerProfile
-    },
-    {
       path: "/company",
       name: "Company",
       component: CompanyProfile
     },
-
-  
+    {
+      path: '/createCustomerProfile',
+      name: 'CreateCustomerProfile',
+      component: CreateCustomerProfile
+    },
+    {
+      path: "/createAdminProfile",
+      name: "CreateAdminProfile",
+      component: CreateAdminProfile
+    },
+    {
+      path: "/createTechProfile",
+      name: "CreateTechProfile",
+      component: CreateTechProfile
+    },
+    {
+      path: "/vehicle",
+      name: "Vehicle",
+      component: Vehicle
+    },
+    {
+      path: "/signup",
+      name: "Registration",
+      component: Registration
+    },
+    {
+      path: "/profileInfo",
+      name: "ProfileInfo",
+      component: Profile
+    }
   ]
 })
