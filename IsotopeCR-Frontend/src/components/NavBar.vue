@@ -1,6 +1,8 @@
 import 'bulma/css/bulma.css';
 
 <template>
+
+
 <div>
     <b-navbar type="dark" variant="dark">
         <b-navbar-brand href="#">Isotope Car Repair Shop</b-navbar-brand>        
@@ -11,19 +13,21 @@ import 'bulma/css/bulma.css';
             </b-navbar-nav>
 
             <b-navbar-nav class="ml-auto">
+                <b-nav-item @click="routeTo('appointment')">Appointment</b-nav-item>
                 <b-nav-item @click="routeTo('login')">Log In</b-nav-item>
                 <b-nav-item @click="routeTo('signup')">Sign Up</b-nav-item>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
 </div>
+
 </template>
 <script>
 export default {
     name: 'Nav',
     methods: {
         routeTo: function (to) {
-        this.$router.push("./"+to);
+        location.href='http://127.0.0.1:8087/'+to;
     }
   }
 }

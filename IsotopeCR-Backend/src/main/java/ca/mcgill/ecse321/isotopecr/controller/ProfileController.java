@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.isotopecr.controller;
 
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -330,7 +331,38 @@ public class ProfileController {
 
 	/*********************************************************
 	 * All profiles
-	 *********************************************************/
+	 *********************************************************/	
+	/**
+	 * Get all profiles from the system
+	 * @return a list of ProfileDtos
+	 * @throws RuntimeException
+	 */
+	@GetMapping(value = { "/profiles/get-all", "/profiles/get-all/" })
+	public List<ProfileDto> getAllProfiles() throws RuntimeException {
+		try {
+			List<ProfileDto> profilesDto = new ArrayList<ProfileDto>();
+			for (Profile profile : profileService.getAllProfiles()) {
+				profilesDto.add(ControllerHelperMethods.convertToDto(profile));
+			}
+			return profilesDto;
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}	
+	
+	/**
+	 * Get all profiles from the system
+	 * @return a list of ProfileDtos
+	 * @throws RuntimeException
+	 */
+	@GetMapping(value = { "/profiles/get/{email}", "/profiles/get/{email}/" })
+	public ProfileDto getProfile(@PathVariable("email") String email) throws RuntimeException {
+		try {
+			return ControllerHelperMethods.convertToDto(profileService.getProfile(email));
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}	
 	
 	/**
 	 * Deletes the profile with the given email.

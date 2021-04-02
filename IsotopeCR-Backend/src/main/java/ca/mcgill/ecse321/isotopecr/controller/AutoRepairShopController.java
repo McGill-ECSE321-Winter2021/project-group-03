@@ -257,7 +257,7 @@ public class AutoRepairShopController {
 			List<CompanyProfileDto> companyProfiles = autoRepairShopService.getCompanyProfiles().stream()
 					.map(cp -> ControllerHelperMethods.convertToDto(cp)).collect(Collectors.toList());
 			return companyProfiles.get(0);
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
 	}

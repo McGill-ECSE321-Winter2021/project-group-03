@@ -60,7 +60,7 @@
 
       <hr />  
 
-        <table id="vehicles" class="table">
+        <table id="vehicle" class="table">
           <th>LicencePlate</th>
           <th>Year</th>
           <th>Model</th>
