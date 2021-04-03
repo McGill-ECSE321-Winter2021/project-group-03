@@ -10,6 +10,7 @@ import CreateTechProfile from '@/components/CreateTechProfile'
 import Vehicle from '@/components/Vehicle.vue'
 import Registration from '@/components/RegistrationNav.vue'
 import Profile from '@/components/AllProfile.vue'
+import ProfileInfo from '@/components/ProfileInfo.vue'
 
 Vue.use(Router)
 
@@ -63,8 +64,13 @@ export default new Router({
     },
     {
       path: "/allProfiles",
-      name: "ProfileInfo",
+      name: "AllProfiles",
       component: Profile
+    },
+    {
+      path: "/profileInfo",
+      name: "ProfileInfo",
+      component: ProfileInfo
     }
   ]
 })
