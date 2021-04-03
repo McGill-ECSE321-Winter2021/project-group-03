@@ -37,6 +37,7 @@ export default {
         AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
             .then(response => {
                 this.futureappointments = response.data
+                console.log(resonse)
             })
             .catch(e => {
                 console.log('Error got')
@@ -45,7 +46,7 @@ export default {
                     console.log(e.response.data)
                     console.log(e.response.status)
                 }
-                this.error = e.response.data
+                this.error = e.response
             });
 
     
