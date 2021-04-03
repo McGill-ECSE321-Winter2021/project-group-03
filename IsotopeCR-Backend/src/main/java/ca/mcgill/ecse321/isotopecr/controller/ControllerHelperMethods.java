@@ -61,7 +61,7 @@ public class ControllerHelperMethods {
 			throw new IllegalArgumentException("There is no such Service!");
 		}
 
-		ServiceDto serviceDto = new ServiceDto(s.getServiceName(), s.getDuration(), s.getPrice(),
+		ServiceDto serviceDto = new ServiceDto(s.getServiceName(), s.getDuration(), s.getPrice(), s.getFrequency(),
 				convertToDto(s.getResource()));
 		return serviceDto;
 	}
@@ -134,10 +134,13 @@ public class ControllerHelperMethods {
 			throw new IllegalArgumentException("Profile does not exist.");
 		}
 		ProfileDto profileDto = new ProfileDto(profile.getEmail(), profile.getFirstName(), profile.getLastName());
+		profileDto.setType("Technician");
 		if (profile instanceof Customer) {
 			profileDto.setPhoneNumber(((Customer) profile).getPhoneNumber());
+			profileDto.setType("Customer");
 		} else if (profile instanceof Admin) {
 			profileDto.setIsOwner(((Admin) profile).getIsOwner().toString());
+			profileDto.setType("Admin");
 		}
 		return profileDto;
 	}

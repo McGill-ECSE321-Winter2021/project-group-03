@@ -27,6 +27,7 @@ import 'bulma/css/bulma.css';
 
 <script>
 export default {
+<<<<<<< HEAD
   name: 'Nav',
   computed: {
     loggedIn() {
@@ -37,8 +38,8 @@ export default {
     }
   },
   methods: {
-    routeTo: function (to) {
-    this.$router.push("./"+to);
+    routeTo: function (to) {        
+    location.href= 'http://127.0.0.1:8087/' + to;
     },
     logOut: function() {
       this.$cookie.delete('email')

@@ -23,20 +23,22 @@ export default {
         return {
             services: [],
             serviceName: "",
+            deletedServiceName: "",
             duration: "",
             price: "",
             frequency: "",
             resource: "",
+            resourceType: "",
             errorService: '',
             response: []
         }
     },
 
     created: function () {
-        AXIOS.get('/api/autorepairshop//service/get-all')
+        AXIOS.get('/api/autorepairshop/service/get-all')
           .then(response => {
             // JSON responses are automatically parsed.
-            this.services = (response.data) //get-all returns a lit of services
+            this.services=(response.data) //get-all returns a lit of services
           })
           .catch(e => {
             this.errorService = e
@@ -44,15 +46,15 @@ export default {
     },
 
     methods: {
-        createService: function (serviceName, duration, price, frequency, resource) {
+        createService: function (serviceName, duration, price, resourceType, frequency) {
             // CREATE a Service
-            AXIOS.post(backendUrl + '/api/autorepairshop/service/create', {}, {
+            AXIOS.post(backendUrl + '/api/autorepairshop/service/create/' + serviceName, {}, {
               params: {
-                serviceName: serviceName,
+                serviceName: serviceName, //Take this out most likely
                 duration: duration,
                 price: price,
                 frequency: frequency,
-                resource: resource
+                resourceType: resourceType
               }
             })
               .then(response => {
@@ -60,8 +62,13 @@ export default {
                 console.log(response)
                 // JSON responses are automatically parsed.
                 this.services.push(response.data)
+                this.duration = ''
+                this.frequency = ''
+                this.price = ''
                 this.errorService = ''
                 this.serviceName = ''
+                this.resourceType = ''
+                this.deletedServiceName = ''
               })
               .catch(e => {
                 console.log('Error!')
@@ -71,15 +78,31 @@ export default {
               });
           },
       
-          deleteService: function () {
+          deleteService: function (deletedServiceName) {
             // DELETE a Service
-            AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete')
+            AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete/' + deletedServiceName, {}, {
+              params: {
+                deletedServiceName: deletedServiceName,
+              }
+            })
               .then(response => {
                 console.log('Response Got')
                 console.log(response)
                 // JSON responses are automatically parsed.
-                this.services = []
+                this.deletedServiceName = ''
+                this.duration = ''
+                this.frequency = ''
+                this.price = ''
                 this.serviceName = ''
+                this.resourceType = ''
+                this.services = AXIOS.get('/api/autorepairshop/service/get-all')
+                .then(response => {
+                  // JSON responses are automatically parsed.
+                  this.services=(response.data) //get-all returns a lit of services
+                })
+                .catch(e => {
+                  this.errorService = e
+                })
               })
               .catch(e => {
                 console.log('Error!')
@@ -88,7 +111,7 @@ export default {
                   console.log(e.response.status);
                   console.log(e.response.message);
                 }
-                this.errorService = errorMsg
+                this.errorService = "Error!"
               });
           }
     },

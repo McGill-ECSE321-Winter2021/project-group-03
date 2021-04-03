@@ -1,66 +1,32 @@
 <template>
   <html lang="en">
-    <div id="createAccount">
-      <h3>My Information</h3>
+    <div id="AllProfile">
+      <h3>System Account Records</h3>
       <div class="container-fluid">
-        <div class="input">
-
-          <table id="profiles" class="table">
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Email</th>
-            <tr v-for="profile in profiles">
-              <td>{{ profile.firstName }}</td>
-              <td>{{ profile.lastName }}</td>
-              <td>{{ profile.email }}</td>
-            </tr>
-          </table>
-
-          <!--
-          <div class="inputbox">
-            <input
-              type="text"
-              class="form-control input-style"
-              v-model="firstName"
-              placeholder="First Name"
-            />
-          </div>
-          <div class="inputbox">
-            <input
-              type="text"
-              class="form-control input-style"
-              v-model="lastName"
-              placeholder="Last Name"
-            />
-          </div>
-          <div class="inputbox">
-            <input
-              type="email"
-              class="form-control input-style"
-              v-model="email"
-              placeholder="Email"
-            />
-          </div>
-          <div class="inputbox">
-            <input
-              type="password"
-              class="form-control input-style"
-              v-model="password"
-              placeholder="Password"
-            />
-          </div>
-          <div class="inputbox">
-            <input
-              type="password"
-              class="form-control input-style"
-              v-model="confirmPassword"
-              placeholder="Confirm Password"
-            />
-          </div>
-          -->
-        </div>
+        <table id="profiles" class="table">
+          <th>FirstName</th>
+          <th>LastName</th>
+          <th>Email</th>
+          <th>PhoneNumber</th>
+          <th>IsOwner</th>
+          <th>AccountType</th>
+          <tr v-for="profile in profiles">
+            <td>{{ profile.firstName }}</td>
+            <td>{{ profile.lastName }}</td>
+            <td>{{ profile.email }}</td>
+            <td>{{ profile.phoneNumber }}</td>
+            <td>{{ profile.isOwner }}</td>
+            <td>{{ profile.type }}</td>
+          </tr>
+        </table>
       </div>
-      <!-- <button class="btn btn-danger" @click="createAdminAccount(email, firstName, lastName, password, isOwner)">Create Account</button> -->
+      <hr/>
+      <div class="container-fluid">
+        <div class="inputbox">
+          <input type="text" class="form-control input-style" v-model="email" placeholder="Email to be deleted"/>
+        </div>
+        <button class="btn btn-danger" @click="deleteProfile(email)">Delete</button>
+      </div>
       <p v-if="error" style="color: red">Error: {{ error }}</p>
     </div>
   </html>
@@ -70,8 +36,8 @@
 </script>
 
 <style scoped>
-#createAccount {
-  padding-top: 20vh;
+#AllProfile {
+  padding-top: 5vh;
 }
 .input {
   top: 20px;

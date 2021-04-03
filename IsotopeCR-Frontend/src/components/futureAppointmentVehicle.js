@@ -31,7 +31,6 @@ export default {
             service: '',
             technician: '',
             licenseplate:'',
-            errorPastappointmentv: '',
             response: []
         }
     },
@@ -39,7 +38,7 @@ export default {
 
     methods: {
 
-        pastappointmentv: function(licenseplate){
+        futureappointmentv: function(licenseplate){
             if(licenseplate == "" ) {
               this.errorMessage = 'License cannot be empty.'
               return false
@@ -48,7 +47,7 @@ export default {
                 AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/'+ licenseplate)
 
                 .then(response => {
-                   this.pastappointments=response.data
+                   this.futureappointments=response.data
 
                   })
                   .catch(e => {
