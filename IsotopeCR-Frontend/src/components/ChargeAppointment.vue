@@ -54,7 +54,7 @@
   </div>
 </template>
 
-<script src="./cancelAppointment.js">
+<script>
 export default {
   name: "CancelAppointment",
 };
