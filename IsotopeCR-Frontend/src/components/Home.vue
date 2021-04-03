@@ -12,60 +12,77 @@
           <div class="text-center">
               <h2 class="section-heading text-uppercase">Services</h2>
           </div>
-          <div class="row text-center">
+          <div class="row text-center" id = "servicesR1">
               <div class="col-md-4">
-                  <span class="fa-stack fa-4x">
-                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                      <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
-                  </span>
+                  <b-icon icon="droplet-fill" style="width: 80px; height: 80px;" ></b-icon>
                   <h4 class="my-3">Oil Change</h4>
                   <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
               </div>
               <div class="col-md-4">
-                  <span class="fa-stack fa-4x">
-                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                      <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
-                  </span>
-                  <h4 class="my-3">Roadside Assitance</h4>
+                  <b-icon icon="tools" style="width: 80px; height: 80px;" ></b-icon>
+                  <h4 class="my-3">Roadside Assistance</h4>
                   <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
               </div>
               <div class="col-md-4">
-                  <span class="fa-stack fa-4x">
-                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                      <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
-                  </span>
+                  <b-icon icon="gear-fill" style="width: 80px; height: 80px;" ></b-icon>
                   <h4 class="my-3">Car & Truck Care</h4>
                   <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
               </div>
           </div>
           <div class="row text-center" id = "servicesR2">
               <div class="col-md-4">
-                  <span class="fa-stack fa-4x">
-                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                      <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
-                  </span>
-                  <h4 class="my-3">Oil Change</h4>
+                <b-icon icon="disc-fill" style="width: 80px; height: 80px;" ></b-icon>
+                  <h4 class="my-3">Tire Change</h4>
                   <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
               </div>
               <div class="col-md-4">
-                  <span class="fa-stack fa-4x">
-                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                      <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
-                  </span>
-                  <h4 class="my-3">Roadside Assitance</h4>
+                <b-icon icon="file-earmark-medical-fill" style="width: 80px; height: 80px;" ></b-icon>
+                  <h4 class="my-3">Vehicle Diagnostic</h4>
                   <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
               </div>
               <div class="col-md-4">
-                  <span class="fa-stack fa-4x">
-                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                      <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
-                  </span>
-                  <h4 class="my-3">Car & Truck Care</h4>
+                <b-icon icon="lightning-fill" style="width: 80px; height: 80px;" ></b-icon>
+                  <h4 class="my-3">Electrical Services</h4>
                   <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
               </div>
           </div>
       </div>
   </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container" id = "footer">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright">Copyright &copy; blackend.io 2017</span>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="\"><b-icon icon="twitter" style="width: 20px; height: 20px;" ></b-icon></a>
+              </li>
+              <li class="list-inline-item">
+                <a href="\"><b-icon icon="facebook" style="width: 20px; height: 20px;" ></b-icon></a>
+              </li>
+              <li class="list-inline-item">
+                <a href="\"><b-icon icon="instagram" style="width: 20px; height: 20px;" ></b-icon></a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
 </div>
 </template>
 
@@ -96,5 +113,11 @@ export default {
 }
 #servicesR2 {
   padding-top: 2vh;
+}
+#servicesR1 {
+  padding-top: 3vh;
+}
+#footer {
+  padding-top: 5vh;
 }
 </style>

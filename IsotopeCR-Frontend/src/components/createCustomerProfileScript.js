@@ -23,7 +23,6 @@ export default {
             email: "",
             phoneNumber: "",
             password: "",
-            confirmPassword: "",
             error: "",
         }
     },
@@ -35,8 +34,6 @@ export default {
                 this.error = "Please enter your last name";
             } else if (this.email == "") {
                 this.error = "Please enter your email";
-            } else if (this.phoneNumber == "") {
-                this.error = "Please enter a phone number";
             } else if (this.password == "") {
                 this.error = "Please enter a password";
             } else if (this.password != this.confirmPassword) {
