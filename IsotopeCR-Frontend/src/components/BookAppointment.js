@@ -30,6 +30,8 @@ export default {
             errorMessage: '',
             response: [],
             selected: null,
+            numWeeks: null,
+            weekStart:'Mon Jan 1st 2021',
             fields: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
           items: [
             { Monday: '9:00', Tuesday: '9:00', Wednesday: '9:00', Thursday: '9:00', Friday: '9:00'},
@@ -71,8 +73,7 @@ export default {
                 return true;
             }
             return false;
-        },
-        isPrevDisa
+        }
         
     }
 
