@@ -45,10 +45,19 @@
             />
           </div>
           <input type="checkbox" id="checkbox" v-model="isOwner" />
-          <label for="checkbox" class="bold">Owner of the company?: {{ isOwner }}</label>
+          <label for="checkbox" class="bold"
+            >Owner of the company?: {{ isOwner }}</label
+          >
         </div>
       </div>
-      <button class="btn btn-danger" @click="createAdminAccount(email, firstName, lastName, password, isOwner)">Sign Up</button>
+      <button
+        class="btn btn-danger"
+        @click="
+          createAdminAccount(email, firstName, lastName, password, isOwner)
+        "
+      >
+        Sign Up
+      </button>
       <p v-if="error" style="color: red">{{ error }}</p>
     </div>
   </html>

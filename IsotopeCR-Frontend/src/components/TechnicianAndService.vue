@@ -6,7 +6,7 @@
         <div class="inputbox"></div>
         <!-- <button class="btn btn-danger" @click="displayServices(email)">View</button> -->
         <p v-if="error" style="color: red">Error: {{ error }}</p>
-        
+
         <hr />
 
         <div>
@@ -24,16 +24,25 @@
           </table>
         </div>
 
-      <hr />
+        <hr />
 
         <h3>Add Services</h3>
         <div>
-          <input type="text" class="inputbox" v-model="serviceName" placeholder="A service name"/>
-          <button class="btn btn-danger" @click="addService(email, serviceName)">Add</button>
+          <input
+            type="text"
+            class="inputbox"
+            v-model="serviceName"
+            placeholder="A service name"
+          />
+          <button
+            class="btn btn-danger"
+            @click="addService(email, serviceName)"
+          >
+            Add
+          </button>
           <p v-if="errorAdd">Error: {{ errorAdd }}</p>
         </div>
-
-      </div> 
+      </div>
     </div>
   </html>
 </template>

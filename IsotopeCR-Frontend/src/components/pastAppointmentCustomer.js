@@ -10,13 +10,13 @@ var AXIOS = axios.create({
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
-   this.date=date;
-   this.starttime=starttime;
-   this.customer = customer;
-   this.vehicle = vehicle;
-   this.service = service;
-   this.technician = technician;
+function AppointmentDto(date, starttime, customer, vehicle, service, technician) {
+    this.date = date;
+    this.starttime = starttime;
+    this.customer = customer;
+    this.vehicle = vehicle;
+    this.service = service;
+    this.technician = technician;
 }
 
 export default {
@@ -30,35 +30,35 @@ export default {
             vehicle: '',
             service: '',
             technician: '',
-            customeremail:'',
+            customeremail: '',
             timeslots: [],
             errorPastappointmentc: '',
             response: []
         }
     },
 
-    created: function(){
-            
-            AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + this.$cookie.get('email'))
+    created: function () {
+
+        AXIOS.get(backendUrl + '/api/appointment/pastappointment/customer/' + this.$cookie.get('email'))
 
             .then(response => {
-               this.pastappointments=response.data
+                this.pastappointments = response.data
 
 
-              })
-              .catch(e => {
+            })
+            .catch(e => {
                 if (e.response) {
                     console.log(e.response)
                     console.log(e.response.data)
                     console.log(e.response.status)
-                  }
-                  this.errorPastappointmentc = e.response.data;
-              });
-
-      
+                }
+                this.errorPastappointmentc = e.response.data;
+            });
 
 
-        }
- }
+
+
+    }
+}
 
 

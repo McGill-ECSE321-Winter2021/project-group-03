@@ -3,8 +3,8 @@ var config = require("../../config")
 var frontendUrl = "http://" + config.dev.host + ':' + config.dev.port
 var backendUrl = "http://" + config.build.backendHost
 var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: { "Access-Control-Allow-Origin": frontendUrl },
+    baseURL: backendUrl,
+    headers: { "Access-Control-Allow-Origin": frontendUrl },
 })
 
 
@@ -20,15 +20,15 @@ function AppointmentDto(date, starttime, customer, vehicle, service, technician)
 export default {
     name: 'cancelappointmentc',
 
-	data(){
-        return{
-        futureappointments:[],
-        timeslots:[],
-		selected: [],
-		selectAll: false,
-        error: '',
-    }
-	},
+    data() {
+        return {
+            futureappointments: [],
+            timeslots: [],
+            selected: [],
+            selectAll: false,
+            error: '',
+        }
+    },
 
 
 
@@ -48,7 +48,7 @@ export default {
                 this.error = e.response
             });
 
-    
+
 
     },
 
@@ -61,34 +61,34 @@ export default {
                 }
 
             }
-        },  
+        },
 
-          cancelAppointment: function(selected){
-            if(selected.length>1){
-                alert( 'You can only cancel one appointment at a time.')
-              return false
-            }else{
+        cancelAppointment: function (selected) {
+            if (selected.length > 1) {
+                alert('You can only cancel one appointment at a time.')
+                return false
+            } else {
                 console.log(selected[0])
-                AXIOS.put( backendUrl + '/api/appointment/cancelappointment/' + selected[0] )
-                .then(response=>{
-                    AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
+                AXIOS.put(backendUrl + '/api/appointment/cancelappointment/' + selected[0])
                     .then(response => {
-                        this.futureappointments = response.data
+                        AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
+                            .then(response => {
+                                this.futureappointments = response.data
+                            })
                     })
-                }) 
-                .catch(e => {
-                    console.log('Error got')
-                    if (e.response) {
-                        console.log(e.response)
-                        console.log(e.response.data)
-                        console.log(e.response.status)
-                    }
-                    this.error = e.response.data
-                });
-                
+                    .catch(e => {
+                        console.log('Error got')
+                        if (e.response) {
+                            console.log(e.response)
+                            console.log(e.response.data)
+                            console.log(e.response.status)
+                        }
+                        this.error = e.response.data
+                    });
 
-    }
-    }
+
+            }
+        }
 
     }
 }

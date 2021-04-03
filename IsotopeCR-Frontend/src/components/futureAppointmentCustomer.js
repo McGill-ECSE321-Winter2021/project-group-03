@@ -35,27 +35,27 @@ export default {
             response: []
         }
     },
-    
-
-    created: function(){
-            
-        AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
-
-        .then(response => {
-           this.futureappointments=response.data
 
 
-          })
-          .catch(e => {
-            if (e.response) {
-                console.log(e.response)
-                console.log(e.response.data)
-                console.log(e.response.status)
-              }
-              this.errorFutureappointmentc = e.response.data;
-          });
+    created: function () {
 
-  
+        AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
+
+            .then(response => {
+                this.futureappointments = response.data
+
+
+            })
+            .catch(e => {
+                if (e.response) {
+                    console.log(e.response)
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                }
+                this.errorFutureappointmentc = e.response.data;
+            });
+
+
 
 
     }

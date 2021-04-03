@@ -46,7 +46,12 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-danger" @click="createTechAccount(email, firstName, lastName, password)">Sign Up</button>
+      <button
+        class="btn btn-danger"
+        @click="createTechAccount(email, firstName, lastName, password)"
+      >
+        Sign Up
+      </button>
       <p v-if="error" style="color: red">Error: {{ error }}</p>
     </div>
   </html>
