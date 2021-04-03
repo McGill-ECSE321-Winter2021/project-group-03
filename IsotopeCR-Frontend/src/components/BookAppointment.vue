@@ -16,11 +16,17 @@
       </thead>
       <tbody>
         <tr>
-          <td><div><button class="button" :disabled="isDisabled('1')">Send</button></div></td>
-          <td><div>
+          <td>
+            <div>
+              <button class="button" :disabled="isDisabled('1')">Send</button>
+            </div>
+          </td>
+          <td>
+            <div>
               <b-button id="1" @click="isDisabled()">check</b-button>
-            </div></td>
-          
+            </div>
+          </td>
+
           <td>9:00</td>
           <td>9:00</td>
           <td>9:00</td>
@@ -133,25 +139,20 @@
       />
       <div class="small_text left_text brand_color_text">Service:</div>
       <input
-        type="password"
+        type="text"
         class="input wide"
         v-model="serviceName"
         placeholder="Service"
       />
       <div class="small_text left_text brand_color_text">Start Time:</div>
       <input
-        type="password"
+        type="text"
         class="input wide"
         v-model="startTime"
         placeholder="Start Time"
       />
       <div class="small_text left_text brand_color_text">Date:</div>
-      <input
-        type="password"
-        class="input wide"
-        v-model="date"
-        placeholder="date"
-      />
+      <input type="text" class="input wide" v-model="date" placeholder="date" />
 
       <span v-if="errorMessage" style="color: red">{{ errorMessage }} </span>
       <div>
@@ -162,6 +163,15 @@
           Book An Appointment
         </button>
       </div>
+    </div>
+    <span v-if="errorMessage" style="color: red">{{ errorMessage }} </span>
+    <div>
+      <button
+        class="button brand_color wide"
+        @click="createAppointment(license, serviceName, startTime, date)"
+      >
+        Book An Appointment
+      </button>
     </div>
   </div>
 </template>
@@ -194,9 +204,8 @@ export default {
 
 .styled-table tbody tr {
   background-color: white;
-  
 }
-.styled-table thead{
+.styled-table thead {
   background-color: #f3f3f3;
 }
 .button {

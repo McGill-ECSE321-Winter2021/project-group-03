@@ -251,7 +251,7 @@ public class ProfileService {
 		if (ServiceHelperMethods.isValidEmail(email)) {
 			customer.setEmail(email);
 		} else {
-			throw new IllegalArgumentException("ERROR: Invalid email.");
+			throw new IllegalArgumentException("ERROR: Invalid email format.");
 		}
 
 		if (ServiceHelperMethods.isValidName(firstName) && ServiceHelperMethods.isValidName(lastName)) {
@@ -470,7 +470,7 @@ public class ProfileService {
 			throws IllegalArgumentException {
 
 		if (profileRepository.findProfileByProfileID(String.valueOf(email.hashCode())) != null) {
-			throw new IllegalArgumentException("ERROR: Administrative account with that email already exists."); 
+			throw new IllegalArgumentException("ERROR: An account with that email already exists."); 
 		}
 
 		Admin admin = new Admin();
@@ -483,7 +483,7 @@ public class ProfileService {
 						"ERROR: Administrative account creation forbidden. Not a company email.");
 			}
 		} else {
-			throw new IllegalArgumentException("ERROR: Invalid email.");
+			throw new IllegalArgumentException("ERROR: Invalid email format.");
 		}
 
 		if (ServiceHelperMethods.isValidName(firstName) && ServiceHelperMethods.isValidName(lastName)) {

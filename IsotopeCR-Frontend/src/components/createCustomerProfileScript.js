@@ -3,8 +3,8 @@ var config = require("../../config");
 var frontendUrl = "http://" + config.dev.host + ':' + config.dev.port;
 var backendUrl = "http://" + config.build.backendHost;
 var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: { "Access-Control-Allow-Origin": frontendUrl },
+    baseURL: backendUrl,
+    headers: { "Access-Control-Allow-Origin": frontendUrl },
 });
 
 function CustomerDto(firstName, lastName, email, phoneNumber) {
@@ -39,31 +39,28 @@ export default {
             } else if (this.password != this.confirmPassword) {
                 this.error = "Your passwords do not match";
             } else {
-                console.log("here");
-                AXIOS.post(backendUrl+ "/api/profile/customer/create", {}, {
+                AXIOS.post(backendUrl + "/api/profile/customer/create", {}, {
                     params: {
-                    email: this.email,
-                    firstName: this.firstName,
-                    lastName: this.lastName,
-                    phoneNumber: this.phoneNumber,
-                    password: this.password,
+                        email: this.email,
+                        firstName: this.firstName,
+                        lastName: this.lastName,
+                        phoneNumber: this.phoneNumber,
+                        password: this.password,
                     }
                 })
-                    .then(
-                        (response) => {
-                            console.log("hello");
-                            alert("Registration complete!")
-                            console.log(response.data);                           
+                    .then((response) => {
+                            console.log("response got");
+                            console.log(response.data);
                             this.error = '';
-                        },
-                        () => {
-                            console.log("not");
                         }
                     )
-                    .catch((e) => {
-                        var errorMsg = "Please enter a valid email, name and password";
-                        console.log(e);
-                        this.error = errorMsg;
+                    .catch((e) => {                       
+                        if (e.response) {
+                            console.log(e.response)
+                            console.log(e.response.data)
+                            console.log(e.response.status)
+                        }
+                        this.error = e.response.data;
                     });
             }
         },

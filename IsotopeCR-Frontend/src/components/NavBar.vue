@@ -27,7 +27,6 @@ import 'bulma/css/bulma.css';
 
 <script>
 export default {
-<<<<<<< HEAD
   name: 'Nav',
   computed: {
     loggedIn() {

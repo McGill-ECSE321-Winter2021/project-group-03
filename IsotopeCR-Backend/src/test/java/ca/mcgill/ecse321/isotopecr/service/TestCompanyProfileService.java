@@ -147,17 +147,6 @@ public class TestCompanyProfileService {
 	}
 
 	@Test
-	public void testCreateCompanyProfileWithInvalidName() {
-		CompanyProfile companyProfile = null;
-		try {
-			companyProfile = service.createCompanyProfile(INVALID_COMPANY_NAME, ADDRESS1, WORKING_HOURS);
-		} catch (IllegalArgumentException e) {
-			assertEquals("ERROR: Invalid company name.", e.getMessage());
-		}
-		assertNull(companyProfile);
-	}
-
-	@Test
 	public void testCreateCompanyProfileWithEmptyAddress() {
 		CompanyProfile companyProfile = null;
 		try {
@@ -221,9 +210,9 @@ public class TestCompanyProfileService {
 		}
 
 		try {
-			companyProfile = service.editCompanyProfile(INVALID_COMPANY_NAME, ADDRESS2, WORKING_HOURS2);
+			companyProfile = service.editCompanyProfile(INVALID_COMPANY_NAME, "", WORKING_HOURS2);
 		} catch (Exception e) {
-			assertEquals("ERROR: Invalid company name.", e.getMessage());
+			assertEquals("ERROR: Address cannot be empty.", e.getMessage());
 		}
 
 		assertNotNull(companyProfile);

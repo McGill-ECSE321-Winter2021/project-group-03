@@ -25,7 +25,7 @@
               type="email"
               class="form-control input-style"
               v-model="email"
-              placeholder="Email"
+              placeholder="Email: abc@isotopecr.ca"
             />
           </div>
           <div class="inputbox">
@@ -33,7 +33,7 @@
               type="password"
               class="form-control input-style"
               v-model="password"
-              placeholder="Password"
+              placeholder="Password:8~20length.1upper/1lower/no space"
             />
           </div>
           <div class="inputbox">
@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-danger" @click="createTechAccount(email, firstName, lastName, password)">Create Account</button>
+      <button class="btn btn-danger" @click="createTechAccount(email, firstName, lastName, password)">Sign Up</button>
       <p v-if="error" style="color: red">Error: {{ error }}</p>
     </div>
   </html>
