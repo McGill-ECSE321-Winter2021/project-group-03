@@ -70,12 +70,8 @@
             </td>
           </tr>
         </table>
-
         <hr />
-
-        <span v-if="errorCompanyProfile" style="color: red"
-          >{{ errorCompanyProfile }}
-        </span>
+        <span v-if="errorCompanyProfile" style="color: red">{{ errorCompanyProfile }}</span>
       </div>
 
       <hr />

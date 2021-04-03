@@ -37,35 +37,48 @@ export default {
         this.companyProfiles.push(response.data)
       })
       .catch(e => {
-        this.errorCompanyProfile = e
+        if (e.response) {
+          console.log(e.response)
+          console.log(e.response.data)
+          console.log(e.response.status)
+        }
+        this.errorCompanyProfile = e.response.data;
       })
   },
 
   methods: {
     createCompanyProfile: function (companyName, address, workingHours) {
-      // CREATE a CompanyProfile
-      AXIOS.post(backendUrl + '/api/autorepairshop/CompanyProfile/create', {}, {
-        params: {
-          companyName: companyName,
-          address: address,
-          workingHours: workingHours
-        }
-      })
-        .then(response => {
-          console.log('response got')
-          console.log(response)
-          // JSON responses are automatically parsed.
-          this.companyProfiles.push(response.data)
-          this.errorCompanyProfile = ''
-          this.newCompanyProfile = ''
-          alert('Your company info is registered!')
+      if (companyName == '') {
+        this.errorCompanyProfile = 'Please enter a companyName'
+      } else if (address == '') {
+        this.errorCompanyProfile = 'Please enter an address'
+      } else if (workingHours == '') {
+        this.errorCompanyProfile = 'Please enter a workingHours'
+      } else {
+        // CREATE a CompanyProfile
+        AXIOS.post(backendUrl + '/api/autorepairshop/CompanyProfile/create', {}, {
+          params: {
+            companyName: companyName,
+            address: address,
+            workingHours: workingHours
+          }
         })
-        .catch(e => {
-          console.log('Ahoh! Error got')
-          var errorMsg = e.message
-          console.log(errorMsg)
-          this.errorCompanyProfile = errorMsg
-        });
+          .then(response => {
+            console.log('response got')
+            console.log(response)
+            this.companyProfiles.push(response.data)
+            this.errorCompanyProfile = ''
+            this.newCompanyProfile = ''
+          })
+          .catch(e => {
+            if (e.response) {
+              console.log(e.response)
+              console.log(e.response.data)
+              console.log(e.response.status)
+            }
+            this.errorCompanyProfile = e.response.data;
+          });
+      }
     },
 
     deleteCompanyProfile: function () {
@@ -74,19 +87,17 @@ export default {
         .then(response => {
           console.log('response got')
           console.log(response)
-          // JSON responses are automatically parsed.
           this.companyProfiles = []
           this.newCompanyProfile = ''
-          alert('Your company info is reseted!')
+          this.errorCompanyProfile = ''
         })
         .catch(e => {
-          console.log('Ahoh! Error got')
           if (e.response) {
-            console.log(e.response.data);
-            console.log(e.response.status);
-            console.log(e.response.message);
+            console.log(e.response)
+            console.log(e.response.data)
+            console.log(e.response.status)
           }
-          this.errorCompanyProfile = errorMsg
+          this.errorCompanyProfile = e.response.data;
         });
     }
 

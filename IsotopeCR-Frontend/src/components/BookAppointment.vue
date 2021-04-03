@@ -5,13 +5,25 @@
         Book an appointment with one of our highly trained technicians!
       </b-card-text>
       <div class="text-label">Vehicle</div>
-      <input type="text" v-model="license" placeholder="License Plate" />
+      <select v-model="licensePlate">
+        <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
+          {{ vehicle.licensePlate }}
+        </option>
+        </select>
       <div class="text-label">Service</div>
-      <input type="text" v-model="serviceName" placeholder="Service" />
-      <div class="text-label">In how many weeks do you want your appointment?</div>
+      <select v-model="serviceName">
+        <option v-for="service in services" v-bind:value="service.serviceName">
+          {{ service.serviceName }}
+        </option>
+      </select>
+      <div class="text-label">
+        In how many weeks do you want your appointment?
+      </div>
       <input type="text" v-model="numWeeks" placeholder="0 for this week" />
       <div></div>
-      <b-button href="#" variant="primary" class="card-button">View Availabilities</b-button>
+      <b-button href="#" variant="primary" class="card-button"
+        >View Availabilities</b-button
+      >
     </b-card>
     <!--
     <button class="button">Previous Week</button>
@@ -941,13 +953,18 @@
         href="#"
         variant="primary"
         class="card-button"
-        @click="createAppointment(license, serviceName, startTime, date)"
+        @click="createAppointment(licensePlate, serviceName, startTime, date)"
       >
         Book Appointment
       </b-button>
     </b-card>
 
-    <div class="input_container">
+    <div class="input_container" id="appointmentInputs">
+      <div class="small_text left_text brand_color_text">Vehicle:</div>
+      
+      </select>
+      <div class="small_text left_text brand_color_text">Service:</div>
+      
       <div class="small_text left_text brand_color_text">Start Time:</div>
       <input
         type="text"
@@ -968,6 +985,7 @@
         </button>
       </div>
     </div>
+    <span v-if="errorMessage" style="color: red">{{ errorMessage }} </span>
   </div>
 </template>
 
@@ -989,11 +1007,10 @@ export default {
   border-collapse: collapse;
   margin: 25px 0;
   font-size: 0.9em;
-  font-family: 'Avenir Black';
+  font-family: "Avenir Black";
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   background-color: white;
-  
 }
 
 .styled-table th,
@@ -1027,7 +1044,11 @@ export default {
   margin-top: 1rem;
 }
 
-.text-label{
+.text-label {
   margin-top: 1rem;
+}
+
+#appointmentInputs {
+  padding-bottom: 5cm;
 }
 </style>

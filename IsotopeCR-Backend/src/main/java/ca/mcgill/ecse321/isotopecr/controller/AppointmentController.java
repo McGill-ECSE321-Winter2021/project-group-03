@@ -2,10 +2,15 @@ package ca.mcgill.ecse321.isotopecr.controller;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,6 +38,7 @@ import ca.mcgill.ecse321.isotopecr.dao.TimeslotRepository;
 import ca.mcgill.ecse321.isotopecr.dao.VehicleRepository;
 import ca.mcgill.ecse321.isotopecr.dto.AppointmentDto;
 import ca.mcgill.ecse321.isotopecr.dto.InvoiceDto;
+import ca.mcgill.ecse321.isotopecr.dto.TimeslotDto;
 import ca.mcgill.ecse321.isotopecr.model.Appointment;
 import ca.mcgill.ecse321.isotopecr.model.Appointment.Status;
 import ca.mcgill.ecse321.isotopecr.model.Customer;
@@ -40,6 +46,7 @@ import ca.mcgill.ecse321.isotopecr.model.Invoice;
 import ca.mcgill.ecse321.isotopecr.model.Service;
 import ca.mcgill.ecse321.isotopecr.model.Technician;
 import ca.mcgill.ecse321.isotopecr.model.Vehicle;
+import ca.mcgill.ecse321.isotopecr.model.Timeslot;
 import ca.mcgill.ecse321.isotopecr.service.AppointmentService;
 import ca.mcgill.ecse321.isotopecr.service.ProfileService;
 
@@ -103,6 +110,62 @@ public class AppointmentController {
 		Appointment appointment = appointmentService.createAppointment(customer, vehicle, technician, aptService,
 				startTime, appointmentDate);
 		return ControllerHelperMethods.convertToDto(appointment);
+	}
+
+	/**
+	 * @author Victoria
+	 * @param serviceName
+	 * @return a list of timesloDtos
+	 * @throws Exception
+	 */
+	@GetMapping(value = { "getUnavailableTimeslots/service", "getUnavailableTimeslots/service/" })
+	public List<TimeslotDto> getUnavailableTimeslots(@PathVariable("service") String serviceName, 
+			@RequestParam Integer numWeeks)
+			throws Exception {
+		try {
+			LocalDate today = LocalDate.now().plusWeeks(numWeeks);
+			if (today.getDayOfWeek()==DayOfWeek.SATURDAY || today.getDayOfWeek()==DayOfWeek.SUNDAY) {
+				today.plusDays(3);
+			}
+			LocalDate start;
+			if(numWeeks!=0) {
+				start = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+			} else {
+				start = today;
+			}
+  
+			Service service = appointmentService.getService(serviceName);
+			List<Appointment> appointments = appointmentService.getAppointmentsByService(service);
+			HashMap<Timeslot, Integer> slots = new HashMap<Timeslot, Integer>();
+			for (Appointment appointment : appointments) {
+				for(Timeslot timeslot : appointment.getTimeslot()) {
+					if(timeslot.getDate().before(java.sql.Date.valueOf(start.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))))
+							&& timeslot.getDate().after(java.sql.Date.valueOf(start.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY))))) {
+						break;
+					}
+					Integer count = slots.get(timeslot);
+					if(count == null){
+						slots.put(timeslot, 1);
+					} else {
+						slots.put(timeslot, count + 1);
+					}
+				}
+				
+			}
+			List<Timeslot> timeslots = new ArrayList<Timeslot>();
+			int max = service.getResource().getMaxAvailable();
+			
+			Iterator it = slots.entrySet().iterator();
+		    while (it.hasNext()) {
+		    	Map.Entry<Timeslot, Integer> element = (Map.Entry<Timeslot, Integer>)it.next();
+		    	if(element.getValue()>=max || appointmentService.getFreeTechnician(element.getKey().getTime(), element.getKey().getDate())==null) {
+		    		timeslots.add(element.getKey());
+		    	}
+		    }
+			return ControllerHelperMethods.convertTimeslotsToDto(timeslots);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	/**
