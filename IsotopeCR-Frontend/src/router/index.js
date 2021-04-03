@@ -76,7 +76,7 @@ export default new Router({
       component: FutureAppointmentVehicle
     },
     {
-      path:"/bookappointment",
+      path:"/bookAppointment",
       name:"BookAppointment",
       component: BookAppointment
     },
