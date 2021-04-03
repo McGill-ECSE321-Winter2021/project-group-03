@@ -21,16 +21,10 @@
       </div>
       <input type="text" v-model="numWeeks" placeholder="0 for this week" />
       <div></div>
-      <b-button href="#" variant="primary" class="card-button"
+      <b-button href="#" variant="primary" class="card-button" @click="getUnavailableTimeslots(serviceName, numWeeks)"
         >View Availabilities</b-button
       >
     </b-card>
-    <!--
-    <button class="button">Previous Week</button>
-    <button class="button" :disabled="isDisabled('1')">Next Week</button>
-    <b-button id="1" @click="isDisabled()">Next Week</b-button>
-     :onclick="selectValue('9:00:00')"
-    <div></div> -->
     <b-card title="Week of" tag="article" class="card">
       <div>{{ weekStart }}</div>
     </b-card>

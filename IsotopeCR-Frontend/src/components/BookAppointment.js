@@ -32,13 +32,8 @@ export default {
             errorMessage: '',
             response: [],
             selected: null,
-            numWeeks: null,
+            numWeeks: '',
             weekStart: 'Mon Jan 1st 2021',
-            fields: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            items: [
-                { Monday: '9:00', Tuesday: '9:00', Wednesday: '9:00', Thursday: '9:00', Friday: '9:00' },
-                { Monday: '9:30', Tuesday: '9:30', Wednesday: '9:30', Thursday: '9:30', Friday: '9:30' },
-            ]
         }
     },
 
@@ -94,6 +89,37 @@ export default {
                             console.log(e.response.data)
                             console.log(e.response.status)
                         }
+                    });
+
+            }
+
+        },
+        getUnavailableTimeslots: function (serviceName, numWeeks) {
+            console.log("called")
+            if (serviceName == "") {
+                this.errorMessage = 'Please select a service'
+                return false
+            } else if (numWeeks == "") {
+                this.errorMessage = 'Please enter the number of weeks'
+                return false
+            } else {
+                AXIOS.get(backendUrl + '/api/appointment/getUnavailableTimeslots/service/' + this.serviceName, {}, {
+                    params: {
+                        numWeeks: this.numWeeks
+                    }
+                })
+                    .then(
+                        (response) => {
+                            console.log("Timeslots retrieved successfully!")
+                            console.log(response.data)
+                            this.errorMessage = ''
+                        })
+                    .catch(e => {
+                        if (e.response) {
+                            console.log(e.response)
+                            console.log(e.response.data)
+                            console.log(e.response.status)
+                        }
                         this.errorMessage = e.response.data;
                     });
 
@@ -102,7 +128,7 @@ export default {
         },
         selectValue(event) {
             this.selected = event.target.innerHTML.toString().trim();
-            console.log(this.selected+":00");
+            console.log(this.selected + ":00");
             this.startTime = this.selected + ":00";
         },
         isDisabled: function (id) {
@@ -111,7 +137,7 @@ export default {
             }
             return false;
         },
-        
+
 
     }
 
