@@ -16,6 +16,7 @@ import 'bulma/css/bulma.css';
                   <b-dropdown-item @click="routeTo('bookappointment')">Book Appointment</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('futureappointment')">Upcoming Appointment</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('pastappointment')">Appointment History</b-dropdown-item>
+                  <b-dropdown-item @click="routeTo('cancelappointment')">Cancel Appointment</b-dropdown-item>
                 </b-nav-item-dropdown>
                 <b-nav-item v-if="!loggedIn" @click="routeTo('login')">Log In</b-nav-item>
                 <b-nav-item v-if="!loggedIn" @click="routeTo('signup')">Sign Up</b-nav-item>

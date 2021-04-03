@@ -21,54 +21,41 @@ function AppointmentDto(date, starttime, customer, vehicle, service, technician)
 
 export default {
     name: 'futureappointmentc',
-    computed: {
-        isCustomer() {
-            if (localStorage.getItem('loggedIn') == "Customer") {
-                return true
-            }
-            return false
-        },
-        isAdmin() {
-            if (localStorage.getItem('loggedIn') == "Admin") {
-                return true
-            }
-            return false
-        }
-    },
     data() {
         return {
             futureappointments: [],
-            id: '',
             date: '',
             starttime: '',
             customer: '',
             vehicle: '',
             service: '',
             technician: '',
-            timeslots: [],
+            customeremail: '',
             errorFutureappointmentc: '',
             response: []
         }
     },
+    
 
-    created: function () {
-        if(localStorage.getItem('loggedIn') == "Customer"){
-            AXIOS.get('/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
-            .then(response => {
-                  this.futureappointments = response.data
-                  this.errorFutureappointmentc = ''
-            })
-            .catch(e => {
-              if (e.response) {
+    created: function(){
+            
+        AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
+
+        .then(response => {
+           this.futureappointments=response.data
+
+
+          })
+          .catch(e => {
+            if (e.response) {
                 console.log(e.response)
                 console.log(e.response.data)
                 console.log(e.response.status)
               }
-              this.errorService = e.response.data;
-            })
-        }
-      },
-    methods: {
+              this.errorFutureappointmentc = e.response.data;
+          });
+
+  
 
 
     }
