@@ -1,5 +1,10 @@
 <template>
-    <div id="futureappointment/customer" class="container">        
+    <div id="futureappointment/customer" class="container">
+        <div v-if="!isCustomer" class="small_text left_text brand_color_text">Customer Email:
+            <input type="text" class="input wide" v-model ='customeremail' placeholder="Customer Email">
+            <button class="button" @click="futureappointmentc(customeremail)" >Find Past Appointment</button>
+        </div>
+        
         <table class= "pastappointmentc">
         <thead>
         <tr>
@@ -30,12 +35,6 @@
 </template>
 
 <script src ="./futureAppointmentCustomer.js">
-
-export default {
-    name: 'FutureAppointmentCustomer',
-
-  
-}
 </script>
 
 <style>

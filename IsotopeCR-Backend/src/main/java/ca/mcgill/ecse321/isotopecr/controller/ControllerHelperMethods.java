@@ -164,6 +164,9 @@ public class ControllerHelperMethods {
 		}
 		AppointmentDto appointmentDto = new AppointmentDto(a.getAppointmentID(), convertToDto(a.getCustomer()),
 				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), convertToDto(a.getService()), timeslots);
+		if(a.getInvoice() != null) {
+			appointmentDto.setInvoice(convertToDto(a.getInvoice()));
+		}
 		return appointmentDto;
 	}
 

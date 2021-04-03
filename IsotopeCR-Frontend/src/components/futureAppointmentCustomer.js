@@ -21,6 +21,20 @@ function AppointmentDto(date, starttime, customer, vehicle, service, technician)
 
 export default {
     name: 'futureappointmentc',
+    computed: {
+        isCustomer() {
+            if (localStorage.getItem('loggedIn') == "Customer") {
+                return true
+            }
+            return false
+        },
+        isAdmin() {
+            if (localStorage.getItem('loggedIn') == "Admin") {
+                return true
+            }
+            return false
+        }
+    },
     data() {
         return {
             futureappointments: [],
@@ -38,26 +52,22 @@ export default {
     },
 
     created: function () {
-
-        AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
-
+        if(localStorage.getItem('loggedIn') == "Customer"){
+            AXIOS.get('/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
             .then(response => {
-                console.log(response.data)
-                this.futureappointments = response.data
-
+                  this.futureappointments = response.data
+                  this.errorFutureappointmentc = ''
             })
             .catch(e => {
-                if (e.response) {
-                    console.log(e.response)
-                    console.log(e.response.data)
-                    console.log(e.response.status)
-                  }
-                  this.errorFutureappointmentc = e.response.data;
-              });
-
-
-
-    },
+              if (e.response) {
+                console.log(e.response)
+                console.log(e.response.data)
+                console.log(e.response.status)
+              }
+              this.errorService = e.response.data;
+            })
+        }
+      },
     methods: {
 
 
