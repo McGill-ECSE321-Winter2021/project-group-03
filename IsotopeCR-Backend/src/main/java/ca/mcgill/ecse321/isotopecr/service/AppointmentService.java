@@ -224,7 +224,7 @@ public class AppointmentService {
 		invoice.setCost(appointment.getService().getPrice());
 		invoice.setInvoiceID(
 				String.valueOf(appointment.getService().getPrice() * appointment.getAppointmentID().hashCode()));
-		invoice.setIsPaid(false);
+		invoice.setIsPaid(true);
 		invoiceRepository.save(invoice);
 		return invoice;
 	}

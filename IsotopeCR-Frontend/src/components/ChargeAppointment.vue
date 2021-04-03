@@ -36,7 +36,7 @@
                             
         <td>{{ aptmt.service.serviceName }}</td>
 
-        <td v-if="!aptmt.invoice">{{ aptmt.invoice.isPaid }}</td>
+        <td>{{ aptmt.invoice.isPaid }}</td>
                             
         <td>
          {{ aptmt.technician.firstName + "  " + aptmt.technician.lastName }}
@@ -48,16 +48,14 @@
         <p v-if="errorPastappointmentc" style="color: red">{{ errorPastappointmentc }}</p>
         
     <div>
-    <button class="button brand_color wide" @click="cancelAppointment(selected)">Cancel An Appointment</button>
+    <button class="button brand_color wide" @click="createInvoice(selected)">Cancel An Appointment</button>
     <p v-if="errorCharge" style="color: red">{{ errorCharge }}</p>     
     </div>
   </div>
 </template>
 
 <script src="./chargeAppointmentScript.js">
-export default {
-  name: "CancelAppointment",
-};
+
 </script>
 
 <style>
