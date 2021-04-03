@@ -52,10 +52,12 @@ export default {
 
                   })
                   .catch(e => {
-                    console.log('Ahoh! Error got')
-                    var errorMsg = e.message
-                    console.log(errorMsg)
-                    this.errorPerson = errorMsg
+                    if (e.response) {
+                        console.log(e.response)
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                      }
+                      this.errorPastappointmentv = e.response.data;
                   });
 
             }

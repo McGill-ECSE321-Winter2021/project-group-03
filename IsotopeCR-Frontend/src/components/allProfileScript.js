@@ -35,7 +35,7 @@ export default {
 
   created: function () {
     var type = localStorage.getItem('loggedIn')
-    if(type != "Admin"){
+    if (type != "Admin") {
       alert("You don't have permission to view all accounts registered!")
       return
     }
@@ -50,7 +50,7 @@ export default {
           console.log(e.response.data)
           console.log(e.response.status)
         }
-        this.error = e
+        this.error = e.response.data
       })
   },
 
@@ -61,17 +61,16 @@ export default {
       } else {
         AXIOS.delete(backendUrl + '/api/profile/profiles/delete/' + email)
           .then((response) => {
-              console.log("response got!")
-              console.log(response.data)
-            }
-          )
+            console.log("response got!")
+            console.log(response.data)
+          })
           .catch(e => {
-            var errorMsg = "Please enter a valid email"
             if (e.response) {
+              console.log(e.response)
               console.log(e.response.data)
               console.log(e.response.status)
             }
-            this.error = errorMsg;
+            this.error = e.response.data;
           });
       }
     }

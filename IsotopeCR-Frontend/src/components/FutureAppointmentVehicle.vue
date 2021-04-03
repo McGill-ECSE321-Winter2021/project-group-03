@@ -29,8 +29,12 @@
             <td>{{futureappointmentv.technician.firstName +" " + futureappointmentv.technician.lastName }}</td>
         </tr>
         </thead>
+
         </table> 
         
+
+        <p v-if="error" style="color: red">{{ error }}</p>
+
     </div>
 </template>
 

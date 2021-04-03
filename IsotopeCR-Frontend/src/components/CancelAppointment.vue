@@ -38,6 +38,7 @@
 	</table>
     <div>
             <button class="button brand_color wide" @click="cancelAppointment(selected)">Cancel An Appointment</button>
+			 <p v-if="error" style="color: red">{{ error }}</p>
     </div>
 </div>
 </template>

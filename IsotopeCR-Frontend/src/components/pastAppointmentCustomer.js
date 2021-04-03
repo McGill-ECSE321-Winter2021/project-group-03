@@ -44,13 +44,19 @@ export default {
             .then(response => {
                this.pastappointments=response.data
 
+
               })
               .catch(e => {
-                console.log('Ahoh! Error got')
-                var errorMsg = e.message
-                console.log(errorMsg)
-                this.errorPerson = errorMsg
+                if (e.response) {
+                    console.log(e.response)
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                  }
+                  this.errorPastappointmentc = e.response.data;
               });
+
+      
+
 
         }
  }

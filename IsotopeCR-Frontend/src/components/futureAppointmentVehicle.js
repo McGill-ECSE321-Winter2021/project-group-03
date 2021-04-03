@@ -32,35 +32,30 @@ export default {
             technician: '',
             timeslots: [],
             licenseplate:'',
-            response: []
+            response: [],
+            error: ''
         }
     },
 
-
     methods: {
-
         futureappointmentv: function(licenseplate){
             if(licenseplate == "" ) {
               this.errorMessage = 'License cannot be empty.'
               return false
-            } else {
-                
+            } else {               
                 AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/'+ licenseplate)
-
                 .then(response => {
                    this.futureappointments=response.data
-
                   })
                   .catch(e => {
-                    console.log('Ahoh! Error got')
-                    var errorMsg = e.message
-                    console.log(errorMsg)
-                    this.errorPerson = errorMsg
+                    if (e.response) {
+                        console.log(e.response)
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                      }
+                      this.error = e.response.data;
                   });
-
             }
-
         }
     }
-
 }

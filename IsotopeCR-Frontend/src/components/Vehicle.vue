@@ -1,7 +1,7 @@
 <template>
   <html lang="en">
     <div id="vehicle">
-      <h3>Vehicle</h3>
+      <h3>Vehicle Info</h3>
       <div class="container-fluid">
         <div class="input">
           <div class="inputbox">
@@ -55,7 +55,7 @@
         >
           Register
         </button>
-        <p v-if="errorVehicle" style="color: red">Error: {{ errorVehicle }}</p>
+        <p v-if="errorVehicle" style="color: red">{{ errorVehicle }}</p>
       </div>
 
       <hr />  

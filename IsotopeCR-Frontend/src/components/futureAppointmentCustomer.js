@@ -10,13 +10,13 @@ var AXIOS = axios.create({
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
-   this.date=date;
-   this.starttime=starttime;
-   this.customer = customer;
-   this.vehicle = vehicle;
-   this.service = service;
-   this.technician = technician;
+function AppointmentDto(date, starttime, customer, vehicle, service, technician) {
+    this.date = date;
+    this.starttime = starttime;
+    this.customer = customer;
+    this.vehicle = vehicle;
+    this.service = service;
+    this.technician = technician;
 }
 
 export default {
@@ -24,7 +24,7 @@ export default {
     data() {
         return {
             futureappointments: [],
-            id:'',
+            id: '',
             date: '',
             starttime: '',
             customer: '',
@@ -36,29 +36,31 @@ export default {
             response: []
         }
     },
-  created: function(){
-                
-                AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
 
-                .then(response => {
-                    console.log(response.data)
-                   this.futureappointments=response.data
+    created: function () {
 
-                  })
-                  .catch(e => {
-                    console.log('Ahoh! Error got')
-                    var errorMsg = e.message
-                    console.log(errorMsg)
-                    this.errorPerson = errorMsg
-                  });
+        AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
 
-            
+            .then(response => {
+                console.log(response.data)
+                this.futureappointments = response.data
 
-        },
+            })
+            .catch(e => {
+                if (e.response) {
+                    console.log(e.response)
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                  }
+                  this.errorFutureappointmentc = e.response.data;
+              });
 
+
+
+    },
     methods: {
 
-      
+
     }
 
 }

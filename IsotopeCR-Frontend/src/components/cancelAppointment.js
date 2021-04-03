@@ -8,14 +8,13 @@ var AXIOS = axios.create({
 })
 
 
-
-function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
-   this.date=date;
-   this.starttime=starttime;
-   this.customer = customer;
-   this.vehicle = vehicle;
-   this.service = service;
-   this.technician = technician;
+function AppointmentDto(date, starttime, customer, vehicle, service, technician) {
+    this.date = date;
+    this.starttime = starttime;
+    this.customer = customer;
+    this.vehicle = vehicle;
+    this.service = service;
+    this.technician = technician;
 }
 
 export default {
@@ -30,33 +29,40 @@ export default {
     }
 	},
 
-    created: function(){
-        AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email') )
 
-                .then(response => {
-                   this.futureappointments=response.data
 
-                  })
-                  .catch(e => {
-                    console.log('Ahoh! Error got')
-                    var errorMsg = e.message
-                    console.log(errorMsg)
-                    this.errorPerson = errorMsg
-                  });
+
+    created: function () {
+        AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
+            .then(response => {
+                this.futureappointments = response.data
+            })
+            .catch(e => {
+                console.log('Error got')
+                if (e.response) {
+                    console.log(e.response)
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                }
+                this.error = e.response.data
+            });
+
+    
 
     },
 
-	methods: {
-		select: function() {
-			this.selected = [];
-			if (!this.selectAll) {
-				for (let i in this.items) {
-					this.selected.push(this.items[i].id);
-				}
-			}
-		},
+    methods: {
+        select: function () {
+            this.selected = []
+            if (!this.selectAll) {
+                for (let i in this.items) {
+                    this.selected.push(this.items[i].id)
+                }
 
-        cancelAppointment: function(selected){
+            }
+        },  
+
+          cancelAppointment: function(selected){
             if(selected.length>1){
                 alert( 'You can only cancel one appointment at a time.')
               return false
@@ -64,9 +70,9 @@ export default {
                 console.log(selected[0])
                 AXIOS.put( backendUrl + '/api/appointment/cancelappointment/' + selected[0] )
                 
-            }
 
-        }
-	}
+    }
+    }
 
+    }
 }

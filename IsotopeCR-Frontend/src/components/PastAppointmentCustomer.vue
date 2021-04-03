@@ -25,6 +25,7 @@
         </tr>
         </thead>
         </table> 
+        <p v-if="errorPastappointmentc" style="color: red">{{ errorPastappointmentc }}</p>
     </div>
 </template>
 

@@ -35,18 +35,15 @@ export default {
 
 
     methods: {
-
         login: function(email,password){
             if(email == "" || password == "") {
               this.errorMessage = 'Email or password cannot be empty.'
               return false
             } else {
-                
                 AXIOS.post(backendUrl+'/api/profile/login', {},{params:{
                     email: email,
                     password: password
                 }})
-
                 .then(response => {
                     // JSON responses are automatically parsed.
                     // this.profile = response.data
@@ -55,18 +52,22 @@ export default {
                     // this.errorMessage = ''
                     this.response = response.data 
                     console.log(response)
+                    this.errorMessage = ''
                     if (this.response != ''){
                         localStorage.setItem('loggedIn', this.response['type'])
                         console.log(localStorage)
                         this.$cookie.set('email', this.response['email'], { expires: '1h'})
                         console.log(this.$cookie.get('email'))
-                        //window.location.href = "/"
+                        window.location.href = "/"
                     }
-
                   })
                   .catch(e => {
-                    console.log("hello")
-                    console.log(e) 
+                    if (e.response) {
+                        console.log(e.response)
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                      }
+                      this.errorMessage = e.response.data;
                 });
 
             }
