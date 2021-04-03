@@ -1,10 +1,9 @@
 <template>
   <div id="service" class="container">
     <div class="inner_container shadow">
+      <br>
       <div class="large_text"><b>Resources</b></div>
-
       <hr />
-<br>
       <table id="services" class="table">
         <th>Resource Type</th>
         <th>Maximum Available</th>
