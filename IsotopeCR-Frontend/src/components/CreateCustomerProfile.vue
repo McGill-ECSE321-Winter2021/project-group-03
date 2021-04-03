@@ -33,11 +33,7 @@
               type="text"
               class="form-control input-style"
               v-model="phoneNumber"
-<<<<<<< HEAD
-              placeholder="Phone Number: 5555555555"
-=======
-              placeholder="Phone Number (optional)"
->>>>>>> 1bf6167186983676502773784494ae78db438e02
+              placeholder="Phone Number: 5555555555(optional)"
             />
           </div>
           <div class="inputbox">

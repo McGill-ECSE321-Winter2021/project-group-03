@@ -41,7 +41,7 @@ export default {
                         console.log(e.response.data)
                         console.log(e.response.status)
                     }
-                    this.errorVehicle = e
+                    this.errorVehicle = e.response.data
                 })
         },
 
