@@ -1,7 +1,8 @@
 <template>
   <div id="chargeappointment">  
     <table class="table table-striped table-hover">  
-      <thead>         
+      <thead>   
+          <p> {{selected}} </p>      
         <tr>        
           <th>
             <label class="form-checkbox">
@@ -36,11 +37,12 @@
                             
         <td>{{ aptmt.service.serviceName }}</td>
 
-        <td>{{ aptmt.invoice.isPaid }}</td>
-                            
         <td>
          {{ aptmt.technician.firstName + "  " + aptmt.technician.lastName }}
         </td>
+
+        <td>{{ aptmt.invoice.isPaid }}</td>                           
+        
         </tr>        
       </tbody>     
     </table>
@@ -48,7 +50,7 @@
         <p v-if="errorPastappointmentc" style="color: red">{{ errorPastappointmentc }}</p>
         
     <div>
-    <button class="button brand_color wide" @click="createInvoice(selected)">Cancel An Appointment</button>
+    <button class="button brand_color wide" @click="createInvoice(selected)">Charge</button>
     <p v-if="errorCharge" style="color: red">{{ errorCharge }}</p>     
     </div>
   </div>
