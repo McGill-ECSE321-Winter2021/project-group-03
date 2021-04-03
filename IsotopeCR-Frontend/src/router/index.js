@@ -8,7 +8,7 @@ import Appointment from '@/components/Appointment'
 import PastAppointment from '@/components/PastAppointment'
 import BookAppointment from '@/components/BookAppointment.vue'
 import FutureAppointment from '@/components/FutureAppointment'
-import CancelAppointment from '@/components/CancelAppointment'
+import CancelAppointment from '@/components/CancelAppointment.vue'
 
 import CreateCustomerProfile from '@/components/CreateCustomerProfile'
 import CompanyProfile from '@/components/CompanyProfile.vue'
@@ -25,6 +25,8 @@ import Registration from '@/components/RegistrationNav.vue'
 import CreateService from '@/components/CreateService.vue'
 import CreateResource from '@/components/CreateResource.vue'
 import Profile from '@/components/AllProfile.vue'
+import ProfileInfo from '@/components/ProfileInfo.vue'
+import TechAndService from '@/components/TechnicianAndService.vue'
 
 Vue.use(Router)
 
@@ -117,6 +119,11 @@ export default new Router({
       component: Registration
     },
     {
+      path: "/allProfiles",
+      name: "AllProfiles",
+      component: Profile
+    },
+    {
       path: "/createService",
       name: "CreateService",
       component: CreateService
@@ -124,12 +131,17 @@ export default new Router({
     {
       path: "/profileInfo",
       name: "ProfileInfo",
-      component: Profile
+      component: ProfileInfo
     },
     {
       path: "/createResource",
       name: "CreateResource",
       component: CreateResource
+    },
+    {
+      path: "/techAndService",
+      name: "TechAndService",
+      component: TechAndService  
     }
   ]
 })

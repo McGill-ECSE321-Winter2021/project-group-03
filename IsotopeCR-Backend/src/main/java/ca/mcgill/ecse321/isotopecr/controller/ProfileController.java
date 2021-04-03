@@ -351,8 +351,8 @@ public class ProfileController {
 	}	
 	
 	/**
-	 * Get all profiles from the system
-	 * @return a list of ProfileDtos
+	 * Get a profile by email
+	 * @return a profileDto
 	 * @throws RuntimeException
 	 */
 	@GetMapping(value = { "/profiles/get/{email}", "/profiles/get/{email}/" })

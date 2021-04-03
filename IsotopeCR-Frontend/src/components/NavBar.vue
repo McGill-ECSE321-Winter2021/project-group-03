@@ -28,7 +28,7 @@ export default {
     name: 'Nav',
     methods: {
         routeTo: function (to) {
-        this.$router.push("./"+to);
+        location.href= 'http://' + config.dev.host + ':' + config.dev.port + '/'+ to;
     }
   }
 }

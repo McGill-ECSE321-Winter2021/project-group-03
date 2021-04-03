@@ -18,7 +18,7 @@
         <td>{{ service.duration }}</td>
         <td>{{ service.price }}</td>
         <td>{{ service.frequency }}</td>
-        <td>{{ service.resource }}</td>
+        <td>{{ service.resource.resourceType }}</td>
       </tr>
     </table>
    
@@ -63,13 +63,13 @@
             <input
               type="text"
               class="form-control input-style"
-              v-model="resource"
-              placeholder="Resource"
+              v-model="resourceType"
+              placeholder="Resource Type"
             />
           </div>
         </div>
       </div>
-      <button class="btn btn-danger" @click="createService(serviceName, duration, price, frequency, resource)">Create Service</button>
+      <button class="btn btn-danger" @click="createService(serviceName, duration, price, resourceType, frequency)">Create Service</button>
       <p>{{ errorService }}</p>
     </div>
 
@@ -87,7 +87,7 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-danger" @click="deleteService()">Delete Service</button>
+      <button class="btn btn-danger" @click="deleteService(deletedServiceName)">Delete Service</button>
       <p>{{ errorService }}</p>
     </div>
       
