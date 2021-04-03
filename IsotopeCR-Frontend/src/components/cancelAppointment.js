@@ -21,10 +21,12 @@ function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
 
 export default {
     name: 'cancelappointmentc',
-	data: () => ({
+
+	data(){
+        return{
 		items: [
 			{
-				id: "id1",
+				id: "id1vaevaa",
 				name: "John Doe",
 				email: "email@example.com"
 			},
@@ -36,16 +38,25 @@ export default {
 		],
 		selected: [],
 		selectAll: false
-	}),
+    }
+	},
 	methods: {
-		select() {
+		select: function() {
 			this.selected = [];
 			if (!this.selectAll) {
 				for (let i in this.items) {
 					this.selected.push(this.items[i].id);
 				}
 			}
-		}
+		},
+
+        cancelAppointment: function(selected){
+            if(selected.length>1){
+                alert( 'You can only cancel one appointment at a time.')
+              return false
+            }
+
+        }
 	}
 
 }

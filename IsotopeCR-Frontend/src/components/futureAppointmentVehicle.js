@@ -48,7 +48,7 @@ export default {
                 AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/'+ licenseplate)
 
                 .then(response => {
-                   this.pastappointments=response.data
+                   this.futureappointments=response.data
 
                   })
                   .catch(e => {

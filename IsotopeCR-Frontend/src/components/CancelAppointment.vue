@@ -1,12 +1,12 @@
 <template>
     <div id="cancelappointment">
-	<div class="text-uppercase text-bold">appointment selected: {{selected}}</div>
+	<div class="text-bold">appointment selected: {{selected}}</div>
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
 				<th>
 					<label class="form-checkbox">
-                         <input type="checkbox" v-model="selectAll" @click="select">
+                         <input type="checkbox">
                          <i class="form-icon"></i>
                      </label>
 				</th>
@@ -22,23 +22,27 @@
 			<tr v-for="i in items">
 				<td>
 					<label class="form-checkbox">
-    					<input type="checkbox" :value="i.id" v-model="selected">
+    					<input type="checkbox" :value="i.name+'/'+i.id" v-model="selected">
 						<i class="form-icon"></i>
   					</label>
 				</td>
-				<td>{{items[0].id}}</td>
+				<td>{{i.id}}</td>
 				<td>{{i.name}}</td>
 				<td>{{i.email}}</td>
                 <td>{{i.id}}</td>
 				<td>{{i.name}}</td>
 				<td>{{i.email}}</td>
+                
 			</tr>
 		</tbody>
 	</table>
+    <div>
+            <button class="button brand_color wide" @click="cancelAppointment(selected)">Cancel An Appointment</button>
+    </div>
 </div>
 </template>
 
-<script>
+<script src="./cancelAppointment.js">
 
 export default {
     name: 'CancelAppointment',
