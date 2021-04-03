@@ -30,22 +30,36 @@ export default {
             vehicle: '',
             service: '',
             technician: '',
-            licenseplate:'',
-            errorPastappointmentv: '',
-            response: []
+            licensePlate:'',
+            timeslots: [] ,
+            errorMessage: '',
+            response: [],
+            vehicles: [],
         }
     },
 
+    created: function () {
+        AXIOS.get('/api/profile/customer/vehicle/get-all/'+this.$cookie.get('email'))
+        .then(response => {                              
+            this.vehicles = response.data
+        })
+        .catch(e => {
+            if (e.response) {
+                console.log(e.response.data)
+                console.log(e.response.status)
+            }
+            this.errorMessage = e.response.data
+        })
+
+      
+    },
 
     methods: {
 
         pastappointmentv: function(licenseplate){
-            if(licenseplate == "" ) {
-              this.errorMessage = 'License cannot be empty.'
-              return false
-            } else {
+         
                 
-                AXIOS.get(backendUrl+'/api/appointment/pastappointment/vehicle/' + licenseplate )
+                AXIOS.get(backendUrl+'/api/appointment/pastappointment/vehicle/' + this.licensePlate )
                 .then(response => {
                    this.pastappointments=response.data
 
@@ -58,8 +72,7 @@ export default {
                       }
                       this.errorPastappointmentv = e.response.data;
                   });
-
-            }
+            
 
         }
     }
