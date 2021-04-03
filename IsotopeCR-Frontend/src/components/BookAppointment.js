@@ -23,9 +23,11 @@ export default {
     name: 'bookappointment',
     data() {
         return {
+            vehicles: [],
+            services: [],
+            licensePlate: '',
             date: '',
             startTime: '',
-            license: '',
             serviceName: '',
             errorMessage: '',
             response: [],
@@ -38,15 +40,41 @@ export default {
         }
     },
 
-    methods: {
+    created: function () {
+        AXIOS.get('/api/profile/customer/vehicle/get-all/'+this.$cookie.get('email'))
+        .then(response => {                              
+            this.vehicles = response.data
+        })
+        .catch(e => {
+            if (e.response) {
+                console.log(e.response.data)
+                console.log(e.response.status)
+            }
+            this.errorMessage = e.response.data
+        }),
 
+        AXIOS.get('/api/autorepairshop/service/get-all')
+          .then(response => {
+            // JSON responses are automatically parsed.
+            this.services=(response.data) //get-all returns a lit of services
+          })
+          .catch(e => {
+            if (e.response) {
+                console.log(e.response.data)
+                console.log(e.response.status)
+            }
+            this.errorMessage = e.response.data
+        })
+    },
+
+    methods: {
         createAppointment: function(license,serviceName,startTime,date){
             if(license == "" || serviceName=="" || startTime==""||date=="" ) {
               this.errorMessage = 'Input cannot be empty.'
               return false
             } else {
                 
-                AXIOS.post(backendUrl+'/api/appointment/create/'+ license + '/' + serviceName, {},{
+                AXIOS.post(backendUrl+'/api/appointment/create/'+ this.licensePlate + '/' + this.serviceName, {},{
                 params:{
                    start:startTime,
                    date:date
@@ -72,7 +100,7 @@ export default {
             }
             return false;
         },
-        isPrevDisa
+        // isPrevDisa
         
     }
 

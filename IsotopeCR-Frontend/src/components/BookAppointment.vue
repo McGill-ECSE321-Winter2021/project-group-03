@@ -1,7 +1,7 @@
 <template>
   <div id="bookappointment" class="container">
-    <button class="button" :disabled="isPrevDisabled()">Previous Week</button>
-    <button class="button" :disabled="isDisabled('1')">Next Week</button>
+    <!-- <button class="button" :disabled="isPrevDisabled()">Previous Week</button> -->
+    <!-- <button class="button" :disabled="isDisabled('1')">Next Week</button> -->
     <b-button id="1" @click="isDisabled()">Next Week</b-button>
     <div></div>
     <table class="styled-table" @click="selectValue($event)">
@@ -129,21 +129,19 @@
 
     Selected: {{ selected }}
 
-    <div class="input_container">
+    <div class="input_container" id="appointmentInputs">
       <div class="small_text left_text brand_color_text">Vehicle:</div>
-      <input
-        type="text"
-        class="input wide"
-        v-model="license"
-        placeholder="Liscence"
-      />
+      <select v-model="licensePlate">
+        <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
+          {{ vehicle.licensePlate }}
+        </option>
+      </select>
       <div class="small_text left_text brand_color_text">Service:</div>
-      <input
-        type="text"
-        class="input wide"
-        v-model="serviceName"
-        placeholder="Service"
-      />
+      <select v-model="serviceName">
+        <option v-for="service in services" v-bind:value="service.serviceName">
+          {{ service.serviceName }}
+        </option>
+      </select>
       <div class="small_text left_text brand_color_text">Start Time:</div>
       <input
         type="text"
@@ -165,14 +163,6 @@
       </div>
     </div>
     <span v-if="errorMessage" style="color: red">{{ errorMessage }} </span>
-    <div>
-      <button
-        class="button brand_color wide"
-        @click="createAppointment(license, serviceName, startTime, date)"
-      >
-        Book An Appointment
-      </button>
-    </div>
   </div>
 </template>
 
@@ -215,5 +205,9 @@ export default {
 }
 .button:disabled {
   color: rgb(214, 61, 61);
+}
+
+#appointmentInputs {
+  padding-bottom: 5cm;
 }
 </style>
