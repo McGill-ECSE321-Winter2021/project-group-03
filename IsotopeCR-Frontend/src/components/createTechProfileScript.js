@@ -3,8 +3,8 @@ var config = require("../../config")
 var frontendUrl = "http://" + config.dev.host + ':' + config.dev.port
 var backendUrl = "http://" + config.build.backendHost
 var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: { "Access-Control-Allow-Origin": frontendUrl },
+    baseURL: backendUrl,
+    headers: { "Access-Control-Allow-Origin": frontendUrl },
 })
 
 function TechDto(firstName, lastName, email) {
@@ -39,7 +39,7 @@ export default {
                 this.error = "Your passwords do not match";
             } else {
                 console.log("here");
-                AXIOS.post(backendUrl+ "/api/profile/technician/create", {}, {
+                AXIOS.post(backendUrl + "/api/profile/technician/create", {}, {
                     params: {
                         email: email,
                         firstName: firstName,

@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
 
-import Appointment from '@/components/Appointment'
 import PastAppointment from '@/components/PastAppointment'
 import BookAppointment from '@/components/BookAppointment.vue'
 import FutureAppointment from '@/components/FutureAppointment'
@@ -46,49 +45,45 @@ export default new Router({
       name: 'Login',
       component: Login
     },
+
     {
-      path:"/appointment",
-      name:"Appointment",
-      component: Appointment
-    },
-    {
-      path:"/pastappointment",
-      name:"PastAppointment",
+      path: "/pastappointment",
+      name: "PastAppointment",
       component: PastAppointment
     },
     {
-      path:"/pastappointment/customer",
+      path: "/pastappointment/customer",
       name: "PastAppointmentCustomer",
       component: PastAppointmentCustomer
     },
     {
-      path:"/pastappointment/vehicle",
+      path: "/pastappointment/vehicle",
       name: "PastAppointmentVehicle",
       component: PastAppointmentVehicle
     },
     {
-      path:"/futureappointment/customer",
+      path: "/futureappointment/customer",
       name: "FutureAppointmentCustomer",
       component: FutureAppointmentCustomer
     },
     {
-      path:"/futureappointment/vehicle",
+      path: "/futureappointment/vehicle",
       name: "FutureAppointmentVehicle",
       component: FutureAppointmentVehicle
     },
     {
-      path:"/bookAppointment",
-      name:"BookAppointment",
+      path: "/bookAppointment",
+      name: "BookAppointment",
       component: BookAppointment
     },
     {
-      path:"/futureappointment",
-      name:"FutureAppointment",
+      path: "/futureappointment",
+      name: "FutureAppointment",
       component: FutureAppointment
     },
     {
-      path:"/cancelappointment",
-      name:"CancelAppointment",
+      path: "/cancelappointment",
+      name: "CancelAppointment",
       component: CancelAppointment
     },
     {
@@ -144,22 +139,22 @@ export default new Router({
     {
       path: "/techAndService",
       name: "TechAndService",
-      component: TechAndService  
+      component: TechAndService
     },
     {
       path: "/adminMenu",
       name: "AdminMenu",
-      component: AdminMenu  
+      component: AdminMenu
     },
     {
       path: "/customerMenu",
       name: "CustomerMenu",
-      component: CustomerMenu  
+      component: CustomerMenu
     },
     {
       path: "/chargeAppointment",
       name: "ChargeAppointment",
-      component: ChargeAppointment  
+      component: ChargeAppointment
     }
   ]
 })

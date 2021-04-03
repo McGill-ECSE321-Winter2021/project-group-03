@@ -11,33 +11,33 @@ function ProfileDto(firstName, lastName, email, password, phoneNumber, isOwner, 
     this.firstName = firstName
     this.lastName = lastName
     this.email = email,
-    this.password = password,
-    this.phoneNumber = phoneNumber,
-    this.isOwner = isOwner,
-    this.type = type
+        this.password = password,
+        this.phoneNumber = phoneNumber,
+        this.isOwner = isOwner,
+        this.type = type
 }
 
 export default {
     name: 'profileInfo',
     data() {
         return {
-            profile:'',
+            profile: '',
             myType: '',
             firstName: '',
             lastName: '',
             email: '',
-            password: '',         
+            password: '',
             phoneNumber: '',
             isOwner: '',
             newPhoneNumber: '',
             newPassword: '',
             type: '',
             error: '',
-            editError:''
+            editError: ''
         }
     },
 
-    created: function(){
+    created: function () {
         console.log(this.$cookie.get('email'))
         this.email = this.$cookie.get('email')
         console.log(localStorage.getItem('loggedIn'))
@@ -68,8 +68,8 @@ export default {
                             console.log(e.response)
                             console.log(e.response.data)
                             console.log(e.response.status)
-                          }
-                          this.error = e.response.data;
+                        }
+                        this.error = e.response.data;
                     });
             }
         },
@@ -80,8 +80,8 @@ export default {
             } else {
                 AXIOS.put(backendUrl + '/api/profile/profiles/edit-phonenumber/', {}, {
                     params: {
-                        email : this.email,
-                        phoneNumber : newPhoneNumber 
+                        email: this.email,
+                        phoneNumber: newPhoneNumber
                     }
                 })
                     .then(
@@ -89,7 +89,7 @@ export default {
                             console.log("response got!")
                             console.log(response.data)
                             this.phoneNumber = response.data.phoneNumber
-                            this.editError = ''                   
+                            this.editError = ''
                         }
                     )
                     .catch(e => {
@@ -105,21 +105,21 @@ export default {
         editPassword: function (newPassword) {
             if (newPassword == "") {
                 this.editError = "Please enter your newIsOwner Value";
-            } else if(this.email != this.$cookie.get('email')) {
+            } else if (this.email != this.$cookie.get('email')) {
                 console.log(this.$cookie.get('email'))
                 alert("Current login credential does not match the input email")
             } else {
                 AXIOS.put(backendUrl + '/api/profile/profiles/edit-password', {}, {
                     params: {
-                        email : this.email,
-                        password : newPassword 
+                        email: this.email,
+                        password: newPassword
                     }
                 })
                     .then(
                         (response) => {
                             console.log("response got!")
                             console.log(response.data)
-                            this.editError = ''                   
+                            this.editError = ''
                         }
                     )
                     .catch(e => {
