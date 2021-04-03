@@ -61,7 +61,7 @@ public class ControllerHelperMethods {
 			throw new IllegalArgumentException("There is no such Service!");
 		}
 
-		ServiceDto serviceDto = new ServiceDto(s.getServiceName(), s.getDuration(), s.getPrice(),
+		ServiceDto serviceDto = new ServiceDto(s.getServiceName(), s.getDuration(), s.getPrice(), s.getFrequency(),
 				convertToDto(s.getResource()));
 		return serviceDto;
 	}
