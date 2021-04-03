@@ -962,7 +962,6 @@
     <div class="input_container" id="appointmentInputs">
       <div class="small_text left_text brand_color_text">Vehicle:</div>
       
-      </select>
       <div class="small_text left_text brand_color_text">Service:</div>
       
       <div class="small_text left_text brand_color_text">Start Time:</div>
