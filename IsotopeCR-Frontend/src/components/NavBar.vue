@@ -27,8 +27,8 @@ import 'bulma/css/bulma.css';
 export default {
     name: 'Nav',
     methods: {
-        routeTo: function (to) {
-        location.href= 'http://' + config.dev.host + ':' + config.dev.port + '/'+ to;
+        routeTo: function (to) {        
+        location.href= 'http://127.0.0.1:8087/' + to;
     }
   }
 }
