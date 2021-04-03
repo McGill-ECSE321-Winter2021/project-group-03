@@ -1,7 +1,11 @@
 <template>
     <div id="pastappointment/vehicle" class="container">
-        <div class="input_box">License Plate:
-        <input type="text" class="input wide" v-model='licenseplate' placeholder="License Plate">
+    <div class="small_text left_text brand_color_text">Vehicle:
+         <select v-model="licensePlate">
+         <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
+          {{ vehicle.licensePlate }}
+        </option>
+        </select>
         <button class="button" @click="pastappointmentv(licenseplate)" >Find Past Appointment</button>
         </div>
         
@@ -32,7 +36,7 @@
     
         </thead>
         </table>   
-        <span v-if="error" style="color:red">{{error}} </span>      
+        <span v-if="errorMessage" style="color:red">{{errorMessage}} </span>      
     </div>
 </template>
 
@@ -45,7 +49,5 @@ export default {
 </script>
 
 <style scoped>
-div.container{
-    display: flex;
-}
+
 </style>

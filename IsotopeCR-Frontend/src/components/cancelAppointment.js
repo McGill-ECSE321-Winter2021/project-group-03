@@ -25,7 +25,8 @@ export default {
         futureappointments:[],
         timeslots:[],
 		selected: [],
-		selectAll: false
+		selectAll: false,
+        error: '',
     }
 	},
 
@@ -69,6 +70,21 @@ export default {
             }else{
                 console.log(selected[0])
                 AXIOS.put( backendUrl + '/api/appointment/cancelappointment/' + selected[0] )
+                .then(response=>{
+                    AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
+                    .then(response => {
+                        this.futureappointments = response.data
+                    })
+                }) 
+                .catch(e => {
+                    console.log('Error got')
+                    if (e.response) {
+                        console.log(e.response)
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                    }
+                    this.error = e.response.data
+                });
                 
 
     }

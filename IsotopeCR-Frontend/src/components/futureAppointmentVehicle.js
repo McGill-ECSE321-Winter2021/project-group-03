@@ -31,19 +31,35 @@ export default {
             service: '',
             technician: '',
             timeslots: [],
-            licenseplate:'',
+            licensePlate:'',
             response: [],
-            error: ''
+            vehicles: [],
+            errorMessage: ''
         }
+    },
+
+
+    created: function () {
+        AXIOS.get('/api/profile/customer/vehicle/get-all/'+this.$cookie.get('email'))
+        .then(response => {                              
+            this.vehicles = response.data
+        })
+        .catch(e => {
+            if (e.response) {
+                console.log(e.response.data)
+                console.log(e.response.status)
+            }
+            this.errorMessage = e.response.data
+        })
+
+      
     },
 
     methods: {
         futureappointmentv: function(licenseplate){
-            if(licenseplate == "" ) {
-              this.errorMessage = 'License cannot be empty.'
-              return false
-            } else {               
-                AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/'+ licenseplate)
+        
+                console.log(this.licensePlate)            
+                AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/'+ this.licensePlate)
                 .then(response => {
                    this.futureappointments=response.data
                   })
@@ -55,7 +71,7 @@ export default {
                       }
                       this.error = e.response.data;
                   });
-            }
+            
         }
     }
 }

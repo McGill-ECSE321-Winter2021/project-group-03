@@ -1,10 +1,14 @@
 <template>
     <div id="futureappointment/vehicle" class="container">
-       <div class="input_box">License Plate:
-        <input type="text" class="input wide" v-model='licenseplate' placeholder="License Plate">
+       
+         <div class="small_text left_text brand_color_text">Vehicle:
+         <select v-model="licensePlate">
+         <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
+          {{ vehicle.licensePlate }}
+        </option>
+        </select>
         <button class="button" @click="futureappointmentv(licenseplate)" >Find Future Appointment</button>
         </div>
-        
         <table class= "futureappointmentv">
         <thead>
         
@@ -33,7 +37,7 @@
         </table> 
         
 
-        <p v-if="error" style="color: red">{{ error }}</p>
+        <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
 
     </div>
 </template>

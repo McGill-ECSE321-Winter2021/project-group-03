@@ -1,6 +1,5 @@
 <template>
     <div id="cancelappointment">
-	<div class="text-bold">appointment selected: {{selected}}</div>
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
@@ -36,6 +35,7 @@
 			</tr>
 		</tbody>
 	</table>
+	 <p v-if="error" style="color: red">{{ error }}</p>
     <div>
             <button class="button brand_color wide" @click="cancelAppointment(selected)">Cancel An Appointment</button>
 			 <p v-if="error" style="color: red">{{ error }}</p>
