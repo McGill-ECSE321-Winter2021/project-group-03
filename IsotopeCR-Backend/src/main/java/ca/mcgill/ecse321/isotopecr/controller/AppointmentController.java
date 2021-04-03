@@ -174,7 +174,7 @@ public class AppointmentController {
 			appointments = appointmentService.getAllAppointmentsBeforeTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
-				if (appointment.getStatus().equals(Status.BOOKED) && appointment.getVehicle.getLicensePlate.equals(licensePlate)) {
+				if (appointment.getStatus().equals(Status.BOOKED) && appointment.getVehicle().getLicensePlate().equals(licensePlate)) {
 					uncancelledappointments.add(appointment);
 				}
 			}
@@ -201,7 +201,7 @@ public class AppointmentController {
 			appointments = appointmentService.getAllAppointmentsAfterTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
-				if (appointment.getStatus().equals(Status.BOOKED) && appointment.getVehicle.getLicensePlate.equals(licensePlate)) {
+				if (appointment.getStatus().equals(Status.BOOKED) && appointment.getVehicle().getLicensePlate().equals(licensePlate)) {
 					uncancelledappointments.add(appointment);
 				}
 			}
