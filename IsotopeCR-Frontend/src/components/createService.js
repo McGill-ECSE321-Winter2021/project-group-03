@@ -67,6 +67,7 @@ export default {
                 this.price = ''
                 this.errorService = ''
                 this.serviceName = ''
+                this.resourceType = ''
                 this.deletedServiceName = ''
               })
               .catch(e => {
@@ -93,6 +94,7 @@ export default {
                 this.frequency = ''
                 this.price = ''
                 this.serviceName = ''
+                this.resourceType = ''
                 this.services = AXIOS.get('/api/autorepairshop/service/get-all')
                 .then(response => {
                   // JSON responses are automatically parsed.
