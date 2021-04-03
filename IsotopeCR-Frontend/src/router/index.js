@@ -27,6 +27,8 @@ import CreateResource from '@/components/CreateResource.vue'
 import Profile from '@/components/AllProfile.vue'
 import ProfileInfo from '@/components/ProfileInfo.vue'
 import TechAndService from '@/components/TechnicianAndService.vue'
+import AdminMenu from '@/components/AdminMenu.vue'
+import CustomerMenu from '@/components/CustomerMenu.vue'
 
 Vue.use(Router)
 
@@ -142,6 +144,16 @@ export default new Router({
       path: "/techAndService",
       name: "TechAndService",
       component: TechAndService  
+    },
+    {
+      path: "/adminMenu",
+      name: "AdminMenu",
+      component: AdminMenu  
+    },
+    {
+      path: "/customerMenu",
+      name: "CustomerMenu",
+      component: CustomerMenu  
     }
   ]
 })
