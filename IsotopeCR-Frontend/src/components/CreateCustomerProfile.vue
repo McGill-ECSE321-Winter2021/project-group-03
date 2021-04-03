@@ -33,7 +33,7 @@
               type="text"
               class="form-control input-style"
               v-model="phoneNumber"
-              placeholder="Phone Number"
+              placeholder="Phone Number (optional)"
             />
           </div>
           <div class="inputbox">
@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-danger" @click="createAc">Create Account</button>
+      <button class="btn btn-danger" @click="createAc">Sign Up</button>
       <p>{{ error }}</p>
     </div>
   </html>
