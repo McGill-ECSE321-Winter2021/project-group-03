@@ -1,14 +1,13 @@
-import axios from 'axios'
-
-var config = require('../../config')
-
-var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port;
-var backendUrl = 'http://' + config.build.backendHost;
-
+import axios from "axios"
+var config = require("../../config")
+var frontendUrl = "http://" + config.dev.host + ':' + config.dev.port
+var backendUrl = "http://" + config.build.backendHost
 var AXIOS = axios.create({
-    baseURL: backendUrl,
-    headers: { 'Access-Control-Allow-Origin': frontendUrl }
+  baseURL: backendUrl,
+  headers: { "Access-Control-Allow-Origin": frontendUrl },
 })
+
+
 
 function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
    this.date=date;
@@ -25,13 +24,14 @@ export default {
 	data(){
         return{
         futureappointments:[],
+        timeslots:[],
 		selected: [],
 		selectAll: false
     }
 	},
 
     created: function(){
-        AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + this.$cookie.get('email') )
+        AXIOS.get(backendUrl + '/api/appointment/futureappointment/customer/' + this.$cookie.get('email') )
 
                 .then(response => {
                    this.futureappointments=response.data
@@ -61,15 +61,9 @@ export default {
                 alert( 'You can only cancel one appointment at a time.')
               return false
             }else{
-                var str = selected[0];
-                var res = str.split("/");
-                var appointmentid = res[0].hashCode().hashCode()*res[1].hashCode()*(String.valueOf(res[3])+String.valueOf(res[4])).hashCode();
-                AXIOS.post(backendUrl+'/api/appointment/cancelappointment/'+appointmentid )
-                .then(response => {
-                    console.log('appointment cancelled');
-                  })
+                console.log(selected[0])
+                AXIOS.put( backendUrl + '/api/appointment/cancelappointment/' + selected[0] )
                 
-
             }
 
         }

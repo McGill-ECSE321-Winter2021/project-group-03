@@ -24,30 +24,24 @@ export default {
     data() {
         return {
             futureappointments: [],
+            id:'',
             date: '',
             starttime: '',
             customer: '',
             vehicle: '',
             service: '',
             technician: '',
-            customeremail:'',
+            timeslots: [],
             errorFutureappointmentc: '',
             response: []
         }
     },
-
-
-    methods: {
-
-        futureappointmentc: function(customeremail){
-            if(customeremail == "" ) {
-              this.errorMessage = 'Email cannot be empty.'
-              return false
-            } else {
+  created: function(){
                 
-                AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + customeremail)
+                AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + this.$cookie.get('email'))
 
                 .then(response => {
+                    console.log(response.data)
                    this.futureappointments=response.data
 
                   })
@@ -58,9 +52,13 @@ export default {
                     this.errorPerson = errorMsg
                   });
 
-            }
+            
 
-        }
+        },
+
+    methods: {
+
+      
     }
 
 }

@@ -31,7 +31,8 @@ export default {
             service: '',
             technician: '',
             licenseplate:'',
-            errorPastappointmentv: '',
+            timeslots: [] ,
+            error: '',
             response: []
         }
     },

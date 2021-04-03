@@ -8,31 +8,31 @@
         <table class= "pastappointmentv">
         <thead>
         <tr>
-        <th scope="col" style="text-align: left; width: 10rem;">Date
+        <th scope="col" style="text-align: left; width: 10rem;">  Date
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Start time
+        <th scope="col" style="text-align: left; width: 10rem;">  Start time
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Customer
+        <th scope="col" style="text-align: left; width: 10rem;">  Customer
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Vehicle
+        <th scope="col" style="text-align: left; width: 10rem;">  Vehicle
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Service
+        <th scope="col" style="text-align: left; width: 10rem;">  Service
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Technician
+        <th scope="col" style="text-align: left; width: 10rem;">  Technician
         </th>
         </tr>
         <tr v-for ="pastappointmentv in pastappointments">
-            <td>{{pastappointmentv.date}}</td>
-            <td>{{pastappointmentv.starttime}}</td>
-            <td>{{pastappointmentv.customer}}</td>
-            <td>{{pastappointmentv.vehicle}}</td>
-            <td>{{pastappointmentv.service}}</td>
-            <td>{{pastappointmentv.technician}}</td>
+            <td>{{pastappointmentv.timeslots[0].date}}</td>
+            <td>{{pastappointmentv.timeslots[0].time}}</td>
+            <td>{{pastappointmentv.customer.email}}</td>
+            <td>{{pastappointmentv.vehicle.licensePlate}}</td>
+            <td>{{pastappointmentv.service.serviceName}}</td>
+            <td>{{pastappointmentv.technician.firstName + " " +pastappointmentv.technician.lastName}}</td>
         </tr>
     
         </thead>
         </table>   
-        <span v-if="errorPastappointmentv" style="color:red">{{errorPastappointmentv}} </span>      
+        <span v-if="error" style="color:red">{{error}} </span>      
     </div>
 </template>
 

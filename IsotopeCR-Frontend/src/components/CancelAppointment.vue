@@ -23,16 +23,16 @@
          
 				<td>
 					<label class="form-checkbox">
-    					<input type="checkbox" :value="aptmt.customer+'/'+aptmt.vehicle+'/'+aptmt.date+'/'+aptmt.starttime" v-model="selected">
+    					<input type="checkbox" :value="aptmt.appointmentID" v-model="selected">
 						<i class="form-icon"></i>
   					</label>
 				</td>
-				<td>{{aptmt.date}}</td>
-                <td>{{aptmt.starttime}}</td>
-                <td>{{aptmt.customer}}</td>
-                <td>{{aptmt.vehicle}}</td>
-                <td>{{aptmt.service}}</td>
-                <td>{{aptmt.technician}}</td>
+				  <td>{{aptmt.timeslots[0].date}}</td>
+                  <td>{{aptmt.timeslots[0].time}}</td>
+                  <td>{{aptmt.customer.email}}</td>
+                  <td>{{aptmt.vehicle.licensePlate}}</td>
+                  <td>{{aptmt.service.serviceName}}</td>
+                  <td>{{aptmt.technician.firstName + "  " + aptmt.technician.lastName }}</td>
 			</tr>
 		</tbody>
 	</table>

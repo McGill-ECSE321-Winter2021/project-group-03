@@ -20,7 +20,7 @@ function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
 }
 
 export default {
-    name: 'pastappointmentv',
+    name: 'futureappointmentv',
     data() {
         return {
             futureappointments: [],
@@ -30,6 +30,7 @@ export default {
             vehicle: '',
             service: '',
             technician: '',
+            timeslots: [],
             licenseplate:'',
             response: []
         }

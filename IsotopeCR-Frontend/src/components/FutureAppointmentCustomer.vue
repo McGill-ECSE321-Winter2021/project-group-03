@@ -1,33 +1,27 @@
 <template>
-    <div id="futureappointment/customer" class="container">
-      <div class="small_text left_text brand_color_text">Customer Email:
-        <input type="text" class="input wide" v-model ='customeremail' placeholder="Customer Email">
-        <button class="button" @click="futureappointmentc(customeremail)" >Find Past Appointment</button>
-        </div>
-        <router-view/>
-        
+    <div id="futureappointment/customer" class="container">        
         <table class= "pastappointmentc">
         <thead>
         <tr>
-        <th scope="col" style="text-align: left; width: 10rem;">Date
+        <th scope="col" style=" width: 10rem;">Date
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Start time
+        <th scope="col" style=" width: 10rem;">Start time
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Customer
+        <th scope="col" style=" width: 10rem;">Customer
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Vehicle
+        <th scope="col" style=" width: 10rem;">Vehicle
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Service
+        <th scope="col" style=" width: 10rem;">Service
         </th>
-        <th scope="col" style="text-align: left; width: 10rem;">Technician
+        <th scope="col" style=" width: 10rem;">Technician
         </th>
         <tr v-for ="futureappointmentc in futureappointments">
-            <td>{{futureappointmentc.date}}</td>
-            <td>{{futureappointmentc.starttime}}</td>
-            <td>{{futureappointmentc.customer}}</td>
-            <td>{{futureappointmentc.vehicle}}</td>
-            <td>{{futureappointmentc.service}}</td>
-            <td>{{futureappointmentc.technician}}</td>
+            <td>{{futureappointmentc.timeslots[0].date}}</td>
+            <td>{{futureappointmentc.timeslots[0].time}}</td>
+            <td>{{futureappointmentc.customer.email}}</td>
+            <td>{{futureappointmentc.vehicle.licensePlate}}</td>
+            <td>{{futureappointmentc.service.serviceName}}</td>
+            <td>{{futureappointmentc.technician.firstName + "  " + futureappointmentc.technician.lastName }}</td>
         </tr>
         </thead>
         </table> 
