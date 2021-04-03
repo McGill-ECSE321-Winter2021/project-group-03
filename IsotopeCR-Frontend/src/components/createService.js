@@ -23,6 +23,7 @@ export default {
         return {
             services: [],
             serviceName: "",
+            deletedServiceName: "",
             duration: "",
             price: "",
             frequency: "",
@@ -33,10 +34,10 @@ export default {
     },
 
     created: function () {
-        AXIOS.get('/api/autorepairshop//service/get-all')
+        AXIOS.get('/api/autorepairshop/service/get-all')
           .then(response => {
             // JSON responses are automatically parsed.
-            this.services = (response.data) //get-all returns a lit of services
+            this.services=(response.data) //get-all returns a lit of services
           })
           .catch(e => {
             this.errorService = e
@@ -46,7 +47,7 @@ export default {
     methods: {
         createService: function (serviceName, duration, price, frequency, resource) {
             // CREATE a Service
-            AXIOS.post(backendUrl + '/api/autorepairshop/service/create', {}, {
+            AXIOS.post(backendUrl + '/api/autorepairshop/service/create/'+serviceName, {}, {
               params: {
                 serviceName: serviceName,
                 duration: duration,
@@ -71,15 +72,22 @@ export default {
               });
           },
       
-          deleteService: function () {
+          deleteService: function (deletedServiceName) {
             // DELETE a Service
-            AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete')
+            AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete/' + deletedServiceName)
               .then(response => {
                 console.log('Response Got')
                 console.log(response)
                 // JSON responses are automatically parsed.
-                this.services = []
-                this.serviceName = ''
+                this.deletedServiceName = ''
+                this.services = this.services = AXIOS.get('/api/autorepairshop/service/get-all')
+                .then(response => {
+                  // JSON responses are automatically parsed.
+                  this.resources=(response.data) //get-all returns a lit of services
+                })
+                .catch(e => {
+                  this.errorResource = e
+                })
               })
               .catch(e => {
                 console.log('Error!')
