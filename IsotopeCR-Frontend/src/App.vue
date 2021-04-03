@@ -1,25 +1,18 @@
 <template>
   <div id="app">
-      <NavBar/>
+        <NavBar/>
         <router-view/>        
   </div>
 </template>
 
 <script>
-import Login from './components/Login'
-import NavBar from './components/NavBar.vue'
-import Appointment from './components/Appointment.vue'
-import CompanyProfile from './components/CompanyProfile.vue'
+import NavBar from './components/NavBar.vue';
 
 export default {
   name: 'app',
   components:{
-    Login,
     NavBar,
-    Appointment,
-    CompanyProfile,
-  },
-
+  }
 }
 </script>
 
@@ -30,6 +23,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

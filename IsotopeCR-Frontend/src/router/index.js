@@ -22,6 +22,8 @@ import CreateAdminProfile from '@/components/CreateAdminProfile'
 import CreateTechProfile from '@/components/CreateTechProfile'
 import Vehicle from '@/components/Vehicle.vue'
 import Registration from '@/components/RegistrationNav.vue'
+import CreateService from '@/components/CreateService.vue'
+import CreateResource from '@/components/CreateResource.vue'
 import Profile from '@/components/AllProfile.vue'
 
 Vue.use(Router)
@@ -31,12 +33,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
-    },
-    {
-      path: '/app',
-      name: 'Home',
+      name: 'home',
       component: Home
     },
     {
@@ -120,9 +117,19 @@ export default new Router({
       component: Registration
     },
     {
+      path: "/createService",
+      name: "CreateService",
+      component: CreateService
+    },
+    {
       path: "/profileInfo",
       name: "ProfileInfo",
       component: Profile
+    },
+    {
+      path: "/createResource",
+      name: "CreateResource",
+      component: CreateResource
     }
   ]
 })

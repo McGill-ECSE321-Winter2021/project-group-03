@@ -4,8 +4,9 @@ import 'bulma/css/bulma.css';
 
 
 <div>
+    <div style="text-align: right;" id="header"><b>Contact Us at <a href="tel:555-555-5555">555-555-5555</a></b></div>
     <b-navbar type="dark" variant="dark">
-        <b-navbar-brand href="#">Isotope Car Repair Shop</b-navbar-brand>        
+        <b-navbar-brand href="#"><img class="avatar" src="../assets/repairShopLogo.png" alt>Isotope Car Repair Shop</b-navbar-brand>        
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
                 <b-nav-item @click="routeTo('')">Home</b-nav-item>
@@ -27,21 +28,21 @@ export default {
     name: 'Nav',
     methods: {
         routeTo: function (to) {
-        location.href='http://127.0.0.1:8087/'+to;
+        this.$router.push("./"+to);
     }
   }
 }
 </script>
 <style>
-  nav {
-    margin-top: 25px;
-    margin-bottom: 30px;
-    /* a {
-      font-weight: bold;
-      color: #2c3e50;
-      &.router-link-exact-active {
-        color: #523c14;
-      }
-    }   */
-  } 
+  .avatar {
+    height: 2em;
+    width: 2em;
+    border-radius: 5.0em;
+    margin-right: 1em;
+    margin-left: 1em;
+    margin-bottom: 1px
+  }
+  #header {
+    background-color: rgb(236, 166, 34);
+  }
 </style>
