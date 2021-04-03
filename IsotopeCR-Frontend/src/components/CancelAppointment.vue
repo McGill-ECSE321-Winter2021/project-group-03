@@ -1,6 +1,5 @@
 <template>
     <div id="cancelappointment">
-	<div class="text-bold">appointment selected: {{selected}}</div>
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
@@ -23,19 +22,20 @@
          
 				<td>
 					<label class="form-checkbox">
-    					<input type="checkbox" :value="aptmt.customer+'/'+aptmt.vehicle+'/'+aptmt.date+'/'+aptmt.starttime" v-model="selected">
+    					<input type="checkbox" :value="aptmt.appointmentID" v-model="selected">
 						<i class="form-icon"></i>
   					</label>
 				</td>
-				<td>{{aptmt.date}}</td>
-                <td>{{aptmt.starttime}}</td>
-                <td>{{aptmt.customer}}</td>
-                <td>{{aptmt.vehicle}}</td>
-                <td>{{aptmt.service}}</td>
-                <td>{{aptmt.technician}}</td>
+				  <td>{{aptmt.timeslots[0].date}}</td>
+                  <td>{{aptmt.timeslots[0].time}}</td>
+                  <td>{{aptmt.customer.email}}</td>
+                  <td>{{aptmt.vehicle.licensePlate}}</td>
+                  <td>{{aptmt.service.serviceName}}</td>
+                  <td>{{aptmt.technician.firstName + "  " + aptmt.technician.lastName }}</td>
 			</tr>
 		</tbody>
 	</table>
+	 <p v-if="error" style="color: red">{{ error }}</p>
     <div>
             <button class="button brand_color wide" @click="cancelAppointment(selected)">Cancel An Appointment</button>
 			 <p v-if="error" style="color: red">{{ error }}</p>

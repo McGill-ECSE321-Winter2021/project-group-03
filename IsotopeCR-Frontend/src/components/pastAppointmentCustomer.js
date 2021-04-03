@@ -31,38 +31,34 @@ export default {
             service: '',
             technician: '',
             customeremail:'',
+            timeslots: [],
             errorPastappointmentc: '',
             response: []
         }
     },
 
+    created: function(){
+            
+            AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + this.$cookie.get('email'))
 
-    methods: {
+            .then(response => {
+               this.pastappointments=response.data
 
-        pastappointmentc: function(customeremail){
-            if(customeremail == "" ) {
-              this.errorPastappointmentc = 'Email cannot be empty.'
-              return false
-            } else {
-                
-                AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + customeremail )
 
-                .then(response => {
-                   this.pastappointments=response.data
-                   this.errorPastappointmentc = ''
-                  })
-                  .catch(e => {
-                    if (e.response) {
-                        console.log(e.response)
-                        console.log(e.response.data)
-                        console.log(e.response.status)
-                      }
-                      this.errorPastappointmentc = e.response.data;
-                  });
+              })
+              .catch(e => {
+                if (e.response) {
+                    console.log(e.response)
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                  }
+                  this.errorPastappointmentc = e.response.data;
+              });
 
-            }
+      
+
 
         }
-    }
+ }
 
-}
+

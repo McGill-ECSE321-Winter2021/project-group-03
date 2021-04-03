@@ -1,11 +1,5 @@
 <template>
     <div id="pastappointment/customer" class="container">
-        <div class="small_text left_text brand_color_text">Customer Email:
-        <input type="text" class="input wide" v-model='customeremail' placeholder="Customer Email">
-        <button class="button" @click="pastappointmentc(customeremail)" >Find Past Appointment</button>
-        </div>
-        <router-view/>
-
         <table class= "pastappointmentc">
         <thead>
         <tr>
@@ -22,12 +16,12 @@
         <th scope="col" style="text-align: left; width: 10rem;">Technician
         </th>
         <tr v-for ="pastappointmentc in pastappointments">
-            <td>{{pastappointmentc.date}}</td>
-            <td>{{pastappointmentc.starttime}}</td>
-            <td>{{pastappointmentc.customer}}</td>
-            <td>{{pastappointmentc.vehicle}}</td>
-            <td>{{pastappointmentc.service}}</td>
-            <td>{{pastappointmentc.technician}}</td>
+            <td>{{pastappointmentc.timeslots[0].date}}</td>
+            <td>{{pastappointmentc.timeslots[0].time}}</td>
+            <td>{{pastappointmentc.customer.email}}</td>
+            <td>{{pastappointmentc.vehicle.licensePlate}}</td>
+            <td>{{pastappointmentc.service.serviceName}}</td>
+            <td>{{pastappointmentc.technician.firstName +" "+ pastappointmentc.technician.lastName}}</td>
         </tr>
         </thead>
         </table> 

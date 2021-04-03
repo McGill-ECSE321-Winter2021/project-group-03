@@ -237,7 +237,7 @@ public class AppointmentController {
 			appointments = appointmentService.getAllAppointmentsBeforeTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
-				if (appointment.getStatus().equals(Status.BOOKED)) {
+				if (appointment.getStatus().equals(Status.BOOKED) && appointment.getVehicle().getLicensePlate().equals(licensePlate)) {
 					uncancelledappointments.add(appointment);
 				}
 			}
@@ -264,7 +264,7 @@ public class AppointmentController {
 			appointments = appointmentService.getAllAppointmentsAfterTime(appointments);
 			List<Appointment> uncancelledappointments = new ArrayList<Appointment>();
 			for (Appointment appointment : appointments) {
-				if (appointment.getStatus().equals(Status.BOOKED)) {
+				if (appointment.getStatus().equals(Status.BOOKED) && appointment.getVehicle().getLicensePlate().equals(licensePlate)) {
 					uncancelledappointments.add(appointment);
 				}
 			}
@@ -280,7 +280,7 @@ public class AppointmentController {
 	 * @return the appointmentdto that is cancelled
 	 * @throws Exception
 	 */
-	@PostMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
+	@PutMapping(value = { "/cancelappointment/{appointment}", "/cancelappointment/{appointment}/" })
 	public AppointmentDto cancelAppointment(@PathVariable("appointment") String aAppointmentId) throws Exception {
 		try {
 			Appointment appointment = appointmentService.getAppointmentsByID(aAppointmentId);
