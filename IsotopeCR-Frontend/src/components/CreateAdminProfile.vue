@@ -48,7 +48,7 @@
           <label for="checkbox" class="bold">Owner of the company?: {{ isOwner }}</label>
         </div>
       </div>
-      <button class="btn btn-danger" @click="createAdminAccount(email, firstName, lastName, password, isOwner)">Create Account</button>
+      <button class="btn btn-danger" @click="createAdminAccount(email, firstName, lastName, password, isOwner)">Sign Up</button>
       <p v-if="error" style="color: red">{{ error }}</p>
     </div>
   </html>

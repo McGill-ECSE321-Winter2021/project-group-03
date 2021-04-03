@@ -33,7 +33,11 @@
               type="text"
               class="form-control input-style"
               v-model="phoneNumber"
+<<<<<<< HEAD
               placeholder="Phone Number: 5555555555"
+=======
+              placeholder="Phone Number (optional)"
+>>>>>>> 1bf6167186983676502773784494ae78db438e02
             />
           </div>
           <div class="inputbox">
@@ -53,8 +57,8 @@
             />
           </div>
         </div>
-      </div>
-      <button class="btn btn-danger" @click="createAc">Create Account</button>
+      </div>     
+      <button class="btn btn-danger" @click="createAc">Sign Up</button>
       <p v-if="error" style="color:red">{{ error }}</p>
     </div>
   </html>

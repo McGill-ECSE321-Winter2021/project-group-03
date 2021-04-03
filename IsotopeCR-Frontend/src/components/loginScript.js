@@ -60,7 +60,7 @@ export default {
                         console.log(localStorage)
                         this.$cookie.set('email', this.response['email'], { expires: '1h'})
                         console.log(this.$cookie.get('email'))
-                        //window.location.href = "/"
+                        window.location.href = "/"
                     }
 
                   })

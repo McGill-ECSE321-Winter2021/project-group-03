@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
 
@@ -8,7 +7,7 @@ import Appointment from '@/components/Appointment'
 import PastAppointment from '@/components/PastAppointment'
 import BookAppointment from '@/components/BookAppointment.vue'
 import FutureAppointment from '@/components/FutureAppointment'
-import CancelAppointment from '@/components/CancelAppointment'
+import CancelAppointment from '@/components/CancelAppointment.vue'
 
 import CreateCustomerProfile from '@/components/CreateCustomerProfile'
 import CompanyProfile from '@/components/CompanyProfile.vue'
@@ -21,9 +20,10 @@ import FutureAppointmentVehicle from '@/components/FutureAppointmentVehicle.vue'
 import CreateAdminProfile from '@/components/CreateAdminProfile'
 import CreateTechProfile from '@/components/CreateTechProfile'
 import Vehicle from '@/components/Vehicle.vue'
-import Registration from '@/components/RegistrationNav.vue'
+
 import CreateService from '@/components/CreateService.vue'
 import CreateResource from '@/components/CreateResource.vue'
+
 import Profile from '@/components/AllProfile.vue'
 import ProfileInfo from '@/components/ProfileInfo.vue'
 import TechAndService from '@/components/TechnicianAndService.vue'
@@ -115,8 +115,8 @@ export default new Router({
     },
     {
       path: "/signup",
-      name: "Registration",
-      component: Registration
+      name: "CreateCustomerProfile",
+      component: CreateCustomerProfile
     },
     {
       path: "/allProfiles",
