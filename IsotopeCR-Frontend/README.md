@@ -32,4 +32,4 @@ npm test
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-As a team, we loaded our webpage application by moving to the frontend directory of our project folder. We then proceeded by running the commands npm install --save vue-cookie and then the npm run dev with the command line.
+As a team, we loaded our webpage application by moving to the frontend directory of our project folder. We then proceeded by running the commands npm install --save vue-cookie and then the npm run dev command with the command line.
