@@ -16,6 +16,7 @@ import PastAppointmentCustomer from '@/components/PastAppointmentCustomer.vue'
 import PastAppointmentVehicle from '@/components/PastAppointmentVehicle.vue'
 import FutureAppointmentCustomer from '@/components/FutureAppointmentCustomer.vue'
 import FutureAppointmentVehicle from '@/components/FutureAppointmentVehicle.vue'
+import ChargeAppointment from '@/components/ChargeAppointment.vue'
 
 import CreateAdminProfile from '@/components/CreateAdminProfile'
 import CreateTechProfile from '@/components/CreateTechProfile'
@@ -154,6 +155,11 @@ export default new Router({
       path: "/customerMenu",
       name: "CustomerMenu",
       component: CustomerMenu  
+    },
+    {
+      path: "/chargeAppointment",
+      name: "ChargeAppointment",
+      component: ChargeAppointment  
     }
   ]
 })
