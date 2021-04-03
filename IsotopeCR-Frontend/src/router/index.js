@@ -3,12 +3,27 @@ import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
+
+import Appointment from '@/components/Appointment'
+import PastAppointment from '@/components/PastAppointment'
+import BookAppointment from '@/components/BookAppointment.vue'
+import FutureAppointment from '@/components/FutureAppointment'
+import CancelAppointment from '@/components/CancelAppointment'
+
 import CreateCustomerProfile from '@/components/CreateCustomerProfile'
 import CompanyProfile from '@/components/CompanyProfile.vue'
+
+import PastAppointmentCustomer from '@/components/PastAppointmentCustomer.vue'
+import PastAppointmentVehicle from '@/components/PastAppointmentVehicle.vue'
+import FutureAppointmentCustomer from '@/components/FutureAppointmentCustomer.vue'
+import FutureAppointmentVehicle from '@/components/FutureAppointmentVehicle.vue'
+
 import CreateAdminProfile from '@/components/CreateAdminProfile'
 import CreateTechProfile from '@/components/CreateTechProfile'
 import Vehicle from '@/components/Vehicle.vue'
 import Registration from '@/components/RegistrationNav.vue'
+import CreateService from '@/components/CreateService.vue'
+import CreateResource from '@/components/CreateResource.vue'
 import Profile from '@/components/AllProfile.vue'
 import ProfileInfo from '@/components/ProfileInfo.vue'
 
@@ -19,18 +34,58 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
-    },
-    {
-      path: '/app',
-      name: 'Home',
+      name: 'home',
       component: Home
     },
     {
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path:"/appointment",
+      name:"Appointment",
+      component: Appointment
+    },
+    {
+      path:"/pastappointment",
+      name:"PastAppointment",
+      component: PastAppointment
+    },
+    {
+      path:"/pastappointment/customer",
+      name: "PastAppointmentCustomer",
+      component: PastAppointmentCustomer
+    },
+    {
+      path:"/pastappointment/vehicle",
+      name: "PastAppointmentVehicle",
+      component: PastAppointmentVehicle
+    },
+    {
+      path:"/futureappointment/customer",
+      name: "FutureAppointmentCustomer",
+      component: FutureAppointmentCustomer
+    },
+    {
+      path:"/futureappointment/vehicle",
+      name: "FutureAppointmentVehicle",
+      component: FutureAppointmentVehicle
+    },
+    {
+      path:"/bookappointment",
+      name:"BookAppointment",
+      component: BookAppointment
+    },
+    {
+      path:"/futureappointment",
+      name:"FutureAppointment",
+      component: FutureAppointment
+    },
+    {
+      path:"/cancelappointment",
+      name:"CancelAppointment",
+      component: CancelAppointment
     },
     {
       path: "/company",
@@ -68,9 +123,19 @@ export default new Router({
       component: Profile
     },
     {
+      path: "/createService",
+      name: "CreateService",
+      component: CreateService
+    },
+    {
       path: "/profileInfo",
       name: "ProfileInfo",
       component: ProfileInfo
+    },
+    {
+      path: "/createResource",
+      name: "CreateResource",
+      component: CreateResource
     }
   ]
 })

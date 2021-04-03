@@ -1,23 +1,74 @@
-<!-- 
 <template>
 <div class="home">
-  <section class="hero is-dark">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">
-          Welcome to the Isotope Car Repair Shop     
-        </h1>
-        <h2 class="subtitle">
-          Make sure you check out our upcoming events below
-        </h2>
-        <div class="button-block">
-          <button class="button is-xl is-dark">Sign Up to Browse Events</button>
-        </div>
-      </div>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4"> Welcome to the Isotope Car Repair Shop</h1>
+      <h2 class="subtitle"> Make sure you check out our services below</h2>
     </div>
+  </div>
+  <!-- Services-->
+  <section class="page-section" id="services">
+      <div class="container">
+          <div class="text-center">
+              <h2 class="section-heading text-uppercase">Services</h2>
+          </div>
+          <div class="row text-center">
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                      <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <h4 class="my-3">Oil Change</h4>
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+              </div>
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                      <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <h4 class="my-3">Roadside Assitance</h4>
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+              </div>
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                      <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <h4 class="my-3">Car & Truck Care</h4>
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+              </div>
+          </div>
+          <div class="row text-center" id = "servicesR2">
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                      <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <h4 class="my-3">Oil Change</h4>
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+              </div>
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                      <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <h4 class="my-3">Roadside Assitance</h4>
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+              </div>
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                      <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                      <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <h4 class="my-3">Car & Truck Care</h4>
+                  <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+              </div>
+          </div>
+      </div>
   </section>
 </div>
 </template>
+
 <script>
 export default {
   name: 'home',
@@ -25,45 +76,25 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-  .hero {    
-    text-align: center;
-    background-image: url('https://cdn.auth0.com/blog/vue-meetup/event-banner.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 400px;
-  }
-  .hero-body .title {
-    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6);
-    padding: 40px 0 20px 0;
-    font-size: 60px;
-  }
-  .subtitle {
-    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
-    font-size: 30px;
-  }
-  .button-block {
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    position: absolute;
-    bottom: -150px;
-    .button {
-      margin-right: 50px;
-      padding-left: 50px;
-      padding-right: 50px;
-    }
-    .welcome {
-      width: 400px;
-      padding: 10px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-  .is-xl {
-    font-size: 1.7rem;
-  }
+
+<style scoped>
+.jumbotron {
+  color: white;
+  background-image: url('../assets/repair-shop.jpg');
+  padding-top: 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 65vh;
+}
+.jumbotron h1 {
+  display: block;
+  font-weight: bold;
+  font-size: 50px;
+  color: white;
+}
+#servicesR2 {
+  padding-top: 2vh;
+}
 </style>
--->
