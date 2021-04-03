@@ -3,6 +3,8 @@
     <div id="service" class="container">
     <div class="inner_container shadow">
 
+          <br>
+
     <div class="large_text"> <b>Resources</b> </div>
 
     <hr>
@@ -15,8 +17,9 @@
         <td>{{ resource.maxAvailable }}</td>
       </tr>
     </table>
-   
+
     <hr>
+        <br>
     <div id="createResource">
       <h3>Create Resource</h3>
       <div class="container-fluid">
@@ -42,6 +45,9 @@
       <button class="btn btn-danger" @click="createResource(resourceType, maxAvailable)">Create Resource</button>
       <p v-if="errorResource" style="color: red">{{ errorResource }}</p>
     </div>
+
+    <br>
+    <br>
 
         <div id="deleteResource">
       <h3>Delete Resource</h3>

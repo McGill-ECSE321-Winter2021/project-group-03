@@ -3,6 +3,8 @@
     <div id="service" class="container">
     <div class="inner_container shadow">
 
+      <br>
+
     <div class="large_text"> <b>Offered Services</b> </div>
 
     <hr>
@@ -72,6 +74,9 @@
       <button class="btn btn-danger" @click="createService(serviceName, duration, price, resourceType, frequency)">Create Service</button>
       <p v-if="errorService" style="color: red">{{ errorService }}</p>
     </div>
+
+<br>
+<br>
 
         <div id="deleteService">
       <h3>Delete Service</h3>
