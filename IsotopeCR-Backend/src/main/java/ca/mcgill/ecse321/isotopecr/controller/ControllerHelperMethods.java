@@ -166,6 +166,11 @@ public class ControllerHelperMethods {
 				convertToDto(a.getVehicle()), convertToDto(a.getTechnician()), convertToDto(a.getService()), timeslots);
 		if(a.getInvoice() != null) {
 			appointmentDto.setInvoice(convertToDto(a.getInvoice()));
+		} else {
+			Invoice invoice = new Invoice();
+			invoice.setIsPaid(false);
+			a.setInvoice(invoice);
+			appointmentDto.setInvoice(convertToDto(invoice));
 		}
 		return appointmentDto;
 	}

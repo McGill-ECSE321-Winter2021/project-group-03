@@ -17,6 +17,8 @@ export default {
     name: 'createAdminProfile',
     data() {
         return {
+            pastappointments: [],
+            selected: [],
             invoice: '',
             customeremail: '',
             cost: '',
@@ -26,6 +28,23 @@ export default {
             errorCharge: '',
         }
     },
+
+    created: function(){      
+        AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + this.$cookie.get('email'))
+        .then(response => {
+           this.pastappointments=response.data
+           console.log(response.data)
+          })
+          .catch(e => {
+            if (e.response) {
+                console.log(e.response)
+                console.log(e.response.data)
+                console.log(e.response.status)
+              }
+              this.errorPastappointmentc = e.response.data;
+          });
+    },
+
     methods: {
         pastappointmentc: function(customeremail){
             if(customeremail == "" ) {

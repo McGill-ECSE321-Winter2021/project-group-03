@@ -18,7 +18,7 @@
         </tr>    
       </thead>        
       <tbody>        
-        <tr v-for="aptmt in futureappointments">                       
+        <tr v-for="aptmt in pastappointments">                       
         <td>
         <label class="form-checkbox">
             <input type="checkbox" :value="aptmt.appointmentID" v-model="selected" />
@@ -36,7 +36,7 @@
                             
         <td>{{ aptmt.service.serviceName }}</td>
 
-        <!-- <td>{{ aptmt.invoice.isPaid }}</td> -->
+        <td v-if="!aptmt.invoice">{{ aptmt.invoice.isPaid }}</td>
                             
         <td>
          {{ aptmt.technician.firstName + "  " + aptmt.technician.lastName }}
@@ -45,16 +45,16 @@
       </tbody>     
     </table>
          
-        <p v-if="error" style="color: red">{{ error }}</p>
+        <p v-if="errorPastappointmentc" style="color: red">{{ errorPastappointmentc }}</p>
         
     <div>
     <button class="button brand_color wide" @click="cancelAppointment(selected)">Cancel An Appointment</button>
-    <p v-if="error" style="color: red">{{ error }}</p>     
+    <p v-if="errorCharge" style="color: red">{{ errorCharge }}</p>     
     </div>
   </div>
 </template>
 
-<script src="./cancelAppointment.js">
+<script src="./chargeAppointmentScript.js">
 export default {
   name: "CancelAppointment",
 };
