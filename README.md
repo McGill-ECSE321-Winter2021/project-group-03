@@ -24,13 +24,13 @@ Jack is a U2 student in the Computer Engineering program at McGill.
   
  ### Below, a table representing each member's role withing the team, and their hours worked per deliverable.
  
- | Name                 | Role                           | Deliverable 1 | Deliverable 2     | Deliverable 3     | Deliverable 4     | 
+| Name                 | Role                           | Deliverable 1 | Deliverable 2     | Deliverable 3     | Deliverable 4     | 
 |----------------------|--------------------------------|---------------|-------------------|-------------------|-------------------|
-| Zichen Chang         | Project Manager                |     30hrs     |      45hrs        | Going to be a lot | Going to be a lot | 
-| Victoria Iannotti    | Software Developer            |     33hrs     |      45hrs        | Going to be a lot | Going to be a lot | 
-| Mathieu-Joseph Magri | QA Lead                        |     33hrs     |      40hrs        | Going to be a lot | Going to be a lot |
-| Jiatong Niu          | Software Consultant            |     33hrs     |      45hrs        | Going to be a lot | Going to be a lot |
-| Jack Wei             | Software Architecture Engineer |     33hrs     |      45hrs        | Going to be a lot | Going to be a lot | 
+| Zichen Chang         | Project Manager                |     30hrs     |      45hrs        |      37 hrs       | Going to be a lot | 
+| Victoria Iannotti    | Software Developer             |     33hrs     |      45hrs        |      36 hrs       | Going to be a lot | 
+| Mathieu-Joseph Magri | QA Lead                        |     33hrs     |      40hrs        |      33 hrs       | Going to be a lot |
+| Jiatong Niu          | Software Consultant            |     33hrs     |      45hrs        |      35 hrs       | Going to be a lot |
+| Jack Wei             | Software Architecture Engineer |     33hrs     |      45hrs        |      37 hrs       | Going to be a lot | 
 
 ## Project Reports
 In each project report, you may find a succinct report of the work done, as well as the meeting minutes and a description of key decisions made on the word done.
