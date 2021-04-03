@@ -8,7 +8,7 @@ import Appointment from '@/components/Appointment'
 import PastAppointment from '@/components/PastAppointment'
 import BookAppointment from '@/components/BookAppointment.vue'
 import FutureAppointment from '@/components/FutureAppointment'
-import CancelAppointment from '@/components/CancelAppointment'
+import CancelAppointment from '@/components/CancelAppointment.vue'
 
 import CreateCustomerProfile from '@/components/CreateCustomerProfile'
 import CompanyProfile from '@/components/CompanyProfile.vue'
