@@ -26,6 +26,7 @@ import CreateService from '@/components/CreateService.vue'
 import CreateResource from '@/components/CreateResource.vue'
 import Profile from '@/components/AllProfile.vue'
 import ProfileInfo from '@/components/ProfileInfo.vue'
+import TechAndService from '@/components/TechnicianAndService.vue'
 
 Vue.use(Router)
 
@@ -136,6 +137,11 @@ export default new Router({
       path: "/createResource",
       name: "CreateResource",
       component: CreateResource
+    },
+    {
+      path: "/techAndService",
+      name: "TechAndService",
+      component: TechAndService  
     }
   ]
 })

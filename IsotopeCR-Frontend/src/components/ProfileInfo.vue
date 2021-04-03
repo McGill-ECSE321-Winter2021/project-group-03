@@ -4,12 +4,6 @@
       <h3>View My Info</h3>
       <div>
         <div class="inputbox">
-          <input
-            type="email"
-            class="form-control input-style"
-            v-model="email"
-            placeholder="Email"
-          />
         </div>
          <button class="btn btn-danger" @click="displayProfile(email)">View My Info</button>
          <p v-if="error" style="color: red">Error: {{ error }}</p>
@@ -49,11 +43,6 @@
         </div>
 
         <h5> Edit Password</h5>
-        <!-- <div v-if="type">
-            <input type="text" class="inputbox" v-model="oldpassword" placeholder="old password"/>
-            <button class="btn btn-danger" @click="editPhoneNumber(newPhoneNumber)">Check Password</button>
-            <p v-if="editError">Error: {{ editError }}</p>
-        </div>    -->
         <div v-if="type">   
                 <input type="password" class="inputbox" v-model="newPassword" placeholder="new password"/>
                 <button class="btn btn-danger" @click="editPassword(newPassword)">Edit Password</button>

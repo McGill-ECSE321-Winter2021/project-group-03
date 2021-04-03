@@ -36,6 +36,11 @@ export default {
         }
     },
 
+    created: function(){
+        console.log(this.$cookie.get('email'))
+        this.email = this.$cookie.get('email')
+    },
+
     methods: {
         displayProfile: function (email) {
             if (email == "") {
@@ -98,6 +103,9 @@ export default {
         editPassword: function (newPassword) {
             if (newPassword == "") {
                 this.editError = "Please enter your newIsOwner Value";
+            } else if(this.email != this.$cookie.get('email')) {
+                console.log(this.$cookie.get('email'))
+                alert("Current login credential does not match the input email")
             } else {
                 AXIOS.put(backendUrl + '/api/profile/profiles/edit-password', {}, {
                     params: {
