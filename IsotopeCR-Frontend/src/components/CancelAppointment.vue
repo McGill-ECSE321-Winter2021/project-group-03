@@ -19,20 +19,20 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="i in items">
+			<tr v-for ="aptmt in futureappointments">
+         
 				<td>
 					<label class="form-checkbox">
-    					<input type="checkbox" :value="i.name+'/'+i.id" v-model="selected">
+    					<input type="checkbox" :value="aptmt.customer+'/'+aptmt.vehicle+'/'+aptmt.date+'/'+aptmt.starttime" v-model="selected">
 						<i class="form-icon"></i>
   					</label>
 				</td>
-				<td>{{i.id}}</td>
-				<td>{{i.name}}</td>
-				<td>{{i.email}}</td>
-                <td>{{i.id}}</td>
-				<td>{{i.name}}</td>
-				<td>{{i.email}}</td>
-                
+				<td>{{aptmt.date}}</td>
+                <td>{{aptmt.starttime}}</td>
+                <td>{{aptmt.customer}}</td>
+                <td>{{aptmt.vehicle}}</td>
+                <td>{{aptmt.service}}</td>
+                <td>{{aptmt.technician}}</td>
 			</tr>
 		</tbody>
 	</table>

@@ -24,22 +24,28 @@ export default {
 
 	data(){
         return{
-		items: [
-			{
-				id: "id1vaevaa",
-				name: "John Doe",
-				email: "email@example.com"
-			},
-			{
-				id: "id2",
-				name: "Jone Doe",
-				email: "email2@example.com"
-			}
-		],
+        futureappointments:[],
 		selected: [],
 		selectAll: false
     }
 	},
+
+    created: function(){
+        AXIOS.get(backendUrl+'/api/appointment/futureappointment/customer/' + this.$cookie.get('email') )
+
+                .then(response => {
+                   this.futureappointments=response.data
+
+                  })
+                  .catch(e => {
+                    console.log('Ahoh! Error got')
+                    var errorMsg = e.message
+                    console.log(errorMsg)
+                    this.errorPerson = errorMsg
+                  });
+
+    },
+
 	methods: {
 		select: function() {
 			this.selected = [];
@@ -54,6 +60,16 @@ export default {
             if(selected.length>1){
                 alert( 'You can only cancel one appointment at a time.')
               return false
+            }else{
+                var str = selected[0];
+                var res = str.split("/");
+                var appointmentid = res[0].hashCode().hashCode()*res[1].hashCode()*(String.valueOf(res[3])+String.valueOf(res[4])).hashCode();
+                AXIOS.post(backendUrl+'/api/appointment/cancelappointment/'+appointmentid )
+                .then(response => {
+                    console.log('appointment cancelled');
+                  })
+                
+
             }
 
         }

@@ -31,7 +31,6 @@ export default {
             service: '',
             technician: '',
             licenseplate:'',
-            errorPastappointmentv: '',
             response: []
         }
     },
@@ -39,7 +38,7 @@ export default {
 
     methods: {
 
-        pastappointmentv: function(licenseplate){
+        futureappointmentv: function(licenseplate){
             if(licenseplate == "" ) {
               this.errorMessage = 'License cannot be empty.'
               return false

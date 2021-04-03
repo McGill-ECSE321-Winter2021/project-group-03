@@ -20,12 +20,12 @@
         <th scope="col" style="text-align: left; width: 10rem;">Technician
         </th>
           <tr v-for ="futureappointmentv in futureappointments">
-            <td>{{futureappointmentv.date}}</td>
-            <td>{{futureappointmentv.starttime}}</td>
-            <td>{{futureappointmentv.customer}}</td>
-            <td>{{futureappointmentv.vehicle}}</td>
-            <td>{{futureappointmentv.service}}</td>
-            <td>{{futureappointmentv.technician}}</td>
+            <td>{{futureappointmentv.timeslots[0].aDate}}</td>
+            <td>{{futureappointmentv.timeslots[0].aTime}}</td>
+            <td>{{futureappointmentv.aCustomer.email}}</td>
+            <td>{{futureappointmentv.aVehicle.licsencePlate}}</td>
+            <td>{{futureappointmentv.aService.serviceName}}</td>
+            <td>{{futureappointmentv.aTechnician.firstName+" "+futureappointmentv.aTechnician.lasttName}}</td>
         </tr>
         </thead>
         </table>
