@@ -75,6 +75,7 @@ export default {
                             .then(response => {
                                 this.futureappointments = response.data
                             })
+                            this.selected = [];
                     })
                     .catch(e => {
                         console.log('Error got')
