@@ -19,6 +19,7 @@ export default {
         return {
             pastappointments: [],
             selected: [],
+            sessionemail: '',
             invoice: '',
             customeremail: '',
             cost: '',
@@ -30,22 +31,26 @@ export default {
     },
 
     created: function(){      
-        AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + this.$cookie.get('email'))
-        .then(response => {
-           this.pastappointments=response.data
-           console.log(response.data)
-          })
-          .catch(e => {
-            if (e.response) {
-                console.log(e.response)
-                console.log(e.response.data)
-                console.log(e.response.status)
-              }
-              this.errorPastappointmentc = e.response.data;
-          });
+        
     },
 
     methods: {
+        viewPastAppointment: function(customeremail){      
+            AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + customeremail)
+            .then(response => {
+               this.pastappointments=response.data
+               console.log(response.data)
+              })
+              .catch(e => {
+                if (e.response) {
+                    console.log(e.response)
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                  }
+                  this.errorPastappointmentc = e.response.data;
+              });
+        },
+
         createInvoice: function (selected) {
             if (selected == "") {
                 this.error = "Please select an Appointment";
@@ -55,12 +60,17 @@ export default {
                             console.log("response got!")
                             console.log(response.data)
                             this.errorCharge = ''
+                            AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + this.customeremail)
+                                .then(response =>{
+                                    this.pastappointments = response.data
+                                    this.selected = []
+                                })                       
                         }
                     )
                     .catch(e => {
                         if (e.response) {
                             console.log(e.response)
-                            console.log(e.response.data)
+                            console.log(e.response)
                             console.log(e.response.status)
                         }
                         this.errorCharge = e.response.data;

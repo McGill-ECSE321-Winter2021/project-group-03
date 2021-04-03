@@ -1,8 +1,16 @@
 <template>
   <div id="chargeappointment">  
+    
+    <div class="input" >
+        <div class="inputbox">
+            <input type="text" class="form-control input-style"  v-model="customeremail" placeholder="Email" />
+            <button class="btn btn-danger" @click="viewPastAppointment(customeremail)">View</button>
+        </div> 
+    </div>
+    
     <table class="table table-striped table-hover">  
       <thead>   
-          <p> {{selected}} </p>      
+        
         <tr>        
           <th>
             <label class="form-checkbox">
@@ -60,8 +68,26 @@
 
 </script>
 
-<style>
-div.container {
-      display: flex;
+<style scoped>
+#createAccount {
+  padding-top: 20vh;
+}
+.input {
+  top: 20px;
+  padding: 30px 30px;
+  width: 450px;
+}
+.inputbox {
+  position: relative;
+  text-align: center;
+  align-self: center;
+  padding: 5px 5px;
+}
+.container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  white-space: nowrap;
 }
 </style>
