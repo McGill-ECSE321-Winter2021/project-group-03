@@ -52,20 +52,17 @@ export default {
                     .then(
                         (response) => {
                             console.log("response got!")
-                            alert("Registration complete!")
                             console.log(response.data)
                             this.error = ''
                         }
                     )
                     .catch(e => {
-                        var errorMsg = "Please enter a valid email, name and password"
-                        console.log(e)
                         if (e.response) {
+                            console.log(e.response)
                             console.log(e.response.data)
                             console.log(e.response.status)
-                            console.log(e.response.message)
                         }
-                        this.error = errorMsg;
+                        this.error = e.response.data;
                     });
             }
         },

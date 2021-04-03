@@ -232,7 +232,7 @@ public class TestCustomerAdminService {
 		try {
 			admin = service.createAdminProfile(FIRSTNAME, LASTNAME, VALID_ADMIN_EMAIL1, ISOWNER, VALID_PASSWORD);
 		} catch (Exception e) {
-			assertEquals("ERROR: Administrative account with that email already exists.", e.getMessage());
+			assertEquals("ERROR: An account with that email already exists.", e.getMessage());
 		}
 
 		assertNull(admin);
@@ -286,7 +286,7 @@ public class TestCustomerAdminService {
 			customer = service.createCustomerProfile(FIRSTNAME, LASTNAME, INVALID_EMAIL, VALID_PHONE_NUMBER,
 					VALID_PASSWORD);
 		} catch (Exception e) {
-			assertEquals("ERROR: Invalid email.", e.getMessage());
+			assertEquals("ERROR: Invalid email format.", e.getMessage());
 		}
 
 		assertNull(customer);

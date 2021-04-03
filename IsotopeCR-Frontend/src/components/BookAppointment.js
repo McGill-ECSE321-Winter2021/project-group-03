@@ -41,7 +41,8 @@ export default {
               return false
             } else {
                 
-                AXIOS.post(backendUrl+'/api/appointment/create/'+ license + serviceName, {},{params:{
+                AXIOS.post(backendUrl+'/api/appointment/create/'+ license + '/' + serviceName, {},{
+                params:{
                    start:startTime,
                    date:date
                 }})

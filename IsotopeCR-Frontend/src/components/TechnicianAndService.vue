@@ -4,10 +4,9 @@
       <h3>View My Services</h3>
       <div>
         <div class="inputbox"></div>
-        <button class="btn btn-danger" @click="displayServices(email)">
-          View
-        </button>
+        <!-- <button class="btn btn-danger" @click="displayServices(email)">View</button> -->
         <p v-if="error" style="color: red">Error: {{ error }}</p>
+        
         <hr />
 
         <div>
@@ -15,55 +14,26 @@
             <th>ServiceName</th>
             <th>Duration</th>
             <th>Price</th>
-            <th>Frequency</th>
             <th>ResourceName</th>
             <tr v-for="service in services">
               <td>{{ service.serviceName }}</td>
               <td>{{ service.duration }}</td>
               <td>{{ service.price }}</td>
-              <td>{{ service.frequency }}</td>
               <td>{{ service.resource.resourceType }}</td>
             </tr>
           </table>
         </div>
-      </div>
 
       <hr />
 
-      <!-- <div>
-        <h3>Edit Info</h3>
-        <h5>Edit PhoneNumber</h5>
-
-        <div v-if="type === 'Customer'">
-          <input
-            type="text"
-            class="inputbox"
-            v-model="newPhoneNumber"
-            placeholder="new phone number"
-          />
-          <button
-            class="btn btn-danger"
-            @click="editPhoneNumber(newPhoneNumber)"
-          >
-            Edit PhoneNumber
-          </button>
-          <p v-if="editError">Error: {{ editError }}</p>
+        <h3>Add Services</h3>
+        <div>
+          <input type="text" class="inputbox" v-model="serviceName" placeholder="A service name"/>
+          <button class="btn btn-danger" @click="addService(email, serviceName)">Add</button>
+          <p v-if="errorAdd">Error: {{ errorAdd }}</p>
         </div>
 
-        <h5>Edit Password</h5>
-        <div v-if="type">
-          <input
-            type="password"
-            class="inputbox"
-            v-model="newPassword"
-            placeholder="new password"
-          />
-          <button class="btn btn-danger" @click="editPassword(newPassword)">
-            Edit Password
-          </button>
-          <p v-if="editError">Error: {{ editError }}</p>
-        </div>
-      </div> -->
+      </div> 
     </div>
   </html>
 </template>
