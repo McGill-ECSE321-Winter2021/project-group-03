@@ -109,9 +109,9 @@ export default {
             } else {
                 console.log(serviceName);
                 console.log(numWeeks)
-                AXIOS.get(backendUrl + '/api/appointment/getUnavailableTimeslots/' + this.serviceName, {}, {
+                AXIOS.get(backendUrl + '/api/appointmentgetUnavailableTimeslots/' + this.serviceName, {}, {
                     params: {
-                        numWeeks: parseInt(this.numWeeks)
+                        numWeeks: numWeeks
                     }
                 })
                     .then(

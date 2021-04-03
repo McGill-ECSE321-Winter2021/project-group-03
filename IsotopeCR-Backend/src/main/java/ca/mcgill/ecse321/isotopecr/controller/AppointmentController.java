@@ -118,7 +118,7 @@ public class AppointmentController {
 	 * @return a list of timesloDtos
 	 * @throws Exception
 	 */
-	@GetMapping(value = { "getUnavailableTimeslots/{service}", "getUnavailableTimeslots/{service}/" })
+	@GetMapping(value = { "/getUnavailableTimeslots/{service}", "/getUnavailableTimeslots/{service}/" })
 	public List<TimeslotDto> getUnavailableTimeslots(@PathVariable("service") String serviceName, 
 			@RequestParam String numWeeks)
 			throws Exception {
