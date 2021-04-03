@@ -75,7 +75,7 @@
                 <a href="#">Privacy Policy</a>
               </li>
               <li class="list-inline-item">
-                <a href="#">Terms of Use</a>
+                <a @click="logOut()">Terms of Use</a>
               </li>
             </ul>
           </div>
@@ -90,6 +90,13 @@
 export default {
   name: 'home',
   components: {
+  },
+  methods: {
+    logOut: function() {
+      this.$cookie.delete('email')
+      localStorage.removeItem('loggedIn')
+      window.location.href = "/"
+    },
   }
 }
 </script>
