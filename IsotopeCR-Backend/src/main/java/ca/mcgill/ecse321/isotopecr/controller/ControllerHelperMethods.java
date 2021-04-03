@@ -185,4 +185,15 @@ public class ControllerHelperMethods {
 		}
 		return aptmtsDto;
 	}
+	
+	public static List<TimeslotDto> convertTimeslotsToDto(List<Timeslot> timeslots) throws Exception {
+		if (timeslots == null) {
+			throw new IllegalArgumentException("There is no appointments.");
+		}
+		List<TimeslotDto> slotsDto = new ArrayList<TimeslotDto>();
+		for (Timeslot slot : timeslots) {
+			slotsDto.add(convertToDto(slot));
+		}
+		return slotsDto;
+	}
 }

@@ -1,10 +1,35 @@
 <template>
   <div id="bookappointment" class="container">
-    <!-- <button class="button" :disabled="isPrevDisabled()">Previous Week</button> -->
-    <!-- <button class="button" :disabled="isDisabled('1')">Next Week</button> -->
-    <b-button id="1" @click="isDisabled()">Next Week</b-button>
-    <div></div>
-    <table class="styled-table" @click="selectValue($event)">
+    <b-card title="Book Appointment" tag="article" class="card">
+      <b-card-text>
+        Book an appointment with one of our highly trained technicians!
+      </b-card-text>
+      <div class="text-label">Vehicle</div>
+      <select v-model="licensePlate">
+        <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
+          {{ vehicle.licensePlate }}
+        </option>
+        </select>
+      <div class="text-label">Service</div>
+      <select v-model="serviceName">
+        <option v-for="service in services" v-bind:value="service.serviceName">
+          {{ service.serviceName }}
+        </option>
+      </select>
+      <div class="text-label">
+        In how many weeks do you want your appointment?
+      </div>
+      <input type="text" v-model="numWeeks" placeholder="0 for this week" />
+      <div></div>
+      <b-button href="#" variant="primary" class="card-button" @click="getUnavailableTimeslots(serviceName, numWeeks)"
+        >View Availabilities</b-button
+      >
+    </b-card>
+    <b-card title="Week of" tag="article" class="card">
+      <div>{{ weekStart }}</div>
+    </b-card>
+
+    <table class="styled-table">
       <thead>
         <tr>
           <th>Monday</th>
@@ -18,130 +43,921 @@
         <tr>
           <td>
             <div>
-              <button class="button" :disabled="isDisabled('1')">Send</button>
+              <button
+                class="button"
+                :disabled="isDisabled('6')"
+                @click="selectValue($event)"
+              >
+                9:00
+              </button>
             </div>
           </td>
           <td>
             <div>
-              <b-button id="1" @click="isDisabled()">check</b-button>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                9:00
+              </button>
             </div>
           </td>
-
-          <td>9:00</td>
-          <td>9:00</td>
-          <td>9:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                9:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                9:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                9:00
+              </button>
+            </div>
+          </td>
         </tr>
-        <td>9:30</td>
-        <td>9:30</td>
-        <td>9:30</td>
-        <td>9:30</td>
-        <td>9:30</td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              9:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              9:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              9:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              9:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              9:30
+            </button>
+          </div>
+        </td>
         <tr>
-          <td>10:00</td>
-          <td>10:00</td>
-          <td>10:00</td>
-          <td>10:00</td>
-          <td>10:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                10:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                10:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                10:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                10:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                10:00
+              </button>
+            </div>
+          </td>
         </tr>
-        <td>10:30</td>
-        <td>10:30</td>
-        <td>10:30</td>
-        <td>10:30</td>
-        <td>10:30</td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              10:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              10:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              10:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              10:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              10:30
+            </button>
+          </div>
+        </td>
         <tr>
-          <td>11:00</td>
-          <td>11:00</td>
-          <td>11:00</td>
-          <td>11:00</td>
-          <td>11:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                11:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                11:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                11:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                11:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                11:00
+              </button>
+            </div>
+          </td>
         </tr>
-        <td>11:30</td>
-        <td>11:30</td>
-        <td>11:30</td>
-        <td>11:30</td>
-        <td>11:30</td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              11:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              11:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              11:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              11:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              11:30
+            </button>
+          </div>
+        </td>
         <tr>
-          <td>12:00</td>
-          <td>12:00</td>
-          <td>12:00</td>
-          <td>12:00</td>
-          <td>12:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                12:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                12:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                12:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                12:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                12:00
+              </button>
+            </div>
+          </td>
         </tr>
-        <td>12:30</td>
-        <td>12:30</td>
-        <td>12:30</td>
-        <td>12:30</td>
-        <td>12:30</td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              12:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              12:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              12:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              12:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              12:30
+            </button>
+          </div>
+        </td>
         <tr>
-          <td>1:00</td>
-          <td>1:00</td>
-          <td>1:00</td>
-          <td>1:00</td>
-          <td>1:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                1:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                1:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                1:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                1:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                1:00
+              </button>
+            </div>
+          </td>
         </tr>
-        <td>1:30</td>
-        <td>1:30</td>
-        <td>1:30</td>
-        <td>1:30</td>
-        <td>1:30</td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              1:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              1:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              1:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              1:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              1:30
+            </button>
+          </div>
+        </td>
         <tr>
-          <td>2:00</td>
-          <td>2:00</td>
-          <td>2:00</td>
-          <td>2:00</td>
-          <td>2:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                2:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                2:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                2:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                2:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                2:00
+              </button>
+            </div>
+          </td>
         </tr>
-        <td>2:30</td>
-        <td>2:30</td>
-        <td>2:30</td>
-        <td>2:30</td>
-        <td>2:30</td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              2:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              2:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              2:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              2:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              2:30
+            </button>
+          </div>
+        </td>
         <tr>
-          <td>3:00</td>
-          <td>3:00</td>
-          <td>3:00</td>
-          <td>3:00</td>
-          <td>3:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                3:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                3:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                3:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                3:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                3:00
+              </button>
+            </div>
+          </td>
         </tr>
-        <td>3:30</td>
-        <td>3:30</td>
-        <td>3:30</td>
-        <td>3:30</td>
-        <td>3:30</td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              3:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              3:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              3:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              3:30
+            </button>
+          </div>
+        </td>
+        <td>
+          <div>
+            <button
+              class="button"
+              :disabled="isDisabled('2')"
+              @click="selectValue($event)"
+            >
+              3:30
+            </button>
+          </div>
+        </td>
         <tr>
-          <td>4:00</td>
-          <td>4:00</td>
-          <td>4:00</td>
-          <td>4:00</td>
-          <td>4:00</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:00
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:00
+              </button>
+            </div>
+          </td>
         </tr>
         <tr>
-          <td>4:30</td>
-          <td>4:30</td>
-          <td>4:30</td>
-          <td>4:30</td>
-          <td>4:30</td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:30
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:30
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:30
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:30
+              </button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button
+                class="button"
+                :disabled="isDisabled('2')"
+                @click="selectValue($event)"
+              >
+                4:30
+              </button>
+            </div>
+          </td>
         </tr>
-
-        <!-- and so on... -->
       </tbody>
     </table>
 
-    Selected: {{ selected }}
+    <b-card title="Confirm Booking" tag="article" class="card">
+      <div>Selected Time: {{ selected }}</div>
+      <b-button
+        href="#"
+        variant="primary"
+        class="card-button"
+        @click="createAppointment(licensePlate, serviceName, startTime, date)"
+      >
+        Book Appointment
+      </b-button>
+    </b-card>
 
     <div class="input_container" id="appointmentInputs">
       <div class="small_text left_text brand_color_text">Vehicle:</div>
-      <select v-model="licensePlate">
-        <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
-          {{ vehicle.licensePlate }}
-        </option>
-      </select>
+      
       <div class="small_text left_text brand_color_text">Service:</div>
-      <select v-model="serviceName">
-        <option v-for="service in services" v-bind:value="service.serviceName">
-          {{ service.serviceName }}
-        </option>
-      </select>
+      
       <div class="small_text left_text brand_color_text">Start Time:</div>
       <input
         type="text"
@@ -174,11 +990,17 @@ export default {
 </script>
 
 <style>
+.container {
+  display: grid;
+}
+.card {
+  margin-top: 1.5rem;
+}
 .styled-table {
   border-collapse: collapse;
   margin: 25px 0;
   font-size: 0.9em;
-  font-family: sans-serif;
+  font-family: "Avenir Black";
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   background-color: white;
@@ -197,14 +1019,26 @@ export default {
 }
 .styled-table thead {
   background-color: #f3f3f3;
+  font-size: 1rem;
 }
 .button {
   background-color: white;
   font-family: sans-serif;
   border: none;
 }
+.button:hover:enabled {
+  color: rgb(47, 93, 219);
+}
 .button:disabled {
   color: rgb(214, 61, 61);
+}
+
+.card-button {
+  margin-top: 1rem;
+}
+
+.text-label {
+  margin-top: 1rem;
 }
 
 #appointmentInputs {

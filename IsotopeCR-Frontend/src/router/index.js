@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
 
-import Appointment from '@/components/Appointment'
 import PastAppointment from '@/components/PastAppointment'
 import BookAppointment from '@/components/BookAppointment.vue'
 import FutureAppointment from '@/components/FutureAppointment'
@@ -46,11 +45,7 @@ export default new Router({
       name: 'Login',
       component: Login
     },
-    {
-      path:"/appointment",
-      name:"Appointment",
-      component: Appointment
-    },
+
     {
       path:"/pastappointment",
       name:"PastAppointment",

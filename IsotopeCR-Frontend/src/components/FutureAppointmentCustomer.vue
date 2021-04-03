@@ -1,5 +1,6 @@
 <template>
-    <div id="futureappointment/customer" class="container">        
+    <div id="futureappointment/customer" class="container">
+        
         <table class= "pastappointmentc">
         <thead>
         <tr>
@@ -30,12 +31,6 @@
 </template>
 
 <script src ="./futureAppointmentCustomer.js">
-
-export default {
-    name: 'FutureAppointmentCustomer',
-
-  
-}
 </script>
 
 <style>

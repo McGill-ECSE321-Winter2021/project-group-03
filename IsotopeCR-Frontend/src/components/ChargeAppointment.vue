@@ -1,5 +1,5 @@
 <template>
-  <div id="cancelappointment">  
+  <div id="chargeappointment">  
     <table class="table table-striped table-hover">  
       <thead>         
         <tr>        

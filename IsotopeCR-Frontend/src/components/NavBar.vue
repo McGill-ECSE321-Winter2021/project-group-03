@@ -1,8 +1,6 @@
 import 'bulma/css/bulma.css';
 
 <template>
-
-
 <div>
     <div style="text-align: right;" id="header"><b>Contact Us at <a href="tel:555-555-5555">555-555-5555</a></b></div>
     <b-navbar type="dark" variant="dark">
@@ -14,7 +12,12 @@ import 'bulma/css/bulma.css';
             </b-navbar-nav>
 
             <b-navbar-nav class="ml-auto">
-                <b-nav-item v-if="loggedIn" @click="routeTo('appointment')">Appointment</b-nav-item>
+                <b-nav-item-dropdown v-if="loggedIn && isCustomer" text="Appointment">
+                  <b-dropdown-item @click="routeTo('bookappointment')">Book Appointment</b-dropdown-item>
+                  <b-dropdown-item @click="routeTo('futureappointment')">Upcoming Appointment</b-dropdown-item>
+                  <b-dropdown-item @click="routeTo('pastappointment')">Appointment History</b-dropdown-item>
+                  <b-dropdown-item @click="routeTo('cancelappointment')">Cancel Appointment</b-dropdown-item>
+                </b-nav-item-dropdown>
                 <b-nav-item v-if="!loggedIn" @click="routeTo('login')">Log In</b-nav-item>
                 <b-nav-item v-if="!loggedIn" @click="routeTo('signup')">Sign Up</b-nav-item>
                 <b-nav-item v-if="loggedIn" @click="logOut()" >Log Out</b-nav-item>
@@ -34,6 +37,18 @@ export default {
             return true
         }
         return false
+    },
+    isCustomer() {
+        if (localStorage.getItem('loggedIn') == "Customer") {
+            return true
+        }
+        return false
+    },
+    isAdmin() {
+        if (localStorage.getItem('loggedIn') == "Admin") {
+            return true
+        }
+        return false
     }
   },
   methods: {
@@ -42,6 +57,7 @@ export default {
     },
     logOut: function() {
       this.$cookie.delete('email')
+      localStorage.removeItem('loggedIn')
       window.location.href = "/"
     }
   }

@@ -19,6 +19,10 @@ function AppointmentDto(date, starttime, customer, vehicle, service, technician)
     this.technician = technician;
 }
 
+function TimeslotDto(time, date) {
+	this.time = time;
+    this.date = date;
+}
 export default {
     name: 'bookappointment',
     data() {
@@ -26,66 +30,96 @@ export default {
             vehicles: [],
             services: [],
             licensePlate: '',
-            date: '',
+            date: '2021-05-03',
             startTime: '',
             serviceName: '',
             errorMessage: '',
             response: [],
             selected: null,
-            fields: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-          items: [
-            { Monday: '9:00', Tuesday: '9:00', Wednesday: '9:00', Thursday: '9:00', Friday: '9:00'},
-            { Monday: '9:30', Tuesday: '9:30', Wednesday: '9:30', Thursday: '9:30', Friday: '9:30'},
-          ]
+            numWeeks: '',
+            weekStart: 'Mon Jan 1st 2021',
         }
     },
 
     created: function () {
-        AXIOS.get('/api/profile/customer/vehicle/get-all/'+this.$cookie.get('email'))
-        .then(response => {                              
-            this.vehicles = response.data
-        })
-        .catch(e => {
-            if (e.response) {
-                console.log(e.response.data)
-                console.log(e.response.status)
-            }
-            this.errorMessage = e.response.data
-        }),
-
+        AXIOS.get('/api/profile/customer/vehicle/get-all/' + this.$cookie.get('email'))
+            .then(response => {
+                this.vehicles = response.data
+            })
+            .catch(e => {
+                if (e.response) {
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                }
+                this.errorMessage = e.response.data
+            })
         AXIOS.get('/api/autorepairshop/service/get-all')
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.services=(response.data) //get-all returns a lit of services
-          })
-          .catch(e => {
-            if (e.response) {
-                console.log(e.response.data)
-                console.log(e.response.status)
-            }
-            this.errorMessage = e.response.data
-        })
+            .then(response => {
+                // JSON responses are automatically parsed.
+                this.services = (response.data) //get-all returns a lit of services
+            })
+            .catch(e => {
+                if (e.response) {
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                }
+                this.errorMessage = e.response.data
+            })
     },
 
     methods: {
-        createAppointment: function(license,serviceName,startTime,date){
-            if(license == "" || serviceName=="" || startTime==""||date=="" ) {
-              this.errorMessage = 'Input cannot be empty.'
-              return false
+        createAppointment: function (licensePlate, serviceName, startTime, date) {
+            if (licensePlate == "" || serviceName == "" || startTime == "" || date == "") {
+                this.errorMessage = 'Input cannot be empty.'
+                return false
             } else {
-                
-                AXIOS.post(backendUrl+'/api/appointment/create/'+ this.licensePlate + '/' + this.serviceName, {},{
-                params:{
-                   start:startTime,
-                   date:date
-                }})
 
-                .then(
-                    (response) => {
-                        console.log("Appointment booked created successfully!")
-                        console.log(response.data)
-                        this.errorMessage = ''
-                    })
+                AXIOS.post(backendUrl + '/api/appointment/create/' + this.licensePlate + '/' + this.serviceName, {}, {
+                    params: {
+                        start: startTime,
+                        date: date
+                    }
+                })
+
+                    .then(
+                        (response) => {
+                            console.log("Appointment booked created successfully!")
+                            console.log(response.data)
+                            this.errorMessage = ''
+                        })
+                    .catch(e => {
+                        if (e.response) {
+                            console.log(e.response)
+                            console.log(e.response.data)
+                            console.log(e.response.status)
+                        }
+                    });
+
+            }
+
+        },
+        getUnavailableTimeslots: function (serviceName, numWeeks) {
+            console.log("called")
+            if (serviceName == "") {
+                this.errorMessage = 'Please select a service'
+                return false
+            } else if (numWeeks == "") {
+                this.errorMessage = 'Please enter the number of weeks'
+                return false
+            } else {
+                console.log(serviceName);
+                console.log(numWeeks)
+                AXIOS.get(backendUrl + '/api/appointmentgetUnavailableTimeslots/' + this.serviceName, {}, {
+                    params: {
+                        numWeeks: numWeeks
+                    }
+                })
+                    .then(
+                        (response) => {
+                            console.log("Timeslots retrieved successfully!")
+                            console.log(response.data)
+                            this.errorMessage = ''
+                        })
                     .catch(e => {
                         if (e.response) {
                             console.log(e.response)
@@ -98,17 +132,19 @@ export default {
             }
 
         },
-        selectValue (event) {
-            this.selected = event.target.innerHTML;
+        selectValue(event) {
+            this.selected = event.target.innerHTML.toString().trim();
+            console.log(this.selected + ":00");
+            this.startTime = this.selected + ":00";
         },
-        isDisabled: function(id) {
-            if(id=='1'){
+        isDisabled: function (id) {
+            if (id == '1') {
                 return true;
             }
             return false;
         },
-        // isPrevDisa
-        
+
+
     }
 
 }
