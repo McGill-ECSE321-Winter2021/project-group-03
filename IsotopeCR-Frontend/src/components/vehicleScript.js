@@ -25,14 +25,14 @@ export default {
             model: '',
             brand: '',
             errorVehicle: '',
-            response:[]
+            response: []
         }
     },
 
     methods: {
         displayVehicle: function (email) {
-            AXIOS.get('/api/profile/customer/vehicle/get-all/'+email)
-                .then(response => {                              
+            AXIOS.get('/api/profile/customer/vehicle/get-all/' + email)
+                .then(response => {
                     this.vehicles = response.data
                     alert("Vehicles displayed!")
                 })

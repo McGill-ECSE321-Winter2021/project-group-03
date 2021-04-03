@@ -20,7 +20,7 @@ function AppointmentDto(date, starttime, customer, vehicle, service, technician)
 }
 
 function TimeslotDto(time, date) {
-	this.time = time;
+    this.time = time;
     this.date = date;
 }
 export default {

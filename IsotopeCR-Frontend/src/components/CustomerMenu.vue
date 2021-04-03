@@ -2,23 +2,43 @@
   <div>
     <div class="input">
       <b-card title="My profile" class="card">
-        <b-button variant="primary" class="button" @click="routeTo('profileInfo')">
+        <b-button
+          variant="primary"
+          class="button"
+          @click="routeTo('profileInfo')"
+        >
           View Profile
         </b-button>
       </b-card>
     </div>
     <div class="input">
       <b-card title="Appointments" class="card">
-        <b-button variant="primary" class="button" @click="routeTo('bookAppointment')">
+        <b-button
+          variant="primary"
+          class="button"
+          @click="routeTo('bookAppointment')"
+        >
           Book Appointment
         </b-button>
-        <b-button variant="primary" class="button" @click="routeTo('cancelAppointment')">
+        <b-button
+          variant="primary"
+          class="button"
+          @click="routeTo('cancelAppointment')"
+        >
           Cancel Appointment
         </b-button>
-        <b-button variant="primary" class="button" @click="routeTo('futureAppointments')">
+        <b-button
+          variant="primary"
+          class="button"
+          @click="routeTo('futureAppointments')"
+        >
           Upcoming Appointments
         </b-button>
-        <b-button variant="primary" class="button" @click="routeTo('pastAppointments')">
+        <b-button
+          variant="primary"
+          class="button"
+          @click="routeTo('pastAppointments')"
+        >
           Appointment History
         </b-button>
       </b-card>
@@ -28,13 +48,13 @@
 
 <script>
 export default {
-    name: 'CustomerMenu',
-    methods: {
-        routeTo: function (to) {
-        location.href='http://127.0.0.1:8087/'+to;
-    }
-  }
-}
+  name: "CustomerMenu",
+  methods: {
+    routeTo: function (to) {
+      location.href = "http://127.0.0.1:8087/" + to;
+    },
+  },
+};
 </script>
 
 <style>

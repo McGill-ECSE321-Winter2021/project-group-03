@@ -49,12 +49,12 @@ export default {
                     }
                 })
                     .then((response) => {
-                            console.log("response got");
-                            console.log(response.data);
-                            this.error = '';
-                        }
+                        console.log("response got");
+                        console.log(response.data);
+                        this.error = '';
+                    }
                     )
-                    .catch((e) => {                       
+                    .catch((e) => {
                         if (e.response) {
                             console.log(e.response)
                             console.log(e.response.data)

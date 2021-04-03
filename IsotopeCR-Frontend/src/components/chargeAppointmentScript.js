@@ -31,7 +31,7 @@ export default {
     },
 
     created: function(){      
-        
+        this.sessionemail = this.$cookie.email
     },
 
     methods: {
@@ -64,7 +64,7 @@ export default {
                                 .then(response =>{
                                     this.pastappointments = response.data
                                     this.selected = []
-                                })                       
+                                })                
                         }
                     )
                     .catch(e => {
