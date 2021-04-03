@@ -6,6 +6,7 @@ public class ProfileDto {
 	private String lastName;
 	private String phoneNumber;
 	private String isOwner;
+	private String type;
 
 	public ProfileDto() {
 	}
@@ -36,11 +37,19 @@ public class ProfileDto {
 		return isOwner;
 	}
 	
+	public String getType() {
+		return type;
+	}
+	
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 	
 	public void setIsOwner(String isOwner) {
 		this.isOwner = isOwner;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 }
