@@ -120,15 +120,15 @@ public class AppointmentController {
 	 */
 	@GetMapping(value = { "getUnavailableTimeslots/{service}", "getUnavailableTimeslots/{service}/" })
 	public List<TimeslotDto> getUnavailableTimeslots(@PathVariable("service") String serviceName, 
-			@RequestParam Integer numWeeks)
+			@RequestParam String numWeeks)
 			throws Exception {
 		try {
-			LocalDate today = LocalDate.now().plusWeeks(numWeeks);
+			LocalDate today = LocalDate.now().plusWeeks(Integer.parseInt(numWeeks));
 			if (today.getDayOfWeek()==DayOfWeek.SATURDAY || today.getDayOfWeek()==DayOfWeek.SUNDAY) {
 				today.plusDays(3);
 			}
 			LocalDate start;
-			if(numWeeks!=0) {
+			if(Integer.parseInt(numWeeks) !=0) {
 				start = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 			} else {
 				start = today;

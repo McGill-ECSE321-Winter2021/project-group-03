@@ -19,6 +19,10 @@ function AppointmentDto(date, starttime, customer, vehicle, service, technician)
     this.technician = technician;
 }
 
+function TimeslotDto(time, date) {
+	this.time = time;
+    this.date = date;
+}
 export default {
     name: 'bookappointment',
     data() {
@@ -103,9 +107,11 @@ export default {
                 this.errorMessage = 'Please enter the number of weeks'
                 return false
             } else {
-                AXIOS.get(backendUrl + '/api/appointment/getUnavailableTimeslots/service/' + this.serviceName, {}, {
+                console.log(serviceName);
+                console.log(numWeeks)
+                AXIOS.get(backendUrl + '/api/appointment/getUnavailableTimeslots/' + this.serviceName, {}, {
                     params: {
-                        numWeeks: this.numWeeks
+                        numWeeks: parseInt(this.numWeeks)
                     }
                 })
                     .then(
