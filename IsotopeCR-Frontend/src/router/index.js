@@ -28,6 +28,8 @@ import Profile from '@/components/AllProfile.vue'
 import ProfileInfo from '@/components/ProfileInfo.vue'
 import TechAndService from '@/components/TechnicianAndService.vue'
 
+import Calendar from '@/components/Calendar.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -142,6 +144,11 @@ export default new Router({
       path: "/techAndService",
       name: "TechAndService",
       component: TechAndService  
+    },
+    {
+      path: "/calendar",
+      name: "Calendar",
+      component: Calendar  
     }
   ]
 })

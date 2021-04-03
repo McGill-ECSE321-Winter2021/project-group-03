@@ -1,6 +1,9 @@
 <template>
   <div id="app">
         <NavBar/>
+          <script src="https://unpkg.com/vue"></script>
+          <script src="https://unpkg.com/vue-cal"></script>
+          <link href="https://unpkg.com/vue-cal/dist/vuecal.css" rel="stylesheet">
         <router-view/>        
   </div>
 </template>
