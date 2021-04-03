@@ -29,6 +29,7 @@
         </tr>
         </thead>
         </table>
+        <p v-if="error" style="color: red">{{ error }}</p>
     </div>
 </template>
 

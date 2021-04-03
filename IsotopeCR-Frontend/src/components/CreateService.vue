@@ -70,7 +70,7 @@
         </div>
       </div>
       <button class="btn btn-danger" @click="createService(serviceName, duration, price, resourceType, frequency)">Create Service</button>
-      <p>{{ errorService }}</p>
+      <p v-if="errorService" style="color: red">{{ errorService }}</p>
     </div>
 
         <div id="deleteService">
@@ -88,7 +88,7 @@
         </div>
       </div>
       <button class="btn btn-danger" @click="deleteService(deletedServiceName)">Delete Service</button>
-      <p>{{ errorService }}</p>
+      <p v-if="errorService" style="color: red">{{ errorService }}</p>
     </div>
       
       <hr>
@@ -107,7 +107,7 @@ src="./createService.js">
 
 <style scoped>
 #createService {
-  padding-top: 20vh;
+  padding-top: 5vh;
 }
 .input {
   top: 20px;

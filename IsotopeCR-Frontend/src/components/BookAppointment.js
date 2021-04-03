@@ -10,13 +10,13 @@ var AXIOS = axios.create({
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
-   this.date=date;
-   this.starttime=starttime;
-   this.customer = customer;
-   this.vehicle = vehicle;
-   this.service = service;
-   this.technician = technician;
+function AppointmentDto(date, starttime, customer, vehicle, service, technician) {
+    this.date = date;
+    this.starttime = starttime;
+    this.customer = customer;
+    this.vehicle = vehicle;
+    this.service = service;
+    this.technician = technician;
 }
 
 export default {
@@ -84,10 +84,17 @@ export default {
                     (response) => {
                         console.log("Appointment booked created successfully!")
                         console.log(response.data)
-                        this.error = ''
-                    }
-                )
-                  
+                        this.errorMessage = ''
+                    })
+                    .catch(e => {
+                        if (e.response) {
+                            console.log(e.response)
+                            console.log(e.response.data)
+                            console.log(e.response.status)
+                        }
+                        this.errorMessage = e.response.data;
+                    });
+
             }
 
         },

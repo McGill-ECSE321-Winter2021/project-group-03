@@ -40,7 +40,7 @@
         </div>
       </div>
       <button class="btn btn-danger" @click="createResource(resourceType, maxAvailable)">Create Resource</button>
-      <p>{{ errorResource }}</p>
+      <p v-if="errorResource" style="color: red">{{ errorResource }}</p>
     </div>
 
         <div id="deleteResource">
@@ -58,7 +58,7 @@
         </div>
       </div>
       <button class="btn btn-danger" @click="deleteResource(deletedResourceType)">Delete Resource</button>
-      <p>{{ errorResource }}</p>
+      <p v-if="errorResource" style="color: red">{{ errorResource }}</p>
     </div>
       
       <hr>

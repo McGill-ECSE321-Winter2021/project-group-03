@@ -22,6 +22,7 @@ export default {
     data() {
         return {
             profile:'',
+            myType: '',
             firstName: '',
             lastName: '',
             email: '',
@@ -39,12 +40,14 @@ export default {
     created: function(){
         console.log(this.$cookie.get('email'))
         this.email = this.$cookie.get('email')
+        console.log(localStorage.getItem('loggedIn'))
+        this.myType = localStorage.getItem('loggedIn')
     },
 
     methods: {
         displayProfile: function (email) {
             if (email == "") {
-                this.error = "Please enter your email";
+                this.error = "Session passed, please relogin";
             } else {
                 AXIOS.get(backendUrl + '/api/profile/profiles/get/' + email)
                     .then(
@@ -61,12 +64,12 @@ export default {
                         }
                     )
                     .catch(e => {
-                        var errorMsg = "Please enter a valid email"
                         if (e.response) {
+                            console.log(e.response)
                             console.log(e.response.data)
                             console.log(e.response.status)
-                        }
-                        this.error = errorMsg;
+                          }
+                          this.error = e.response.data;
                     });
             }
         },
@@ -90,12 +93,11 @@ export default {
                         }
                     )
                     .catch(e => {
-                        var errorMsg = "Please enter a valid Phone Number"
                         if (e.response) {
                             console.log(e.response.data)
                             console.log(e.response.status)
                         }
-                        this.editError = errorMsg;
+                        this.editError = e.response.data
                     });
             }
         },
@@ -121,12 +123,11 @@ export default {
                         }
                     )
                     .catch(e => {
-                        var errorMsg = "Please enter a valid password"
                         if (e.response) {
                             console.log(e.response.data)
                             console.log(e.response.status)
                         }
-                        this.editError = errorMsg;
+                        this.editError = e.response.data
                     });
             }
         },
