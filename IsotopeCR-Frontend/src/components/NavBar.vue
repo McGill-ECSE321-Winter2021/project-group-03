@@ -17,6 +17,8 @@ import 'bulma/css/bulma.css';
         </b-navbar-nav>
 
             <b-navbar-nav class="ml-auto">
+                <b-nav-item v-if="loggedIn && isAdmin" @click="routeTo('techAndService')">Technician & Service</b-nav-item>
+
                 <b-nav-item v-if="loggedIn && isAdmin" @click="routeTo('createresource')">Resource Management</b-nav-item>
 
                 <b-nav-item v-if="loggedIn && isAdmin" @click="routeTo('createservice')">Service Management</b-nav-item>

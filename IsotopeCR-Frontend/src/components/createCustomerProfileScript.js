@@ -24,6 +24,7 @@ export default {
             phoneNumber: "",
             password: "",
             error: "",
+            confirmPassword: ""
         }
     },
     methods: {

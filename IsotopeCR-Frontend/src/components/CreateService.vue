@@ -1,7 +1,7 @@
 <template>
   <div id="service" class="container">
     <div class="inner_container shadow">
-      <br>
+      <br />
       <div class="large_text"><b>Offered Services</b></div>
 
       <hr />
@@ -67,28 +67,33 @@
             </div>
           </div>
         </div>
-        <button
-          class="btn btn-danger"
-          @click="
-            createService(serviceName, duration, price, resourceType, frequency)
-          "
-        >
-          Create Service
-        </button>
         <p v-if="errorService" style="color: red">{{ errorService }}</p>
       </div>
-      <button class="btn btn-danger" @click="createService(serviceName, duration, price, resourceType, frequency)">Create Service</button>
+      <button
+        class="btn btn-danger"
+        @click="
+          createService(serviceName, duration, price, resourceType, frequency)
+        "
+      >
+        Create Service
+      </button>
       <p v-if="errorService" style="color: red">{{ errorService }}</p>
-    </div>
-        <div id="deleteService">
+    <div id="deleteService">
       <h3>Delete Service</h3>
-      <select style="width: 150px; height: 36px;" class="form-select" v-model="serviceName">
+      <select
+        style="width: 150px; height: 36px"
+        class="form-select"
+        v-model="serviceName"
+      >
         <option v-for="service in services" v-bind:value="service.serviceName">
           {{ service.serviceName }}
         </option>
       </select>
-      <button class="btn btn-danger" @click="deleteService()">Delete Service</button>
+      <button class="btn btn-danger" @click="deleteService()">
+        Delete Service
+      </button>
       <p v-if="errorService" style="color: red">{{ errorService }}</p>
+      </div>
     </div>
   </div>
 </template>

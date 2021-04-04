@@ -56,7 +56,7 @@ export default {
     },
 
     methods: {
-        futureappointmentv: function (licenseplate) {
+        futureappointmentv: function () {
 
             console.log(this.licensePlate)
             AXIOS.get(backendUrl + '/api/appointment/futureappointment/vehicle/' + this.licensePlate)
