@@ -38,36 +38,40 @@ export default {
             numWeeks: '',
             weekStart: '',
             days: 0,
-            disabledNum: 2
+            disabledNum: 2,
+            email: ''
         }
     },
 
 
 
     created: function () {
-        AXIOS.get('/api/profile/customer/vehicle/get-all/' + this.$cookie.get('email'))
-            .then(response => {
-                this.vehicles = response.data
-            })
-            .catch(e => {
-                if (e.response) {
-                    console.log(e.response.data)
-                    console.log(e.response.status)
-                }
-                this.errorMessage = e.response.data
-            })
-        AXIOS.get('/api/autorepairshop/service/get-all')
-            .then(response => {
-                // JSON responses are automatically parsed.
-                this.services = (response.data) //get-all returns a lit of services
-            })
-            .catch(e => {
-                if (e.response) {
-                    console.log(e.response.data)
-                    console.log(e.response.status)
-                }
-                this.errorMessage = e.response.data
-            })
+        if (this.email != '') {
+            AXIOS.get('/api/profile/customer/vehicle/get-all/' + this.email)
+                .then(response => {
+                    this.vehicles = response.data
+                })
+                .catch(e => {
+                    if (e.response) {
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                    }
+                    this.errorMessage = e.response.data
+                })
+
+            AXIOS.get('/api/autorepairshop/service/get-all')
+                .then(response => {
+                    // JSON responses are automatically parsed.
+                    this.services = (response.data) //get-all returns a lit of services
+                })
+                .catch(e => {
+                    if (e.response) {
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                    }
+                    this.errorMessage = e.response.data
+                })
+        }
     },
     methods: {
         getUnavailableTimeslots: function () {
@@ -149,7 +153,6 @@ export default {
                             console.log("Appointment booked created successfully!")
                             console.log(response.data)
                             this.errorMessage = ''
-                            window.location.href = "/futureappointment/customer";
                         })
                     .catch(e => {
                         if (e.response) {
@@ -158,7 +161,7 @@ export default {
                             console.log(e.response.status)
                         }
                     });
-                
+
             }
 
         },
@@ -174,9 +177,32 @@ export default {
             }
             return false;
         },
+        updateEmail: function (email) {
+            this.email = email;
+            AXIOS.get('/api/profile/customer/vehicle/get-all/' + this.email)
+                .then(response => {
+                    this.vehicles = response.data
+                })
+                .catch(e => {
+                    if (e.response) {
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                    }
+                    this.errorMessage = e.response.data
+                })
 
-
-
-    }
-
+            AXIOS.get('/api/autorepairshop/service/get-all')
+                .then(response => {
+                    // JSON responses are automatically parsed.
+                    this.services = (response.data) //get-all returns a lit of services
+                })
+                .catch(e => {
+                    if (e.response) {
+                        console.log(e.response.data)
+                        console.log(e.response.status)
+                    }
+                    this.errorMessage = e.response.data
+                })
+        }
+    },
 }
