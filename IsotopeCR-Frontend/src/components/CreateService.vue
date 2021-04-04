@@ -67,7 +67,6 @@
             </div>
           </div>
         </div>
-        <p v-if="errorService" style="color: red">{{ errorService }}</p>
       </div>
       <button
         class="btn btn-danger"
@@ -77,7 +76,7 @@
       >
         Create Service
       </button>
-      <p v-if="errorService" style="color: red">{{ errorService }}</p>
+      <p v-if="errorCreate" style="color: red">{{ errorCreate }}</p>
     <div id="deleteService">
       <h3>Delete Service</h3>
       <select
@@ -92,7 +91,7 @@
       <button class="btn btn-danger" @click="deleteService()">
         Delete Service
       </button>
-      <p v-if="errorService" style="color: red">{{ errorService }}</p>
+      <p v-if="errorDelete" style="color: red">{{ errorDelete }}</p>
       </div>
     </div>
   </div>

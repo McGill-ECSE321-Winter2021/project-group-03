@@ -30,6 +30,8 @@ export default {
       resource: "",
       resourceType: "",
       errorService: '',
+      errorCreate: '',
+      errorDelete:'',
       response: []
     }
   },
@@ -37,7 +39,6 @@ export default {
   created: function () {
     AXIOS.get('/api/autorepairshop/service/get-all')
       .then(response => {
-        // JSON responses are automatically parsed.
         this.services = (response.data) //get-all returns a lit of services
       })
       .catch(e => {
@@ -69,7 +70,7 @@ export default {
           this.duration = ''
           this.frequency = ''
           this.price = ''
-          this.errorService = ''
+          this.errorCreate = ''
           this.serviceName = ''
           this.resourceType = ''
           this.deletedServiceName = ''
@@ -80,7 +81,7 @@ export default {
             console.log(e.response.data)
             console.log(e.response.status)
           }
-          this.errorService = e.response.data;
+          this.errorCreate = e.response.data;
         });
     },
 
@@ -89,7 +90,6 @@ export default {
       AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete/' + this.serviceName)
         .then(response => {
           console.log(response)
-          // JSON responses are automatically parsed.
           this.deletedServiceName = ''
           this.duration = ''
           this.frequency = ''
@@ -98,12 +98,12 @@ export default {
           this.resourceType = ''
           this.services = AXIOS.get('/api/autorepairshop/service/get-all')
             .then(response => {
-              // JSON responses are automatically parsed.
               this.services = (response.data) //get-all returns a lit of services
             })
             .catch(e => {
-              this.errorService = e.response.data
+              this.errorDelete = e.response.data
             })
+          this.errorDelete = ''
         })
         .catch(e => {
           if (e.response) {
@@ -111,7 +111,11 @@ export default {
             console.log(e.response.data)
             console.log(e.response.status)
           }
-          this.errorService = e.response.data;
+          if (e.response.data.length < 30){
+            this.errorDelete = e.response.data
+          } else {
+            this.errorDelete = "The service is occupied by Appointments, cannot be deleted"
+          }
         });
     }
   },

@@ -1329,7 +1329,7 @@ public class TestAppointmentService {
 
 		assertNotNull(invoice);
 		assertEquals(service1.getPrice(), invoice.getCost());
-		assertEquals(false, invoice.getIsPaid());
+		assertEquals(true, invoice.getIsPaid());
 		assertEquals(String.valueOf(service1.getPrice() * appointment.getAppointmentID().hashCode()),
 				invoice.getInvoiceID());
 	}
