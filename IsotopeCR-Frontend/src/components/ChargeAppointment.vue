@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div id="chargeappointment">  
     
     <div class="input" >
@@ -13,16 +12,6 @@
       <thead>   
         
         <tr>        
-=======
-  <div id="chargeappointment">
-      
-    <table class="table table-striped table-hover">
-        
-      <thead>
-               
-        <tr>
-                 
->>>>>>> a23de245116ea03266f74f3a17f660a088f94066
           <th>
             <label class="form-checkbox">
               <input type="checkbox" /><i class="form-icon"></i> </label
@@ -40,7 +29,6 @@
           <th>Service</th>
                           
           <th>Technician</th>
-<<<<<<< HEAD
           <th>IsCharged</th>         
         </tr>    
       </thead>        
@@ -52,28 +40,6 @@
             <i class="form-icon"></i>
         </label>
         </td>
-=======
-          <th>IsCharged</th>
-                   
-        </tr>
-            
-      </thead>
-              
-      <tbody>
-                
-        <tr v-for="aptmt in futureappointments">
-                                 
-          <td>
-            <label class="form-checkbox">
-              <input
-                type="checkbox"
-                :value="aptmt.appointmentID"
-                v-model="selected"
-              />
-              <i class="form-icon"></i>
-            </label>
-          </td>
->>>>>>> a23de245116ea03266f74f3a17f660a088f94066
                             
           <td>{{ aptmt.timeslots[0].date }}</td>
                             
@@ -85,7 +51,6 @@
                             
           <td>{{ aptmt.service.serviceName }}</td>
 
-<<<<<<< HEAD
         <td>
          {{ aptmt.technician.firstName + "  " + aptmt.technician.lastName }}
         </td>
@@ -101,30 +66,6 @@
     <div>
     <button class="button brand_color wide" @click="createInvoice(selected)">Charge</button>
     <p v-if="errorCharge" style="color: red">{{ errorCharge }}</p>     
-=======
-          <!-- <td>{{ aptmt.invoice.isPaid }}</td> -->
-                            
-          <td>
-            {{ aptmt.technician.firstName + "  " + aptmt.technician.lastName }}
-          </td>
-        </tr>
-                
-      </tbody>
-          
-    </table>
-         
-    <p v-if="error" style="color: red">{{ error }}</p>
-        
-    <div>
-      <button
-        class="button brand_color wide"
-        @click="cancelAppointment(selected)"
-      >
-        Cancel An Appointment
-      </button>
-      <p v-if="error" style="color: red">{{ error }}</p>
-          
->>>>>>> a23de245116ea03266f74f3a17f660a088f94066
     </div>
   </div>
 </template>
