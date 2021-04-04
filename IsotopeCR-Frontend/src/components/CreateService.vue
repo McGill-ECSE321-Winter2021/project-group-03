@@ -38,7 +38,7 @@
                 type="number"
                 class="form-control input-style"
                 v-model="duration"
-                placeholder="Duration"
+                placeholder="Duration: multiple of 30(minutes)"
               />
             </div>
             <div class="inputbox">
@@ -46,7 +46,7 @@
                 type="number"
                 class="form-control input-style"
                 v-model="price"
-                placeholder="Price"
+                placeholder="Price: (natural number)"
               />
             </div>
             <div class="inputbox">
@@ -54,7 +54,7 @@
                 type="number"
                 class="form-control input-style"
                 v-model="frequency"
-                placeholder="Frequency"
+                placeholder="Frequency: an integer representing months"
               />
             </div>
             <div class="inputbox">

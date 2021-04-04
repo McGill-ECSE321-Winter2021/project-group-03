@@ -1,7 +1,7 @@
 <template>
   <html lang="en">
     <div id="AllProfile">
-      <h3>View My Info</h3>
+      <h3>View Info</h3>
       <div>
         <div class="inputbox">
           <input
@@ -23,14 +23,12 @@
             <th>LastName</th>
             <th>Email</th>
             <th>PhoneNumber</th>
-            <th>IsOwner</th>
             <th>AccountType</th>
             <tr>
               <td>{{ firstName }}</td>
               <td>{{ lastName }}</td>
               <td>{{ email }}</td>
               <td>{{ phoneNumber }}</td>
-              <td>{{ isOwner }}</td>
               <td>{{ type }}</td>
             </tr>
           </table>

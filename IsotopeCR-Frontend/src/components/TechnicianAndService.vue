@@ -3,8 +3,15 @@
     <div id="Top">
       <h3>View My Services</h3>
       <div>
-        <div class="inputbox"></div>
-        <!-- <button class="btn btn-danger" @click="displayServices(email)">View</button> -->
+        <div class="inputbox">
+          <input
+              type="text"
+              class="form-control input-style"
+              v-model="email"
+              placeholder="Email of technician"
+          />
+        </div>
+        <button class="btn btn-danger" @click="displayServices(email)">View</button>
         <p v-if="error" style="color: red">Error: {{ error }}</p>
 
         <hr />
