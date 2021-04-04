@@ -32,7 +32,7 @@
               type="number"
               class="form-control input-style"
               v-model="maxAvailable"
-              placeholder="Maximum Available"
+              placeholder="Maximum Available >=1"
             />
           </div>
         </div>

@@ -63,7 +63,6 @@ export default {
         }
       })
         .then(response => {
-          console.log('Response Got')
           console.log(response)
           // JSON responses are automatically parsed.
           this.services.push(response.data)
@@ -76,7 +75,6 @@ export default {
           this.deletedServiceName = ''
         })
         .catch(e => {
-          console.log('Error!')
           if (e.response) {
             console.log(e.response)
             console.log(e.response.data)
@@ -90,7 +88,6 @@ export default {
       // DELETE a Service
       AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete/' + this.serviceName)
         .then(response => {
-          console.log('Response Got')
           console.log(response)
           // JSON responses are automatically parsed.
           this.deletedServiceName = ''
@@ -109,7 +106,6 @@ export default {
             })
         })
         .catch(e => {
-          console.log('Error!')
           if (e.response) {
             console.log(e.response)
             console.log(e.response.data)

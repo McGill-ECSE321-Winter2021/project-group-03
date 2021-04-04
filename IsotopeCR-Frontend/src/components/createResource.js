@@ -54,7 +54,6 @@ export default {
         }
       })
         .then(response => {
-          console.log('Response Got')
           console.log(response)
           this.resources.push(response.data)
           this.errorResource = ''
@@ -63,7 +62,6 @@ export default {
           this.deletedResourceType = ''
         })
         .catch(e => {
-          console.log('Error!')
           if (e.response) {
             console.log(e.response)
             console.log(e.response.data)
@@ -77,7 +75,6 @@ export default {
       // DELETE a Service
       AXIOS.delete(backendUrl + '/api/autorepairshop/resource/delete/' + this.resourceType)
         .then(response => {
-          console.log('Response Got')
           console.log(response)
           this.errorResource = ''
           this.deletedResourceType = ''
@@ -92,7 +89,6 @@ export default {
             })
         })
         .catch(e => {
-          console.log('Error!')
           if (e.response) {
             console.log(e.response)
             console.log(e.response.data)

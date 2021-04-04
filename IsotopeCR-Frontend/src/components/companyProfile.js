@@ -64,7 +64,6 @@ export default {
           }
         })
           .then(response => {
-            console.log('response got')
             console.log(response)
             this.companyProfiles.push(response.data)
             this.errorCompanyProfile = ''
@@ -85,7 +84,6 @@ export default {
       // DELETE a CompanyProfile
       AXIOS.delete(backendUrl + '/api/autorepairshop/CompanyProfile/delete')
         .then(response => {
-          console.log('response got')
           console.log(response)
           this.companyProfiles = []
           this.newCompanyProfile = ''

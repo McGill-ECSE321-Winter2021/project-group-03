@@ -52,7 +52,6 @@ export default {
                 AXIOS.get(backendUrl + '/api/profile/profiles/get/' + email)
                     .then(
                         (response) => {
-                            console.log("response got!")
                             console.log(response.data)
                             this.firstName = response.data.firstName
                             this.lastName = response.data.lastName
@@ -86,7 +85,6 @@ export default {
                 })
                     .then(
                         (response) => {
-                            console.log("response got!")
                             console.log(response.data)
                             this.phoneNumber = response.data.phoneNumber
                             this.editError = ''
@@ -117,7 +115,6 @@ export default {
                 })
                     .then(
                         (response) => {
-                            console.log("response got!")
                             console.log(response.data)
                             this.editError = ''
                         }

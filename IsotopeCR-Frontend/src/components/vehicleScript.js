@@ -67,7 +67,6 @@ export default {
                 })
                     .then(
                         (response) => {
-                            console.log("response got!")
                             console.log(response.data)
                             this.vehicles.push(response.data)
                             this.errorVehicle = ''
