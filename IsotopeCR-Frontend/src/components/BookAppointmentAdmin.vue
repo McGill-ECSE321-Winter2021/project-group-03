@@ -4,12 +4,20 @@
       <b-card-text>
         Book an appointment with one of our highly trained technicians!
       </b-card-text>
+      <div class="text-label">
+        Customer Email
+      </div>
+      <input type="text" v-model="email" placeholder="john@mail.com" />
+      <div></div>
+      <b-button href="#" variant="primary" class="card-button" @click="updateEmail(email)"
+        >Search Customer </b-button
+      >
       <div class="text-label">Vehicle</div>
       <select v-model="licensePlate">
         <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
           {{ vehicle.licensePlate }}
         </option>
-      </select>
+        </select>
       <div class="text-label">Service</div>
       <select v-model="serviceName">
         <option v-for="service in services" v-bind:value="service.serviceName">
@@ -901,7 +909,7 @@
   </div>
 </template>
 
-<script src='./bookAppointment.js'>
+<script src='./bookAppointmentAdmin.js'>
 export default {
   name: "BookAppointment",
   methods: {},

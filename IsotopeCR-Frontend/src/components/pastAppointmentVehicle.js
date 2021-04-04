@@ -56,7 +56,7 @@ export default {
 
     methods: {
 
-        pastappointmentv: function (licenseplate) {
+        pastappointmentv: function () {
 
 
             AXIOS.get(backendUrl + '/api/appointment/pastappointment/vehicle/' + this.licensePlate)
