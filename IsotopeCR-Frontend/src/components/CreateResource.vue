@@ -42,7 +42,7 @@
         >
           Create Resource
         </button>
-        <p v-if="errorResource" style="color: red">{{ errorResource }}</p>
+        <p v-if="errorcreateResource" style="color: red">{{ errorcreateResource }}</p>
       </div>
 <br>
 <br>
