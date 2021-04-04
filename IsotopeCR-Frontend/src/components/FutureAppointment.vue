@@ -4,8 +4,6 @@
       <div>
         <input
           type="button"
-          variant="primary"
-          class="card-button"
           onclick="location.href='http://127.0.0.1:8087/futureappointment/vehicle';"
           value="View Future Appointment for Vehicle"
         />

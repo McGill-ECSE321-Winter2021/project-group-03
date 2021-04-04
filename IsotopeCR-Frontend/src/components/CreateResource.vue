@@ -1,12 +1,12 @@
 <template>
-  <div id="service" class="container">
+  <div id="service" class="container"> 
     <div class="inner_container shadow">
       <br>
       <div class="large_text"><b>Resources</b></div>
       <hr />
       <table id="services" class="table">
         <th>Resource Type</th>
-        <th>Maximum Available</th>
+        <th>Maximum Available  </th>
         <tr v-for="resource in resources">
           <td>{{ resource.resourceType }}</td>
           <td>{{ resource.maxAvailable }}</td>
@@ -31,7 +31,7 @@
                 type="number"
                 class="form-control input-style"
                 v-model="maxAvailable"
-                placeholder="Maximum Available"
+                placeholder="Maximum Available (>=1)"
               />
             </div>
           </div>
@@ -42,7 +42,7 @@
         >
           Create Resource
         </button>
-        <p v-if="errorResource" style="color: red">{{ errorResource }}</p>
+        <p v-if="errorcreateResource" style="color: red">{{ errorcreateResource }}</p>
       </div>
 <br>
 <br>
