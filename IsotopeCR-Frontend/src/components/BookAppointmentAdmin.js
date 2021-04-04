@@ -108,7 +108,6 @@ export default {
                             this.errorMessage = ''
                         })
                     .catch(e => {
-                        console.log("error")
                         if (e.response) {
                             console.log(e.response)
                             console.log(e.response.data)

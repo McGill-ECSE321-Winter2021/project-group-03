@@ -38,7 +38,6 @@ export default {
             } else if (password != this.confirmPassword) {
                 this.error = "Your passwords do not match";
             } else {
-                console.log("here");
                 AXIOS.post(backendUrl + "/api/profile/technician/create", {}, {
                     params: {
                         email: email,
