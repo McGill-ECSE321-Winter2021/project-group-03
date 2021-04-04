@@ -9,7 +9,7 @@
         <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
           {{ vehicle.licensePlate }}
         </option>
-        </select>
+      </select>
       <div class="text-label">Service</div>
       <select v-model="serviceName">
         <option v-for="service in services" v-bind:value="service.serviceName">

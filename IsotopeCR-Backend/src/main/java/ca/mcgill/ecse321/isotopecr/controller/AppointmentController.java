@@ -109,6 +109,11 @@ public class AppointmentController {
 
 		Appointment appointment = appointmentService.createAppointment(customer, vehicle, technician, aptService,
 				startTime, appointmentDate);
+		
+		Invoice invoice = new Invoice();
+		invoice.setIsPaid(false);
+		appointment.setInvoice(invoice);
+		
 		return ControllerHelperMethods.convertToDto(appointment);
 	}
 

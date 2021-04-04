@@ -3,8 +3,8 @@ var config = require("../../config")
 var frontendUrl = "http://" + config.dev.host + ':' + config.dev.port
 var backendUrl = "http://" + config.build.backendHost
 var AXIOS = axios.create({
-  baseURL: backendUrl,
-  headers: { "Access-Control-Allow-Origin": frontendUrl },
+    baseURL: backendUrl,
+    headers: { "Access-Control-Allow-Origin": frontendUrl },
 })
 
 function AdminDto(firstName, lastName, email, isOwner) {
@@ -21,7 +21,7 @@ export default {
             firstName: '',
             lastName: '',
             email: '',
-            password: '',         
+            password: '',
             isOwner: '',
             confirmPassword: '',
             error: '',
@@ -40,7 +40,7 @@ export default {
             } else if (password != this.confirmPassword) {
                 this.error = "Your passwords do not match";
             } else {
-                AXIOS.post(backendUrl+ "/api/profile/admin/create", {}, {
+                AXIOS.post(backendUrl + "/api/profile/admin/create", {}, {
                     params: {
                         email: email,
                         firstName: firstName,
@@ -54,6 +54,7 @@ export default {
                             console.log("response got!")
                             console.log(response.data)
                             this.error = ''
+                            window.location.href = "/"
                         }
                     )
                     .catch(e => {

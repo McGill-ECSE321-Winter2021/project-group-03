@@ -10,13 +10,13 @@ var AXIOS = axios.create({
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
-   this.date=date;
-   this.starttime=starttime;
-   this.customer = customer;
-   this.vehicle = vehicle;
-   this.service = service;
-   this.technician = technician;
+function AppointmentDto(date, starttime, customer, vehicle, service, technician) {
+    this.date = date;
+    this.starttime = starttime;
+    this.customer = customer;
+    this.vehicle = vehicle;
+    this.service = service;
+    this.technician = technician;
 }
 
 export default {
@@ -31,7 +31,7 @@ export default {
             service: '',
             technician: '',
             timeslots: [],
-            licensePlate:'',
+            licensePlate: '',
             response: [],
             vehicles: [],
             errorMessage: ''
@@ -40,38 +40,38 @@ export default {
 
 
     created: function () {
-        AXIOS.get('/api/profile/customer/vehicle/get-all/'+this.$cookie.get('email'))
-        .then(response => {                              
-            this.vehicles = response.data
-        })
-        .catch(e => {
-            if (e.response) {
-                console.log(e.response.data)
-                console.log(e.response.status)
-            }
-            this.errorMessage = e.response.data
-        })
+        AXIOS.get('/api/profile/customer/vehicle/get-all/' + this.$cookie.get('email'))
+            .then(response => {
+                this.vehicles = response.data
+            })
+            .catch(e => {
+                if (e.response) {
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                }
+                this.errorMessage = e.response.data
+            })
 
-      
+
     },
 
     methods: {
-        futureappointmentv: function(licenseplate){
-        
-                console.log(this.licensePlate)            
-                AXIOS.get(backendUrl+'/api/appointment/futureappointment/vehicle/'+ this.licensePlate)
+        futureappointmentv: function () {
+
+            console.log(this.licensePlate)
+            AXIOS.get(backendUrl + '/api/appointment/futureappointment/vehicle/' + this.licensePlate)
                 .then(response => {
-                   this.futureappointments=response.data
-                  })
-                  .catch(e => {
+                    this.futureappointments = response.data
+                })
+                .catch(e => {
                     if (e.response) {
                         console.log(e.response)
                         console.log(e.response.data)
                         console.log(e.response.status)
-                      }
-                      this.error = e.response.data;
-                  });
-            
+                    }
+                    this.error = e.response.data;
+                });
+
         }
     }
 }

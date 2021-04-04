@@ -23,6 +23,7 @@ export default {
       deletedResourceType: "",
       maxAvailable: "",
       errorResource: '',
+      errorcreateResource: '',
       response: []
     }
   },
@@ -68,17 +69,13 @@ export default {
             console.log(e.response.data)
             console.log(e.response.status)
           }
-          this.errorResource = e.response.data;
+          this.errorcreateResource = e.response.data;
         });
     },
 
-    deleteResource: function (deletedResourceType) {
+    deleteResource: function () {
       // DELETE a Service
-      AXIOS.delete(backendUrl + '/api/autorepairshop/resource/delete/' + deletedResourceType, {}, {
-        params: {
-          deletedResourceType: deletedResourceType,
-        }
-      })
+      AXIOS.delete(backendUrl + '/api/autorepairshop/resource/delete/' + this.resourceType)
         .then(response => {
           console.log('Response Got')
           console.log(response)

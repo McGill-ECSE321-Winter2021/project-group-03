@@ -86,13 +86,9 @@ export default {
         });
     },
 
-    deleteService: function (deletedServiceName) {
+    deleteService: function () {
       // DELETE a Service
-      AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete/' + deletedServiceName, {}, {
-        params: {
-          deletedServiceName: deletedServiceName,
-        }
-      })
+      AXIOS.delete(backendUrl + '/api/autorepairshop/service/delete/' + this.serviceName)
         .then(response => {
           console.log('Response Got')
           console.log(response)

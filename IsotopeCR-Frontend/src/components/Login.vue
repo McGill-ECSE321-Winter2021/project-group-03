@@ -1,35 +1,41 @@
 <template>
-    <div id="login">
-        <div class="input_container">
-            <h3>Log In</h3>
-            <div class="container-fluid">
-                <div class="input">
-                    <div class="small_text left_text brand_color_text">Email:</div>
-                    <input
-                    type="text"
-                    class="form-control input-style"
-                    v-model="email"
-                    placeholder="email"
-                    />
-                    <div id="password" class="small_text left_text brand_color_text">Password:</div>
-                    <input
-                    type="text"
-                    class="form-control input-style"
-                    v-model="password"
-                    placeholder="password"
-                    />
-                    <span v-if="errorMessage" style="color:red">{{errorMessage}} </span>
-                </div>
-            </div>
-            <button class="btn btn-primary" @click="login(email,password)">Log In</button>
+  <div id="login">
+    <div class="input_container">
+      <h3>Log In</h3>
+      <div class="container-fluid">
+        <div class="input">
+          <div class="small_text left_text brand_color_text">Email:</div>
+          <input
+            type="text"
+            class="form-control input-style"
+            v-model="email"
+            placeholder="email"
+          />
+          <div id="password" class="small_text left_text brand_color_text">
+            Password:
+          </div>
+          <input
+            type="text"
+            class="form-control input-style"
+            v-model="password"
+            placeholder="password"
+          />
+          <span v-if="errorMessage" style="color: red"
+            >{{ errorMessage }}
+          </span>
         </div>
+      </div>
+      <button class="btn btn-primary" @click="login(email, password)">
+        Log In
+      </button>
     </div>
+  </div>
 </template>
 
 <script src='./loginScript.js'>
 export default {
-  name: 'Login'
-}
+  name: "Login",
+};
 </script>
 
 <style scoped>

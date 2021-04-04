@@ -1,13 +1,11 @@
 <template>
 
-    <div id="service" class="container">
+    <div id="resource" class="container">
     <div class="inner_container shadow">
-
-    <div class="large_text"> <b>Resources</b> </div>
-
-    <hr>
+      <br>
+      <div class="large_text"><b>Resources</b></div>
    
-    <table id="services" class="table">
+    <table id="resources" class="table">
       <th>Resource Type</th>
       <th>Maximum Available</th>
       <tr v-for="resource in resources">
@@ -38,25 +36,19 @@
             />
           </div>
         </div>
+
       </div>
-      <button class="btn btn-danger" @click="createResource(resourceType, maxAvailable)">Create Resource</button>
-      <p v-if="errorResource" style="color: red">{{ errorResource }}</p>
-    </div>
+        <button class="btn btn-danger" @click="createResource(resourceType, maxAvailable)">Create Resource</button>
+        <p v-if="errorcreateResource" style="color: red">{{ errorcreateResource }}</p>
+       </div>
 
         <div id="deleteResource">
       <h3>Delete Resource</h3>
-      <div class="container-fluid">
-        <div class="input">
-          <div class="inputbox">
-            <input
-              type="text"
-              class="form-control input-style"
-              v-model="deletedResourceType"
-              placeholder="Resource Type"
-            />
-          </div>
-        </div>
-      </div>
+      <select style="width: 150px; height: 36px;" class="form-select" v-model="resourceType">
+        <option v-for="resource in resources" v-bind:value="resource.resourceType">
+          {{ resource.resourceType }}
+        </option>
+      </select>
       <button class="btn btn-danger" @click="deleteResource(deletedResourceType)">Delete Resource</button>
       <p v-if="errorResource" style="color: red">{{ errorResource }}</p>
     </div>
@@ -65,19 +57,19 @@
 
     </div> 
 
+      <hr />
+    </div>
   </div>
-  
 </template>
 
 <script 
 
 src="./createResource.js">
-
 </script>
 
 <style scoped>
-#createService {
-  padding-top: 20vh;
+#createResource {
+  padding-top: 5vh;
 }
 .input {
   top: 20px;
@@ -96,5 +88,11 @@ src="./createResource.js">
   justify-content: center;
   overflow: auto;
   white-space: nowrap;
+}
+#resource {
+  padding-top: 6vh;
+}
+#deleteResource {
+  padding-top: 6vh;
 }
 </style>
