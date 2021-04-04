@@ -13,7 +13,7 @@ import 'bulma/css/bulma.css';
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item @click="routeTo('')">Home</b-nav-item>
-          <b-nav-item @click="routeTo('about')">About</b-nav-item>
+          <b-nav-item href="/#about">About</b-nav-item>
         </b-navbar-nav>
 
             <b-navbar-nav class="ml-auto">
@@ -28,6 +28,11 @@ import 'bulma/css/bulma.css';
                   <b-dropdown-item @click="routeTo('futureappointment')">Upcoming Appointment</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('pastappointment')">Appointment History</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('cancelappointment')">Cancel Appointment</b-dropdown-item>
+                </b-nav-item-dropdown>
+
+                <b-nav-item-dropdown v-if="loggedIn && isAdmin" text="Appointment Management">
+                  <b-dropdown-item @click="routeTo('bookAppointmentAdmin')">Book Appointment</b-dropdown-item>
+                  <b-dropdown-item @click="routeTo('chargeAppointment')">View & Charge Appointment</b-dropdown-item>
                 </b-nav-item-dropdown>
 
                 <b-nav-item-dropdown v-if="loggedIn && isAdmin" text="Profile Management">

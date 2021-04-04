@@ -7,6 +7,7 @@ import PastAppointment from '@/components/PastAppointment'
 import BookAppointment from '@/components/BookAppointment.vue'
 import FutureAppointment from '@/components/FutureAppointment'
 import CancelAppointment from '@/components/CancelAppointment.vue'
+import BookAppointmentAdmin from '@/components/BookAppointmentAdmin.vue'
 
 import CreateCustomerProfile from '@/components/CreateCustomerProfile'
 import CompanyProfile from '@/components/CompanyProfile.vue'
@@ -75,6 +76,11 @@ export default new Router({
       path: "/bookAppointment",
       name: "BookAppointment",
       component: BookAppointment
+    },
+    {
+      path: "/bookAppointmentAdmin",
+      name: "BookAppointmentAdmin",
+      component: BookAppointmentAdmin
     },
     {
       path: "/futureappointment",

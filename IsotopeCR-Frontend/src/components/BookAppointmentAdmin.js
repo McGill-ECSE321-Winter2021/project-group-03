@@ -153,6 +153,7 @@ export default {
                             console.log("Appointment booked created successfully!")
                             console.log(response.data)
                             this.errorMessage = ''
+                            window.location.href = "/"
                         })
                     .catch(e => {
                         if (e.response) {

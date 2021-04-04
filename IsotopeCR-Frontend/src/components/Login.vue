@@ -15,7 +15,7 @@
             Password:
           </div>
           <input
-            type="text"
+            type="password"
             class="form-control input-style"
             v-model="password"
             placeholder="password"
