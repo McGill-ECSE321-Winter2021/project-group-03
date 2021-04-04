@@ -40,7 +40,7 @@ export default {
     displayServices: function (email) {
       AXIOS.get(backendUrl + '/api/profile/technician/service/get-all/' + email)
         .then((response) => {
-          console.log("response got!")
+
           console.log(response.data)
           this.services = response.data
           if (response.data.legnth == 0) {
@@ -71,7 +71,6 @@ export default {
           }
         })
           .then((response) => {
-            console.log("response got!")
             console.log(response.data)
             this.services.push(response.data)
             this.errorAdd = ''
