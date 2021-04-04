@@ -20,27 +20,27 @@
             ></b-icon>
             <h4 class="my-3">Oil Change</h4>
             <p class="text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
-              maxime quam architecto quo inventore harum ex magni, dicta
-              impedit.
+              Let our technicians help you choose the oil that’s best for your car. 
+              Take advantage of a 15-point inspection, included with your oil change. 
+              Service Driven By Experts. 
             </p>
           </div>
           <div class="col-md-4">
             <b-icon icon="tools" style="width: 80px; height: 80px"></b-icon>
             <h4 class="my-3">Roadside Assistance</h4>
             <p class="text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
-              maxime quam architecto quo inventore harum ex magni, dicta
-              impedit.
+              Count On Us For High-Quality, 24/7 Towing Services With Our Advanced Equipment. 
+              Call Us! We Are Well-Known For Our Exceptional Automotive Hauling & Roadside Assistance Solutions. 
+              No Hidden Fees. Direct Billing. Fast Service. Courteous Staff. Experienced Team.
             </p>
           </div>
           <div class="col-md-4">
             <b-icon icon="gear-fill" style="width: 80px; height: 80px"></b-icon>
             <h4 class="my-3">Car & Truck Care</h4>
             <p class="text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
-              maxime quam architecto quo inventore harum ex magni, dicta
-              impedit.
+              We will clean vehicles according to company standards or client specifications, which may 
+              include performing detail inspections, thoroughly washing, buffing, and waxing exteriors, vacuuming, 
+              steaming, and deodorizing interiors, and keeping records related to gas levels and the condition of the vehicle.
             </p>
           </div>
         </div>
@@ -49,9 +49,7 @@
             <b-icon icon="disc-fill" style="width: 80px; height: 80px"></b-icon>
             <h4 class="my-3">Tire Change</h4>
             <p class="text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
-              maxime quam architecto quo inventore harum ex magni, dicta
-              impedit.
+              IsotopeCR is Your One-Stop Shop For All Your Tire Installation Needs. Learn More Now! Tire Maintenance.
             </p>
           </div>
           <div class="col-md-4">
@@ -61,9 +59,8 @@
             ></b-icon>
             <h4 class="my-3">Vehicle Diagnostic</h4>
             <p class="text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
-              maxime quam architecto quo inventore harum ex magni, dicta
-              impedit.
+              Our technician will determine if your vehicle has issues with its engine, exhaust, transmission, ignition coils,
+              oil tank, throttle, and more.
             </p>
           </div>
           <div class="col-md-4">
@@ -73,9 +70,8 @@
             ></b-icon>
             <h4 class="my-3">Electrical Services</h4>
             <p class="text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
-              maxime quam architecto quo inventore harum ex magni, dicta
-              impedit.
+              Electrical layout, design, wiring and installation; Upgrades; Energy audits; Sales, installation and maintenance
+              of your car's generator
             </p>
           </div>
         </div>
