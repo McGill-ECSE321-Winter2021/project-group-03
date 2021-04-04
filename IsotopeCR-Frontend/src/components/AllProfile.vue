@@ -20,12 +20,19 @@
           </tr>
         </table>
       </div>
-      <hr/>
+      <hr />
       <div class="container-fluid">
         <div class="inputbox">
-          <input type="text" class="form-control input-style" v-model="email" placeholder="Email to be deleted"/>
+          <input
+            type="text"
+            class="form-control input-style"
+            v-model="email"
+            placeholder="Email to be deleted"
+          />
         </div>
-        <button class="btn btn-danger" @click="deleteProfile(email)">Delete</button>
+        <button class="btn btn-danger" @click="deleteProfile(email)">
+          Delete
+        </button>
       </div>
       <p v-if="error" style="color: red">Error: {{ error }}</p>
     </div>

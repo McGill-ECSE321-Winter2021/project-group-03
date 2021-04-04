@@ -17,6 +17,9 @@ export default {
     name: 'createAdminProfile',
     data() {
         return {
+            pastappointments: [],
+            selected: [],
+            sessionemail: '',
             invoice: '',
             customeremail: '',
             cost: '',
@@ -26,60 +29,48 @@ export default {
             errorCharge: '',
         }
     },
+
+    created: function(){      
+        this.sessionemail = this.$cookie.email
+    },
+
     methods: {
-        pastappointmentc: function(customeremail){
-            if(customeremail == "" ) {
-              this.errorPastappointmentc = 'Email cannot be empty.'
-              return false
-            } else {  
-                AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + customeremail )
-                .then(response => {
-                   this.pastappointments=response.data
-                   this.errorPastappointmentc = ''
-                  })
-                  .catch(e => {
-                    if (e.response) {
-                        console.log(e.response)
-                        console.log(e.response.data)
-                        console.log(e.response.status)
-                      }
-                      this.errorPastappointmentc = e.response.data;
-                  });
-            }
+        viewPastAppointment: function(customeremail){      
+            AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + customeremail)
+            .then(response => {
+               this.pastappointments=response.data
+               console.log(response.data)
+              })
+              .catch(e => {
+                if (e.response) {
+                    console.log(e.response)
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                  }
+                  this.errorPastappointmentc = e.response.data;
+              });
         },
 
-        createInvoice: function (email, firstName, lastName, password, isOwner) {
-            if (firstName == "") {
-                this.error = "Please enter your first name";
-            } else if (lastName == "") {
-                this.error = "Please enter your last name";
-            } else if (email == "") {
-                this.error = "Please enter your email";
-            } else if (password == "") {
-                this.error = "Please enter a password";
-            } else if (password != this.confirmPassword) {
-                this.error = "Your passwords do not match";
+        createInvoice: function (selected) {
+            if (selected == "") {
+                this.error = "Please select an Appointment";
             } else {
-                AXIOS.post(backendUrl+ "/api/appointment/createInvoice/", {}, {
-                    params: {
-                        email: email,
-                        firstName: firstName,
-                        lastName: lastName,
-                        password: password,
-                        isOwner: isOwner
-                    }
-                })
-                    .then(
-                        (response) => {
+                AXIOS.post(backendUrl+ "/api/appointment/createInvoice/"+selected[0])
+                    .then(response => {
                             console.log("response got!")
                             console.log(response.data)
                             this.errorCharge = ''
+                            AXIOS.get(backendUrl+'/api/appointment/pastappointment/customer/' + this.customeremail)
+                                .then(response =>{
+                                    this.pastappointments = response.data
+                                    this.selected = []
+                                })                
                         }
                     )
                     .catch(e => {
                         if (e.response) {
                             console.log(e.response)
-                            console.log(e.response.data)
+                            console.log(e.response)
                             console.log(e.response.status)
                         }
                         this.errorCharge = e.response.data;

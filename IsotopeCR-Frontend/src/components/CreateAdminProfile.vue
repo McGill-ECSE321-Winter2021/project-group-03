@@ -44,9 +44,23 @@
               placeholder="Confirm Password"
             />
           </div>
+<<<<<<< HEAD
+=======
+          <input type="checkbox" id="checkbox" v-model="isOwner" />
+          <label for="checkbox" class="bold"
+            >Owner of the company?: {{ isOwner }}</label
+          >
+>>>>>>> 11cc278518b8932da41c1d3a37825e60a8447d5e
         </div>
       </div>
-      <button class="btn btn-danger" @click="createAdminAccount(email, firstName, lastName, password, isOwner)">Sign Up</button>
+      <button
+        class="btn btn-danger"
+        @click="
+          createAdminAccount(email, firstName, lastName, password, isOwner)
+        "
+      >
+        Sign Up
+      </button>
       <p v-if="error" style="color: red">{{ error }}</p>
     </div>
   </html>

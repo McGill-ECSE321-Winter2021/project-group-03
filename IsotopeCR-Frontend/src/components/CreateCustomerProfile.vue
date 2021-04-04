@@ -53,9 +53,9 @@
             />
           </div>
         </div>
-      </div>     
+      </div>
       <button class="btn btn-danger" @click="createAc">Sign Up</button>
-      <p v-if="error" style="color:red">{{ error }}</p>
+      <p v-if="error" style="color: red">{{ error }}</p>
     </div>
   </html>
 </template>
@@ -64,7 +64,7 @@
 </script>
 
 <style scoped>
-#createAccount {    
+#createAccount {
   padding-top: 20vh;
 }
 .input {

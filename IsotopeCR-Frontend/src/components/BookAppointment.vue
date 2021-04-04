@@ -9,7 +9,7 @@
         <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
           {{ vehicle.licensePlate }}
         </option>
-        </select>
+      </select>
       <div class="text-label">Service</div>
       <select v-model="serviceName">
         <option v-for="service in services" v-bind:value="service.serviceName">
@@ -21,7 +21,11 @@
       </div>
       <input type="text" v-model="numWeeks" placeholder="0 for this week" />
       <div></div>
-      <b-button href="#" variant="primary" class="card-button" @click="getUnavailableTimeslots(serviceName, numWeeks)"
+      <b-button
+        href="#"
+        variant="primary"
+        class="card-button"
+        @click="getUnavailableTimeslots(serviceName, numWeeks)"
         >View Availabilities</b-button
       >
     </b-card>
@@ -955,9 +959,9 @@
 
     <div class="input_container" id="appointmentInputs">
       <div class="small_text left_text brand_color_text">Vehicle:</div>
-      
+
       <div class="small_text left_text brand_color_text">Service:</div>
-      
+
       <div class="small_text left_text brand_color_text">Start Time:</div>
       <input
         type="text"

@@ -10,13 +10,13 @@ var AXIOS = axios.create({
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-function AppointmentDto(date, starttime, customer, vehicle,service,technician) {
-   this.date=date;
-   this.starttime=starttime;
-   this.customer = customer;
-   this.vehicle = vehicle;
-   this.service = service;
-   this.technician = technician;
+function AppointmentDto(date, starttime, customer, vehicle, service, technician) {
+    this.date = date;
+    this.starttime = starttime;
+    this.customer = customer;
+    this.vehicle = vehicle;
+    this.service = service;
+    this.technician = technician;
 }
 
 export default {
@@ -30,8 +30,8 @@ export default {
             vehicle: '',
             service: '',
             technician: '',
-            licensePlate:'',
-            timeslots: [] ,
+            licensePlate: '',
+            timeslots: [],
             errorMessage: '',
             response: [],
             vehicles: [],
@@ -39,40 +39,40 @@ export default {
     },
 
     created: function () {
-        AXIOS.get('/api/profile/customer/vehicle/get-all/'+this.$cookie.get('email'))
-        .then(response => {                              
-            this.vehicles = response.data
-        })
-        .catch(e => {
-            if (e.response) {
-                console.log(e.response.data)
-                console.log(e.response.status)
-            }
-            this.errorMessage = e.response.data
-        })
+        AXIOS.get('/api/profile/customer/vehicle/get-all/' + this.$cookie.get('email'))
+            .then(response => {
+                this.vehicles = response.data
+            })
+            .catch(e => {
+                if (e.response) {
+                    console.log(e.response.data)
+                    console.log(e.response.status)
+                }
+                this.errorMessage = e.response.data
+            })
 
-      
+
     },
 
     methods: {
 
-        pastappointmentv: function(licenseplate){
-         
-                
-                AXIOS.get(backendUrl+'/api/appointment/pastappointment/vehicle/' + this.licensePlate )
-                .then(response => {
-                   this.pastappointments=response.data
+        pastappointmentv: function (licenseplate) {
 
-                  })
-                  .catch(e => {
+
+            AXIOS.get(backendUrl + '/api/appointment/pastappointment/vehicle/' + this.licensePlate)
+                .then(response => {
+                    this.pastappointments = response.data
+
+                })
+                .catch(e => {
                     if (e.response) {
                         console.log(e.response)
                         console.log(e.response.data)
                         console.log(e.response.status)
-                      }
-                      this.errorPastappointmentv = e.response.data;
-                  });
-            
+                    }
+                    this.errorPastappointmentv = e.response.data;
+                });
+
 
         }
     }

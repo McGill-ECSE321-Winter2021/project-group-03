@@ -23,6 +23,7 @@ export default {
       deletedResourceType: "",
       maxAvailable: "",
       errorResource: '',
+      errorcreateResource: '',
       response: []
     }
   },
@@ -68,7 +69,7 @@ export default {
             console.log(e.response.data)
             console.log(e.response.status)
           }
-          this.errorResource = e.response.data;
+          this.errorcreateResource = e.response.data;
         });
     },
 

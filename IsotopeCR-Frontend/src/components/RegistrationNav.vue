@@ -2,11 +2,19 @@
   <html lang="en">
     <h2>Profile Navigation</h2>
     <div class="inputbox">
-    <a href="http://127.0.0.1:8087/createCustomerProfile" class="btn btn-primary">Client Entry</a>
+      <a
+        href="http://127.0.0.1:8087/createCustomerProfile"
+        class="btn btn-primary"
+        >Client Entry</a
+      >
     </div>
-    <a href="http://127.0.0.1:8087/createAdminProfile" class="btn btn-primary">Admin Entry</a>
+    <a href="http://127.0.0.1:8087/createAdminProfile" class="btn btn-primary"
+      >Admin Entry</a
+    >
     <div class="inputbox">
-    <a href="http://127.0.0.1:8087/createTechProfile" class="btn btn-primary">Technician Entry</a>
+      <a href="http://127.0.0.1:8087/createTechProfile" class="btn btn-primary"
+        >Technician Entry</a
+      >
     </div>
   </html>
 </template>

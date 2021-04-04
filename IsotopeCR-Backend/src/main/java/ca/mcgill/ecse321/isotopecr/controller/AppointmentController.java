@@ -109,6 +109,11 @@ public class AppointmentController {
 
 		Appointment appointment = appointmentService.createAppointment(customer, vehicle, technician, aptService,
 				startTime, appointmentDate);
+		
+		Invoice invoice = new Invoice();
+		invoice.setIsPaid(false);
+		appointment.setInvoice(invoice);
+		
 		return ControllerHelperMethods.convertToDto(appointment);
 	}
 
@@ -118,7 +123,7 @@ public class AppointmentController {
 	 * @return a list of timesloDtos
 	 * @throws Exception
 	 */
-	@GetMapping(value = { "getUnavailableTimeslots/{service}", "getUnavailableTimeslots/{service}/" })
+	@GetMapping(value = { "/getUnavailableTimeslots/{service}", "/getUnavailableTimeslots/{service}/" })
 	public List<TimeslotDto> getUnavailableTimeslots(@PathVariable("service") String serviceName, 
 			@RequestParam String numWeeks)
 			throws Exception {
