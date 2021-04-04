@@ -42,12 +42,14 @@
     </table>
     <p v-if="error" style="color: red">{{ error }}</p>
     <div>
-      <button
-        class="button brand_color wide"
+      <b-button
+        href="#"
+        variant="primary"
+        class="card-button"
         @click="cancelAppointment(selected)"
       >
-        Cancel An Appointment
-      </button>
+        Cancel Appointment
+      </b-button>
       <p v-if="error" style="color: red">{{ error }}</p>
     </div>
   </div>
@@ -62,5 +64,8 @@ export default {
 <style>
 div.container {
   display: flex;
+}
+.card-button {
+  margin: 1.2rem;
 }
 </style>

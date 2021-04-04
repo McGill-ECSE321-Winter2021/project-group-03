@@ -1,20 +1,23 @@
 <template>
   <div id="pastappointment" class="container">
-    <div>
-      <input
-        type="button"
-        onclick="location.href='http://127.0.0.1:8087/pastappointment/vehicle';"
-        value="View Past Appointment for Vehicle"
-      />
-    </div>
-    <div>
-      <input
-        type="button"
+    <b-card title="Appointment History" tag="article" class="card">
+      <b-button
+        href="#"
+        variant="primary"
+        class="card-button"
         onclick="location.href='http://127.0.0.1:8087/pastappointment/customer';"
-        value="View Past Appointment for Customer"
-      />
-    </div>
-    <router-view />
+      >
+        View All
+      </b-button>
+      <b-button
+        href="#"
+        variant="primary"
+        class="card-button"
+        onclick="location.href='http://127.0.0.1:8087/pastappointment/vehicle';"
+      >
+        Filter by Vehicle
+      </b-button>
+    </b-card>
   </div>
 </template>
 
@@ -25,4 +28,14 @@ export default {
 </script>
 
 <style>
+.container {
+  margin-top: 1rem;
+  display: grid;
+}
+.card {
+  display: flex;
+}
+.card-button {
+  margin-top: 1.2rem;
+}
 </style>
