@@ -1,43 +1,57 @@
 <template>
   <div id="pastappointment/vehicle" class="container">
-    <div class="small_text left_text brand_color_text">
-      Vehicle:
+    <b-card
+      title="Past Appointments"
+      sub-title="Filter by Vehicle"
+      tag="article"
+      class="card"
+    >
+    <div class="box">
+      <div class="card-button">License Plate:</div>
       <select v-model="licensePlate">
         <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
           {{ vehicle.licensePlate }}
         </option>
       </select>
-      <button class="button" @click="pastappointmentv()">
-        Find Past Appointment
-      </button>
-    </div>
-
-    <table class="pastappointmentv">
-      <thead>
-        <tr>
-          <th scope="col" style="text-align: left; width: 10rem">Date</th>
-          <th scope="col" style="text-align: left; width: 10rem">Start time</th>
-          <th scope="col" style="text-align: left; width: 10rem">Customer</th>
-          <th scope="col" style="text-align: left; width: 10rem">Vehicle</th>
-          <th scope="col" style="text-align: left; width: 10rem">Service</th>
-          <th scope="col" style="text-align: left; width: 10rem">Technician</th>
-        </tr>
-        <tr v-for="pastappointmentv in pastappointments">
-          <td>{{ pastappointmentv.timeslots[0].date }}</td>
-          <td>{{ pastappointmentv.timeslots[0].time }}</td>
-          <td>{{ pastappointmentv.customer.email }}</td>
-          <td>{{ pastappointmentv.vehicle.licensePlate }}</td>
-          <td>{{ pastappointmentv.service.serviceName }}</td>
-          <td>
-            {{
-              pastappointmentv.technician.firstName +
-              " " +
-              pastappointmentv.technician.lastName
-            }}
-          </td>
-        </tr>
-      </thead>
-    </table>
+      </div>
+      <div/>
+      <b-button
+        href="#"
+        variant="primary"
+        class="card-button"
+        @click="pastappointmentv()"
+      >
+        View Appointments
+      </b-button>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>Customer</th>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Technician</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="pastappointmentc in pastappointments">
+            <td>{{ pastappointmentc.timeslots[0].date }}</td>
+            <td>{{ pastappointmentc.timeslots[0].time }}</td>
+            <td>{{ pastappointmentc.customer.email }}</td>
+            <td>{{ pastappointmentc.vehicle.licensePlate }}</td>
+            <td>{{ pastappointmentc.service.serviceName }}</td>
+            <td>
+              {{
+                pastappointmentc.technician.firstName +
+                " " +
+                pastappointmentc.technician.lastName
+              }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </b-card>
     <span v-if="errorMessage" style="color: red">{{ errorMessage }} </span>
   </div>
 </template>
@@ -49,4 +63,11 @@ export default {
 </script>
 
 <style scoped>
+.card-button {
+  margin: 0.5rem;
+}
+.box {
+  display: flex;
+  justify-content: center;
+}
 </style>

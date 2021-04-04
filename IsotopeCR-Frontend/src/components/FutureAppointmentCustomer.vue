@@ -1,17 +1,20 @@
 <template>
   <div id="futureappointment/customer" class="container">
-    <table class="pastappointmentc">
-      <thead>
-        <tr>
-          <th scope="col" style="width: 10rem">Date</th>
-          <th scope="col" style="width: 10rem">Start time</th>
-          <th scope="col" style="width: 10rem">Customer</th>
-          <th scope="col" style="width: 10rem">Vehicle</th>
-          <th scope="col" style="width: 10rem">Service</th>
-          <th scope="col" style="width: 10rem">Technician</th>
-        </tr>
 
-        <tr v-for="futureappointmentc in futureappointments">
+  <b-card title="Upcoming Appointments" tag="article" class="card">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>StartTime</th>
+            <th>Customer</th>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Technician</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="futureappointmentc in futureappointments">
           <td>{{ futureappointmentc.timeslots[0].date }}</td>
           <td>{{ futureappointmentc.timeslots[0].time }}</td>
           <td>{{ futureappointmentc.customer.email }}</td>
@@ -25,8 +28,9 @@
             }}
           </td>
         </tr>
-      </thead>
-    </table>
+        </tbody>
+      </table>
+    </b-card>
     <p v-if="errorFutureappointmentc" style="color: red">
       {{ errorFutureappointmentc }}
     </p>
@@ -37,7 +41,10 @@
 </script>
 
 <style>
-div.container {
-  display: flex;
+.container {
+  display: grid;
+}
+.card {
+  margin: 1.2rem;
 }
 </style>

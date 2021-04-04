@@ -1,25 +1,42 @@
 <template>
   <div id="futureappointment/vehicle" class="container">
-    <div class="small_text left_text brand_color_text">
-      Vehicle:
+
+  <b-card
+      title="Upcoming Appointments"
+      sub-title="Filter by Vehicle"
+      tag="article"
+      class="card"
+    >
+    <div class="box">
+      <div class="card-button">License Plate:</div>
       <select v-model="licensePlate">
         <option v-for="vehicle in vehicles" v-bind:value="vehicle.licensePlate">
           {{ vehicle.licensePlate }}
         </option>
       </select>
-      <button class="button" @click="futureappointmentv()">
-        Find Future Appointment
-      </button>
-    </div>
-    <table class="futureappointmentv">
-      <thead>
-        <th scope="col" style="width: 10rem">Date</th>
-        <th scope="col" style="width: 10rem">Start time</th>
-        <th scope="col" style="width: 10rem">Customer</th>
-        <th scope="col" style="width: 10rem">Vehicle</th>
-        <th scope="col" style="width: 10rem">Service</th>
-        <th scope="col" style="width: 10rem">Technician</th>
-        <tr v-for="futureappointmentv in futureappointments">
+      </div>
+      <div/>
+      <b-button
+        href="#"
+        variant="primary"
+        class="card-button"
+        @click="futureappointmentv()"
+      >
+        View Appointments
+      </b-button>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>Customer</th>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Technician</th>
+          </tr>
+        </thead>
+        <tbody>
+           <tr v-for="futureappointmentv in futureappointments">
           <td>{{ futureappointmentv.timeslots[0].date }}</td>
           <td>{{ futureappointmentv.timeslots[0].time }}</td>
           <td>{{ futureappointmentv.customer.email }}</td>
@@ -33,9 +50,9 @@
             }}
           </td>
         </tr>
-      </thead>
-    </table>
-
+        </tbody>
+      </table>
+    </b-card>
     <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
   </div>
 </template>
@@ -47,4 +64,11 @@ export default {
 </script>
 
 <style>
+.card-button {
+  margin: 0.5rem;
+}
+.box {
+  display: flex;
+  justify-content: center;
+}
 </style>
