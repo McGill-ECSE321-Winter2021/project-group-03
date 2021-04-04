@@ -7,7 +7,7 @@
           {{ vehicle.licensePlate }}
         </option>
       </select>
-      <button class="button" @click="pastappointmentv(licenseplate)">
+      <button class="button" @click="pastappointmentv()">
         Find Past Appointment
       </button>
     </div>
