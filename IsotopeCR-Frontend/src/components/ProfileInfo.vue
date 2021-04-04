@@ -28,10 +28,10 @@
         </div>
       </div>
       <hr />
-      <div>
-        <h3>Edit Info</h3>
+      <div id = "editInfo">
+        <h3 id = "title">Edit Info</h3>
         <h5> Edit PhoneNumber</h5>
-        <div v-if="type === 'Customer'">           
+        <div v-if="type === 'Customer'" id = "editPhoneNumber">           
                 <input type="text" class="inputbox" v-model="newPhoneNumber" placeholder="new phone number"/>
                 <button class="btn btn-danger" @click="editPhoneNumber(newPhoneNumber)">Edit PhoneNumber</button>
                 <p v-if="editError" style="color: red">{{ editError }}</p>
@@ -71,5 +71,14 @@
   justify-content: center;
   overflow: auto;
   white-space: nowrap;
+}
+#editInfo {
+  padding-top: 5vh;
+}
+#editPhoneNumber {
+  padding-bottom: 5vh;
+}
+#title {
+  padding-bottom: 3vh;
 }
 </style>

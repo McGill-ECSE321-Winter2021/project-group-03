@@ -12,12 +12,29 @@ import 'bulma/css/bulma.css';
             </b-navbar-nav>
 
             <b-navbar-nav class="ml-auto">
+                <b-nav-item v-if="loggedIn && isAdmin" @click="routeTo('createresource')">Resource Management</b-nav-item>
+
+                <b-nav-item v-if="loggedIn && isAdmin" @click="routeTo('createservice')">Service Management</b-nav-item>
+
                 <b-nav-item-dropdown v-if="loggedIn && isCustomer" text="Appointment">
                   <b-dropdown-item @click="routeTo('bookappointment')">Book Appointment</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('futureappointment')">Upcoming Appointment</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('pastappointment')">Appointment History</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('cancelappointment')">Cancel Appointment</b-dropdown-item>
                 </b-nav-item-dropdown>
+
+                <b-nav-item-dropdown v-if="loggedIn && isAdmin" text="Profile Management">
+                  <b-dropdown-item @click="routeTo('allProfiles')">View Profiles</b-dropdown-item>
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-group id="dropdown-group-1" header="Create Profiles">
+                    <b-dropdown-item @click="routeTo('createCustomerProfile')">Customer</b-dropdown-item>
+                    <b-dropdown-item @click="routeTo('createTechProfile')">Technician</b-dropdown-item>
+                    <b-dropdown-item @click="routeTo('createAdminProfile')">Admin</b-dropdown-item>
+                  </b-dropdown-group>
+                </b-nav-item-dropdown>
+
+                <b-nav-item v-if="loggedIn" @click="routeTo('profileInfo')">Profile Info</b-nav-item>
+
                 <b-nav-item v-if="!loggedIn" @click="routeTo('login')">Log In</b-nav-item>
                 <b-nav-item v-if="!loggedIn" @click="routeTo('signup')">Sign Up</b-nav-item>
                 <b-nav-item v-if="loggedIn" @click="logOut()" >Log Out</b-nav-item>

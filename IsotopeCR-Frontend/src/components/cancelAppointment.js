@@ -78,7 +78,6 @@ export default {
                     })
                 }) 
                 .catch(e => {
-                    console.log('Error got')
                     if (e.response) {
                         console.log(e.response)
                         console.log(e.response.data)
