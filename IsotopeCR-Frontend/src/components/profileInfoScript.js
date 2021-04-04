@@ -33,7 +33,8 @@ export default {
             newPassword: '',
             type: '',
             error: '',
-            editError: ''
+            editError: '',
+            passwordError: ''
         }
     },
 
@@ -102,10 +103,7 @@ export default {
 
         editPassword: function (newPassword) {
             if (newPassword == "") {
-                this.editError = "Please enter your newIsOwner Value";
-            } else if (this.email != this.$cookie.get('email')) {
-                console.log(this.$cookie.get('email'))
-                alert("Current login credential does not match the input email")
+                this.passwordError = "Please enter your newIsOwner Value";
             } else {
                 AXIOS.put(backendUrl + '/api/profile/profiles/edit-password', {}, {
                     params: {
@@ -116,7 +114,7 @@ export default {
                     .then(
                         (response) => {
                             console.log(response.data)
-                            this.editError = ''
+                            this.passwordError = ''
                         }
                     )
                     .catch(e => {
@@ -124,7 +122,7 @@ export default {
                             console.log(e.response.data)
                             console.log(e.response.status)
                         }
-                        this.editError = e.response.data
+                        this.passwordError = e.response.data
                     });
             }
         },

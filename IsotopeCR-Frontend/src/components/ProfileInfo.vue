@@ -13,7 +13,7 @@
           />
         </div>
         <button class="btn btn-danger" @click="displayProfile(email)">
-          View My Info
+          View Info
         </button>
         <p v-if="error" style="color: red">Error: {{ error }}</p>
         <hr />
@@ -64,7 +64,7 @@
           <button class="btn btn-danger" @click="editPassword(newPassword)">
             Edit Password
           </button>
-          <p v-if="editError" style="color: red">{{ editError }}</p>
+          <p v-if="passwordError" style="color: red">{{ passwordError }}</p>
         </div>
       </div>
     </div>

@@ -73,13 +73,16 @@ export default {
                         }
                     )
                     .catch(e => {
-                        var errorMsg = "Please check your input according to the hint"
                         console.log(e)
                         if (e.response) {
                             console.log(e.response.data)
                             console.log(e.response.status)
                         }
-                        this.errorVehicle = errorMsg
+                        if(e.response.data.length > 30){
+                            this.errorVehicle = "Duplicate LicensePlate"
+                        } else {
+                            this.errorVehicle = "Please check your input according to hint"
+                        }
                     });
             }
         },

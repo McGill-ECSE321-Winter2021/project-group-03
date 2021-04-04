@@ -23,6 +23,8 @@ import 'bulma/css/bulma.css';
 
                 <b-nav-item v-if="loggedIn && isAdmin" @click="routeTo('createservice')">Service Management</b-nav-item>
 
+                <b-nav-item v-if="loggedIn && isCustomer" @click="routeTo('vehicle')">My Vehicles</b-nav-item>
+
                 <b-nav-item-dropdown v-if="loggedIn && isCustomer" text="Appointment">
                   <b-dropdown-item @click="routeTo('bookappointment')">Book Appointment</b-dropdown-item>
                   <b-dropdown-item @click="routeTo('futureappointment')">Upcoming Appointment</b-dropdown-item>

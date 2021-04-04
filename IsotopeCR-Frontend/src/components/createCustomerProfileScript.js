@@ -35,8 +35,6 @@ export default {
                 this.error = "Please enter your last name";
             } else if (this.email == "") {
                 this.error = "Please enter your email";
-            } else if (this.password == "") {
-                this.error = "Please enter a password";
             } else if (this.password != this.confirmPassword) {
                 this.error = "Your passwords do not match";
             } else {
@@ -52,6 +50,7 @@ export default {
                     .then((response) => {
                         console.log(response.data);
                         this.error = '';
+                        window.location.href = "/"
                     }
                     )
                     .catch((e) => {

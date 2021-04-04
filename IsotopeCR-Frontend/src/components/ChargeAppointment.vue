@@ -29,7 +29,8 @@
           <th>Service</th>
                           
           <th>Technician</th>
-          <th>IsCharged</th>         
+
+          <th>Charged</th>         
         </tr>    
       </thead>        
       <tbody>        
