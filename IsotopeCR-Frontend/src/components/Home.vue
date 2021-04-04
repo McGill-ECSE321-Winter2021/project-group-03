@@ -82,6 +82,12 @@
       </div>
     </section>
 
+    <div class="about-section" id = "about">
+      <h1>About</h1>
+      <h3 style="color:orange;">Expert auto care for all. </h3>
+      <p>We provide the expert auto maintenance you need - for any brand of car, truck or SUV.</p>
+    </div>
+
     <!-- Footer -->
     <footer>
       <div class="container" id="footer">
@@ -169,6 +175,9 @@ export default {
 }
 #servicesR1 {
   padding-top: 3vh;
+}
+#about {
+  padding-top: 5vh;
 }
 #footer {
   padding-top: 5vh;

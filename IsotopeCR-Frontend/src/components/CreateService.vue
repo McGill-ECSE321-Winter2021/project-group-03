@@ -77,32 +77,18 @@
         </button>
         <p v-if="errorService" style="color: red">{{ errorService }}</p>
       </div>
-<br>
-<br>
-      <div id="deleteService">
-        <h3>Delete Service</h3>
-        <div class="container-fluid">
-          <div class="input">
-            <div class="inputbox">
-              <input
-                type="text"
-                class="form-control input-style"
-                v-model="deletedServiceName"
-                placeholder="Service Name"
-              />
-            </div>
-          </div>
-        </div>
-        <button
-          class="btn btn-danger"
-          @click="deleteService(deletedServiceName)"
-        >
-          Delete Service
-        </button>
-        <p v-if="errorService" style="color: red">{{ errorService }}</p>
-      </div>
-
-      <hr />
+      <button class="btn btn-danger" @click="createService(serviceName, duration, price, resourceType, frequency)">Create Service</button>
+      <p v-if="errorService" style="color: red">{{ errorService }}</p>
+    </div>
+        <div id="deleteService">
+      <h3>Delete Service</h3>
+      <select style="width: 150px; height: 36px;" class="form-select" v-model="serviceName">
+        <option v-for="service in services" v-bind:value="service.serviceName">
+          {{ service.serviceName }}
+        </option>
+      </select>
+      <button class="btn btn-danger" @click="deleteService()">Delete Service</button>
+      <p v-if="errorService" style="color: red">{{ errorService }}</p>
     </div>
   </div>
 </template>
@@ -133,5 +119,11 @@ src="./createService.js">
   justify-content: center;
   overflow: auto;
   white-space: nowrap;
+}
+#service {
+  padding-top: 6vh;
+}
+#deleteService {
+  padding-top: 6vh;
 }
 </style>

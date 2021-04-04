@@ -54,6 +54,7 @@ export default {
                             console.log("response got!")
                             console.log(response.data)
                             this.error = ''
+                            window.location.href = "/"
                         }
                     )
                     .catch(e => {

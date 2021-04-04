@@ -96,4 +96,13 @@
   overflow: auto;
   white-space: nowrap;
 }
+#editInfo {
+  padding-top: 5vh;
+}
+#editPhoneNumber {
+  padding-bottom: 5vh;
+}
+#title {
+  padding-bottom: 3vh;
+}
 </style>
