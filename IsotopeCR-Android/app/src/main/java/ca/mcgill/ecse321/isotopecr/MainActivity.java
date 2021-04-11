@@ -16,14 +16,24 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private String error = null;
+    // APPEND NEW CONTENT STARTING FROM HERE
+    private List<String> personNames = new ArrayList<>();
+    private ArrayAdapter<String> personAdapter;             // arrayadapter is a way of viewing array objects for front-end
+    private List<String> eventNames = new ArrayList<>();
+    private ArrayAdapter<String> eventAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         refreshErrorMessage();
+
+        // 4.5.3
+        /*Spinner personSpinner = (Spinner) findViewById(R.id.personspinner);
+        Spinner eventSpinner = (Spinner) findViewById(R.id.eventspinner);
+
+        personAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, personNames);
+        personAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        personSpinner.setAdapter(personAdapter);
+
+        eventAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventNames);
+        eventAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eventSpinner.setAdapter(eventAdapter);
+
+        // Get initial content for spinners
+        refreshLists(this.getCurrentFocus());*/
     }
 
     @Override
@@ -101,5 +126,76 @@ public class MainActivity extends AppCompatActivity {
                 refreshErrorMessage();
             }
         });
+    }
+
+
+    // ===================================================
+    // ==================== Helpers ======================
+    // ===================================================
+    private Bundle getTimeFromLabel(String text) {
+        Bundle rtn = new Bundle();
+        String comps[] = text.toString().split(":");
+        int hour = 12;
+        int minute = 0;
+
+        if (comps.length == 2) {
+            hour = Integer.parseInt(comps[0]);
+            minute = Integer.parseInt(comps[1]);
+        }
+
+        rtn.putInt("hour", hour);
+        rtn.putInt("minute", minute);
+
+        return rtn;
+    }
+
+    private Bundle getDateFromLabel(String text) {
+        Bundle rtn = new Bundle();
+        String comps[] = text.toString().split("-");
+        int day = 1;
+        int month = 1;
+        int year = 1;
+
+        if (comps.length == 3) {
+            day = Integer.parseInt(comps[0]);
+            month = Integer.parseInt(comps[1]);
+            year = Integer.parseInt(comps[2]);
+        }
+
+        rtn.putInt("day", day);
+        rtn.putInt("month", month-1);
+        rtn.putInt("year", year);
+
+        return rtn;
+    }
+
+    public void showTimePickerDialog(View v) {
+        TextView tf = (TextView) v;
+        Bundle args = getTimeFromLabel(tf.getText().toString());
+        args.putInt("id", v.getId());
+
+        TimePickerFragment newFragment = new TimePickerFragment();
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public void showDatePickerDialog(View v) {
+        TextView tf = (TextView) v;
+        Bundle args = getDateFromLabel(tf.getText().toString());
+        args.putInt("id", v.getId());
+
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void setTime(int id, int h, int m) {
+        TextView tv = (TextView) findViewById(id);
+        tv.setText(String.format("%02d:%02d", h, m));
+    }
+
+    public void setDate(int id, int d, int m, int y) {
+        TextView tv = (TextView) findViewById(id);
+        tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
     }
 }
