@@ -107,10 +107,31 @@ public class MainActivity extends AppCompatActivity {
     // ===================================================
     // ============ Write function handler ===============
     // ===================================================
-    public void addPerson(View v) {
+   /* public void addPerson(View v) {
         error = "";
         final TextView tv = (TextView) findViewById(R.id.newperson_name);
         HttpUtils.post("persons/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                refreshErrorMessage();
+                tv.setText("");
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+                refreshErrorMessage();
+            }
+        });
+    }*/
+
+    public void GetVehicle(View v) {
+        error = "";
+        final TextView tv = (TextView) findViewById(R.id.customer_email);
+        HttpUtils.get("/customer/vehicle/get-all/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 refreshErrorMessage();
