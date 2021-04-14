@@ -32,6 +32,7 @@
     <string name="refresh_button">Refresh lists</string>
 
     <string name="refresh_vehicle">Refresh Vehicles</string>
+    <string name="refresh_service">Refresh Services</string>
 
     <string name="name_prompt">Select name</string>
 </resources>

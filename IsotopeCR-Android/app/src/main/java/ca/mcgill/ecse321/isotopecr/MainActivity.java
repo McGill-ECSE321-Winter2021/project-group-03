@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,10 +31,16 @@ public class MainActivity extends AppCompatActivity {
 
     private String error = null;
     // APPEND NEW CONTENT STARTING FROM HERE
-    private List<String> personNames = new ArrayList<>();
+    /*private List<String> personNames = new ArrayList<>();
     private ArrayAdapter<String> personAdapter;             // arrayadapter is a way of viewing array objects for front-end
     private List<String> eventNames = new ArrayList<>();
-    private ArrayAdapter<String> eventAdapter;
+    private ArrayAdapter<String> eventAdapter;*/
+
+    private List<String> licensePlates = new ArrayList<>();
+    private ArrayAdapter<String> vehicleAdapter;
+    private List<String> services = new ArrayList<>();
+    private ArrayAdapter<String> serviceAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         refreshErrorMessage();
 
         // 4.5.3
-        /*Spinner personSpinner = (Spinner) findViewById(R.id.personspinner);
+       /* Spinner personSpinner = (Spinner) findViewById(R.id.personspinner);
         Spinner eventSpinner = (Spinner) findViewById(R.id.eventspinner);
 
         personAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, personNames);
@@ -63,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         eventAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventNames);
         eventAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        eventSpinner.setAdapter(eventAdapter);
+        eventSpinner.setAdaptereventAdapter);
 
         // Get initial content for spinners
         refreshLists(this.getCurrentFocus());*/
@@ -128,14 +135,83 @@ public class MainActivity extends AppCompatActivity {
         });
     }*/
 
+    /**
+     * This method get all the vehicles registered by a customer.
+     * @param v
+     */
     public void GetVehicle(View v) {
         error = "";
         final TextView tv = (TextView) findViewById(R.id.customer_email);
-        HttpUtils.get("/customer/vehicle/get-all/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+        final Spinner s = (Spinner) findViewById(R.id.vehiclespinner);
+        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
+        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(vehicleAdapter);
+
+        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 refreshErrorMessage();
+                /*System.out.println("==========================================");
+                System.out.println("StatusCode = " + statusCode);
+                System.out.println("==========================================");
+                System.out.println(response);*/
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject vehicleJSON = null;
+                    try {
+                        vehicleJSON = response.getJSONObject(i);
+                        String vehicle = vehicleJSON.getString("licensePlate");
+                        licensePlates.add(vehicle);
+                        System.out.println(vehicle);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 tv.setText("");
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+                refreshErrorMessage();
+            }
+        });
+    }
+
+    /**
+     * This method get all the services provided in the system.
+     * @param v
+     */
+    public void GetServices(View v) {
+        error = "";
+
+        Spinner s = (Spinner) findViewById(R.id.servicespinner);
+        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
+        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(serviceAdapter);
+
+        HttpUtils.get("/api/autorepairshop/service/get-all" , new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                refreshErrorMessage();
+                System.out.println("==========================================");
+                System.out.println("StatusCode = " + statusCode);
+                System.out.println("==========================================");
+                System.out.println(response);
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject serviceJSON = null;
+                    try {
+                        serviceJSON = response.getJSONObject(i);
+                        String service = serviceJSON.getString("serviceName");
+                        services.add(service);
+                        System.out.println(service);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
