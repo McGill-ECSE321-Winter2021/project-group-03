@@ -16,6 +16,7 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> vehicleAdapter;
     private List<String> services = new ArrayList<>();
     private ArrayAdapter<String> serviceAdapter;
+
+    private String selectedVehicle = "";
+    private String selectedService = "";
+
+    private Spinner vehicleSpinner;
+    private Spinner serviceSpinner;
+
+    private TextView vehicleView;
+    private TextView serviceView;
 
 
     @Override
@@ -60,20 +71,63 @@ public class MainActivity extends AppCompatActivity {
 
         refreshErrorMessage();
 
-        // 4.5.3
-       /* Spinner personSpinner = (Spinner) findViewById(R.id.personspinner);
-        Spinner eventSpinner = (Spinner) findViewById(R.id.eventspinner);
 
-        personAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, personNames);
-        personAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        personSpinner.setAdapter(personAdapter);
+        vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
+        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleSpinner.setAdapter(vehicleAdapter);
+        vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
 
-        eventAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventNames);
-        eventAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        eventSpinner.setAdaptereventAdapter);
+        vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // get selected item and assign to textview
+                String licensePlate = vehicleSpinner.getSelectedItem().toString();
 
-        // Get initial content for spinners
-        refreshLists(this.getCurrentFocus());*/
+                selectedVehicle = licensePlate;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // handle if you'd like to
+                selectedVehicle = "";
+            }
+        });
+
+
+        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
+        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serviceSpinner.setAdapter(serviceAdapter);
+
+        serviceView = (TextView) findViewById(R.id.service_name);
+
+//        serviceView.setText("Hello world");
+
+        serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // get selected item and assign to textview
+                System.out.println("================================");
+                System.out.println("================================");
+                System.out.println("================================");
+                System.out.println("================================");
+
+
+                String serviceName = serviceSpinner.getSelectedItem().toString();
+//                String serviceName = (String) parent.getItemAtPosition(position);
+//                serviceView.setText(serviceName);
+                selectedService = serviceName;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedService = "";
+                System.out.println("Nothing!!!!");
+                System.out.println("Nothing!!!!");
+                System.out.println("Nothing!!!!");
+            }
+        });
     }
 
     @Override
@@ -142,24 +196,16 @@ public class MainActivity extends AppCompatActivity {
     public void GetVehicle(View v) {
         error = "";
         final TextView tv = (TextView) findViewById(R.id.customer_email);
-        final Spinner s = (Spinner) findViewById(R.id.vehiclespinner);
-        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
-        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s.setAdapter(vehicleAdapter);
+        final TextView vehicleView = findViewById(R.id.vehicle_licenseplate);
+
 
         HttpUtils.get("/api/profile/customer/vehicle/get-all/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 refreshErrorMessage();
-                /*System.out.println("==========================================");
-                System.out.println("StatusCode = " + statusCode);
-                System.out.println("==========================================");
-                System.out.println(response);*/
                 for (int i = 0; i < response.length(); i++) {
-                    JSONObject vehicleJSON = null;
                     try {
-                        vehicleJSON = response.getJSONObject(i);
-                        String vehicle = vehicleJSON.getString("licensePlate");
+                        String vehicle = response.getJSONObject(i).getString("licensePlate");
                         licensePlates.add(vehicle);
                         System.out.println(vehicle);
                     } catch (JSONException e) {
@@ -167,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 tv.setText("");
+                vehicleAdapter.notifyDataSetChanged();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
@@ -187,11 +234,6 @@ public class MainActivity extends AppCompatActivity {
     public void GetServices(View v) {
         error = "";
 
-        Spinner s = (Spinner) findViewById(R.id.servicespinner);
-        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
-        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s.setAdapter(serviceAdapter);
-
         HttpUtils.get("/api/autorepairshop/service/get-all" , new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -205,13 +247,14 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         serviceJSON = response.getJSONObject(i);
                         String service = serviceJSON.getString("serviceName");
+
                         services.add(service);
                         System.out.println(service);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-
+                serviceAdapter.notifyDataSetChanged();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
