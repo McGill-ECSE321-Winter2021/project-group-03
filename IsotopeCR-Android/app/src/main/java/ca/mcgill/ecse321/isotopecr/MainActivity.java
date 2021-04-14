@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.isotopecr;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                logout();
+                return true;
+            }
+        });
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -154,29 +162,36 @@ public class MainActivity extends AppCompatActivity {
                     NavigationView navigationView = findViewById(R.id.nav_view);
                     Menu nav_Menu = navigationView.getMenu();
                     nav_Menu.findItem(R.id.nav_login).setVisible(false);
+                    nav_Menu.findItem(R.id.nav_logout).setVisible(true);
 //                    Navigation.findNavController(v).navigate(R.id.nav_schedule);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                try {
-//                    error += errorResponse.get(0).toString();
-//                } catch (JSONException e) {
-//                    error += e.getMessage();
-//                }
-//                refreshErrorMessage();
-//            }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 error += responseString;
-                System.out.println(error);
                 refreshErrorMessage();
             }
         });
+    }
+
+    /**
+     * Customer logout function.
+     *
+     * @author Jack Wei
+     */
+    public void logout() {
+        loginEmail = null;
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_login).setVisible(true);
+
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
+
+        nav_Menu.findItem(R.id.nav_logout).setVisible(false);
     }
 
 
