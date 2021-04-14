@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,6 +44,20 @@ public class MainActivity extends AppCompatActivity {
     private List<String> eventNames = new ArrayList<>();
     private ArrayAdapter<String> eventAdapter;
 
+    private List<String> licensePlates = new ArrayList<>();
+    private ArrayAdapter<String> vehicleAdapter;
+    private List<String> services = new ArrayList<>();
+    private ArrayAdapter<String> serviceAdapter;
+
+    private String selectedVehicle = "";
+    private String selectedService = "";
+
+    private Spinner vehicleSpinner;
+    private Spinner serviceSpinner;
+
+    private TextView vehicleView;
+    private TextView serviceView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +84,66 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_login, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_login, R.id.nav_slideshow, R.id.nav_bookappointment)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+
+       /* vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+        System.out.println("================");
+        System.out.println(vehicleSpinner);
+
+        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
+        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleSpinner.setAdapter(vehicleAdapter);
+        vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
+
+        vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // get selected item and assign to textview
+                String licensePlate = vehicleSpinner.getSelectedItem().toString();
+
+                selectedVehicle = licensePlate;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // handle if you'd like to
+                selectedVehicle = "";
+            }
+        });
+*/
+
+       /* serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
+        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serviceSpinner.setAdapter(serviceAdapter);
+
+        serviceView = (TextView) findViewById(R.id.service_name);
+
+//        serviceView.setText("Hello world");
+
+        serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // get selected item and assign to textview
+                String serviceName = serviceSpinner.getSelectedItem().toString();
+//                String serviceName = (String) parent.getItemAtPosition(position);
+//                serviceView.setText(serviceName);
+                selectedService = serviceName;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedService = "";
+            }
+        });*/
+
 
 //        refreshErrorMessage();
     }
@@ -194,6 +264,109 @@ public class MainActivity extends AppCompatActivity {
         nav_Menu.findItem(R.id.nav_logout).setVisible(false);
     }
 
+
+    /**
+     * This method get all the vehicles registered by a customer.
+     * @param v
+     */
+    public void GetVehicle(View v) {
+        error = "";
+        final TextView tv = (TextView) findViewById(R.id.customer_email);
+        final TextView vehicleView = findViewById(R.id.vehicle_licenseplate);
+
+        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                refreshErrorMessage();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        String vehicle = response.getJSONObject(i).getString("licensePlate");
+                        licensePlates.add(vehicle);
+                        System.out.println(vehicle);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                tv.setText("");
+                vehicleAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+                refreshErrorMessage();
+            }
+        });
+    }
+
+    /**
+     * This method get all the services provided in the system.
+     * @param v
+     */
+    public void GetServices(View v) {
+        error = "";
+
+        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
+        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serviceSpinner.setAdapter(serviceAdapter);
+
+        serviceView = (TextView) findViewById(R.id.service_name);
+
+//        serviceView.setText("Hello world");
+
+        serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // get selected item and assign to textview
+                String serviceName = serviceSpinner.getSelectedItem().toString();
+//                String serviceName = (String) parent.getItemAtPosition(position);
+//                serviceView.setText(serviceName);
+                selectedService = serviceName;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedService = "";
+            }
+        });
+
+        HttpUtils.get("/api/autorepairshop/service/get-all" , new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                refreshErrorMessage();
+                System.out.println("==========================================");
+                System.out.println("StatusCode = " + statusCode);
+                System.out.println("==========================================");
+                System.out.println(response);
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject serviceJSON = null;
+                    try {
+                        serviceJSON = response.getJSONObject(i);
+                        String service = serviceJSON.getString("serviceName");
+
+                        services.add(service);
+                        System.out.println(service);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                serviceAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+//                refreshErrorMessage();
+            }
+        });
+    }
 
     // ===================================================
     // ==================== Helpers ======================

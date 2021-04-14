@@ -21,5 +21,10 @@
             android:icon="@drawable/ic_baseline_account_circle_24"
             android:title="@string/menu_logout"
             android:visible="false"/>
+
+        <item
+            android:id="@+id/nav_bookappointment"
+            android:icon="@drawable/ic_baseline_account_circle_24"
+            android:title="@string/menu_bookappointment" />
     </group>
 </menu>
