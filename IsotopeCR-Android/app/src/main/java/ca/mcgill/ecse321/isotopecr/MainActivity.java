@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,18 +85,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    // added in 4.3.2
-//    private void refreshErrorMessage() {
-//        // set the error message
-//        TextView tvError = (TextView) findViewById(R.id.error);
-//        tvError.setText(error);
-//
-//        if (error == null || error.length() == 0) {
-//            tvError.setVisibility(View.GONE);
-//        } else {
-//            tvError.setVisibility(View.VISIBLE);
-//        }
-//    }
+    // added in 4.3.2
+    private void refreshErrorMessage() {
+        // set the error message
+        TextView tvError = (TextView) findViewById(R.id.error1);
+        tvError.setText(error);
+
+        if (error == null || error.length() == 0) {
+            tvError.setVisibility(View.GONE);
+        } else {
+            tvError.setVisibility(View.VISIBLE);
+        }
+    }
 
     // ===================================================
     // ============ Write function handler ===============
@@ -138,40 +139,42 @@ public class MainActivity extends AppCompatActivity {
         params.put("email", email.getText().toString());
         params.put("password", password.getText().toString());
 
+        System.out.println(params.toString());
+
         // Send login post request
-        HttpUtils.post("login/", params, new JsonHttpResponseHandler() {
+        HttpUtils.post("/api/profile/login/", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                refreshErrorMessage();
-//                try {
-//                    // Updates the logged in email
-//                    email = response.getString("email");
-//                    tutorName.setText(name);
-//                    tutorId.setText(userId + "");
-//
-//                     Hide Login and unhide the rest of the nav options
-//                    NavigationView navigationView = findViewById(R.id.nav_view);
-//                    Menu nav_Menu = navigationView.getMenu();
-//                    nav_Menu.findItem(R.id.nav_welcome).setVisible(false);
-//                    nav_Menu.findItem(R.id.nav_schedule).setVisible(true);
-//                    nav_Menu.findItem(R.id.nav_notification).setVisible(true);
-//                    nav_Menu.findItem(R.id.nav_reviews).setVisible(true);
-//                    nav_Menu.findItem(R.id.nav_wages).setVisible(true);
-//                    nav_Menu.findItem(R.id.nav_settings).setVisible(true);
+                error = "";
+                refreshErrorMessage();
+                try {
+                    // Updates the logged in email
+                    loginEmail = response.getString("email");
+
+                    NavigationView navigationView = findViewById(R.id.nav_view);
+                    Menu nav_Menu = navigationView.getMenu();
+                    nav_Menu.findItem(R.id.nav_login).setVisible(false);
 //                    Navigation.findNavController(v).navigate(R.id.nav_schedule);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+//                try {
+//                    error += errorResponse.get(0).toString();
+//                } catch (JSONException e) {
+//                    error += e.getMessage();
+//                }
 //                refreshErrorMessage();
+//            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                error += responseString;
+                System.out.println(error);
+                refreshErrorMessage();
             }
         });
     }
