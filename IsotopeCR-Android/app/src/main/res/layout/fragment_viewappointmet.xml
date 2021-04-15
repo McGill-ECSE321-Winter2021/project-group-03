@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="ViewAppointment"
+                android:onClick="GetFutureAppointment"
                 android:text="@string/name_appointmentview1" />
         <?xml version="1.0" encoding="utf-8"?>
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -394,10 +394,49 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void GetFutureAppointment(View v) {
+        error = "";
+
+
+        HttpUtils.get("/api/appointment/futureappointment/get-all", new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                refreshErrorMessage();
+                System.out.println("==========================================");
+                System.out.println("StatusCode = " + statusCode);
+                System.out.println("==========================================");
+                System.out.println(response);
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject serviceJSON = null;
+                    try {
+                        serviceJSON = response.getJSONObject(i);
+                        String service = serviceJSON.getString("serviceName");
+
+                        services.add(service);
+                        System.out.println(service);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                serviceAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+//                refreshErrorMessage();
+            }
+        });
+    }
 
 
 
-                /**
+
+    /**
                  * This method book an appointment for the user.
                  *
                  * @param v
