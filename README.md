@@ -42,5 +42,3 @@ In each project report, you may find a succinct report of the work done, as well
 [Project Report 3](https://github.com/McGill-ECSE321-Winter2021/project-group-03/wiki/Project-Reports#sprint-3deliverable-3-report)
 
 [Project Report 4](https://github.com/McGill-ECSE321-Winter2021/project-group-03/wiki/Project-Reports#sprint-4deliverable-4-report)
-
-[Project Report 5](https://github.com/McGill-ECSE321-Winter2021/project-group-03/wiki/Project-Reports#sprint-5deliverable-5-report)
