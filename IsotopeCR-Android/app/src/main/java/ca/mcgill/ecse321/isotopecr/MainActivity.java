@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -404,62 +406,73 @@ public class MainActivity extends AppCompatActivity {
         TextView time = (TextView) findViewById(R.id.starttime);
 
         // get PathVariables
-//        String vehicleplate = vehicleSpinner.getSelectedItem().toString();
-//        String servicename = serviceSpinner.getSelectedItem().toString();
+        String vehicleplate = vehicleSpinner.getSelectedItem().toString();
+        String servicename = serviceSpinner.getSelectedItem().toString();
 
         System.out.println("======================================");
         System.out.println(date.getText().toString());
         System.out.println("======================================");
 
         Bundle dateBundle = getDateFromLabel(date.getText().toString());
-        String formatDate = dateBundle.getString("year").toString() + dateBundle.getString("month").toString() + dateBundle.getString("day").toString();
+        String formatDate = formatISODate(dateBundle);
         System.out.println(formatDate);
-      /*  Bundle timeBundle = getTimeFromLabel(time.getText().toString());
-        String formatTime = timeBundle.getString("hour") + timeBundle.getString("minute");
-        System.out.println(formatTime);*/
 
+        Bundle timeBundle = getTimeFromLabel(time.getText().toString());
+        String formatTime = formatISOTime(timeBundle);
+        System.out.println(formatTime);
 
         System.out.println("======================================");
-        System.out.println(dateBundle.getString("year").toString());
 
         // Construct request parameter
-      /*  RequestParams params = new RequestParams();
-        params.put("start", time.getText().toString());
-        params.put("date", formatDate);*/
+        RequestParams params = new RequestParams();
+        params.put("start", formatTime);
+        params.put("date", formatDate);
 
-       /* HttpUtils.post("/api/appointment/create/" + vehicleplate + "/" + servicename
-                , new RequestParams(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+
+            String uri = "/api/appointment/create/" + vehicleplate + "/" + servicename;
+            String fullUri = uri.replace(" ", "%20");
+
+            System.out.println(fullUri);
+
+            HttpUtils.post(fullUri, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                refreshErrorMessage();
-                System.out.println("==========================================");
-                System.out.println("StatusCode = " + statusCode);
-                System.out.println("==========================================");
-                System.out.println(response);
-                for (int i = 0; i < response.length(); i++) {
-                    JSONObject serviceJSON = null;
+                    System.out.println("==========================================");
+                    System.out.println("StatusCode = " + statusCode);
+                    System.out.println("==========================================");
+                    System.out.println(response);
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     try {
-                        serviceJSON = response.getJSONObject(i);
-                        String service = serviceJSON.getString("serviceName");
-
-                        services.add(service);
-                        System.out.println(service);
+                        error += errorResponse.get("message").toString();
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        error += e.getMessage();
                     }
-                }
-                serviceAdapter.notifyDataSetChanged();
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
 //                refreshErrorMessage();
-            }
-        });*/
+                }
+            });
+
+
+
+
+    }
+
+    private String formatISOTime(Bundle timeBundle) {
+        int hour = timeBundle.getInt("hour");
+        int minute = timeBundle.getInt("minute");
+
+        return String.format("%02d:%02d:%02d", hour, minute, 0);
+    }
+
+    private String formatISODate(Bundle dateBundle) {
+        int year = dateBundle.getInt("year");
+        int month = dateBundle.getInt("month");
+        int day = dateBundle.getInt("day");
+
+        return String.format("%04d-%02d-%02d", year, month + 1, day);
     }
 
     // ===================================================
