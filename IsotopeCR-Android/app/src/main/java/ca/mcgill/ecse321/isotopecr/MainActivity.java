@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void GetVehicle(View v) {
         error = "";
-        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
+//        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
 
         vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
 
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + customerEmail.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 //                refreshErrorMessage();
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                customerEmail.setText("");
+//                customerEmail.setText("");
                 vehicleAdapter.notifyDataSetChanged();
             }
             @Override
