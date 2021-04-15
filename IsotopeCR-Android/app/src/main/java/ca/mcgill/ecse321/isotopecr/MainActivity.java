@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.isotopecr;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -95,58 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-       /* vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
-        System.out.println("================");
-        System.out.println(vehicleSpinner);
-
-        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
-        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        vehicleSpinner.setAdapter(vehicleAdapter);
-        vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
-
-        vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // get selected item and assign to textview
-                String licensePlate = vehicleSpinner.getSelectedItem().toString();
-
-                selectedVehicle = licensePlate;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // handle if you'd like to
-                selectedVehicle = "";
-            }
-        });
-*/
-
-       /* serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
-        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
-        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        serviceSpinner.setAdapter(serviceAdapter);
-
-        serviceView = (TextView) findViewById(R.id.service_name);
-
-//        serviceView.setText("Hello world");
-
-        serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // get selected item and assign to textview
-                String serviceName = serviceSpinner.getSelectedItem().toString();
-//                String serviceName = (String) parent.getItemAtPosition(position);
-//                serviceView.setText(serviceName);
-                selectedService = serviceName;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                selectedService = "";
-            }
-        });*/
-
-
 //        refreshErrorMessage();
     }
 
@@ -181,27 +131,6 @@ public class MainActivity extends AppCompatActivity {
     // ===================================================
     // ============ Write function handler ===============
     // ===================================================
-//    public void addPerson(View v) {
-//        error = "";
-//        final TextView tv = (TextView) findViewById(R.id.newperson_name);
-//        HttpUtils.post("persons/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                refreshErrorMessage();
-//                tv.setText("");
-//            }
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                try {
-//                    error += errorResponse.get("message").toString();
-//                } catch (JSONException e) {
-//                    error += e.getMessage();
-//                }
-//                refreshErrorMessage();
-//            }
-//        });
-//    }
-
     /**
      * Customer login function.
      *
@@ -405,29 +334,29 @@ public class MainActivity extends AppCompatActivity {
         TextView date = (TextView) findViewById(R.id.newappointment_date);
         TextView time = (TextView) findViewById(R.id.starttime);
 
-        // get PathVariables
-        String vehicleplate = vehicleSpinner.getSelectedItem().toString();
-        String servicename = serviceSpinner.getSelectedItem().toString();
+        if (vehicleSpinner.getSelectedItem() != null && serviceSpinner.getSelectedItem() != null) {
+            // get PathVariables
+            String vehicleplate = vehicleSpinner.getSelectedItem().toString();
+            String servicename = serviceSpinner.getSelectedItem().toString();
 
-        System.out.println("======================================");
-        System.out.println(date.getText().toString());
-        System.out.println("======================================");
+            System.out.println("======================================");
+            System.out.println(date.getText().toString());
+            System.out.println("======================================");
 
-        Bundle dateBundle = getDateFromLabel(date.getText().toString());
-        String formatDate = formatISODate(dateBundle);
-        System.out.println(formatDate);
+            Bundle dateBundle = getDateFromLabel(date.getText().toString());
+            String formatDate = formatISODate(dateBundle);
+            System.out.println(formatDate);
 
-        Bundle timeBundle = getTimeFromLabel(time.getText().toString());
-        String formatTime = formatISOTime(timeBundle);
-        System.out.println(formatTime);
+            Bundle timeBundle = getTimeFromLabel(time.getText().toString());
+            String formatTime = formatISOTime(timeBundle);
+            System.out.println(formatTime);
 
-        System.out.println("======================================");
+            System.out.println("======================================");
 
-        // Construct request parameter
-        RequestParams params = new RequestParams();
-        params.put("start", formatTime);
-        params.put("date", formatDate);
-
+            // Construct request parameter
+            RequestParams params = new RequestParams();
+            params.put("start", formatTime);
+            params.put("date", formatDate);
 
 
             String uri = "/api/appointment/create/" + vehicleplate + "/" + servicename;
@@ -443,19 +372,31 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("StatusCode = " + statusCode);
                     System.out.println("==========================================");
                     System.out.println(response);
+
+                    Context context = getApplicationContext();
+                    CharSequence text = "Book Appointment Successful!";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast.makeText(context, text, duration).show();
                 }
                 @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    try {
-                        error += errorResponse.get("message").toString();
-                    } catch (JSONException e) {
-                        error += e.getMessage();
-                    }
-//                refreshErrorMessage();
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        System.out.println(responseString);
+
+                        Context context = getApplicationContext();
+                        CharSequence text = responseString;
+                        int duration = Toast.LENGTH_LONG;
+                        Toast.makeText(context, text, duration).show();
                 }
             });
 
+        } else {
+            Context context = getApplicationContext();
+            CharSequence text = "Please select vehicle and services before your Booking";
+            int duration = Toast.LENGTH_LONG;
 
+            Toast.makeText(context, text, duration).show();
+        }
 
 
     }
