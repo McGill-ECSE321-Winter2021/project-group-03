@@ -271,13 +271,36 @@ public class MainActivity extends AppCompatActivity {
      */
     public void GetVehicle(View v) {
         error = "";
-        final TextView tv = (TextView) findViewById(R.id.customer_email);
-        final TextView vehicleView = findViewById(R.id.vehicle_licenseplate);
+        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
 
-        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+        vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+
+        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
+        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleSpinner.setAdapter(vehicleAdapter);
+        vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
+
+        vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // get selected item and assign to textview
+                String licensePlate = vehicleSpinner.getSelectedItem().toString();
+
+                selectedVehicle = licensePlate;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // handle if you'd like to
+                selectedVehicle = "";
+            }
+        });
+
+
+        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + customerEmail.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                refreshErrorMessage();
+//                refreshErrorMessage();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         String vehicle = response.getJSONObject(i).getString("licensePlate");
@@ -287,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                tv.setText("");
+                customerEmail.setText("");
                 vehicleAdapter.notifyDataSetChanged();
             }
             @Override
@@ -297,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     error += e.getMessage();
                 }
-                refreshErrorMessage();
+//                refreshErrorMessage();
             }
         });
     }
@@ -313,7 +336,6 @@ public class MainActivity extends AppCompatActivity {
         serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
         serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         serviceSpinner.setAdapter(serviceAdapter);
-
         serviceView = (TextView) findViewById(R.id.service_name);
 
 //        serviceView.setText("Hello world");
@@ -366,6 +388,78 @@ public class MainActivity extends AppCompatActivity {
 //                refreshErrorMessage();
             }
         });
+    }
+
+
+    /**
+     * This method book an appointment for the user.
+     * @param v
+     */
+    public void BookAppointment(View v) {
+        error = "";
+
+        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+        vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+        TextView date = (TextView) findViewById(R.id.newappointment_date);
+        TextView time = (TextView) findViewById(R.id.starttime);
+
+        // get PathVariables
+//        String vehicleplate = vehicleSpinner.getSelectedItem().toString();
+//        String servicename = serviceSpinner.getSelectedItem().toString();
+
+        System.out.println("======================================");
+        System.out.println(date.getText().toString());
+        System.out.println("======================================");
+
+        Bundle dateBundle = getDateFromLabel(date.getText().toString());
+        String formatDate = dateBundle.getString("year").toString() + dateBundle.getString("month").toString() + dateBundle.getString("day").toString();
+        System.out.println(formatDate);
+      /*  Bundle timeBundle = getTimeFromLabel(time.getText().toString());
+        String formatTime = timeBundle.getString("hour") + timeBundle.getString("minute");
+        System.out.println(formatTime);*/
+
+
+        System.out.println("======================================");
+        System.out.println(dateBundle.getString("year").toString());
+
+        // Construct request parameter
+      /*  RequestParams params = new RequestParams();
+        params.put("start", time.getText().toString());
+        params.put("date", formatDate);*/
+
+       /* HttpUtils.post("/api/appointment/create/" + vehicleplate + "/" + servicename
+                , new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                refreshErrorMessage();
+                System.out.println("==========================================");
+                System.out.println("StatusCode = " + statusCode);
+                System.out.println("==========================================");
+                System.out.println(response);
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject serviceJSON = null;
+                    try {
+                        serviceJSON = response.getJSONObject(i);
+                        String service = serviceJSON.getString("serviceName");
+
+                        services.add(service);
+                        System.out.println(service);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                serviceAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+//                refreshErrorMessage();
+            }
+        });*/
     }
 
     // ===================================================
