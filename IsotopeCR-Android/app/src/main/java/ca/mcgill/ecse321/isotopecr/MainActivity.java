@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,19 +36,17 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
+    // APPEND NEW CONTENT STARTING FROM HERE
+    private final List<String> personNames = new ArrayList<>();
+    private final List<String> eventNames = new ArrayList<>();
+    private final List<String> licensePlates = new ArrayList<>();
+    private final List<String> services = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
     private String error = null;
     private String loginEmail = null;
-
-    // APPEND NEW CONTENT STARTING FROM HERE
-    private List<String> personNames = new ArrayList<>();
     private ArrayAdapter<String> personAdapter;             // arrayadapter is a way of viewing array objects for front-end
-    private List<String> eventNames = new ArrayList<>();
     private ArrayAdapter<String> eventAdapter;
-
-    private List<String> licensePlates = new ArrayList<>();
     private ArrayAdapter<String> vehicleAdapter;
-    private List<String> services = new ArrayList<>();
     private ArrayAdapter<String> serviceAdapter;
 
     private String selectedVehicle = "";
@@ -267,17 +267,41 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method get all the vehicles registered by a customer.
+     *
      * @param v
      */
     public void GetVehicle(View v) {
         error = "";
-        final TextView tv = (TextView) findViewById(R.id.customer_email);
-        final TextView vehicleView = findViewById(R.id.vehicle_licenseplate);
+        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
 
-        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+        vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+
+        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
+        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleSpinner.setAdapter(vehicleAdapter);
+        vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
+
+        vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // get selected item and assign to textview
+                String licensePlate = vehicleSpinner.getSelectedItem().toString();
+
+                selectedVehicle = licensePlate;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // handle if you'd like to
+                selectedVehicle = "";
+            }
+        });
+
+
+        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + customerEmail.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                refreshErrorMessage();
+//                refreshErrorMessage();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         String vehicle = response.getJSONObject(i).getString("licensePlate");
@@ -287,9 +311,10 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                tv.setText("");
+                customerEmail.setText("");
                 vehicleAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 try {
@@ -297,13 +322,14 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     error += e.getMessage();
                 }
-                refreshErrorMessage();
+//                refreshErrorMessage();
             }
         });
     }
 
     /**
      * This method get all the services provided in the system.
+     *
      * @param v
      */
     public void GetServices(View v) {
@@ -313,7 +339,6 @@ public class MainActivity extends AppCompatActivity {
         serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
         serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         serviceSpinner.setAdapter(serviceAdapter);
-
         serviceView = (TextView) findViewById(R.id.service_name);
 
 //        serviceView.setText("Hello world");
@@ -334,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        HttpUtils.get("/api/autorepairshop/service/get-all" , new RequestParams(), new JsonHttpResponseHandler() {
+        HttpUtils.get("/api/autorepairshop/service/get-all", new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 //                refreshErrorMessage();
@@ -356,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 serviceAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 try {
@@ -368,118 +394,158 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void GetFutureAppointments(View v) {
-        error = "";
-
-        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
-        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
-        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        serviceSpinner.setAdapter(serviceAdapter);
-
-        serviceView = (TextView) findViewById(R.id.service_name);
 
 
-        HttpUtils.get("/api/appointment/futureappointment/customer/" , new RequestParams(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                /**
+                 * This method book an appointment for the user.
+                 *
+                 * @param v
+                 */
+        public void BookAppointment (View v){
+            error = "";
+
+            serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+            vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+            TextView date = (TextView) findViewById(R.id.newappointment_date);
+            TextView time = (TextView) findViewById(R.id.starttime);
+
+            // get PathVariables
+            String vehicleplate = vehicleSpinner.getSelectedItem().toString();
+            String servicename = serviceSpinner.getSelectedItem().toString();
+
+            System.out.println("======================================");
+            System.out.println(date.getText().toString());
+            System.out.println("======================================");
+
+            Bundle dateBundle = getDateFromLabel(date.getText().toString());
+            String formatDate = formatISODate(dateBundle);
+            System.out.println(formatDate);
+
+            Bundle timeBundle = getTimeFromLabel(time.getText().toString());
+            String formatTime = formatISOTime(timeBundle);
+            System.out.println(formatTime);
+
+            System.out.println("======================================");
+
+            // Construct request parameter
+            RequestParams params = new RequestParams();
+            params.put("start", formatTime);
+            params.put("date", formatDate);
+
+
+            String uri = "/api/appointment/create/" + vehicleplate + "/" + servicename;
+            String fullUri = uri.replace(" ", "%20");
+
+            System.out.println(fullUri);
+
+            HttpUtils.post(fullUri, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 //                refreshErrorMessage();
-                System.out.println("==========================================");
-                System.out.println("StatusCode = " + statusCode);
-                System.out.println("==========================================");
-                System.out.println(response);
-                for (int i = 0; i < response.length(); i++) {
-                    JSONObject serviceJSON = null;
+                    System.out.println("==========================================");
+                    System.out.println("StatusCode = " + statusCode);
+                    System.out.println("==========================================");
+                    System.out.println(response);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     try {
-                        serviceJSON = response.getJSONObject(i);
-                        String service = serviceJSON.getString("serviceName");
-
-                        services.add(service);
-                        System.out.println(service);
+                        error += errorResponse.get("message").toString();
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        error += e.getMessage();
                     }
-                }
-                serviceAdapter.notifyDataSetChanged();
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
 //                refreshErrorMessage();
+                }
+            });
+
+
+        }
+
+        private String formatISOTime (Bundle timeBundle){
+            int hour = timeBundle.getInt("hour");
+            int minute = timeBundle.getInt("minute");
+
+            return String.format("%02d:%02d:%02d", hour, minute, 0);
+        }
+
+        private String formatISODate (Bundle dateBundle){
+            int year = dateBundle.getInt("year");
+            int month = dateBundle.getInt("month");
+            int day = dateBundle.getInt("day");
+
+            return String.format("%04d-%02d-%02d", year, month + 1, day);
+
+        }
+
+        // ===================================================
+        // ==================== Helpers ======================
+        // ===================================================
+        private Bundle getTimeFromLabel (String text){
+            Bundle rtn = new Bundle();
+            String[] comps = text.split(":");
+            int hour = 12;
+            int minute = 0;
+
+            if (comps.length == 2) {
+                hour = Integer.parseInt(comps[0]);
+                minute = Integer.parseInt(comps[1]);
             }
-        });
-    }
 
-    // ===================================================
-    // ==================== Helpers ======================
-    // ===================================================
-    private Bundle getTimeFromLabel(String text) {
-        Bundle rtn = new Bundle();
-        String comps[] = text.toString().split(":");
-        int hour = 12;
-        int minute = 0;
+            rtn.putInt("hour", hour);
+            rtn.putInt("minute", minute);
 
-        if (comps.length == 2) {
-            hour = Integer.parseInt(comps[0]);
-            minute = Integer.parseInt(comps[1]);
+            return rtn;
         }
 
-        rtn.putInt("hour", hour);
-        rtn.putInt("minute", minute);
+        private Bundle getDateFromLabel (String text){
+            Bundle rtn = new Bundle();
+            String[] comps = text.split("-");
+            int day = 1;
+            int month = 1;
+            int year = 1;
 
-        return rtn;
-    }
+            if (comps.length == 3) {
+                day = Integer.parseInt(comps[0]);
+                month = Integer.parseInt(comps[1]);
+                year = Integer.parseInt(comps[2]);
+            }
 
-    private Bundle getDateFromLabel(String text) {
-        Bundle rtn = new Bundle();
-        String comps[] = text.toString().split("-");
-        int day = 1;
-        int month = 1;
-        int year = 1;
+            rtn.putInt("day", day);
+            rtn.putInt("month", month - 1);
+            rtn.putInt("year", year);
 
-        if (comps.length == 3) {
-            day = Integer.parseInt(comps[0]);
-            month = Integer.parseInt(comps[1]);
-            year = Integer.parseInt(comps[2]);
+            return rtn;
         }
 
-        rtn.putInt("day", day);
-        rtn.putInt("month", month-1);
-        rtn.putInt("year", year);
+        public void showTimePickerDialog (View v){
+            TextView tf = (TextView) v;
+            Bundle args = getTimeFromLabel(tf.getText().toString());
+            args.putInt("id", v.getId());
 
-        return rtn;
+            TimePickerFragment newFragment = new TimePickerFragment();
+            newFragment.setArguments(args);
+            newFragment.show(getSupportFragmentManager(), "timePicker");
+        }
+
+        public void showDatePickerDialog (View v){
+            TextView tf = (TextView) v;
+            Bundle args = getDateFromLabel(tf.getText().toString());
+            args.putInt("id", v.getId());
+
+            DatePickerFragment newFragment = new DatePickerFragment();
+            newFragment.setArguments(args);
+            newFragment.show(getSupportFragmentManager(), "datePicker");
+        }
+
+        public void setTime ( int id, int h, int m){
+            TextView tv = (TextView) findViewById(id);
+            tv.setText(String.format("%02d:%02d", h, m));
+        }
+
+        public void setDate ( int id, int d, int m, int y){
+            TextView tv = (TextView) findViewById(id);
+            tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
+        }
     }
-
-    public void showTimePickerDialog(View v) {
-        TextView tf = (TextView) v;
-        Bundle args = getTimeFromLabel(tf.getText().toString());
-        args.putInt("id", v.getId());
-
-        TimePickerFragment newFragment = new TimePickerFragment();
-        newFragment.setArguments(args);
-        newFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
-    public void showDatePickerDialog(View v) {
-        TextView tf = (TextView) v;
-        Bundle args = getDateFromLabel(tf.getText().toString());
-        args.putInt("id", v.getId());
-
-        DatePickerFragment newFragment = new DatePickerFragment();
-        newFragment.setArguments(args);
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    public void setTime(int id, int h, int m) {
-        TextView tv = (TextView) findViewById(id);
-        tv.setText(String.format("%02d:%02d", h, m));
-    }
-
-    public void setDate(int id, int d, int m, int y) {
-        TextView tv = (TextView) findViewById(id);
-        tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
-    }
-}
