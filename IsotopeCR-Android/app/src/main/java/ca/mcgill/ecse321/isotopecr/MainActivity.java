@@ -368,6 +368,51 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void GetFutureAppointments(View v) {
+        error = "";
+
+        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
+        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serviceSpinner.setAdapter(serviceAdapter);
+
+        serviceView = (TextView) findViewById(R.id.service_name);
+
+
+        HttpUtils.get("/api/appointment/futureappointment/customer/" , new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                refreshErrorMessage();
+                System.out.println("==========================================");
+                System.out.println("StatusCode = " + statusCode);
+                System.out.println("==========================================");
+                System.out.println(response);
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject serviceJSON = null;
+                    try {
+                        serviceJSON = response.getJSONObject(i);
+                        String service = serviceJSON.getString("serviceName");
+
+                        services.add(service);
+                        System.out.println(service);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                serviceAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+//                refreshErrorMessage();
+            }
+        });
+    }
+
     // ===================================================
     // ==================== Helpers ======================
     // ===================================================
