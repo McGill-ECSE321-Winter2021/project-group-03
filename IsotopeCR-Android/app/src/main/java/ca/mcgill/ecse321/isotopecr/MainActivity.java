@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,18 +33,24 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.mcgill.ecse321.isotopecr.ui.home.HomeViewModel;
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
     // APPEND NEW CONTENT STARTING FROM HERE
-    private final List<String> personNames = new ArrayList<>();
+    // private final List<String> personNames = new ArrayList<>();
     private final List<String> eventNames = new ArrayList<>();
     private final List<String> licensePlates = new ArrayList<>();
     private final List<String> services = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
     private String error = null;
     private String loginEmail = null;
+    private HomeViewModel viewModel = null;
+
+    // APPEND NEW CONTENT STARTING FROM HERE
+    private List<String> personNames = new ArrayList<>();
+
     private ArrayAdapter<String> personAdapter;             // arrayadapter is a way of viewing array objects for front-end
     private ArrayAdapter<String> eventAdapter;
     private ArrayAdapter<String> vehicleAdapter;
@@ -91,60 +98,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-
-       /* vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
-        System.out.println("================");
-        System.out.println(vehicleSpinner);
-
-        vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
-        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        vehicleSpinner.setAdapter(vehicleAdapter);
-        vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
-
-        vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // get selected item and assign to textview
-                String licensePlate = vehicleSpinner.getSelectedItem().toString();
-
-                selectedVehicle = licensePlate;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // handle if you'd like to
-                selectedVehicle = "";
-            }
-        });
-*/
-
-       /* serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
-        serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
-        serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        serviceSpinner.setAdapter(serviceAdapter);
-
-        serviceView = (TextView) findViewById(R.id.service_name);
-
-//        serviceView.setText("Hello world");
-
-        serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // get selected item and assign to textview
-                String serviceName = serviceSpinner.getSelectedItem().toString();
-//                String serviceName = (String) parent.getItemAtPosition(position);
-//                serviceView.setText(serviceName);
-                selectedService = serviceName;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                selectedService = "";
-            }
-        });*/
-
-
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 //        refreshErrorMessage();
     }
 
@@ -217,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         params.put("email", email.getText().toString());
         params.put("password", password.getText().toString());
 
+        HomeViewModel viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         System.out.println(params.toString());
 
         // Send login post request
@@ -228,12 +184,15 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     // Updates the logged in email
                     loginEmail = response.getString("email");
+                    String firstName =  response.getString("firstName");
+
+                    viewModel.setFirstName(firstName);
 
                     NavigationView navigationView = findViewById(R.id.nav_view);
                     Menu nav_Menu = navigationView.getMenu();
                     nav_Menu.findItem(R.id.nav_login).setVisible(false);
                     nav_Menu.findItem(R.id.nav_logout).setVisible(true);
-//                    Navigation.findNavController(v).navigate(R.id.nav_schedule);
+                    Navigation.findNavController(v).navigate(R.id.nav_home);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -258,10 +217,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_login).setVisible(true);
+        nav_Menu.findItem(R.id.nav_logout).setVisible(false);
+
+        viewModel.resetText();
 
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
 
-        nav_Menu.findItem(R.id.nav_logout).setVisible(false);
     }
 
 
@@ -272,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void GetVehicle(View v) {
         error = "";
-        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
+//        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
 
         vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
 
@@ -298,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + customerEmail.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
+        HttpUtils.get("/api/profile/customer/vehicle/get-all/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 //                refreshErrorMessage();
@@ -311,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                customerEmail.setText("");
+//                customerEmail.setText("");
                 vehicleAdapter.notifyDataSetChanged();
             }
 
