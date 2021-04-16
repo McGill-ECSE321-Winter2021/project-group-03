@@ -2,36 +2,34 @@ package ca.mcgill.ecse321.isotopecr;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel viewModel = null;
 
     // APPEND NEW CONTENT STARTING FROM HERE
-    private List<String> personNames = new ArrayList<>();
-    private ArrayAdapter<String> personAdapter;             // arrayadapter is a way of viewing array objects for front-end
-    private List<String> eventNames = new ArrayList<>();
-    private ArrayAdapter<String> eventAdapter;
-
     private List<String> licensePlates = new ArrayList<>();
     private ArrayAdapter<String> vehicleAdapter;
     private List<String> services = new ArrayList<>();
@@ -212,13 +205,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method get all the vehicles registered by a customer.
      * @param v
+     * @author Zichen
      */
     public void GetVehicle(View v) {
-        error = "";
-//        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
-
         vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
-
         vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
         vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(vehicleAdapter);
@@ -235,16 +225,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // handle if you'd like to
                 selectedVehicle = "";
             }
         });
 
-
         HttpUtils.get("/api/profile/customer/vehicle/get-all/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                refreshErrorMessage();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         String vehicle = response.getJSONObject(i).getString("licensePlate");
@@ -254,17 +241,14 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-//                customerEmail.setText("");
                 vehicleAdapter.notifyDataSetChanged();
             }
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
-//                refreshErrorMessage();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Context context = getApplicationContext();
+                CharSequence text = responseString;
+                int duration = Toast.LENGTH_LONG;
+                Toast.makeText(context, text, duration).show();
             }
         });
     }
@@ -272,25 +256,19 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method get all the services provided in the system.
      * @param v
+     * @author Zichen
      */
     public void GetServices(View v) {
-        error = "";
-
         serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
         serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
         serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         serviceSpinner.setAdapter(serviceAdapter);
         serviceView = (TextView) findViewById(R.id.service_name);
-
-//        serviceView.setText("Hello world");
-
         serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // get selected item and assign to textview
                 String serviceName = serviceSpinner.getSelectedItem().toString();
-//                String serviceName = (String) parent.getItemAtPosition(position);
-//                serviceView.setText(serviceName);
                 selectedService = serviceName;
             }
 
@@ -303,17 +281,11 @@ public class MainActivity extends AppCompatActivity {
         HttpUtils.get("/api/autorepairshop/service/get-all" , new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                refreshErrorMessage();
-                System.out.println("==========================================");
-                System.out.println("StatusCode = " + statusCode);
-                System.out.println("==========================================");
-                System.out.println(response);
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject serviceJSON = null;
                     try {
                         serviceJSON = response.getJSONObject(i);
                         String service = serviceJSON.getString("serviceName");
-
                         services.add(service);
                         System.out.println(service);
                     } catch (JSONException e) {
@@ -323,13 +295,11 @@ public class MainActivity extends AppCompatActivity {
                 serviceAdapter.notifyDataSetChanged();
             }
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
-//                refreshErrorMessage();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Context context = getApplicationContext();
+                CharSequence text = responseString;
+                int duration = Toast.LENGTH_LONG;
+                Toast.makeText(context, text, duration).show();
             }
         });
     }
@@ -338,64 +308,40 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method book an appointment for the user.
      * @param v
+     * @autor Zichen
      */
     public void BookAppointment(View v) {
-        error = "";
-
         serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
         vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
         TextView date = (TextView) findViewById(R.id.newappointment_date);
         TextView time = (TextView) findViewById(R.id.starttime);
 
         if (vehicleSpinner.getSelectedItem() != null && serviceSpinner.getSelectedItem() != null) {
-            // get PathVariables
-            String vehicleplate = vehicleSpinner.getSelectedItem().toString();
-            String servicename = serviceSpinner.getSelectedItem().toString();
-
-            System.out.println("======================================");
-            System.out.println(date.getText().toString());
-            System.out.println("======================================");
-
+            // format the input date & time to backend-accepted format
             Bundle dateBundle = getDateFromLabel(date.getText().toString());
             String formatDate = formatISODate(dateBundle);
-            System.out.println(formatDate);
 
             Bundle timeBundle = getTimeFromLabel(time.getText().toString());
             String formatTime = formatISOTime(timeBundle);
-            System.out.println(formatTime);
-
-            System.out.println("======================================");
 
             // Construct request parameter
             RequestParams params = new RequestParams();
             params.put("start", formatTime);
             params.put("date", formatDate);
 
-
-            String uri = "/api/appointment/create/" + vehicleplate + "/" + servicename;
+            String uri = "/api/appointment/create/" + selectedVehicle + "/" + selectedService;
             String fullUri = uri.replace(" ", "%20");
-
-            System.out.println(fullUri);
 
             HttpUtils.post(fullUri, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                refreshErrorMessage();
-                    System.out.println("==========================================");
-                    System.out.println("StatusCode = " + statusCode);
-                    System.out.println("==========================================");
-                    System.out.println(response);
-
                     Context context = getApplicationContext();
                     CharSequence text = "Book Appointment Successful!";
                     int duration = Toast.LENGTH_LONG;
-
                     Toast.makeText(context, text, duration).show();
                 }
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        System.out.println(responseString);
-
                         Context context = getApplicationContext();
                         CharSequence text = responseString;
                         int duration = Toast.LENGTH_LONG;
@@ -407,13 +353,20 @@ public class MainActivity extends AppCompatActivity {
             Context context = getApplicationContext();
             CharSequence text = "Please select vehicle and services before your Booking";
             int duration = Toast.LENGTH_LONG;
-
             Toast.makeText(context, text, duration).show();
         }
-
-
     }
 
+
+    // ===================================================
+    // ==================== Helpers ======================
+    // ===================================================
+
+    /**
+     * Transfer the format of Android-frontend time into ISO format
+     * @param timeBundle
+     * @return a time string with desired format
+     */
     private String formatISOTime(Bundle timeBundle) {
         int hour = timeBundle.getInt("hour");
         int minute = timeBundle.getInt("minute");
@@ -421,6 +374,11 @@ public class MainActivity extends AppCompatActivity {
         return String.format("%02d:%02d:%02d", hour, minute, 0);
     }
 
+    /**
+     * Transfer the format of Android-frontend date into ISO format
+     * @param dateBundle
+     * @return a date string with desired format
+     */
     private String formatISODate(Bundle dateBundle) {
         int year = dateBundle.getInt("year");
         int month = dateBundle.getInt("month");
@@ -429,9 +387,11 @@ public class MainActivity extends AppCompatActivity {
         return String.format("%04d-%02d-%02d", year, month + 1, day);
     }
 
-    // ===================================================
-    // ==================== Helpers ======================
-    // ===================================================
+    /**
+     * Get the time bundle from the label
+     * @param text
+     * @return a bundle of time
+     */
     private Bundle getTimeFromLabel(String text) {
         Bundle rtn = new Bundle();
         String comps[] = text.toString().split(":");
@@ -449,6 +409,11 @@ public class MainActivity extends AppCompatActivity {
         return rtn;
     }
 
+    /**
+     * Get the date bundle from the label
+     * @param text
+     * @return a bundle of date
+     */
     private Bundle getDateFromLabel(String text) {
         Bundle rtn = new Bundle();
         String comps[] = text.toString().split("-");
