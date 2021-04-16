@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -40,8 +41,6 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity {
 
     // APPEND NEW CONTENT STARTING FROM HERE
-    // private final List<String> personNames = new ArrayList<>();
-    private final List<String> eventNames = new ArrayList<>();
     private final List<String> licensePlates = new ArrayList<>();
     private final List<String> services = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
@@ -146,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Customer login function.
      *
-     * @param v view of
+     * @param v view
      * @author Jack Wei
      */
     public void login(final View v) {
-        error = "";
+        hideVirtualKeyboard(v);
 
         final TextView email = (TextView) findViewById(R.id.login_email);
         final TextView password = (TextView) findViewById(R.id.login_password);
@@ -183,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     nav_Menu.findItem(R.id.nav_viewappointment).setVisible(true);
                     nav_Menu.findItem(R.id.nav_logout).setVisible(true);
 
-                    // navigate to home page
+                    // Navigate to home page
                     Navigation.findNavController(v).navigate(R.id.nav_home);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -192,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                error += responseString;
-                refreshErrorMessage();
+                // Show error message
+                showMessageWithToast(responseString);
             }
         });
     }
@@ -268,10 +267,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Context context = getApplicationContext();
-                CharSequence text = responseString;
-                int duration = Toast.LENGTH_LONG;
-                Toast.makeText(context, text, duration).show();
+                // Show error message
+                showMessageWithToast(responseString);
             }
         });
     }
@@ -322,10 +319,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Context context = getApplicationContext();
-                CharSequence text = responseString;
-                int duration = Toast.LENGTH_LONG;
-                Toast.makeText(context, text, duration).show();
+
             }
         });
     }
@@ -468,26 +462,17 @@ public class MainActivity extends AppCompatActivity {
             HttpUtils.post(fullUri, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Book Appointment Successful!";
-                    int duration = Toast.LENGTH_LONG;
-                    Toast.makeText(context, text, duration).show();
+                    showMessageWithToast("Book Appointment Successful!");
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    Context context = getApplicationContext();
-                    CharSequence text = responseString;
-                    int duration = Toast.LENGTH_LONG;
-                    Toast.makeText(context, text, duration).show();
+                    showMessageWithToast(responseString);
                 }
             });
 
         } else {
-            Context context = getApplicationContext();
-            CharSequence text = "Please select vehicle and services before your Booking";
-            int duration = Toast.LENGTH_LONG;
-            Toast.makeText(context, text, duration).show();
+            showMessageWithToast("Please select vehicle and services before your Booking");
         }
     }
 
@@ -600,5 +585,28 @@ public class MainActivity extends AppCompatActivity {
     public void setDate(int id, int d, int m, int y) {
         TextView tv = (TextView) findViewById(id);
         tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
+    }
+
+    /**
+     * Helper method for hiding virtual keyboard.
+     *
+     * @param v view from which virtual keyboard should be hidden
+     * @author Jack Wei
+     */
+    private void hideVirtualKeyboard(View v){
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    /**
+     * Helper method for showing a popup message.
+     *
+     * @param message message shown
+     */
+    private void showMessageWithToast(String message){
+        Context context = getApplicationContext();
+        CharSequence text = message;
+        int duration = Toast.LENGTH_LONG;
+        Toast.makeText(context, text, duration).show();
     }
 }
