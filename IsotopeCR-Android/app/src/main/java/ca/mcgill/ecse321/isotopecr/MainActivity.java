@@ -59,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private Spinner vehicleSpinner;
     private Spinner serviceSpinner;
 
-    private TextView vehicleView;
-    private TextView serviceView;
-
 
     private final List<String> appointmentTimes = new ArrayList<>();
     private final List<String> appointmentDates = new ArrayList<>();
@@ -125,23 +122,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // added in 4.3.2
-    private void refreshErrorMessage() {
-        // set the error message
-        TextView tvError = (TextView) findViewById(R.id.error);
-        tvError.setText(error);
-
-        if (error == null || error.length() == 0) {
-            tvError.setVisibility(View.GONE);
-        } else {
-            tvError.setVisibility(View.VISIBLE);
-        }
-    }
-
     // ===================================================
-    // ============ Write function handler ===============
+    // ============ Http Request Functions ===============
     // ===================================================
-
     /**
      * Customer login function.
      *
@@ -239,13 +222,11 @@ public class MainActivity extends AppCompatActivity {
         vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
         vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(vehicleAdapter);
-        vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
         vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // get selected item and assign to textview
                 String licensePlate = vehicleSpinner.getSelectedItem().toString();
-
                 selectedVehicle = licensePlate;
             }
 
@@ -267,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                vehicleAdapter.notifyDataSetChanged();
+                vehicleAdapter.notifyDataSetChanged();  // update the change in the frontend
             }
 
             @Override
@@ -290,7 +271,6 @@ public class MainActivity extends AppCompatActivity {
         serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
         serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         serviceSpinner.setAdapter(serviceAdapter);
-        serviceView = (TextView) findViewById(R.id.service_name);
         serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -319,12 +299,13 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                serviceAdapter.notifyDataSetChanged();
+                serviceAdapter.notifyDataSetChanged();  // update the change in the frontend
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                // Show error message
+                showMessageWithToast(responseString);
             }
         });
     }
@@ -437,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This method book an appointment for the user.
+     * This method will book an appointment for the user.
      *
      * @param v
      * @autor Zichen
@@ -461,10 +442,11 @@ public class MainActivity extends AppCompatActivity {
             params.put("start", formatTime);
             params.put("date", formatDate);
 
-            String uri = "/api/appointment/create/" + selectedVehicle + "/" + selectedService;
-            String fullUri = uri.replace(" ", "%20");
+            // Encode the URL
+            String url = "/api/appointment/create/" + selectedVehicle + "/" + selectedService;
+            String fullUrl = url.replace(" ", "%20");
 
-            HttpUtils.post(fullUri, params, new JsonHttpResponseHandler() {
+            HttpUtils.post(fullUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     showMessageWithToast("Book Appointment Successful!");
