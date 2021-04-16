@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="GetPastAppointment"
-                android:text="@string/name_appointmentview2" />
+                android:text="@string/name_appointmentview2"/>
 
             <Button
                 android:layout_width="wrap_content"
