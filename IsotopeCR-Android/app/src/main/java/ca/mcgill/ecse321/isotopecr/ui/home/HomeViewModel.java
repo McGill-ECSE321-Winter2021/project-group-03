@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mHomePageText;
+    private MutableLiveData<String> mHomePageText;  // home page welcome message
     private final String IsotopeStr = "Isotope Repair Shop";
 
     public HomeViewModel() {
@@ -17,6 +17,10 @@ public class HomeViewModel extends ViewModel {
         return mHomePageText;
     }
 
+    /**
+     *
+     * @param firstName
+     */
     public void setFirstName(String firstName) {
         mHomePageText.setValue("Welcome, " + firstName + "!");
     }

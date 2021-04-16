@@ -46,10 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private final List<String> services = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
     private String error = null;
-    private String loginEmail = null;
+    private String loginEmail = null; // variable to store the email of the logged in user
+
     private HomeViewModel viewModel = null;
-
-
 
     // APPEND NEW CONTENT STARTING FROM HERE
     private ArrayAdapter<String> vehicleAdapter;
@@ -74,15 +73,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Create a click listener for floating action button in home page
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Contact us at 1111111111", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        // Create a click listener for logout button in navigation
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -91,21 +95,20 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_login, R.id.nav_slideshow, R.id.nav_bookappointment)
+                R.id.nav_home, R.id.nav_login, R.id.nav_slideshow, R.id.nav_bookappointment, R.id.nav_viewappointment)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-
+        // Get the view model for home page for subsequent updates to UI
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-//        refreshErrorMessage();
     }
 
     @Override
@@ -139,10 +142,11 @@ public class MainActivity extends AppCompatActivity {
     // ===================================================
     // ============ Write function handler ===============
     // ===================================================
+
     /**
      * Customer login function.
      *
-     * @param v
+     * @param v view of
      * @author Jack Wei
      */
     public void login(final View v) {
@@ -156,28 +160,30 @@ public class MainActivity extends AppCompatActivity {
         params.put("email", email.getText().toString());
         params.put("password", password.getText().toString());
 
-        HomeViewModel viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
-        System.out.println(params.toString());
-
         // Send login post request
         HttpUtils.post("/api/profile/login/", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 error = "";
                 refreshErrorMessage();
-                try {
-                    // Updates the logged in email
-                    loginEmail = response.getString("email");
-                    String firstName =  response.getString("firstName");
 
+                try {
+                    // Update the logged in email
+                    loginEmail = response.getString("email");
+
+                    // Update UI in Home page for custom welcome message
+                    String firstName = response.getString("firstName");
                     viewModel.setFirstName(firstName);
 
+                    // Hide login and reveal book appointment and view appointments in navigation
                     NavigationView navigationView = findViewById(R.id.nav_view);
                     Menu nav_Menu = navigationView.getMenu();
                     nav_Menu.findItem(R.id.nav_login).setVisible(false);
                     nav_Menu.findItem(R.id.nav_bookappointment).setVisible(true);
+                    nav_Menu.findItem(R.id.nav_viewappointment).setVisible(true);
                     nav_Menu.findItem(R.id.nav_logout).setVisible(true);
+
+                    // navigate to home page
                     Navigation.findNavController(v).navigate(R.id.nav_home);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -198,18 +204,22 @@ public class MainActivity extends AppCompatActivity {
      * @author Jack Wei
      */
     public void logout() {
+        // clear email for currently logged in user
         loginEmail = null;
 
+        // reveal login and hide book appointment and logout in navigation
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_login).setVisible(true);
         nav_Menu.findItem(R.id.nav_bookappointment).setVisible(false);
+        nav_Menu.findItem(R.id.nav_viewappointment).setVisible(false);
         nav_Menu.findItem(R.id.nav_logout).setVisible(false);
 
+        // update home page UI to generic welcome message
         viewModel.resetText();
 
+        // navigate to home page
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
-
     }
 
 
@@ -325,16 +335,16 @@ public class MainActivity extends AppCompatActivity {
         final TextView email = (TextView) findViewById(R.id.customer_email);
         String inputEmail = email.toString();
 
-        HttpUtils.get("/api/appointment/futureappointment/customer/"+inputEmail, new RequestParams(), new JsonHttpResponseHandler() {
+        HttpUtils.get("/api/appointment/futureappointment/customer/" + inputEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                for (int i=0; i< response.length() ; i++) {
+                for (int i = 0; i < response.length(); i++) {
                     JSONObject appointmentJSON = null;
                     JSONObject vehicleJSON = null;
                     JSONObject serviceJSON = null;
                     JSONArray timeslotsJSON = null;
                     JSONObject firsttimeslotJSON = null;
-                    try{
+                    try {
                         appointmentJSON = response.getJSONObject(i);
                         vehicleJSON = appointmentJSON.getJSONObject("vehicle");
                         String licensePlate = vehicleJSON.getString("licensePlate");
@@ -349,11 +359,11 @@ public class MainActivity extends AppCompatActivity {
                         String appointmentDate = firsttimeslotJSON.getString("date");
                         appointmentDates.add(appointmentDate);
 
-                    }catch (JSONException e) {
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(),licensePlates,services,appointmentDates,appointmentTimes);
+                ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(), licensePlates, services, appointmentDates, appointmentTimes);
                 aListView.setAdapter(appointmentAdapter);
 
             }
@@ -370,11 +380,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
-
     /**
      * This method book an appointment for the user.
+     *
      * @param v
      * @autor Zichen
      */
@@ -411,10 +419,10 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Context context = getApplicationContext();
-                        CharSequence text = responseString;
-                        int duration = Toast.LENGTH_LONG;
-                        Toast.makeText(context, text, duration).show();
+                    Context context = getApplicationContext();
+                    CharSequence text = responseString;
+                    int duration = Toast.LENGTH_LONG;
+                    Toast.makeText(context, text, duration).show();
                 }
             });
 
@@ -427,14 +435,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     // ===================================================
     // ==================== Helpers ======================
     // ===================================================
 
     /**
      * Transfer the format of Android-frontend time into ISO format
+     *
      * @param timeBundle
      * @return a time string with desired format
      */
@@ -447,6 +454,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Transfer the format of Android-frontend date into ISO format
+     *
      * @param dateBundle
      * @return a date string with desired format
      */
@@ -459,35 +467,38 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Get the time bundle from the label
+     *
      * @param text
      * @return a bundle of time
      */
-    private Bundle getTimeFromLabel(String text){
-            Bundle rtn = new Bundle();
-            String comps[] = text.toString().split(":");
-            int hour = 12;
-            int minute = 0;
+    private Bundle getTimeFromLabel(String text) {
+        Bundle rtn = new Bundle();
+        String[] comps = text.split(":");
+        int hour = 12;
+        int minute = 0;
 
-            if (comps.length == 2) {
-                hour = Integer.parseInt(comps[0]);
-                minute = Integer.parseInt(comps[1]);
-            }
-
-
-            rtn.putInt("hour", hour);
-            rtn.putInt("minute", minute);
-
-
-            return rtn;
+        if (comps.length == 2) {
+            hour = Integer.parseInt(comps[0]);
+            minute = Integer.parseInt(comps[1]);
         }
+
+
+        rtn.putInt("hour", hour);
+        rtn.putInt("minute", minute);
+
+
+        return rtn;
+    }
+
     /**
      * Get the date bundle from the label
+     *
      * @param text
      * @return a bundle of date
      */
     private Bundle getDateFromLabel(String text) {
         Bundle rtn = new Bundle();
-        String comps[] = text.toString().split("-");
+        String[] comps = text.split("-");
         int day = 1;
         int month = 1;
         int year = 1;
@@ -497,40 +508,40 @@ public class MainActivity extends AppCompatActivity {
             month = Integer.parseInt(comps[1]);
             year = Integer.parseInt(comps[2]);
         }
-            rtn.putInt("day", day);
-            rtn.putInt("month", month - 1);
-            rtn.putInt("year", year);
+        rtn.putInt("day", day);
+        rtn.putInt("month", month - 1);
+        rtn.putInt("year", year);
 
-            return rtn;
-        }
-
-        public void showTimePickerDialog (View v){
-            TextView tf = (TextView) v;
-            Bundle args = getTimeFromLabel(tf.getText().toString());
-            args.putInt("id", v.getId());
-
-            TimePickerFragment newFragment = new TimePickerFragment();
-            newFragment.setArguments(args);
-            newFragment.show(getSupportFragmentManager(), "timePicker");
-        }
-
-        public void showDatePickerDialog (View v){
-            TextView tf = (TextView) v;
-            Bundle args = getDateFromLabel(tf.getText().toString());
-            args.putInt("id", v.getId());
-
-            DatePickerFragment newFragment = new DatePickerFragment();
-            newFragment.setArguments(args);
-            newFragment.show(getSupportFragmentManager(), "datePicker");
-        }
-
-        public void setTime ( int id, int h, int m){
-            TextView tv = (TextView) findViewById(id);
-            tv.setText(String.format("%02d:%02d", h, m));
-        }
-
-        public void setDate ( int id, int d, int m, int y){
-            TextView tv = (TextView) findViewById(id);
-            tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
-        }
+        return rtn;
     }
+
+    public void showTimePickerDialog(View v) {
+        TextView tf = (TextView) v;
+        Bundle args = getTimeFromLabel(tf.getText().toString());
+        args.putInt("id", v.getId());
+
+        TimePickerFragment newFragment = new TimePickerFragment();
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public void showDatePickerDialog(View v) {
+        TextView tf = (TextView) v;
+        Bundle args = getDateFromLabel(tf.getText().toString());
+        args.putInt("id", v.getId());
+
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.setArguments(args);
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void setTime(int id, int h, int m) {
+        TextView tv = (TextView) findViewById(id);
+        tv.setText(String.format("%02d:%02d", h, m));
+    }
+
+    public void setDate(int id, int d, int m, int y) {
+        TextView tv = (TextView) findViewById(id);
+        tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
+    }
+}

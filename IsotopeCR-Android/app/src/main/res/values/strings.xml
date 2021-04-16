@@ -20,8 +20,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_logout">Log Out</string>
     <string name="menu_bookappointment">Book Appointment</string>
-
-
+    <string name="menu_viewappointment">View Appointment</string>
 
     <string name="newappointment_date_label">Date?</string>
     <string name="vehiclespinner_label">Vehicle</string>
