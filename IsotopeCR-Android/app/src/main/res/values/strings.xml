@@ -41,7 +41,7 @@
 
     <string name="name_prompt">Select name</string>
     <string name="name_appointmentview1">View Future Appointment</string>
-
+    <string name="name_appointmentview2">View Past Appointment (including appointments within next 24 hrs)</string>
 
 
 </resources>
