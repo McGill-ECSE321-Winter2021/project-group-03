@@ -149,14 +149,21 @@ public class MainActivity extends AppCompatActivity {
      * @author Jack Wei
      */
     public void login(final View v) {
-        hideVirtualKeyboard(v);
-
         final TextView email = (TextView) findViewById(R.id.login_email);
         final TextView password = (TextView) findViewById(R.id.login_password);
 
+        hideVirtualKeyboard(v);
+
+        // Check if input email could be an employee's account (prohibited on android app), if so, shown an error.
+        String emailString = email.getText().toString();
+        if(emailString.contains("isotopecr.ca")){
+            showMessageWithToast("ERROR: Profile does not exist.");
+            return;
+        }
+
         // Construct request parameter
         RequestParams params = new RequestParams();
-        params.put("email", email.getText().toString());
+        params.put("email", emailString);
         params.put("password", password.getText().toString());
 
         // Send login post request
