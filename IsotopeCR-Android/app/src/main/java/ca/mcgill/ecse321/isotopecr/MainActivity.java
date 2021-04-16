@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private String loginEmail = null;
     private HomeViewModel viewModel = null;
 
+
+
     // APPEND NEW CONTENT STARTING FROM HERE
     private List<String> personNames = new ArrayList<>();
 
@@ -64,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView vehicleView;
     private TextView serviceView;
+
+    ListView aListView;
+    private final List<String> appointmentTimes = new ArrayList<>();
+    private final List<String> appointmentDates = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,28 +365,40 @@ public class MainActivity extends AppCompatActivity {
     public void GetFutureAppointment(View v) {
         error = "";
 
+        final TextView email = (TextView) findViewById(R.id.customer_email);
+        String inputEmail = email.toString();
 
-        HttpUtils.get("/api/appointment/futureappointment/get-all", new RequestParams(), new JsonHttpResponseHandler() {
+        HttpUtils.get("/api/appointment/futureappointment/customer/"+inputEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                refreshErrorMessage();
-                System.out.println("==========================================");
-                System.out.println("StatusCode = " + statusCode);
-                System.out.println("==========================================");
-                System.out.println(response);
-                for (int i = 0; i < response.length(); i++) {
+                for (int i=0; i< response.length() ; i++) {
+                    JSONObject appointmentJSON = null;
+                    JSONObject vehicleJSON = null;
                     JSONObject serviceJSON = null;
-                    try {
-                        serviceJSON = response.getJSONObject(i);
-                        String service = serviceJSON.getString("serviceName");
+                    JSONArray timeslotsJSON = null;
+                    JSONObject firsttimeslotJSON = null;
+                    try{
+                        appointmentJSON = response.getJSONObject(i);
+                        vehicleJSON = appointmentJSON.getJSONObject("vehicle");
+                        String licensePlate = vehicleJSON.getString("licensePlate");
+                        licensePlates.add(licensePlate);
+                        serviceJSON = appointmentJSON.getJSONObject("service");
+                        String serviceName = serviceJSON.getString("serviceName");
+                        services.add(serviceName);
+                        timeslotsJSON = appointmentJSON.getJSONArray("timeslot");
+                        firsttimeslotJSON = timeslotsJSON.getJSONObject(0);
+                        String appointmentTime = firsttimeslotJSON.getString("time");
+                        appointmentTimes.add(appointmentTime);
+                        String appointmentDate = firsttimeslotJSON.getString("date");
+                        appointmentDates.add(appointmentDate);
 
-                        services.add(service);
-                        System.out.println(service);
-                    } catch (JSONException e) {
+                    }catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                serviceAdapter.notifyDataSetChanged();
+                ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(),licensePlates,services,appointmentDates,appointmentTimes);
+                aListView.setAdapter(appointmentAdapter);
+
             }
 
             @Override
