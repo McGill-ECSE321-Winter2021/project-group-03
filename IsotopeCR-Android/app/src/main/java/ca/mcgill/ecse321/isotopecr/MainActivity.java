@@ -230,12 +230,12 @@ public class MainActivity extends AppCompatActivity {
      * @author Zichen
      */
     public void GetVehicle(View v) {
+        // set up the Listener for the spinner once clicked
         vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
         vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
         vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(vehicleAdapter);
         vehicleView = (TextView) findViewById(R.id.vehicle_licenseplate);
-
         vehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -254,11 +254,11 @@ public class MainActivity extends AppCompatActivity {
         HttpUtils.get("/api/profile/customer/vehicle/get-all/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                licensePlates.clear();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         String vehicle = response.getJSONObject(i).getString("licensePlate");
                         licensePlates.add(vehicle);
-                        System.out.println(vehicle);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -283,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
      * @author Zichen
      */
     public void GetServices(View v) {
+        // set up the Listener for the spinner once clicked
         serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
         serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
         serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -305,13 +306,13 @@ public class MainActivity extends AppCompatActivity {
         HttpUtils.get("/api/autorepairshop/service/get-all", new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                services.clear();
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject serviceJSON = null;
                     try {
                         serviceJSON = response.getJSONObject(i);
                         String service = serviceJSON.getString("serviceName");
                         services.add(service);
-                        System.out.println(service);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
