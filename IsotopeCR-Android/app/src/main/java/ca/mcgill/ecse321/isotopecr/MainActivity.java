@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     // added in 4.3.2
     private void refreshErrorMessage() {
         // set the error message
-        TextView tvError = (TextView) findViewById(R.id.error1);
+        TextView tvError = (TextView) findViewById(R.id.error);
         tvError.setText(error);
 
         if (error == null || error.length() == 0) {
@@ -163,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
         HttpUtils.post("/api/profile/login/", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                error = "";
-                refreshErrorMessage();
 
                 try {
                     // Update the logged in email
