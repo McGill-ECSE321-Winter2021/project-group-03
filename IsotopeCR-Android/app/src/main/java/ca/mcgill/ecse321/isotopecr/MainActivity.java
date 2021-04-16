@@ -1,36 +1,36 @@
 package ca.mcgill.ecse321.isotopecr;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     // APPEND NEW CONTENT STARTING FROM HERE
-    private List<String> personNames = new ArrayList<>();
-
-    private ArrayAdapter<String> personAdapter;             // arrayadapter is a way of viewing array objects for front-end
-    private ArrayAdapter<String> eventAdapter;
     private ArrayAdapter<String> vehicleAdapter;
     private ArrayAdapter<String> serviceAdapter;
 
@@ -105,7 +101,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
 //        refreshErrorMessage();
     }
 
@@ -140,27 +139,6 @@ public class MainActivity extends AppCompatActivity {
     // ===================================================
     // ============ Write function handler ===============
     // ===================================================
-//    public void addPerson(View v) {
-//        error = "";
-//        final TextView tv = (TextView) findViewById(R.id.newperson_name);
-//        HttpUtils.post("persons/" + tv.getText().toString(), new RequestParams(), new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                refreshErrorMessage();
-//                tv.setText("");
-//            }
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                try {
-//                    error += errorResponse.get("message").toString();
-//                } catch (JSONException e) {
-//                    error += e.getMessage();
-//                }
-//                refreshErrorMessage();
-//            }
-//        });
-//    }
-
     /**
      * Customer login function.
      *
@@ -198,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                     NavigationView navigationView = findViewById(R.id.nav_view);
                     Menu nav_Menu = navigationView.getMenu();
                     nav_Menu.findItem(R.id.nav_login).setVisible(false);
+                    nav_Menu.findItem(R.id.nav_bookappointment).setVisible(true);
                     nav_Menu.findItem(R.id.nav_logout).setVisible(true);
                     Navigation.findNavController(v).navigate(R.id.nav_home);
                 } catch (JSONException e) {
@@ -224,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_login).setVisible(true);
+        nav_Menu.findItem(R.id.nav_bookappointment).setVisible(false);
         nav_Menu.findItem(R.id.nav_logout).setVisible(false);
 
         viewModel.resetText();
@@ -237,13 +217,10 @@ public class MainActivity extends AppCompatActivity {
      * This method get all the vehicles registered by a customer.
      *
      * @param v
+     * @author Zichen
      */
     public void GetVehicle(View v) {
-        error = "";
-//        final TextView customerEmail = (TextView) findViewById(R.id.customer_email);
-
         vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
-
         vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
         vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(vehicleAdapter);
@@ -260,16 +237,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // handle if you'd like to
                 selectedVehicle = "";
             }
         });
 
-
         HttpUtils.get("/api/profile/customer/vehicle/get-all/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                refreshErrorMessage();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         String vehicle = response.getJSONObject(i).getString("licensePlate");
@@ -279,18 +253,15 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-//                customerEmail.setText("");
                 vehicleAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
-//                refreshErrorMessage();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Context context = getApplicationContext();
+                CharSequence text = responseString;
+                int duration = Toast.LENGTH_LONG;
+                Toast.makeText(context, text, duration).show();
             }
         });
     }
@@ -299,25 +270,19 @@ public class MainActivity extends AppCompatActivity {
      * This method get all the services provided in the system.
      *
      * @param v
+     * @author Zichen
      */
     public void GetServices(View v) {
-        error = "";
-
         serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
         serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
         serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         serviceSpinner.setAdapter(serviceAdapter);
         serviceView = (TextView) findViewById(R.id.service_name);
-
-//        serviceView.setText("Hello world");
-
         serviceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // get selected item and assign to textview
                 String serviceName = serviceSpinner.getSelectedItem().toString();
-//                String serviceName = (String) parent.getItemAtPosition(position);
-//                serviceView.setText(serviceName);
                 selectedService = serviceName;
             }
 
@@ -330,17 +295,11 @@ public class MainActivity extends AppCompatActivity {
         HttpUtils.get("/api/autorepairshop/service/get-all", new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                refreshErrorMessage();
-                System.out.println("==========================================");
-                System.out.println("StatusCode = " + statusCode);
-                System.out.println("==========================================");
-                System.out.println(response);
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject serviceJSON = null;
                     try {
                         serviceJSON = response.getJSONObject(i);
                         String service = serviceJSON.getString("serviceName");
-
                         services.add(service);
                         System.out.println(service);
                     } catch (JSONException e) {
@@ -351,13 +310,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
-//                refreshErrorMessage();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Context context = getApplicationContext();
+                CharSequence text = responseString;
+                int duration = Toast.LENGTH_LONG;
+                Toast.makeText(context, text, duration).show();
             }
         });
     }
@@ -417,93 +374,97 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-                 * This method book an appointment for the user.
-                 *
-                 * @param v
-                 */
-        public void BookAppointment (View v){
-            error = "";
+     * This method book an appointment for the user.
+     * @param v
+     * @autor Zichen
+     */
+    public void BookAppointment(View v) {
+        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+        vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+        TextView date = (TextView) findViewById(R.id.newappointment_date);
+        TextView time = (TextView) findViewById(R.id.starttime);
 
-            serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
-            vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
-            TextView date = (TextView) findViewById(R.id.newappointment_date);
-            TextView time = (TextView) findViewById(R.id.starttime);
-
-            // get PathVariables
-            String vehicleplate = vehicleSpinner.getSelectedItem().toString();
-            String servicename = serviceSpinner.getSelectedItem().toString();
-
-            System.out.println("======================================");
-            System.out.println(date.getText().toString());
-            System.out.println("======================================");
-
+        if (vehicleSpinner.getSelectedItem() != null && serviceSpinner.getSelectedItem() != null) {
+            // format the input date & time to backend-accepted format
             Bundle dateBundle = getDateFromLabel(date.getText().toString());
             String formatDate = formatISODate(dateBundle);
-            System.out.println(formatDate);
 
             Bundle timeBundle = getTimeFromLabel(time.getText().toString());
             String formatTime = formatISOTime(timeBundle);
-            System.out.println(formatTime);
-
-            System.out.println("======================================");
 
             // Construct request parameter
             RequestParams params = new RequestParams();
             params.put("start", formatTime);
             params.put("date", formatDate);
 
-
-            String uri = "/api/appointment/create/" + vehicleplate + "/" + servicename;
+            String uri = "/api/appointment/create/" + selectedVehicle + "/" + selectedService;
             String fullUri = uri.replace(" ", "%20");
-
-            System.out.println(fullUri);
 
             HttpUtils.post(fullUri, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                refreshErrorMessage();
-                    System.out.println("==========================================");
-                    System.out.println("StatusCode = " + statusCode);
-                    System.out.println("==========================================");
-                    System.out.println(response);
+                    Context context = getApplicationContext();
+                    CharSequence text = "Book Appointment Successful!";
+                    int duration = Toast.LENGTH_LONG;
+                    Toast.makeText(context, text, duration).show();
                 }
 
                 @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    try {
-                        error += errorResponse.get("message").toString();
-                    } catch (JSONException e) {
-                        error += e.getMessage();
-                    }
-//                refreshErrorMessage();
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        Context context = getApplicationContext();
+                        CharSequence text = responseString;
+                        int duration = Toast.LENGTH_LONG;
+                        Toast.makeText(context, text, duration).show();
                 }
             });
 
-
+        } else {
+            Context context = getApplicationContext();
+            CharSequence text = "Please select vehicle and services before your Booking";
+            int duration = Toast.LENGTH_LONG;
+            Toast.makeText(context, text, duration).show();
         }
+    }
 
-        private String formatISOTime (Bundle timeBundle){
-            int hour = timeBundle.getInt("hour");
-            int minute = timeBundle.getInt("minute");
 
-            return String.format("%02d:%02d:%02d", hour, minute, 0);
-        }
 
-        private String formatISODate (Bundle dateBundle){
-            int year = dateBundle.getInt("year");
-            int month = dateBundle.getInt("month");
-            int day = dateBundle.getInt("day");
 
-            return String.format("%04d-%02d-%02d", year, month + 1, day);
+    // ===================================================
+    // ==================== Helpers ======================
+    // ===================================================
 
-        }
+    /**
+     * Transfer the format of Android-frontend time into ISO format
+     * @param timeBundle
+     * @return a time string with desired format
+     */
+    private String formatISOTime(Bundle timeBundle) {
+        int hour = timeBundle.getInt("hour");
+        int minute = timeBundle.getInt("minute");
 
-        // ===================================================
-        // ==================== Helpers ======================
-        // ===================================================
-        private Bundle getTimeFromLabel (String text){
+        return String.format("%02d:%02d:%02d", hour, minute, 0);
+    }
+
+    /**
+     * Transfer the format of Android-frontend date into ISO format
+     * @param dateBundle
+     * @return a date string with desired format
+     */
+    private String formatISODate(Bundle dateBundle) {
+        int year = dateBundle.getInt("year");
+        int month = dateBundle.getInt("month");
+        int day = dateBundle.getInt("day");
+        return String.format("%04d-%02d-%02d", year, month + 1, day);
+    }
+
+    /**
+     * Get the time bundle from the label
+     * @param text
+     * @return a bundle of time
+     */
+    private Bundle getTimeFromLabel(String text){
             Bundle rtn = new Bundle();
-            String[] comps = text.split(":");
+            String comps[] = text.toString().split(":");
             int hour = 12;
             int minute = 0;
 
@@ -512,25 +473,30 @@ public class MainActivity extends AppCompatActivity {
                 minute = Integer.parseInt(comps[1]);
             }
 
+
             rtn.putInt("hour", hour);
             rtn.putInt("minute", minute);
 
+
             return rtn;
         }
+    /**
+     * Get the date bundle from the label
+     * @param text
+     * @return a bundle of date
+     */
+    private Bundle getDateFromLabel(String text) {
+        Bundle rtn = new Bundle();
+        String comps[] = text.toString().split("-");
+        int day = 1;
+        int month = 1;
+        int year = 1;
 
-        private Bundle getDateFromLabel (String text){
-            Bundle rtn = new Bundle();
-            String[] comps = text.split("-");
-            int day = 1;
-            int month = 1;
-            int year = 1;
-
-            if (comps.length == 3) {
-                day = Integer.parseInt(comps[0]);
-                month = Integer.parseInt(comps[1]);
-                year = Integer.parseInt(comps[2]);
-            }
-
+        if (comps.length == 3) {
+            day = Integer.parseInt(comps[0]);
+            month = Integer.parseInt(comps[1]);
+            year = Integer.parseInt(comps[2]);
+        }
             rtn.putInt("day", day);
             rtn.putInt("month", month - 1);
             rtn.putInt("year", year);

@@ -32,6 +32,20 @@ public class HomeFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.nav_login);
             }
         });
+
+        final Button bookAppointmentButton = (Button) root.findViewById(R.id.bookAppointmentButton);
+        bookAppointmentButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.nav_bookappointment);
+            }
+        });
+
+        final Button viewAppointmentButton = (Button) root.findViewById(R.id.ViewAppointmentButton);
+        viewAppointmentButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+//                Navigation.findNavController(v).navigate(R.id.nav_login);
+            }
+        });
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
