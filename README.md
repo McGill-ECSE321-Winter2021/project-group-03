@@ -26,11 +26,11 @@ Jack is a U2 student in the Computer Engineering program at McGill.
  
 | Name                 | Role                           | Deliverable 1 | Deliverable 2     | Deliverable 3     | Deliverable 4     | 
 |----------------------|--------------------------------|---------------|-------------------|-------------------|-------------------|
-| Zichen Chang         | Project Manager                |     30hrs     |      45hrs        |      42 hrs       | Going to be a lot | 
-| Victoria Iannotti    | Software Developer             |     33hrs     |      45hrs        |      40 hrs       | Going to be a lot | 
-| Mathieu-Joseph Magri | QA Lead                        |     33hrs     |      40hrs        |      38 hrs       | Going to be a lot |
-| Jiatong Niu          | Software Consultant            |     33hrs     |      45hrs        |      40 hrs       | Going to be a lot |
-| Jack Wei             | Software Architecture Engineer |     33hrs     |      45hrs        |      41 hrs       | Going to be a lot | 
+| Zichen Chang         | Project Manager                |     30hrs     |      45hrs        |      42 hrs       |      23 hrs       | 
+| Victoria Iannotti    | Software Developer             |     33hrs     |      45hrs        |      40 hrs       |      21 hrs       | 
+| Mathieu-Joseph Magri | QA Lead                        |     33hrs     |      40hrs        |      38 hrs       |      18 hrs       |
+| Jiatong Niu          | Software Consultant            |     33hrs     |      45hrs        |      40 hrs       |      20 hrs       |
+| Jack Wei             | Software Architecture Engineer |     33hrs     |      45hrs        |      41 hrs       |      22 hrs       | 
 
 ## Project Reports
 In each project report, you may find a succinct report of the work done, as well as the meeting minutes and a description of key decisions made on the word done.
