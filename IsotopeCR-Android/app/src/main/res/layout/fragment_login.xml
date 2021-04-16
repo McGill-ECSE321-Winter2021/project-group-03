@@ -62,16 +62,4 @@
         app:layout_constraintTop_toBottomOf="@+id/login_text"
         app:layout_constraintVertical_bias="0.9" />
 
-    <TextView
-        android:id="@+id/error1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginBottom="171dp"
-        android:text=""
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/login_button"
-        app:layout_constraintTop_toBottomOf="@+id/login_text" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
