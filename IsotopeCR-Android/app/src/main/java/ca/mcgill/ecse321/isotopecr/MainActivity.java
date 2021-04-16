@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     NavigationView navigationView = findViewById(R.id.nav_view);
                     Menu nav_Menu = navigationView.getMenu();
                     nav_Menu.findItem(R.id.nav_login).setVisible(false);
+                    nav_Menu.findItem(R.id.nav_bookappointment).setVisible(true);
                     nav_Menu.findItem(R.id.nav_logout).setVisible(true);
                     Navigation.findNavController(v).navigate(R.id.nav_home);
                 } catch (JSONException e) {
@@ -193,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_login).setVisible(true);
+        nav_Menu.findItem(R.id.nav_bookappointment).setVisible(false);
         nav_Menu.findItem(R.id.nav_logout).setVisible(false);
 
         viewModel.resetText();
