@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView vehicleView;
     private TextView serviceView;
 
-    ListView aListView;
+
     private final List<String> appointmentTimes = new ArrayList<>();
     private final List<String> appointmentDates = new ArrayList<>();
 
@@ -332,12 +332,13 @@ public class MainActivity extends AppCompatActivity {
     public void GetFutureAppointment(View v) {
         error = "";
 
-        final TextView email = (TextView) findViewById(R.id.customer_email);
-        String inputEmail = email.toString();
-
-        HttpUtils.get("/api/appointment/futureappointment/customer/" + inputEmail, new RequestParams(), new JsonHttpResponseHandler() {
+        HttpUtils.get("/api/appointment/futureappointment/customer/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                licensePlates.clear();
+                services.clear();
+                appointmentDates.clear();
+                appointmentTimes.clear();
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject appointmentJSON = null;
                     JSONObject vehicleJSON = null;
@@ -352,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
                         serviceJSON = appointmentJSON.getJSONObject("service");
                         String serviceName = serviceJSON.getString("serviceName");
                         services.add(serviceName);
-                        timeslotsJSON = appointmentJSON.getJSONArray("timeslot");
+                        timeslotsJSON = appointmentJSON.getJSONArray("timeslots");
                         firsttimeslotJSON = timeslotsJSON.getJSONObject(0);
                         String appointmentTime = firsttimeslotJSON.getString("time");
                         appointmentTimes.add(appointmentTime);
@@ -363,7 +364,62 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+
                 ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(), licensePlates, services, appointmentDates, appointmentTimes);
+                ListView aListView = findViewById(R.id.futureappointmentListView);
+                aListView.setAdapter(appointmentAdapter);
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    error += errorResponse.get("message").toString();
+                } catch (JSONException e) {
+                    error += e.getMessage();
+                }
+//                refreshErrorMessage();
+            }
+        });
+    }
+    public void GetPastAppointment(View v) {
+        error = "";
+
+        HttpUtils.get("/api/appointment/pastappointment/customer/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                licensePlates.clear();
+                services.clear();
+                appointmentDates.clear();
+                appointmentTimes.clear();
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject appointmentJSON = null;
+                    JSONObject vehicleJSON = null;
+                    JSONObject serviceJSON = null;
+                    JSONArray timeslotsJSON = null;
+                    JSONObject firsttimeslotJSON = null;
+                    try {
+                        appointmentJSON = response.getJSONObject(i);
+                        vehicleJSON = appointmentJSON.getJSONObject("vehicle");
+                        String licensePlate = vehicleJSON.getString("licensePlate");
+                        licensePlates.add(licensePlate);
+                        serviceJSON = appointmentJSON.getJSONObject("service");
+                        String serviceName = serviceJSON.getString("serviceName");
+                        services.add(serviceName);
+                        timeslotsJSON = appointmentJSON.getJSONArray("timeslots");
+                        firsttimeslotJSON = timeslotsJSON.getJSONObject(0);
+                        String appointmentTime = firsttimeslotJSON.getString("time");
+                        appointmentTimes.add(appointmentTime);
+                        String appointmentDate = firsttimeslotJSON.getString("date");
+                        appointmentDates.add(appointmentDate);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(), licensePlates, services, appointmentDates, appointmentTimes);
+                ListView aListView = findViewById(R.id.futureappointmentListView);
                 aListView.setAdapter(appointmentAdapter);
 
             }
