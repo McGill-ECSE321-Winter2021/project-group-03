@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
@@ -25,39 +25,38 @@
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="15dp"
-            android:background="#16552e" />
+            android:layout_height="24dp"
+            android:background="#FDFDFD" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="GetPastAppointment"
-                android:text="@string/name_appointmentview2"/>
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:backgroundTint="#0a51f5"
+            android:onClick="GetPastAppointment"
+            android:text="@string/name_appointmentview2"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="GetFutureAppointment"
-                android:text="@string/name_appointmentview1" />
-
+        <Button
+            android:layout_width="253dp"
+            android:layout_height="66dp"
+            android:layout_gravity="center"
+            android:backgroundTint="#0a51f5"
+            android:onClick="GetFutureAppointment"
+            android:text="@string/name_appointmentview1"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
 
 
         <ListView
-            android:id ="@+id/futureappointmentListView"
+            android:id="@+id/futureappointmentListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/material_blue_grey_800"
             android:dividerHeight="1dp"
-            android:footerDividersEnabled="false">
-        </ListView>
+            android:footerDividersEnabled="false"></ListView>
 
 
     </LinearLayout>

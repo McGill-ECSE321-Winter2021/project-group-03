@@ -22,11 +22,11 @@
     <string name="menu_bookappointment">Book Appointment</string>
     <string name="menu_viewappointment">View Appointment</string>
 
-    <string name="newappointment_date_label">Date?</string>
+    <string name="newappointment_date_label">Date</string>
     <string name="vehiclespinner_label">Vehicle</string>
     <string name="email_hint">johndoe@email.com</string>
     <string name="servicespinner_label">Service</string>
-    <string name="starttime_label">Start time?</string>
+    <string name="starttime_label">Start time</string>
     <string name="endtime_label">End time?</string>
     <string name="newappointment_date_first">15-04-2021</string>
     <string name="newappointment_button">Book Appointment</string>
@@ -36,11 +36,11 @@
     <string name="newevent_hint">Event name?</string>
     <string name="refresh_button">Refresh lists</string>
 
-    <string name="refresh_vehicle">Refresh Vehicles</string>
-    <string name="refresh_service">Refresh Services</string>
+    <string name="refresh_vehicle">Refresh</string>
+    <string name="refresh_service">Refresh</string>
 
     <string name="name_prompt">Select name</string>
-    <string name="name_appointmentview1">View Future Appointment</string>
+    <string name="name_appointmentview1">View Future Appointments</string>
     <string name="name_appointmentview2">View Past Appointment (including appointments within next 24 hrs)</string>
 
 

@@ -4,37 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context="ui.home.HomeFragment">
 
     <Button
         android:id="@+id/login"
         android:layout_width="197dp"
         android:layout_height="97dp"
-        android:layout_marginBottom="74dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="#0A51F5"
+        android:foregroundTint="#FFFFFF"
         android:text="Login"
+        android:textColor="#FFFFFF"
         android:textSize="10pt"
         app:layout_constraintBottom_toTopOf="@+id/signUp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+    />
 
     <TextView
         android:id="@+id/text_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_width="313dp"
+        android:layout_height="138dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center"
         android:text="Isotope Repair Shop"
         android:textSize="20pt"
-        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintBottom_toTopOf="@+id/bookAppointmentButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/bookAppointmentButton"
         android:layout_width="193dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:text="Book Appointment"
         android:visibility="invisible"
+        android:backgroundTint="#0A51F5"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/ViewAppointmentButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -46,6 +54,8 @@
         android:layout_marginBottom="48dp"
         android:text="View Appointment"
         android:visibility="invisible"
+        android:backgroundTint="#0A51F5"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/login"
         app:layout_constraintStart_toStartOf="@+id/login" />
@@ -54,12 +64,12 @@
         android:id="@+id/signUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="116dp"
         android:text="or sign up from our website!"
         android:textSize="10pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline

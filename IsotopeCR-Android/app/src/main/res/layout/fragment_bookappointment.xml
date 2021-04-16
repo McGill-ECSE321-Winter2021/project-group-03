@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <!--<fragment
@@ -36,9 +37,9 @@
             android:visibility="gone" />
 
         <View
-            android:layout_width="fill_parent"
-            android:layout_height="15dp"
-            android:background="#16552e" />
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:background="#FFFFFF" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,83 +49,102 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/vehicle_licenseplate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/vehiclespinner_label" />
+                    android:layout_width="88dp"
+                    android:layout_height="match_parent"
+                    android:foregroundTint="#000000"
+                    android:text="@string/vehiclespinner_label"
+                    android:textSize="24sp" />
 
                 <Spinner
                     android:id="@+id/vehiclespinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
                     android:layout_gravity="end"
                     android:prompt="@string/name_prompt" />
+
+                <Button
+                    android:layout_width="78dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:backgroundTint="#0A51F5"
+                    android:onClick="GetVehicle"
+                    android:text="@string/refresh_vehicle"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="20px"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/service_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/servicespinner_label" />
+                    android:layout_width="88dp"
+                    android:layout_height="42dp"
+                    android:text="@string/servicespinner_label"
+                    android:textSize="24sp" />
 
                 <Spinner
                     android:id="@+id/servicespinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="36dp"
                     android:layout_gravity="end"
                     android:prompt="@string/name_prompt" />
 
+                <Button
+                    android:layout_width="78dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:backgroundTint="#0A51F5"
+                    android:onClick="GetServices"
+                    android:text="@string/refresh_service"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:onClick="GetVehicle"
-                    android:text="@string/refresh_vehicle" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:onClick="GetServices"
-                    android:text="@string/refresh_service" />
+                    android:layout_weight="1" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="121dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="20px"
                     android:layout_weight="1"
-                    android:text="@string/newappointment_date_label" />
+                    android:text="@string/newappointment_date_label"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/newappointment_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="258dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="end"
                     android:onClick="showDatePickerDialog"
-                    android:text="@string/newappointment_date_first" />
+                    android:text="@string/newappointment_date_first"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,27 +153,36 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="118dp"
+                    android:layout_height="51dp"
+                    android:layout_marginLeft="20px"
                     android:layout_weight="1"
-                    android:text="@string/starttime_label" />
+                    android:text="@string/starttime_label"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/starttime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="256dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="end"
                     android:onClick="showTimePickerDialog"
-                    android:text="@string/starttime_first" />
+                    android:text="@string/starttime_first"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
             </LinearLayout>
 
-
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="188dp"
+                android:layout_height="103dp"
                 android:layout_gravity="center"
+                android:backgroundTint="#0a51f5"
+                android:foregroundTint="#FFFFFF"
                 android:onClick="BookAppointment"
-                android:text="@string/newappointment_button" />
+                android:text="@string/newappointment_button"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+
         </LinearLayout>
     </LinearLayout>
 
