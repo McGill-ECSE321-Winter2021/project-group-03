@@ -40,23 +40,21 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
-    // APPEND NEW CONTENT STARTING FROM HERE
     private final List<String> licensePlates = new ArrayList<>();
     private final List<String> services = new ArrayList<>();
     private final List<String> appointmentTimes = new ArrayList<>();
     private final List<String> appointmentDates = new ArrayList<>();
+
     private AppBarConfiguration mAppBarConfiguration;
-    private String error = null;
-    private String loginEmail = null; // variable to store the email of the logged in user
-    private HomeViewModel viewModel = null;
-    // APPEND NEW CONTENT STARTING FROM HERE
+    private String loginEmail = null;           // variable to store the email of the logged in user
+    private HomeViewModel viewModel = null;     // viewModel for updating UI elements in home page
+
     private ArrayAdapter<String> vehicleAdapter;
     private ArrayAdapter<String> serviceAdapter;
     private String selectedVehicle = "";
     private String selectedService = "";
     private Spinner vehicleSpinner;
     private Spinner serviceSpinner;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,15 +118,17 @@ public class MainActivity extends AppCompatActivity {
     // ===================================================
     // ============ Http Request Functions ===============
     // ===================================================
+
     /**
-     * Customer login function.
+     * Customer login method.
+     * This method would update the logged in email and UI elements in navigation bar and home page.
      *
      * @param v view
      * @author Jack Wei
      */
     public void login(final View v) {
-        final TextView email = (TextView) findViewById(R.id.login_email);
-        final TextView password = (TextView) findViewById(R.id.login_password);
+        final TextView email = findViewById(R.id.login_email);
+        final TextView password = findViewById(R.id.login_password);
 
         hideVirtualKeyboard(v);
 
@@ -208,12 +208,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method get all the vehicles registered by a customer.
      *
-     * @param v
+     * @param v view
      * @author Zichen
      */
     public void GetVehicle(View v) {
         // set up the Listener for the spinner once clicked
-        vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
+        vehicleSpinner = findViewById(R.id.vehiclespinner);
         vehicleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, licensePlates);
         vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(vehicleAdapter);
@@ -257,12 +257,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method get all the services provided in the system.
      *
-     * @param v
+     * @param v view
      * @author Zichen
      */
     public void GetServices(View v) {
         // set up the Listener for the spinner once clicked
-        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
+        serviceSpinner = findViewById(R.id.servicespinner);
         serviceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, services);
         serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         serviceSpinner.setAdapter(serviceAdapter);
@@ -308,11 +308,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method gets the future appointments for current login user in the system.
      *
-     * @param v
+     * @param v view
      * @author Jiatong
      */
     public void GetFutureAppointment(View v) {
-        error = "";
 
         HttpUtils.get("/api/appointment/futureappointment/customer/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
@@ -332,11 +331,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method gets the past appointments for current login user in the system.
      *
-     * @param v
+     * @param v view
      * @author Jiatong
      */
     public void GetPastAppointment(View v) {
-        error = "";
 
         HttpUtils.get("/api/appointment/pastappointment/customer/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
@@ -357,14 +355,14 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method will book an appointment for the user.
      *
-     * @param v
+     * @param v view
      * @autor Zichen
      */
     public void BookAppointment(View v) {
-        serviceSpinner = (Spinner) findViewById(R.id.servicespinner);
-        vehicleSpinner = (Spinner) findViewById(R.id.vehiclespinner);
-        TextView date = (TextView) findViewById(R.id.newappointment_date);
-        TextView time = (TextView) findViewById(R.id.starttime);
+        serviceSpinner = findViewById(R.id.servicespinner);
+        vehicleSpinner = findViewById(R.id.vehiclespinner);
+        TextView date = findViewById(R.id.newappointment_date);
+        TextView time = findViewById(R.id.starttime);
 
         if (vehicleSpinner.getSelectedItem() != null && serviceSpinner.getSelectedItem() != null) {
             // format the input date & time to backend-accepted format
@@ -448,10 +446,8 @@ public class MainActivity extends AppCompatActivity {
             minute = Integer.parseInt(comps[1]);
         }
 
-
         rtn.putInt("hour", hour);
         rtn.putInt("minute", minute);
-
 
         return rtn;
     }
@@ -474,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
             month = Integer.parseInt(comps[1]);
             year = Integer.parseInt(comps[2]);
         }
+
         rtn.putInt("day", day);
         rtn.putInt("month", month - 1);
         rtn.putInt("year", year);
@@ -483,6 +480,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Show the TimePickerDialog when booking an appointment
+     *
      * @param v
      */
     public void showTimePickerDialog(View v) {
@@ -497,6 +495,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Show the DatePickerDialog when booking an appointment
+     *
      * @param v
      */
     public void showDatePickerDialog(View v) {
@@ -511,24 +510,26 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Set the content of the text view after choosing the time
+     *
      * @param id TextView id
-     * @param h hour
-     * @param m minute
+     * @param h  hour
+     * @param m  minute
      */
     public void setTime(int id, int h, int m) {
-        TextView tv = (TextView) findViewById(id);
+        TextView tv = findViewById(id);
         tv.setText(String.format("%02d:%02d", h, m));
     }
 
     /**
      * Set the content of the text view after choosing the time
+     *
      * @param id TextView id
-     * @param d day
-     * @param m month
-     * @param y year
+     * @param d  day
+     * @param m  month
+     * @param y  year
      */
     public void setDate(int id, int d, int m, int y) {
-        TextView tv = (TextView) findViewById(id);
+        TextView tv = findViewById(id);
         tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
     }
 
@@ -539,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
      * @author Jack Wei
      */
     private void hideVirtualKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
