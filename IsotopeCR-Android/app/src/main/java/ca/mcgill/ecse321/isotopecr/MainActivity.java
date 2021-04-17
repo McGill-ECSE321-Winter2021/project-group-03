@@ -43,25 +43,20 @@ public class MainActivity extends AppCompatActivity {
     // APPEND NEW CONTENT STARTING FROM HERE
     private final List<String> licensePlates = new ArrayList<>();
     private final List<String> services = new ArrayList<>();
+    private final List<String> appointmentTimes = new ArrayList<>();
+    private final List<String> appointmentDates = new ArrayList<>();
     private AppBarConfiguration mAppBarConfiguration;
     private String error = null;
     private String loginEmail = null; // variable to store the email of the logged in user
-
     private HomeViewModel viewModel = null;
-
     // APPEND NEW CONTENT STARTING FROM HERE
     private ArrayAdapter<String> vehicleAdapter;
     private ArrayAdapter<String> serviceAdapter;
-
     private String selectedVehicle = "";
     private String selectedService = "";
-
     private Spinner vehicleSpinner;
     private Spinner serviceSpinner;
 
-
-    private final List<String> appointmentTimes = new ArrayList<>();
-    private final List<String> appointmentDates = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Check if input email could be an employee's account (prohibited on android app), if so, shown an error.
         String emailString = email.getText().toString();
-        if(emailString.contains("isotopecr.ca")){
+        if (emailString.contains("isotopecr.ca")) {
             showMessageWithToast("ERROR: Profile does not exist.");
             return;
         }
@@ -310,109 +305,51 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method gets the future appointments for current login user in the system.
+     *
+     * @param v
+     * @author Jiatong
+     */
     public void GetFutureAppointment(View v) {
         error = "";
 
         HttpUtils.get("/api/appointment/futureappointment/customer/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                licensePlates.clear();
-                services.clear();
-                appointmentDates.clear();
-                appointmentTimes.clear();
-                for (int i = 0; i < response.length(); i++) {
-                    JSONObject appointmentJSON = null;
-                    JSONObject vehicleJSON = null;
-                    JSONObject serviceJSON = null;
-                    JSONArray timeslotsJSON = null;
-                    JSONObject firsttimeslotJSON = null;
-                    try {
-                        appointmentJSON = response.getJSONObject(i);
-                        vehicleJSON = appointmentJSON.getJSONObject("vehicle");
-                        String licensePlate = vehicleJSON.getString("licensePlate");
-                        licensePlates.add(licensePlate);
-                        serviceJSON = appointmentJSON.getJSONObject("service");
-                        String serviceName = serviceJSON.getString("serviceName");
-                        services.add(serviceName);
-                        timeslotsJSON = appointmentJSON.getJSONArray("timeslots");
-                        firsttimeslotJSON = timeslotsJSON.getJSONObject(0);
-                        String appointmentTime = firsttimeslotJSON.getString("time");
-                        appointmentTimes.add(appointmentTime);
-                        String appointmentDate = firsttimeslotJSON.getString("date");
-                        appointmentDates.add(appointmentDate);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(), licensePlates, services, appointmentDates, appointmentTimes);
-                ListView aListView = findViewById(R.id.futureappointmentListView);
-                aListView.setAdapter(appointmentAdapter);
-
+                //calling on helper method to generate the appointment table
+                getAppointments(response);
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
-//                refreshErrorMessage();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                // Show error message
+                showMessageWithToast(responseString);
             }
         });
     }
+
+    /**
+     * This method gets the past appointments for current login user in the system.
+     *
+     * @param v
+     * @author Jiatong
+     */
     public void GetPastAppointment(View v) {
         error = "";
 
         HttpUtils.get("/api/appointment/pastappointment/customer/" + loginEmail, new RequestParams(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                licensePlates.clear();
-                services.clear();
-                appointmentDates.clear();
-                appointmentTimes.clear();
-                for (int i = 0; i < response.length(); i++) {
-                    JSONObject appointmentJSON = null;
-                    JSONObject vehicleJSON = null;
-                    JSONObject serviceJSON = null;
-                    JSONArray timeslotsJSON = null;
-                    JSONObject firsttimeslotJSON = null;
-                    try {
-                        appointmentJSON = response.getJSONObject(i);
-                        vehicleJSON = appointmentJSON.getJSONObject("vehicle");
-                        String licensePlate = vehicleJSON.getString("licensePlate");
-                        licensePlates.add(licensePlate);
-                        serviceJSON = appointmentJSON.getJSONObject("service");
-                        String serviceName = serviceJSON.getString("serviceName");
-                        services.add(serviceName);
-                        timeslotsJSON = appointmentJSON.getJSONArray("timeslots");
-                        firsttimeslotJSON = timeslotsJSON.getJSONObject(0);
-                        String appointmentTime = firsttimeslotJSON.getString("time");
-                        appointmentTimes.add(appointmentTime);
-                        String appointmentDate = firsttimeslotJSON.getString("date");
-                        appointmentDates.add(appointmentDate);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(), licensePlates, services, appointmentDates, appointmentTimes);
-                ListView aListView = findViewById(R.id.futureappointmentListView);
-                aListView.setAdapter(appointmentAdapter);
+                //calling on helper method to generate the appointment table
+                getAppointments(response);
 
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                try {
-                    error += errorResponse.get("message").toString();
-                } catch (JSONException e) {
-                    error += e.getMessage();
-                }
-//                refreshErrorMessage();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                // Show error message
+                showMessageWithToast(responseString);
             }
         });
     }
@@ -601,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
      * @param v view from which virtual keyboard should be hidden
      * @author Jack Wei
      */
-    private void hideVirtualKeyboard(View v){
+    private void hideVirtualKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
@@ -611,10 +548,63 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param message message shown
      */
-    private void showMessageWithToast(String message){
+    private void showMessageWithToast(String message) {
         Context context = getApplicationContext();
         CharSequence text = message;
         int duration = Toast.LENGTH_LONG;
         Toast.makeText(context, text, duration).show();
+    }
+
+    /**
+     * Helper method that deal with the response and put the information that we want into
+     * the adapter that is manually created and link the adapter with listview
+     *
+     * @param response response after calling HttpUtil.get
+     * @author Jiatong Niu
+     */
+    public void getAppointments(JSONArray response) {
+        //make sure every time before putting information into the array, the array is empty
+        licensePlates.clear();
+        services.clear();
+        appointmentDates.clear();
+        appointmentTimes.clear();
+
+        for (int i = 0; i < response.length(); i++) {
+            JSONObject appointmentJSON = null;
+            JSONObject vehicleJSON = null;
+            JSONObject serviceJSON = null;
+            JSONArray timeslotsJSON = null;
+            JSONObject firsttimeslotJSON = null;
+            try {
+                appointmentJSON = response.getJSONObject(i);
+
+                //use a JSONObject to represent vehicle and get licensePlate
+                vehicleJSON = appointmentJSON.getJSONObject("vehicle");
+                String licensePlate = vehicleJSON.getString("licensePlate");
+                licensePlates.add(licensePlate);
+
+                //use a JSONObject to represent service and get serviceName
+                serviceJSON = appointmentJSON.getJSONObject("service");
+                String serviceName = serviceJSON.getString("serviceName");
+                services.add(serviceName);
+
+                //use a JSONArray to represent timeslots, use JSONObject to get the first time slot and get start Time and star Date
+                timeslotsJSON = appointmentJSON.getJSONArray("timeslots");
+                firsttimeslotJSON = timeslotsJSON.getJSONObject(0);
+                String appointmentTime = firsttimeslotJSON.getString("time");
+                appointmentTimes.add(appointmentTime);
+                String appointmentDate = firsttimeslotJSON.getString("date");
+                appointmentDates.add(appointmentDate);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ViewAppointmentAdapter appointmentAdapter = new ViewAppointmentAdapter(getBaseContext(), licensePlates, services, appointmentDates, appointmentTimes);
+
+        //represent the listview in the viewappointment.xml
+        ListView aListView = findViewById(R.id.futureappointmentListView);
+        aListView.setAdapter(appointmentAdapter);
     }
 }

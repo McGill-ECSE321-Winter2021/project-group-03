@@ -34,7 +34,7 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        MainActivity myActivity = (MainActivity)getActivity();
+        MainActivity myActivity = (MainActivity) getActivity();
         myActivity.setDate(getArguments().getInt("id"), day, month, year);
     }
 }
