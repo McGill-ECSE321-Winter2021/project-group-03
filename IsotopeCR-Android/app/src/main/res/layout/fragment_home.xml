@@ -14,7 +14,7 @@
         android:layout_marginBottom="32dp"
         android:backgroundTint="#0A51F5"
         android:foregroundTint="#FFFFFF"
-        android:text="Login"
+        android:text="@string/home_login"
         android:textColor="#FFFFFF"
         android:textSize="10pt"
         app:layout_constraintBottom_toTopOf="@+id/signUp"
@@ -29,7 +29,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginBottom="32dp"
         android:gravity="center"
-        android:text="Isotope Repair Shop"
+        android:text="@string/isotope_repair_shop"
         android:textSize="20pt"
         app:layout_constraintBottom_toTopOf="@+id/bookAppointmentButton"
         app:layout_constraintStart_toStartOf="parent" />
@@ -39,7 +39,7 @@
         android:layout_width="193dp"
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
-        android:text="Book Appointment"
+        android:text="@string/book_appointment"
         android:visibility="invisible"
         android:backgroundTint="#0A51F5"
         android:textColor="#FFFFFF"
@@ -52,7 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginBottom="48dp"
-        android:text="View Appointment"
+        android:text="@string/view_appointment"
         android:visibility="invisible"
         android:backgroundTint="#0A51F5"
         android:textColor="#FFFFFF"
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="116dp"
-        android:text="or sign up from our website!"
+        android:text="@string/sign_hint"
         android:textSize="10pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,6 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005" />
+        app:layout_constraintVertical_bias="0.005"
+        android:contentDescription="@string/car_repair_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

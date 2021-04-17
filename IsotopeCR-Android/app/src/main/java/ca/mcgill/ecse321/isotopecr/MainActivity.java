@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_login, R.id.nav_slideshow, R.id.nav_bookappointment, R.id.nav_viewappointment)
+                R.id.nav_home, R.id.nav_login, R.id.nav_bookappointment, R.id.nav_viewappointment)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
      * @param response response after calling HttpUtil.get
      * @author Jiatong Niu
      */
-    public void getAppointments(JSONArray response) {
+    private void getAppointments(JSONArray response) {
         //make sure every time before putting information into the array, the array is empty
         licensePlates.clear();
         services.clear();
