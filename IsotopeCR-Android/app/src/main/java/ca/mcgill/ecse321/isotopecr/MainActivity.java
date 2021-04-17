@@ -544,6 +544,10 @@ public class MainActivity extends AppCompatActivity {
         return rtn;
     }
 
+    /**
+     * Show the TimePickerDialog when booking an appointment
+     * @param v
+     */
     public void showTimePickerDialog(View v) {
         TextView tf = (TextView) v;
         Bundle args = getTimeFromLabel(tf.getText().toString());
@@ -554,6 +558,10 @@ public class MainActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
+    /**
+     * Show the DatePickerDialog when booking an appointment
+     * @param v
+     */
     public void showDatePickerDialog(View v) {
         TextView tf = (TextView) v;
         Bundle args = getDateFromLabel(tf.getText().toString());
@@ -564,11 +572,24 @@ public class MainActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+    /**
+     * Set the content of the text view after choosing the time
+     * @param id TextView id
+     * @param h hour
+     * @param m minute
+     */
     public void setTime(int id, int h, int m) {
         TextView tv = (TextView) findViewById(id);
         tv.setText(String.format("%02d:%02d", h, m));
     }
 
+    /**
+     * Set the content of the text view after choosing the time
+     * @param id TextView id
+     * @param d day
+     * @param m month
+     * @param y year
+     */
     public void setDate(int id, int d, int m, int y) {
         TextView tv = (TextView) findViewById(id);
         tv.setText(String.format("%02d-%02d-%04d", d, m + 1, y));
