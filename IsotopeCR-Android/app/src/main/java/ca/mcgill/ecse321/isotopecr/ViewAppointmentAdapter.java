@@ -7,10 +7,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.util.List;
 
 
-
+/**
+ * this adapter is create because we want each item inside the adapter contains more that one information
+ *
+ * @author Jiatong Niu
+ */
 public class ViewAppointmentAdapter extends BaseAdapter {
     LayoutInflater aInflater;
     ListView aListView;
@@ -19,7 +24,7 @@ public class ViewAppointmentAdapter extends BaseAdapter {
     List<String> startTime;
     List<String> startDate;
 
-    public ViewAppointmentAdapter (Context context, List<String> licensePlate, List<String> serviceName, List<String> startDate, List<String> startTime){
+    public ViewAppointmentAdapter(Context context, List<String> licensePlate, List<String> serviceName, List<String> startDate, List<String> startTime) {
         this.licensePlate = licensePlate;
         this.serviceName = serviceName;
         this.startTime = startTime;
@@ -28,20 +33,23 @@ public class ViewAppointmentAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount(){
+    public int getCount() {
         return licensePlate.size();
     }
+
     @Override
-    public Object getItem (int i){
-        return licensePlate.get(i)+"  "+serviceName.get(i)+"  "+startDate.get(i) +"  "+startTime.get(i);
+    public Object getItem(int i) {
+        return licensePlate.get(i) + "  " + serviceName.get(i) + "  " + startDate.get(i) + "  " + startTime.get(i);
     }
+
     @Override
-    public long getItemId (int i){
-        return i ;
+    public long getItemId(int i) {
+        return i;
     }
+
     @Override
-    public View getView (int i, View convertView, ViewGroup parent){
-        View view = aInflater.inflate(R.layout.showfutureappointment,null);
+    public View getView(int i, View convertView, ViewGroup parent) {
+        View view = aInflater.inflate(R.layout.showfutureappointment, null);
         TextView licensePlateTextView = (TextView) view.findViewById(R.id.licenseplate);
         TextView serviceNameTextView = (TextView) view.findViewById(R.id.serviceName);
         TextView appointmentDateTextView = (TextView) view.findViewById(R.id.appointmentDate);
