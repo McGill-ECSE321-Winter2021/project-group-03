@@ -562,7 +562,7 @@ public class MainActivity extends AppCompatActivity {
      * @param response response after calling HttpUtil.get
      * @author Jiatong Niu
      */
-    public void getAppointments(JSONArray response) {
+    private void getAppointments(JSONArray response) {
         //make sure every time before putting information into the array, the array is empty
         licensePlates.clear();
         services.clear();
