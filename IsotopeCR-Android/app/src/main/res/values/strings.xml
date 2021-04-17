@@ -42,6 +42,18 @@
     <string name="name_prompt">Select name</string>
     <string name="name_appointmentview1">View Future Appointments</string>
     <string name="name_appointmentview2">View Past Appointment (including appointments within next 24 hrs)</string>
+    <string name="shop_title">Isotope Car Repair Shop</string>
+    <string name="shop_intro">Fixing cars since 1974</string>
+    <string name="button_contact">ContactUs</string>
+    <string name="home_login">Login</string>
+    <string name="isotope_repair_shop">Isotope Repair Shop</string>
+    <string name="book_appointment">Book Appointment</string>
+    <string name="view_appointment">View Appointment</string>
+    <string name="sign_hint">or sign up from our website!</string>
+    <string name="car_repair_image">CarRepairImage</string>
+    <string name="hint_password">password</string>
+    <string name="login">Login</string>
+    <string name="hint_email">email</string>
 
 
 </resources>
